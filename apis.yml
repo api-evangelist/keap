@@ -1,0 +1,62 @@
+aid: keap
+name: Keap
+description: >-
+  Keap (formerly Infusionsoft) is a customer relationship management (CRM),
+  sales, and marketing automation platform for small businesses that combines
+  contact management, email marketing, e-commerce, and pipeline automation.
+  The Keap REST API provides programmatic access to contacts, companies,
+  opportunities, orders, products, tasks, campaigns, and tags using OAuth 2.0
+  or Personal Access Tokens.
+type: Index
+image: https://kinlane-productions.s3.amazonaws.com/apis-json/apis-json-logo.jpg
+tags:
+  - CRM
+  - Sales
+  - Marketing Automation
+  - Small Business
+  - E-Commerce
+  - Contacts
+url: https://raw.githubusercontent.com/api-evangelist/keap/refs/heads/main/apis.yml
+created: '2026-05-11'
+modified: '2026-05-11'
+specificationVersion: '0.19'
+apis:
+  - aid: keap:rest-api
+    name: Keap REST API
+    description: >-
+      REST API for managing contacts, companies, opportunities, orders,
+      products, tasks, campaigns, tags, and emails in Keap CRM.
+      Authentication uses OAuth 2.0, Personal Access Tokens, or Service
+      Account API Keys.
+    humanURL: https://developer.infusionsoft.com/docs/restv2/
+    baseURL: https://api.infusionsoft.com/crm/rest/v2
+    tags:
+      - CRM
+      - Contacts
+      - Sales
+      - Marketing Automation
+      - Orders
+      - Campaigns
+    properties:
+      - type: Documentation
+        url: https://developer.infusionsoft.com/docs/restv2/
+      - type: API Reference v1
+        url: https://developer.infusionsoft.com/docs/rest/
+      - type: Authentication
+        url: https://developer.infusionsoft.com/authentication/
+common:
+  - type: Website
+    url: https://keap.com
+  - type: Documentation
+    url: https://developer.infusionsoft.com/
+  - type: Sign Up
+    url: https://keap.com/signup
+  - type: Pricing
+    url: https://keap.com/pricing
+  - type: Developer Portal
+    url: https://developer.infusionsoft.com/
+  - type: OAuth
+    url: https://developer.infusionsoft.com/getting-started-oauth-keys/
+maintainers:
+  - FN: Kin Lane
+    email: kin@apievangelist.com
