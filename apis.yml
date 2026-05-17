@@ -49,7 +49,7 @@ common:
     url: https://keap.com
   - type: Documentation
     url: https://developer.infusionsoft.com/
-  - type: Sign Up
+  - type: SignUp
     url: https://keap.com/signup
   - type: Pricing
     url: https://keap.com/pricing
