@@ -45,6 +45,8 @@ apis:
       - type: Authentication
         url: https://developer.infusionsoft.com/authentication/
 common:
+  - type: LinkedIn
+    url: https://www.linkedin.com/company/keap-growing
   - type: Website
     url: https://keap.com
   - type: Documentation
