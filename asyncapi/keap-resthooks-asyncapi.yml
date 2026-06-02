@@ -1,0 +1,633 @@
+asyncapi: '2.6.0'
+info:
+  title: Keap REST Hooks
+  version: 'v1'
+  description: |
+    AsyncAPI 2.6 description of the Keap (formerly Infusionsoft) REST Hooks
+    webhook surface. Keap REST Hooks are subscriptions that are created and
+    managed via the v1 REST API (`POST /rest/v1/hooks`). Once a subscription
+    is in `Verified` status, Keap delivers events to the `hookUrl` registered
+    by the subscriber via HTTP POST with a JSON body.
+
+    Verification handshake (Immediate Confirmation): When a subscription is
+    created or re-verified, Keap sends a `POST` to the `hookUrl` carrying a
+    temporary `X-Hook-Secret` header. The subscriber must respond with HTTP
+    200 and echo back the same `X-Hook-Secret` header and value. A Delayed
+    Confirmation flow is also supported via `POST /rest/v1/hooks/{key}/delayedVerify`
+    where the subscriber sends the `X-Hook-Secret` it received back to Keap
+    as a header.
+
+    Delivery payload: Each delivery contains one or more changed objects of
+    the same event type, up to a maximum of 1000 objects. The body fields
+    documented by Keap are `event_key`, `object_type`, and `object_keys`,
+    where each `object_keys` entry has an `id`, optional `apiUrl`, and a
+    `timestamp`.
+
+    Event keys use noun.verb dot-syntax (for example `contact.add`,
+    `contact.edit`, `invoice.delete`). The authoritative list of available
+    event keys is exposed at runtime via `GET /rest/v1/hooks/event_keys` -
+    the channels below cover the commonly used contact, contactGroup,
+    opportunity, invoice, order, and subscription events.
+
+    Retry policy: Deliveries are attempted up to four times. The first
+    attempt occurs 30-60 seconds after the originating change (5-10 minutes
+    for `contactGroup.applied` and `contactGroup.delete`); subsequent
+    attempts occur 30-60 seconds, 5 minutes, and 30 minutes after each
+    prior failure. A response status `<200` or `>=400` (other than `410`)
+    or no response within 30 seconds counts as a failure. A `410` response
+    marks the subscription `Inactive` immediately. After four failed
+    attempts the subscription is marked `Inactive` and can be re-verified
+    via `POST /rest/v1/hooks/{key}/verify`.
+
+    Sources:
+      - https://developer.infusionsoft.com/docs/rest/ (REST Hooks tag)
+      - https://crm.infusionsoft.com/app/v3/api-docs/V1
+      - https://developer.infusionsoft.com/rest-hook-documentation/
+
+    Note on `X-Hook-Signature`: An HMAC `X-Hook-Signature` header is
+    declared as an optional message header below to accommodate subscriber
+    integrations that expect one. The Keap v1 REST Hooks documentation
+    does not specify a signing algorithm or shared-secret derivation for
+    event deliveries beyond the verification `X-Hook-Secret`; subscribers
+    should consult their Keap account settings to confirm whether signed
+    deliveries are enabled for their app.
+  contact:
+    name: Keap
+    url: https://developer.infusionsoft.com/rest-hook-documentation/
+    email: api@keap.com
+  license:
+    name: Apache 2.0
+    url: https://www.apache.org/licenses/LICENSE-2.0
+  tags:
+    - name: Keap
+    - name: Infusionsoft
+    - name: REST Hooks
+    - name: Webhooks
+    - name: CRM
+
+defaultContentType: application/json
+
+servers:
+  subscriber:
+    url: '{hookUrl}'
+    protocol: https
+    description: |
+      The subscriber-controlled HTTPS endpoint registered with Keap as
+      `hookUrl` when creating a REST Hook subscription via
+      `POST /rest/v1/hooks`. Keap sends both the verification `POST`
+      (carrying `X-Hook-Secret`) and all subsequent event deliveries to
+      this URL.
+    variables:
+      hookUrl:
+        description: Subscriber-controlled URL stored on the Keap REST Hook subscription.
+        default: https://example.com/webhooks/keap
+
+channels:
+  hook.verification:
+    description: |
+      Verification handshake from Keap to the subscriber. Issued when a
+      subscription is created via `POST /rest/v1/hooks` (Immediate
+      Confirmation) or re-verified via `POST /rest/v1/hooks/{key}/verify`.
+      The subscriber must respond with HTTP 200 and echo the
+      `X-Hook-Secret` header back.
+    bindings:
+      http:
+        type: request
+        method: POST
+        bindingVersion: 0.3.0
+    subscribe:
+      summary: Subscription verification request
+      operationId: onHookVerification
+      message:
+        $ref: '#/components/messages/HookVerification'
+
+  contact.add:
+    description: A new contact has been created.
+    bindings:
+      http:
+        type: request
+        method: POST
+        bindingVersion: 0.3.0
+    subscribe:
+      summary: Contact added
+      operationId: onContactAdd
+      message:
+        $ref: '#/components/messages/ContactAdd'
+
+  contact.edit:
+    description: An existing contact has been edited.
+    bindings:
+      http:
+        type: request
+        method: POST
+        bindingVersion: 0.3.0
+    subscribe:
+      summary: Contact edited
+      operationId: onContactEdit
+      message:
+        $ref: '#/components/messages/ContactEdit'
+
+  contact.delete:
+    description: A contact has been deleted.
+    bindings:
+      http:
+        type: request
+        method: POST
+        bindingVersion: 0.3.0
+    subscribe:
+      summary: Contact deleted
+      operationId: onContactDelete
+      message:
+        $ref: '#/components/messages/ContactDelete'
+
+  contactGroup.applied:
+    description: |
+      A contact group (tag) has been applied to one or more contacts.
+      First-attempt delivery for this event type is batched on a 5-10
+      minute interval rather than the 30-60 second interval used for
+      most event types.
+    bindings:
+      http:
+        type: request
+        method: POST
+        bindingVersion: 0.3.0
+    subscribe:
+      summary: Contact group applied
+      operationId: onContactGroupApplied
+      message:
+        $ref: '#/components/messages/ContactGroupApplied'
+
+  contactGroup.removed:
+    description: A contact group (tag) has been removed from one or more contacts.
+    bindings:
+      http:
+        type: request
+        method: POST
+        bindingVersion: 0.3.0
+    subscribe:
+      summary: Contact group removed
+      operationId: onContactGroupRemoved
+      message:
+        $ref: '#/components/messages/ContactGroupRemoved'
+
+  opportunity.add:
+    description: A new opportunity has been created.
+    bindings:
+      http:
+        type: request
+        method: POST
+        bindingVersion: 0.3.0
+    subscribe:
+      summary: Opportunity added
+      operationId: onOpportunityAdd
+      message:
+        $ref: '#/components/messages/OpportunityAdd'
+
+  opportunity.edit:
+    description: An existing opportunity has been edited.
+    bindings:
+      http:
+        type: request
+        method: POST
+        bindingVersion: 0.3.0
+    subscribe:
+      summary: Opportunity edited
+      operationId: onOpportunityEdit
+      message:
+        $ref: '#/components/messages/OpportunityEdit'
+
+  opportunity.delete:
+    description: An opportunity has been deleted.
+    bindings:
+      http:
+        type: request
+        method: POST
+        bindingVersion: 0.3.0
+    subscribe:
+      summary: Opportunity deleted
+      operationId: onOpportunityDelete
+      message:
+        $ref: '#/components/messages/OpportunityDelete'
+
+  invoice.add:
+    description: A new invoice has been created.
+    bindings:
+      http:
+        type: request
+        method: POST
+        bindingVersion: 0.3.0
+    subscribe:
+      summary: Invoice added
+      operationId: onInvoiceAdd
+      message:
+        $ref: '#/components/messages/InvoiceAdd'
+
+  invoice.edit:
+    description: An existing invoice has been edited.
+    bindings:
+      http:
+        type: request
+        method: POST
+        bindingVersion: 0.3.0
+    subscribe:
+      summary: Invoice edited
+      operationId: onInvoiceEdit
+      message:
+        $ref: '#/components/messages/InvoiceEdit'
+
+  order.add:
+    description: A new e-commerce order has been created.
+    bindings:
+      http:
+        type: request
+        method: POST
+        bindingVersion: 0.3.0
+    subscribe:
+      summary: Order added
+      operationId: onOrderAdd
+      message:
+        $ref: '#/components/messages/OrderAdd'
+
+  subscription.add:
+    description: A new recurring subscription has been created.
+    bindings:
+      http:
+        type: request
+        method: POST
+        bindingVersion: 0.3.0
+    subscribe:
+      summary: Subscription added
+      operationId: onSubscriptionAdd
+      message:
+        $ref: '#/components/messages/SubscriptionAdd'
+
+  subscription.edit:
+    description: An existing recurring subscription has been edited.
+    bindings:
+      http:
+        type: request
+        method: POST
+        bindingVersion: 0.3.0
+    subscribe:
+      summary: Subscription edited
+      operationId: onSubscriptionEdit
+      message:
+        $ref: '#/components/messages/SubscriptionEdit'
+
+  subscription.delete:
+    description: A recurring subscription has been deleted.
+    bindings:
+      http:
+        type: request
+        method: POST
+        bindingVersion: 0.3.0
+    subscribe:
+      summary: Subscription deleted
+      operationId: onSubscriptionDelete
+      message:
+        $ref: '#/components/messages/SubscriptionDelete'
+
+components:
+  messageTraits:
+    HookDeliveryHeaders:
+      headers:
+        type: object
+        properties:
+          Content-Type:
+            type: string
+            const: application/json
+          User-Agent:
+            type: string
+            description: User-Agent string identifying the Keap REST Hook dispatcher.
+          X-Hook-Signature:
+            type: string
+            description: |
+              Optional HMAC signature header. The Keap v1 REST Hooks
+              documentation does not formally specify a delivery-signing
+              algorithm; this header is declared optional to accommodate
+              integrations that expect a signed delivery. Implementers
+              should not assume an algorithm without confirming it with
+              Keap support or their app configuration.
+
+  messages:
+    HookVerification:
+      name: HookVerification
+      title: Subscription verification request
+      summary: |
+        Empty-body verification `POST` issued by Keap to the subscriber's
+        `hookUrl`. The subscriber must respond with HTTP 200 and echo the
+        `X-Hook-Secret` header value to confirm ownership of the endpoint.
+      contentType: application/json
+      headers:
+        type: object
+        required:
+          - X-Hook-Secret
+        properties:
+          X-Hook-Secret:
+            type: string
+            description: |
+              Temporary secret generated by Keap. The subscriber must
+              return this exact value in the `X-Hook-Secret` response
+              header along with a 200 status code to verify the
+              subscription.
+      payload:
+        type: object
+        description: |
+          The verification request has no documented body. Some Keap
+          dispatchers send an empty body and others send `{}`; subscribers
+          should treat the body as opaque and rely on the
+          `X-Hook-Secret` header.
+        additionalProperties: true
+
+    ContactAdd:
+      name: ContactAdd
+      title: contact.add
+      summary: One or more contacts have been created in Keap.
+      traits:
+        - $ref: '#/components/messageTraits/HookDeliveryHeaders'
+      contentType: application/json
+      payload:
+        allOf:
+          - $ref: '#/components/schemas/HookEnvelope'
+          - type: object
+            properties:
+              event_key:
+                const: contact.add
+              object_type:
+                const: contact
+
+    ContactEdit:
+      name: ContactEdit
+      title: contact.edit
+      summary: One or more contacts have been edited.
+      traits:
+        - $ref: '#/components/messageTraits/HookDeliveryHeaders'
+      contentType: application/json
+      payload:
+        allOf:
+          - $ref: '#/components/schemas/HookEnvelope'
+          - type: object
+            properties:
+              event_key:
+                const: contact.edit
+              object_type:
+                const: contact
+
+    ContactDelete:
+      name: ContactDelete
+      title: contact.delete
+      summary: One or more contacts have been deleted.
+      traits:
+        - $ref: '#/components/messageTraits/HookDeliveryHeaders'
+      contentType: application/json
+      payload:
+        allOf:
+          - $ref: '#/components/schemas/HookEnvelope'
+          - type: object
+            properties:
+              event_key:
+                const: contact.delete
+              object_type:
+                const: contact
+
+    ContactGroupApplied:
+      name: ContactGroupApplied
+      title: contactGroup.applied
+      summary: A contact group (tag) was applied to one or more contacts.
+      traits:
+        - $ref: '#/components/messageTraits/HookDeliveryHeaders'
+      contentType: application/json
+      payload:
+        allOf:
+          - $ref: '#/components/schemas/HookEnvelope'
+          - type: object
+            properties:
+              event_key:
+                const: contactGroup.applied
+              object_type:
+                const: contactGroup
+
+    ContactGroupRemoved:
+      name: ContactGroupRemoved
+      title: contactGroup.removed
+      summary: A contact group (tag) was removed from one or more contacts.
+      traits:
+        - $ref: '#/components/messageTraits/HookDeliveryHeaders'
+      contentType: application/json
+      payload:
+        allOf:
+          - $ref: '#/components/schemas/HookEnvelope'
+          - type: object
+            properties:
+              event_key:
+                const: contactGroup.removed
+              object_type:
+                const: contactGroup
+
+    OpportunityAdd:
+      name: OpportunityAdd
+      title: opportunity.add
+      summary: One or more opportunities have been created.
+      traits:
+        - $ref: '#/components/messageTraits/HookDeliveryHeaders'
+      contentType: application/json
+      payload:
+        allOf:
+          - $ref: '#/components/schemas/HookEnvelope'
+          - type: object
+            properties:
+              event_key:
+                const: opportunity.add
+              object_type:
+                const: opportunity
+
+    OpportunityEdit:
+      name: OpportunityEdit
+      title: opportunity.edit
+      summary: One or more opportunities have been edited.
+      traits:
+        - $ref: '#/components/messageTraits/HookDeliveryHeaders'
+      contentType: application/json
+      payload:
+        allOf:
+          - $ref: '#/components/schemas/HookEnvelope'
+          - type: object
+            properties:
+              event_key:
+                const: opportunity.edit
+              object_type:
+                const: opportunity
+
+    OpportunityDelete:
+      name: OpportunityDelete
+      title: opportunity.delete
+      summary: One or more opportunities have been deleted.
+      traits:
+        - $ref: '#/components/messageTraits/HookDeliveryHeaders'
+      contentType: application/json
+      payload:
+        allOf:
+          - $ref: '#/components/schemas/HookEnvelope'
+          - type: object
+            properties:
+              event_key:
+                const: opportunity.delete
+              object_type:
+                const: opportunity
+
+    InvoiceAdd:
+      name: InvoiceAdd
+      title: invoice.add
+      summary: One or more invoices have been created.
+      traits:
+        - $ref: '#/components/messageTraits/HookDeliveryHeaders'
+      contentType: application/json
+      payload:
+        allOf:
+          - $ref: '#/components/schemas/HookEnvelope'
+          - type: object
+            properties:
+              event_key:
+                const: invoice.add
+              object_type:
+                const: invoice
+
+    InvoiceEdit:
+      name: InvoiceEdit
+      title: invoice.edit
+      summary: One or more invoices have been edited.
+      traits:
+        - $ref: '#/components/messageTraits/HookDeliveryHeaders'
+      contentType: application/json
+      payload:
+        allOf:
+          - $ref: '#/components/schemas/HookEnvelope'
+          - type: object
+            properties:
+              event_key:
+                const: invoice.edit
+              object_type:
+                const: invoice
+
+    OrderAdd:
+      name: OrderAdd
+      title: order.add
+      summary: One or more orders have been created.
+      traits:
+        - $ref: '#/components/messageTraits/HookDeliveryHeaders'
+      contentType: application/json
+      payload:
+        allOf:
+          - $ref: '#/components/schemas/HookEnvelope'
+          - type: object
+            properties:
+              event_key:
+                const: order.add
+              object_type:
+                const: order
+
+    SubscriptionAdd:
+      name: SubscriptionAdd
+      title: subscription.add
+      summary: One or more recurring subscriptions have been created.
+      traits:
+        - $ref: '#/components/messageTraits/HookDeliveryHeaders'
+      contentType: application/json
+      payload:
+        allOf:
+          - $ref: '#/components/schemas/HookEnvelope'
+          - type: object
+            properties:
+              event_key:
+                const: subscription.add
+              object_type:
+                const: subscription
+
+    SubscriptionEdit:
+      name: SubscriptionEdit
+      title: subscription.edit
+      summary: One or more recurring subscriptions have been edited.
+      traits:
+        - $ref: '#/components/messageTraits/HookDeliveryHeaders'
+      contentType: application/json
+      payload:
+        allOf:
+          - $ref: '#/components/schemas/HookEnvelope'
+          - type: object
+            properties:
+              event_key:
+                const: subscription.edit
+              object_type:
+                const: subscription
+
+    SubscriptionDelete:
+      name: SubscriptionDelete
+      title: subscription.delete
+      summary: One or more recurring subscriptions have been deleted.
+      traits:
+        - $ref: '#/components/messageTraits/HookDeliveryHeaders'
+      contentType: application/json
+      payload:
+        allOf:
+          - $ref: '#/components/schemas/HookEnvelope'
+          - type: object
+            properties:
+              event_key:
+                const: subscription.delete
+              object_type:
+                const: subscription
+
+  schemas:
+    HookEnvelope:
+      type: object
+      description: |
+        The shared envelope for every Keap REST Hook delivery. The body
+        contains the `event_key`, the `object_type` (resource name), and
+        an `object_keys` array with one or more changed objects (maximum
+        1000 per delivery).
+      required:
+        - event_key
+        - object_type
+        - object_keys
+      properties:
+        event_key:
+          type: string
+          description: |
+            Identifier of the event type, in `noun.verb` dot-syntax (for
+            example `contact.add`). Matches the `eventKey` registered on
+            the originating REST Hook subscription.
+        object_type:
+          type: string
+          description: Resource name affected by the event (for example `contact`).
+        object_keys:
+          type: array
+          description: |
+            One or more changed objects of the same `event_key`. A single
+            delivery contains a maximum of 1000 entries.
+          minItems: 1
+          maxItems: 1000
+          items:
+            $ref: '#/components/schemas/HookObjectKey'
+
+    HookObjectKey:
+      type: object
+      required:
+        - id
+        - timestamp
+      properties:
+        id:
+          description: Identifier of the changed resource object.
+          oneOf:
+            - type: integer
+              format: int64
+            - type: string
+        apiUrl:
+          type: string
+          format: uri
+          description: |
+            Optional REST API URL where the changed resource can be
+            retrieved. May be absent depending on the event type.
+        timestamp:
+          type: string
+          format: date-time
+          description: ISO-8601 timestamp at which the change occurred.

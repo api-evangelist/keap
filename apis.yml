@@ -18,7 +18,7 @@ tags:
   - Contacts
 url: https://raw.githubusercontent.com/api-evangelist/keap/refs/heads/main/apis.yml
 created: '2026-05-11'
-modified: '2026-05-11'
+modified: '2026-05-30'
 specificationVersion: '0.19'
 apis:
   - aid: keap:rest-api
@@ -44,6 +44,36 @@ apis:
         url: https://developer.infusionsoft.com/docs/rest/
       - type: Authentication
         url: https://developer.infusionsoft.com/authentication/
+      - type: OpenAPI
+        url: https://raw.githubusercontent.com/api-evangelist/keap/refs/heads/main/openapi/keap-openapi.yml
+  - aid: keap:rest-hooks
+    name: Keap REST Hooks
+    description: >-
+      Keap REST Hooks webhook surface. Subscribers register a `hookUrl`
+      and `eventKey` via the v1 REST API (`POST /rest/v1/hooks`), complete
+      an `X-Hook-Secret` verification handshake, then receive HTTP POST
+      deliveries when contact, contactGroup, opportunity, invoice, order,
+      and subscription events occur. Event types follow `noun.verb`
+      dot-syntax (for example `contact.add`, `invoice.delete`).
+    humanURL: https://developer.infusionsoft.com/rest-hook-documentation/
+    baseURL: https://api.infusionsoft.com/crm/rest/v1/hooks
+    tags:
+      - Webhooks
+      - REST Hooks
+      - Events
+      - CRM
+      - Contacts
+      - Opportunities
+      - Invoices
+      - Orders
+      - Subscriptions
+    properties:
+      - type: Documentation
+        url: https://developer.infusionsoft.com/rest-hook-documentation/
+      - type: API Reference
+        url: https://developer.infusionsoft.com/docs/rest/
+      - type: AsyncAPI
+        url: https://raw.githubusercontent.com/api-evangelist/keap/refs/heads/main/asyncapi/keap-resthooks-asyncapi.yml
 common:
   - type: LinkedIn
     url: https://www.linkedin.com/company/keap-growing
