@@ -70,7 +70,7 @@ apis:
     properties:
       - type: Documentation
         url: https://developer.infusionsoft.com/rest-hook-documentation/
-      - type: API Reference
+      - type: APIReference
         url: https://developer.infusionsoft.com/docs/rest/
       - type: AsyncAPI
         url: https://raw.githubusercontent.com/api-evangelist/keap/refs/heads/main/asyncapi/keap-resthooks-asyncapi.yml
@@ -81,11 +81,11 @@ common:
     url: https://keap.com
   - type: Documentation
     url: https://developer.infusionsoft.com/
-  - type: SignUp
+  - type: Signup
     url: https://keap.com/signup
   - type: Pricing
     url: https://keap.com/pricing
-  - type: Developer Portal
+  - type: DeveloperPortal
     url: https://developer.infusionsoft.com/
   - type: OAuth
     url: https://developer.infusionsoft.com/getting-started-oauth-keys/
