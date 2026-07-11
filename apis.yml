@@ -75,6 +75,10 @@ apis:
       - type: AsyncAPI
         url: https://raw.githubusercontent.com/api-evangelist/keap/refs/heads/main/asyncapi/keap-resthooks-asyncapi.yml
 common:
+  - type: DomainSecurity
+    url: security/keap-domain-security.yml
+  - type: Authentication
+    url: authentication/keap-authentication.yml
   - type: OAuthScopes
     url: scopes/keap-scopes.yml
   - type: LinkedIn
