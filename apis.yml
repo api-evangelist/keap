@@ -75,6 +75,8 @@ apis:
       - type: AsyncAPI
         url: https://raw.githubusercontent.com/api-evangelist/keap/refs/heads/main/asyncapi/keap-resthooks-asyncapi.yml
 common:
+  - type: OAuthScopes
+    url: scopes/keap-scopes.yml
   - type: LinkedIn
     url: https://www.linkedin.com/company/keap-growing
   - type: Website
@@ -89,6 +91,8 @@ common:
     url: https://developer.infusionsoft.com/
   - type: OAuth
     url: https://developer.infusionsoft.com/getting-started-oauth-keys/
+  - url: https://keap.com/small-business-automation-blog
+    type: Blog
 maintainers:
   - FN: Kin Lane
     email: kin@apievangelist.com

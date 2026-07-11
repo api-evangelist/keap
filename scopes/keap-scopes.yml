@@ -1,0 +1,18 @@
+generated: '2026-07-11'
+method: derived
+source: openapi/keap-openapi.yml
+schemes:
+- name: oauth2
+  source: openapi/keap-openapi.yml
+  flows:
+  - flow: authorizationCode
+    authorizationUrl: https://accounts.infusionsoft.com/app/oauth/authorize
+    tokenUrl: https://api.infusionsoft.com/token
+  description: Keap uses OAuth 2.0 for authentication. See https://developer.infusionsoft.com/getting-started-oauth-keys/
+scopes:
+- scope: full
+  description: Full access to the Keap CRM REST API.
+  flows:
+  - authorizationCode
+  sources:
+  - openapi/keap-openapi.yml
