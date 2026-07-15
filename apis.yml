@@ -75,6 +75,8 @@ apis:
       - type: AsyncAPI
         url: https://raw.githubusercontent.com/api-evangelist/keap/refs/heads/main/asyncapi/keap-resthooks-asyncapi.yml
 common:
+  - type: AgenticAccess
+    url: agentic-access/keap-agentic-access.yml
   - type: DomainSecurity
     url: security/keap-domain-security.yml
   - type: Authentication
