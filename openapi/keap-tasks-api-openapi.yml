@@ -1,0 +1,170 @@
+openapi: 3.1.0
+info:
+  title: Keap REST Campaigns Tasks API
+  description: 'Curated OpenAPI 3.1 description of the Keap (formerly Infusionsoft) REST v2 API.
+
+    Covers a representative subset of contacts, companies, opportunities, orders,
+
+    products, tasks, campaigns, and tags. Derived from the official Keap v2 OpenAPI
+
+    document published at https://developer.infusionsoft.com/docs/restv2/ which is
+
+    served by the api.infusionsoft.com host.
+
+    '
+  version: 2.70.0
+  contact:
+    name: Keap
+    url: https://developer.keap.com/get-support/
+    email: api@keap.com
+  license:
+    name: Apache 2.0
+    url: https://www.apache.org/licenses/LICENSE-2.0
+servers:
+- url: https://api.infusionsoft.com/crm/rest
+  description: Keap production REST API
+security:
+- oauth2: []
+tags:
+- name: Tasks
+  description: Manage tasks and follow-ups.
+paths:
+  /v2/tasks:
+    get:
+      tags:
+      - Tasks
+      summary: List tasks
+      operationId: listTasks
+      parameters:
+      - $ref: '#/components/parameters/PageSize'
+      - $ref: '#/components/parameters/PageToken'
+      responses:
+        '200':
+          description: A page of tasks.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TaskList'
+    post:
+      tags:
+      - Tasks
+      summary: Create a task
+      operationId: createTask
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Task'
+      responses:
+        '201':
+          description: Task created.
+  /v2/tasks/{id}:
+    parameters:
+    - $ref: '#/components/parameters/IdPath'
+    get:
+      tags:
+      - Tasks
+      summary: Get a task
+      operationId: getTask
+      responses:
+        '200':
+          description: Task.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Task'
+components:
+  parameters:
+    IdPath:
+      name: id
+      in: path
+      required: true
+      schema:
+        type: string
+    PageToken:
+      name: page_token
+      in: query
+      required: false
+      schema:
+        type: string
+    PageSize:
+      name: limit
+      in: query
+      required: false
+      schema:
+        type: integer
+        minimum: 1
+        maximum: 1000
+        default: 100
+  schemas:
+    Task:
+      type: object
+      properties:
+        id:
+          type: string
+        title:
+          type: string
+        description:
+          type: string
+        due_date:
+          type: string
+          format: date-time
+        completed:
+          type: boolean
+        contact:
+          $ref: '#/components/schemas/Contact'
+    Contact:
+      type: object
+      properties:
+        id:
+          type: string
+        given_name:
+          type: string
+        family_name:
+          type: string
+        email_addresses:
+          type: array
+          items:
+            type: object
+            properties:
+              email:
+                type: string
+                format: email
+              field:
+                type: string
+        phone_numbers:
+          type: array
+          items:
+            type: object
+            properties:
+              number:
+                type: string
+              field:
+                type: string
+        company:
+          type: object
+          properties:
+            id:
+              type: string
+            company_name:
+              type: string
+    TaskList:
+      type: object
+      properties:
+        tasks:
+          type: array
+          items:
+            $ref: '#/components/schemas/Task'
+        next_page_token:
+          type: string
+  securitySchemes:
+    oauth2:
+      type: oauth2
+      description: Keap uses OAuth 2.0 for authentication. See https://developer.infusionsoft.com/getting-started-oauth-keys/
+      flows:
+        authorizationCode:
+          authorizationUrl: https://accounts.infusionsoft.com/app/oauth/authorize
+          tokenUrl: https://api.infusionsoft.com/token
+          scopes:
+            full: Full access to the Keap CRM REST API.

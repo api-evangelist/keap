@@ -1,0 +1,116 @@
+openapi: 3.1.0
+info:
+  title: Keap REST Campaigns API
+  description: 'Curated OpenAPI 3.1 description of the Keap (formerly Infusionsoft) REST v2 API.
+
+    Covers a representative subset of contacts, companies, opportunities, orders,
+
+    products, tasks, campaigns, and tags. Derived from the official Keap v2 OpenAPI
+
+    document published at https://developer.infusionsoft.com/docs/restv2/ which is
+
+    served by the api.infusionsoft.com host.
+
+    '
+  version: 2.70.0
+  contact:
+    name: Keap
+    url: https://developer.keap.com/get-support/
+    email: api@keap.com
+  license:
+    name: Apache 2.0
+    url: https://www.apache.org/licenses/LICENSE-2.0
+servers:
+- url: https://api.infusionsoft.com/crm/rest
+  description: Keap production REST API
+security:
+- oauth2: []
+tags:
+- name: Campaigns
+  description: Read marketing campaigns.
+paths:
+  /v2/campaigns:
+    get:
+      tags:
+      - Campaigns
+      summary: List campaigns
+      operationId: listCampaigns
+      parameters:
+      - $ref: '#/components/parameters/PageSize'
+      - $ref: '#/components/parameters/PageToken'
+      responses:
+        '200':
+          description: A page of campaigns.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CampaignList'
+  /v2/campaigns/{campaign_id}:
+    parameters:
+    - name: campaign_id
+      in: path
+      required: true
+      schema:
+        type: string
+    get:
+      tags:
+      - Campaigns
+      summary: Get a campaign
+      operationId: getCampaign
+      responses:
+        '200':
+          description: Campaign.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Campaign'
+components:
+  schemas:
+    Campaign:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        active_contact_count:
+          type: integer
+        completed_contact_count:
+          type: integer
+        published_status:
+          type: string
+    CampaignList:
+      type: object
+      properties:
+        campaigns:
+          type: array
+          items:
+            $ref: '#/components/schemas/Campaign'
+        next_page_token:
+          type: string
+  parameters:
+    PageSize:
+      name: limit
+      in: query
+      required: false
+      schema:
+        type: integer
+        minimum: 1
+        maximum: 1000
+        default: 100
+    PageToken:
+      name: page_token
+      in: query
+      required: false
+      schema:
+        type: string
+  securitySchemes:
+    oauth2:
+      type: oauth2
+      description: Keap uses OAuth 2.0 for authentication. See https://developer.infusionsoft.com/getting-started-oauth-keys/
+      flows:
+        authorizationCode:
+          authorizationUrl: https://accounts.infusionsoft.com/app/oauth/authorize
+          tokenUrl: https://api.infusionsoft.com/token
+          scopes:
+            full: Full access to the Keap CRM REST API.

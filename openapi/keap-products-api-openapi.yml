@@ -1,0 +1,135 @@
+openapi: 3.1.0
+info:
+  title: Keap REST Campaigns Products API
+  description: 'Curated OpenAPI 3.1 description of the Keap (formerly Infusionsoft) REST v2 API.
+
+    Covers a representative subset of contacts, companies, opportunities, orders,
+
+    products, tasks, campaigns, and tags. Derived from the official Keap v2 OpenAPI
+
+    document published at https://developer.infusionsoft.com/docs/restv2/ which is
+
+    served by the api.infusionsoft.com host.
+
+    '
+  version: 2.70.0
+  contact:
+    name: Keap
+    url: https://developer.keap.com/get-support/
+    email: api@keap.com
+  license:
+    name: Apache 2.0
+    url: https://www.apache.org/licenses/LICENSE-2.0
+servers:
+- url: https://api.infusionsoft.com/crm/rest
+  description: Keap production REST API
+security:
+- oauth2: []
+tags:
+- name: Products
+  description: Manage catalog products.
+paths:
+  /v2/products:
+    get:
+      tags:
+      - Products
+      summary: List products
+      operationId: listProducts
+      parameters:
+      - $ref: '#/components/parameters/PageSize'
+      - $ref: '#/components/parameters/PageToken'
+      responses:
+        '200':
+          description: A page of products.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProductList'
+    post:
+      tags:
+      - Products
+      summary: Create a product
+      operationId: createProduct
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Product'
+      responses:
+        '201':
+          description: Product created.
+  /v2/products/{id}:
+    parameters:
+    - $ref: '#/components/parameters/IdPath'
+    get:
+      tags:
+      - Products
+      summary: Get a product
+      operationId: getProduct
+      responses:
+        '200':
+          description: Product.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Product'
+components:
+  parameters:
+    IdPath:
+      name: id
+      in: path
+      required: true
+      schema:
+        type: string
+    PageToken:
+      name: page_token
+      in: query
+      required: false
+      schema:
+        type: string
+    PageSize:
+      name: limit
+      in: query
+      required: false
+      schema:
+        type: integer
+        minimum: 1
+        maximum: 1000
+        default: 100
+  schemas:
+    Product:
+      type: object
+      properties:
+        id:
+          type: string
+        product_name:
+          type: string
+        product_desc:
+          type: string
+        product_price:
+          type: number
+          format: double
+        sku:
+          type: string
+        active:
+          type: boolean
+    ProductList:
+      type: object
+      properties:
+        products:
+          type: array
+          items:
+            $ref: '#/components/schemas/Product'
+        next_page_token:
+          type: string
+  securitySchemes:
+    oauth2:
+      type: oauth2
+      description: Keap uses OAuth 2.0 for authentication. See https://developer.infusionsoft.com/getting-started-oauth-keys/
+      flows:
+        authorizationCode:
+          authorizationUrl: https://accounts.infusionsoft.com/app/oauth/authorize
+          tokenUrl: https://api.infusionsoft.com/token
+          scopes:
+            full: Full access to the Keap CRM REST API.
