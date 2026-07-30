@@ -8,7 +8,19 @@ description: >-
   opportunities, orders, products, tasks, campaigns, and tags using OAuth 2.0
   or Personal Access Tokens.
 type: Index
-image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
+accessModel:
+  pricing: unknown
+  onboarding: self-serve
+  trial: false
+  try_now: false
+  public: false
+  label: Self-serve signup
+  confidence: medium
+  source:
+  - authentication
+  generated: '2026-07-22'
+  method: derived
+image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/icons/keap.png
 tags:
   - CRM
   - Sales
@@ -21,59 +33,161 @@ created: '2026-05-11'
 modified: '2026-05-30'
 specificationVersion: '0.19'
 apis:
-  - aid: keap:rest-api
-    name: Keap REST API
-    description: >-
-      REST API for managing contacts, companies, opportunities, orders,
-      products, tasks, campaigns, tags, and emails in Keap CRM.
-      Authentication uses OAuth 2.0, Personal Access Tokens, or Service
-      Account API Keys.
-    humanURL: https://developer.infusionsoft.com/docs/restv2/
-    baseURL: https://api.infusionsoft.com/crm/rest/v2
-    tags:
-      - CRM
-      - Contacts
-      - Sales
-      - Marketing Automation
-      - Orders
-      - Campaigns
-    properties:
-      - type: Documentation
-        url: https://developer.infusionsoft.com/docs/restv2/
-      - type: API Reference v1
-        url: https://developer.infusionsoft.com/docs/rest/
-      - type: Authentication
-        url: https://developer.infusionsoft.com/authentication/
-      - type: OpenAPI
-        url: https://raw.githubusercontent.com/api-evangelist/keap/refs/heads/main/openapi/keap-openapi.yml
-  - aid: keap:rest-hooks
-    name: Keap REST Hooks
-    description: >-
-      Keap REST Hooks webhook surface. Subscribers register a `hookUrl`
-      and `eventKey` via the v1 REST API (`POST /rest/v1/hooks`), complete
-      an `X-Hook-Secret` verification handshake, then receive HTTP POST
-      deliveries when contact, contactGroup, opportunity, invoice, order,
-      and subscription events occur. Event types follow `noun.verb`
-      dot-syntax (for example `contact.add`, `invoice.delete`).
-    humanURL: https://developer.infusionsoft.com/rest-hook-documentation/
-    baseURL: https://api.infusionsoft.com/crm/rest/v1/hooks
-    tags:
-      - Webhooks
-      - REST Hooks
-      - Events
-      - CRM
-      - Contacts
-      - Opportunities
-      - Invoices
-      - Orders
-      - Subscriptions
-    properties:
-      - type: Documentation
-        url: https://developer.infusionsoft.com/rest-hook-documentation/
-      - type: APIReference
-        url: https://developer.infusionsoft.com/docs/rest/
-      - type: AsyncAPI
-        url: https://raw.githubusercontent.com/api-evangelist/keap/refs/heads/main/asyncapi/keap-resthooks-asyncapi.yml
+- aid: keap:rest-hooks
+  name: Keap REST Hooks
+  description: >-
+    Keap REST Hooks webhook surface. Subscribers register a `hookUrl` and `eventKey` via the v1 REST API
+    (`POST /rest/v1/hooks`), complete an `X-Hook-Secret` verification handshake, then receive HTTP POST
+    deliveries when contact, contactGroup, opportunity, invoice, order, and subscription events occur.
+    Event types follow `noun.verb` dot-syntax (for example `contact.add`, `invoice.delete`).
+  humanURL: https://developer.infusionsoft.com/rest-hook-documentation/
+  baseURL: https://api.infusionsoft.com/crm/rest/v1/hooks
+  tags:
+  - Webhooks
+  - REST Hooks
+  - Events
+  - CRM
+  - Contacts
+  - Opportunities
+  - Invoices
+  - Orders
+  - Subscriptions
+  properties:
+  - type: Documentation
+    url: https://developer.infusionsoft.com/rest-hook-documentation/
+  - type: APIReference
+    url: https://developer.infusionsoft.com/docs/rest/
+  - type: AsyncAPI
+    url: >-
+      https://raw.githubusercontent.com/api-evangelist/keap/refs/heads/main/asyncapi/keap-resthooks-asyncapi.yml
+- aid: keap:keap-campaigns-api
+  name: Keap Campaigns API
+  description: Read marketing campaigns.
+  humanURL: https://developer.infusionsoft.com/docs/restv2/
+  baseURL: https://api.infusionsoft.com/crm/rest/v2
+  tags:
+  - Campaigns
+  properties:
+  - type: OpenAPI
+    url: openapi/keap-campaigns-api-openapi.yml
+  - type: Documentation
+    url: https://developer.infusionsoft.com/docs/restv2/
+  - type: API Reference v1
+    url: https://developer.infusionsoft.com/docs/rest/
+  - type: Authentication
+    url: https://developer.infusionsoft.com/authentication/
+- aid: keap:keap-companies-api
+  name: Keap Companies API
+  description: Manage company records.
+  humanURL: https://developer.infusionsoft.com/docs/restv2/
+  baseURL: https://api.infusionsoft.com/crm/rest/v2
+  tags:
+  - Companies
+  properties:
+  - type: OpenAPI
+    url: openapi/keap-companies-api-openapi.yml
+  - type: Documentation
+    url: https://developer.infusionsoft.com/docs/restv2/
+  - type: API Reference v1
+    url: https://developer.infusionsoft.com/docs/rest/
+  - type: Authentication
+    url: https://developer.infusionsoft.com/authentication/
+- aid: keap:keap-contacts-api
+  name: Keap Contacts API
+  description: Manage Keap contacts.
+  humanURL: https://developer.infusionsoft.com/docs/restv2/
+  baseURL: https://api.infusionsoft.com/crm/rest/v2
+  tags:
+  - Contacts
+  properties:
+  - type: OpenAPI
+    url: openapi/keap-contacts-api-openapi.yml
+  - type: Documentation
+    url: https://developer.infusionsoft.com/docs/restv2/
+  - type: API Reference v1
+    url: https://developer.infusionsoft.com/docs/rest/
+  - type: Authentication
+    url: https://developer.infusionsoft.com/authentication/
+- aid: keap:keap-opportunities-api
+  name: Keap Opportunities API
+  description: Manage sales opportunities.
+  humanURL: https://developer.infusionsoft.com/docs/restv2/
+  baseURL: https://api.infusionsoft.com/crm/rest/v2
+  tags:
+  - Opportunities
+  properties:
+  - type: OpenAPI
+    url: openapi/keap-opportunities-api-openapi.yml
+  - type: Documentation
+    url: https://developer.infusionsoft.com/docs/restv2/
+  - type: API Reference v1
+    url: https://developer.infusionsoft.com/docs/rest/
+  - type: Authentication
+    url: https://developer.infusionsoft.com/authentication/
+- aid: keap:keap-orders-api
+  name: Keap Orders API
+  description: Manage e-commerce orders.
+  humanURL: https://developer.infusionsoft.com/docs/restv2/
+  baseURL: https://api.infusionsoft.com/crm/rest/v2
+  tags:
+  - Orders
+  properties:
+  - type: OpenAPI
+    url: openapi/keap-orders-api-openapi.yml
+  - type: Documentation
+    url: https://developer.infusionsoft.com/docs/restv2/
+  - type: API Reference v1
+    url: https://developer.infusionsoft.com/docs/rest/
+  - type: Authentication
+    url: https://developer.infusionsoft.com/authentication/
+- aid: keap:keap-products-api
+  name: Keap Products API
+  description: Manage catalog products.
+  humanURL: https://developer.infusionsoft.com/docs/restv2/
+  baseURL: https://api.infusionsoft.com/crm/rest/v2
+  tags:
+  - Products
+  properties:
+  - type: OpenAPI
+    url: openapi/keap-products-api-openapi.yml
+  - type: Documentation
+    url: https://developer.infusionsoft.com/docs/restv2/
+  - type: API Reference v1
+    url: https://developer.infusionsoft.com/docs/rest/
+  - type: Authentication
+    url: https://developer.infusionsoft.com/authentication/
+- aid: keap:keap-tags-api
+  name: Keap Tags API
+  description: Manage tags and tag categories.
+  humanURL: https://developer.infusionsoft.com/docs/restv2/
+  baseURL: https://api.infusionsoft.com/crm/rest/v2
+  tags:
+  - Tags
+  properties:
+  - type: OpenAPI
+    url: openapi/keap-tags-api-openapi.yml
+  - type: Documentation
+    url: https://developer.infusionsoft.com/docs/restv2/
+  - type: API Reference v1
+    url: https://developer.infusionsoft.com/docs/rest/
+  - type: Authentication
+    url: https://developer.infusionsoft.com/authentication/
+- aid: keap:keap-tasks-api
+  name: Keap Tasks API
+  description: Manage tasks and follow-ups.
+  humanURL: https://developer.infusionsoft.com/docs/restv2/
+  baseURL: https://api.infusionsoft.com/crm/rest/v2
+  tags:
+  - Tasks
+  properties:
+  - type: OpenAPI
+    url: openapi/keap-tasks-api-openapi.yml
+  - type: Documentation
+    url: https://developer.infusionsoft.com/docs/restv2/
+  - type: API Reference v1
+    url: https://developer.infusionsoft.com/docs/rest/
+  - type: Authentication
+    url: https://developer.infusionsoft.com/authentication/
 common:
   - type: AgenticAccess
     url: agentic-access/keap-agentic-access.yml
