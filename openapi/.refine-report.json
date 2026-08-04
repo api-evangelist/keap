@@ -1,0 +1,28 @@
+{
+  "provider": "keap",
+  "sources": [
+    "keap-campaigns-api-openapi.yml",
+    "keap-companies-api-openapi.yml",
+    "keap-contacts-api-openapi.yml",
+    "keap-opportunities-api-openapi.yml",
+    "keap-orders-api-openapi.yml",
+    "keap-products-api-openapi.yml",
+    "keap-tags-api-openapi.yml",
+    "keap-tasks-api-openapi.yml"
+  ],
+  "outputs": [
+    "keap-campaigns-api-openapi.yml",
+    "keap-companies-api-openapi.yml",
+    "keap-contacts-api-openapi.yml",
+    "keap-opportunities-api-openapi.yml",
+    "keap-orders-api-openapi.yml",
+    "keap-products-api-openapi.yml",
+    "keap-tags-api-openapi.yml",
+    "keap-tasks-api-openapi.yml"
+  ],
+  "archived": [],
+  "errors": [],
+  "warnings": [],
+  "notes": [],
+  "skipped": []
+}
