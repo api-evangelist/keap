@@ -1,0 +1,671 @@
+openapi: 3.1.0
+info:
+  title: Keap Files API
+  description: Keap Public API Documentation
+  termsOfService: https://www.thryv.com/terms-of-use
+  contact:
+    name: Keap
+    url: https://developer.keap.com/get-support
+    email: api.keap@thryv.com
+  license:
+    name: Apache 2.0
+    url: https://www.apache.org/licenses/LICENSE-2.0
+  version: v2
+servers:
+- url: https://api.infusionsoft.com/crm
+tags:
+- name: Files
+paths:
+  /rest/v2/files:
+    get:
+      tags:
+      - Files
+      summary: List all files
+      description: Retrieves a list of files
+      operationId: listFiles
+      parameters:
+      - name: filter
+        in: query
+        description: 'Filter to apply, allowed fields are:
+
+          - (Boolean) `is_public` — `true` (public) or `false` (private)
+
+          - (String) `contact_id`
+
+          - (String) `user_id`
+
+          - (FileBoxCategory) `category` — one of: `ATTACHMENTS`, `CART`, `DOCUMENTS`, `HIDDEN`, `INVOICE`,
+          `LOGO`, `TICKETS`, `WEB_FORM`, `FUNNEL`
+
+          - (FileBoxType) `file_box_type` — one of: `APPLICATION`, `IMAGE`, `FAX`, `ATTACHMENT`, `TICKET`,
+          `CONTACT`, `DIGITAL_PRODUCT`, `IMPORT`, `HIDDEN`, `WEB_FORM`, `STYLED_CART`, `RESAMPLED_IMAGE`,
+          `TEMPLATE_THUMBNAIL`, `FUNNEL`, `LOGO_THUMBNAIL`, `UNLAYER`, `BRANDING_CENTER_LOGO`
+
+          - (String) `file_name`
+
+          - (String) `created_time`
+
+          - (String) `updated_time`
+
+
+          You will need to apply the `==` operator to check the equality of one of the filters with your
+          searched
+
+          word, in the encoded form `%3D%3D`. Multiple filters are combined with a semicolon (`;`, encoded
+          `%3B`)
+
+          and are ANDed together. For the filters listed above, here are some examples:
+
+          - `filter=contact_id%3D%3D123`
+
+          - `filter=is_public%3D%3Dfalse`
+
+          - `filter=category%3D%3DDOCUMENTS`
+
+          - `filter=file_box_type%3D%3DTICKET%3Bcategory%3D%3DATTACHMENTS`
+
+          - `filter=file_box_type%3D%3DCONTACT%3Bis_public%3D%3Dfalse`
+
+          '
+        required: false
+        schema:
+          type: string
+      - name: page_token
+        in: query
+        description: Page token
+        required: false
+        schema:
+          type: string
+      - name: order_by
+        in: query
+        description: 'Attribute and direction to order items.
+
+          One of the following fields:
+
+          - `file_name`
+
+          - `updated_time`
+
+          - ...
+
+
+          One of the following directions:
+
+          - `asc`
+
+          - `desc`
+
+          '
+        required: false
+        schema:
+          type: string
+      - name: page_size
+        in: query
+        description: Total number of items to return per page
+        required: false
+        schema:
+          type: integer
+          format: int32
+          maximum: 1000
+          minimum: 0
+        example: 0
+      responses:
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '409':
+          description: Conflict
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '501':
+          description: Method Not Implemented
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '405':
+          description: Method Not Allowed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListFilesResponse'
+    post:
+      tags:
+      - Files
+      summary: Create a file
+      description: Uploads a file using multipart/form-data. The `file` part contains the binary file
+        content; `file_name`, `is_public`, `file_association`, and optionally `contact_id` are additional
+        text parts in the same multipart request. Sending these as URL query parameters is not supported.
+      operationId: createFile
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                file:
+                  type: string
+                  format: binary
+                  description: File to upload
+                file_name:
+                  type: string
+                  description: File name
+                contact_id:
+                  type: string
+                  description: Contact ID. Required if the `file_association` is CONTACT
+                is_public:
+                  type: string
+                  description: Is public
+                file_association:
+                  type: string
+                  description: File association
+              required:
+              - file
+              - file_association
+              - file_name
+      responses:
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '409':
+          description: Conflict
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '501':
+          description: Method Not Implemented
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '405':
+          description: Method Not Allowed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FileMetadata'
+  /rest/v2/files/{file_id}:
+    get:
+      tags:
+      - Files
+      summary: Retrieve a file
+      description: Retrieves a file
+      operationId: getFile
+      parameters:
+      - name: file_id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '409':
+          description: Conflict
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '501':
+          description: Method Not Implemented
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '405':
+          description: Method Not Allowed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FileMetadata'
+    post:
+      tags:
+      - Files
+      summary: Update a file
+      description: Updates a file using multipart/form-data. Note that this endpoint uses POST instead
+        of PATCH.
+      operationId: updateFile
+      parameters:
+      - name: file_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: update_mask
+        in: query
+        description: An optional list of properties to be updated. If set, only the provided properties
+          will be updated and others will be skipped.
+        required: false
+        schema:
+          type: array
+          items:
+            type: string
+            enum:
+            - file
+            - file_name
+            - is_public
+          uniqueItems: true
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                file:
+                  type: string
+                  format: binary
+                  description: File to upload
+                file_name:
+                  type: string
+                  description: File name
+                is_public:
+                  type: boolean
+                  description: Is public
+      responses:
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '409':
+          description: Conflict
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '501':
+          description: Method Not Implemented
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '405':
+          description: Method Not Allowed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FileMetadata'
+    delete:
+      tags:
+      - Files
+      summary: Delete a file
+      description: Deletes a specified file
+      operationId: deleteFile
+      parameters:
+      - name: file_id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '409':
+          description: Conflict
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '501':
+          description: Method Not Implemented
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '405':
+          description: Method Not Allowed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '204':
+          description: No Content
+  /rest/v2/files/{file_id}:data:
+    get:
+      tags:
+      - Files
+      summary: Retrieve a file's data
+      description: Retrieves a file's data
+      operationId: getFileData_1
+      parameters:
+      - name: file_id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '409':
+          description: Conflict
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '501':
+          description: Method Not Implemented
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '405':
+          description: Method Not Allowed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: string
+                format: byte
+components:
+  schemas:
+    Error:
+      type: object
+      properties:
+        code:
+          type: integer
+          format: int32
+        message:
+          type: string
+        status:
+          type: string
+        details:
+          type: array
+          items:
+            $ref: '#/components/schemas/ErrorDetails'
+    ErrorDetails:
+      type: object
+      properties:
+        domain:
+          type: string
+        resource:
+          type: string
+    FileMetadata:
+      type: object
+      properties:
+        id:
+          type: string
+          description: File ID
+          example: 12345
+        category:
+          type: string
+          description: File category
+          enum:
+          - ATTACHMENTS
+          - CART
+          - DOCUMENTS
+          - HIDDEN
+          - INVOICE
+          - LOGO
+          - TICKETS
+          - WEB_FORM
+          - FUNNEL
+          example: DOCUMENTS
+        file_name:
+          type: string
+          description: File name with extension
+          example: document.pdf
+        is_public:
+          type: boolean
+          description: Whether file is publicly accessible
+          example: false
+        contact_id:
+          type: string
+          description: Associated contact ID
+          example: 1001
+        created_by_id:
+          type: string
+          description: ID of user who created the file
+          example: 456
+        remote_file_key:
+          type: string
+          description: Remote storage key
+          example: files/12345/document.pdf
+        file_box_type:
+          type: string
+          description: File box type
+          enum:
+          - APPLICATION
+          - IMAGE
+          - FAX
+          - ATTACHMENT
+          - TICKET
+          - CONTACT
+          - DIGITAL_PRODUCT
+          - IMPORT
+          - HIDDEN
+          - WEB_FORM
+          - STYLED_CART
+          - RESAMPLED_IMAGE
+          - TEMPLATE_THUMBNAIL
+          - FUNNEL
+          - LOGO_THUMBNAIL
+          - UNLAYER
+          - BRANDING_CENTER_LOGO
+          example: APPLICATION
+        file_size:
+          type: integer
+          format: int64
+          description: File size in bytes
+          example: 1048576
+        created_time:
+          type: string
+          description: Creation timestamp (ISO-8601)
+          example: '2024-01-10T08:00:00Z'
+        updated_time:
+          type: string
+          description: Last update timestamp (ISO-8601)
+          example: '2024-03-15T10:30:00Z'
+    ListFilesResponse:
+      type: object
+      properties:
+        files:
+          type: array
+          items:
+            $ref: '#/components/schemas/FileMetadata'
+        next_page_token:
+          type: string
+  securitySchemes:
+    oauth2:
+      type: oauth2
+      flows:
+        authorizationCode:
+          authorizationUrl: https://accounts.infusionsoft.com/app/oauth/authorize
+          tokenUrl: https://api.infusionsoft.com/token
+          scopes: {}
+security:
+- oauth2: []

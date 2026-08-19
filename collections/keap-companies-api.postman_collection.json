@@ -1,0 +1,343 @@
+{
+  "item": [
+    {
+      "id": "420c162f-8b3e-4ee1-b3b7-7fb2ef368d8d",
+      "name": "Companies",
+      "description": {
+        "content": "Manage company records.",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "dd6071ea-6325-43cd-9cf8-28a716371c59",
+          "name": "List companies",
+          "request": {
+            "name": "List companies",
+            "description": {},
+            "url": {
+              "path": [
+                "v2",
+                "companies"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "limit",
+                  "value": "100"
+                },
+                {
+                  "disabled": false,
+                  "key": "page_token",
+                  "value": "<string>"
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "ac9a75ba-2f7b-4ec7-b2e7-12e107c0042e",
+              "name": "A page of companies.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v2",
+                    "companies"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "limit",
+                      "value": "100"
+                    },
+                    {
+                      "key": "page_token",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"companies\": [\n    {\n      \"id\": \"string\",\n      \"company_name\": \"string\",\n      \"email\": \"DneicOfJ@kdoeDSKcR.emh\",\n      \"phone\": \"string\",\n      \"website\": \"string\"\n    },\n    {\n      \"id\": \"string\",\n      \"company_name\": \"string\",\n      \"email\": \"Un0IPLRey@ziZUvr.bfzy\",\n      \"phone\": \"string\",\n      \"website\": \"string\"\n    }\n  ],\n  \"next_page_token\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "274f3723-4fc2-4830-8041-6eddd070664b",
+          "name": "Create a company",
+          "request": {
+            "name": "Create a company",
+            "description": {},
+            "url": {
+              "path": [
+                "v2",
+                "companies"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"id\": \"<string>\",\n  \"company_name\": \"<string>\",\n  \"email\": \"<email>\",\n  \"phone\": \"<string>\",\n  \"website\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "76e520d8-506d-4aa4-b291-47d0ab9daf09",
+              "name": "Company created.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v2",
+                    "companies"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"id\": \"<string>\",\n  \"company_name\": \"<string>\",\n  \"email\": \"<email>\",\n  \"phone\": \"<string>\",\n  \"website\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Created",
+              "code": 201,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"string\",\n  \"company_name\": \"string\",\n  \"email\": \"dIMo9K7ZaU6@MllxklDlcqieZI.nnkk\",\n  \"phone\": \"string\",\n  \"website\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "a5f9d8bf-8dc2-46bd-a009-24915a40bec6",
+          "name": "Get a company by ID",
+          "request": {
+            "name": "Get a company by ID",
+            "description": {},
+            "url": {
+              "path": [
+                "v2",
+                "companies",
+                ":id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "id",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "a24bde86-9e4d-49b5-b39e-dd5a3b4587d9",
+              "name": "Company.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v2",
+                    "companies",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"string\",\n  \"company_name\": \"string\",\n  \"email\": \"dIMo9K7ZaU6@MllxklDlcqieZI.nnkk\",\n  \"phone\": \"string\",\n  \"website\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://api.infusionsoft.com/crm/rest",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "oauth2",
+    "oauth2": [
+      {
+        "key": "scope",
+        "value": "full"
+      },
+      {
+        "key": "accessTokenUrl",
+        "value": "https://api.infusionsoft.com/token"
+      },
+      {
+        "key": "authUrl",
+        "value": "https://accounts.infusionsoft.com/app/oauth/authorize"
+      },
+      {
+        "key": "grant_type",
+        "value": "authorization_code"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "aca081c8-6549-4610-9313-9f25fd9dcb69",
+    "name": "Keap REST Campaigns Companies API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "Curated OpenAPI 3.1 description of the Keap (formerly Infusionsoft) REST v2 API.\nCovers a representative subset of contacts, companies, opportunities, orders,\nproducts, tasks, campaigns, and tags. Derived from the official Keap v2 OpenAPI\ndocument published at https://developer.infusionsoft.com/docs/restv2/ which is\nserved by the api.infusionsoft.com host.\n\n\nContact Support:\n Name: Keap\n Email: api@keap.com",
+      "type": "text/plain"
+    }
+  }
+}

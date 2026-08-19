@@ -1,0 +1,70 @@
+generated: '2026-08-13'
+method: searched
+source: https://developer.infusionsoft.com/payments-api-integration-configuration/
+docs: https://developer.infusionsoft.com/payments-api-integration-configuration/
+summary: >-
+  Keap ships one client-side embeddable surface: a hosted payment web component
+  (`<keap-payment-method>`) delivered as a JavaScript bundle from payments.keap.page.
+  It is not optional — Keap states that "in order to use any of Keap's payment
+  processors the API developer will be REQUIRED to use Keap's hosted Payment
+  component", so the card-data path is deliberately kept out of the REST API and
+  inside the component. It brokers Stripe, PayPal and Authorize.Net behind one tag.
+component_count: 1
+families:
+  - family: Payments
+    components:
+      - name: keap-payment-method
+        type: web-component
+        tag: <keap-payment-method>
+        required: true
+        loader:
+          url: https://payments.keap.page/lib/payment-method-embed.js
+          registry: cdn
+          version: null
+          published: null
+          version_note: >-
+            The distribution URL is UNPINNED — it carries no version segment and no
+            content hash, and the served bundle exposes no version string. A consumer
+            cannot tell which build they are loading, and neither can we; recorded as
+            null after checking, not left unchecked. Bundle is 7,679 bytes,
+            text/javascript, HTTP 200 on 2026-08-13.
+        session_flow:
+          step_1: >-
+            POST https://api.infusionsoft.com/crm/rest/v2/paymentMethodConfigs with
+            {"contact_id": ...} to mint a session key.
+          step_2: Load the bundle, then render <keap-payment-method data-key="SESSION_KEY">.
+          session_ttl: 1 hour
+          note: Session keys expire after one hour; repeat step 1 to mint a new one.
+        attributes:
+          - name: data-key
+            required: true
+            description: The session key returned by POST /rest/v2/paymentMethodConfigs.
+          - name: data-styles
+            required: false
+            description: JSON object of style overrides.
+        style_properties:
+          - backgroundColor
+          - padding
+          - height
+          - fontSize
+          - borderRadius
+          - borderColor
+          - borderWidth
+          - borderStyle
+          - iconColor
+          - fontFamily
+        processor_specific_styles:
+          stripe: [primaryColor, spacingUnit, borderColorFocus]
+        processors_detected:
+          - Stripe
+          - PayPal
+          - Authorize.Net
+        processors_detected_note: Read from processor identifiers present in the served bundle.
+        backing_api:
+          - operation_area: Payment Methods
+            spec: openapi/keap-orders-api-openapi.yml
+            note: paymentMethodConfigs and paymentMethods live under the v2 commerce surface.
+not_found:
+  - Embedded dashboards or analytics widgets.
+  - A general-purpose element/UI library beyond payments.
+  - A hosted checkout page distinct from the component.

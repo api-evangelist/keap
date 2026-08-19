@@ -1,0 +1,1 @@
+{"authorization_servers":["https://api.keap.com/mcp"],"bearer_methods_supported":["header"],"resource":"https://api.keap.com/mcp","scopes_supported":["offline_access"]}

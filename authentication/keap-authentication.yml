@@ -1,19 +1,113 @@
-generated: '2026-07-11'
-method: derived
-source: openapi/keap-openapi.yml
-summary:
-  types:
-  - oauth2
-  oauth2_flows:
-  - authorizationCode
+generated: '2026-08-13'
+method: searched
+source: >-
+  https://developer.infusionsoft.com/getting-started-oauth-keys/ +
+  https://developer.infusionsoft.com/authentication/ +
+  https://developer.infusionsoft.com/pat-and-sak/ +
+  https://developer.infusionsoft.com/legacy-key-deprecation/ +
+  openapi/_original/keap-v2-openapi.json +
+  well-known/keap-oauth-authorization-server-mcp.json
+docs: https://developer.infusionsoft.com/getting-started-oauth-keys/
+summary: >-
+  Keap supports three live credential types against one bearer-token contract, plus a
+  fourth being retired. The OpenAPI declares only oauth2/authorizationCode, so the spec
+  alone under-describes the surface: Personal Access Tokens and Service Account Keys
+  are equally valid on every REST operation and are how most scripting integrations
+  actually authenticate. The MCP server at api.keap.com/mcp uses a SEPARATE, more
+  modern authorization stack — OAuth 2.1 with PKCE and dynamic client registration
+  against login.labs.thryv.com — and does not share the REST authorization server.
+summary_types:
+  types: [oauth2, bearer-token]
+  oauth2_flows: [authorizationCode, refreshToken]
+  scopes: 1
+  mfa: n/a
 schemes:
-- name: oauth2
-  type: oauth2
-  flows:
-  - flow: authorizationCode
-    authorizationUrl: https://accounts.infusionsoft.com/app/oauth/authorize
-    tokenUrl: https://api.infusionsoft.com/token
-    scopes: 1
-  description: Keap uses OAuth 2.0 for authentication. See https://developer.infusionsoft.com/getting-started-oauth-keys/
-  sources:
-  - openapi/keap-openapi.yml
+  - name: oauth2
+    type: oauth2
+    declared_in_spec: true
+    flows:
+      - flow: authorizationCode
+        authorizationUrl: https://accounts.infusionsoft.com/app/oauth/authorize
+        tokenUrl: https://api.infusionsoft.com/token
+        scopes:
+          full: Full access to the Keap CRM REST API. The only scope Keap accepts.
+      - flow: refreshToken
+        tokenUrl: https://api.infusionsoft.com/token
+        note: >-
+          Documented but not declared in the spec. Requires HTTP Basic on the token
+          endpoint: `Authorization: Basic base64(client_id:client_secret)`.
+    request_parameters:
+      authorize: [client_id, redirect_uri, response_type=code, scope=full]
+      token: [client_id, client_secret, code, grant_type=authorization_code, redirect_uri]
+      refresh: [grant_type=refresh_token, refresh_token]
+    token_placement: 'Authorization: Bearer <access_token>'
+    redirect_uri_requirements: Must be HTTPS. Keap will not redirect to any other URL during the flow.
+    refresh_token_rotation: true
+    refresh_token_rotation_note: >-
+      CRITICAL AND EASY TO GET WRONG — every refresh returns a NEW refresh token as
+      well as a new access token. The old refresh token is spent. If the new one is not
+      persisted the integration is locked out and needs re-authorization by the user.
+    credentials_issued_at: https://keys.developer.keap.com/my-apps
+  - name: personal_access_token
+    type: http
+    scheme: bearer
+    declared_in_spec: false
+    token_placement: 'Authorization: Bearer <token>'
+    identity: Acts as the user who created it, inheriting that user's visibility and edit permissions.
+    scope: A single authorized Keap application.
+    created_by: Any app user, from Settings → API Settings.
+    docs: https://developer.infusionsoft.com/pat-and-sak/
+    note: >-
+      Keap's Postman quick-start page documents an alternate header,
+      `X-Keap-API-Key: <token>`, for the same credential. The two Keap pages
+      disagree; the Bearer form is what the OpenAPI declares.
+  - name: service_account_key
+    type: http
+    scheme: bearer
+    declared_in_spec: false
+    token_placement: 'Authorization: Bearer <token>'
+    identity: Admin access to all stored data in the application.
+    scope: A single authorized Keap application.
+    created_by: Admins only.
+    docs: https://developer.infusionsoft.com/pat-and-sak/
+    note: >-
+      Shown in full exactly once at creation. Revocation from the API Settings screen
+      can take several minutes to propagate through the gateway.
+  - name: legacy_api_key
+    type: apiKey
+    status: deprecating
+    declared_in_spec: false
+    surface: XML-RPC only
+    token_placement: 'Authorization: Bearer <legacy_key>'
+    base_url: https://api.infusionsoft.com/crm/xmlrpc
+    docs: https://developer.infusionsoft.com/legacy-key-deprecation/
+    migration: https://developer.infusionsoft.com/legacy-key-migration/
+    note: >-
+      Keap runs periodic brownouts against Legacy Keys and plans to deactivate all of
+      them. Replace with a Service Account Key.
+mcp_authorization:
+  applies_to: https://api.keap.com/mcp
+  separate_from_rest: true
+  issuer: https://login.labs.thryv.com
+  authorization_endpoint: https://login.labs.thryv.com/authorize
+  token_endpoint: https://login.labs.thryv.com/oauth/token
+  registration_endpoint: https://api.keap.com/mcp/auth/register
+  dynamic_client_registration: true
+  pkce: S256
+  grant_types: [authorization_code, refresh_token]
+  scopes_supported: [offline_access]
+  public_clients: true
+  metadata:
+    - well-known/keap-oauth-protected-resource-mcp.json
+    - well-known/keap-oauth-authorization-server-mcp.json
+gateway_behaviour:
+  note: >-
+    Auth failures rejected at the Apigee gateway return a different envelope from the
+    API's own errors — observed live:
+    {"fault":{"faultstring":"Invalid access token","detail":{"errorcode":"oauth.v2.InvalidAccessToken"}}}.
+    Clients must handle both.
+gaps:
+  - The OpenAPI declares only oauth2; PAT/SAK are undeclared despite being fully supported.
+  - Only one scope (`full`) exists, so least-privilege delegation is not possible on the REST API.
+  - Two Keap pages disagree on the PAT/SAK header (Authorization: Bearer vs X-Keap-API-Key).
+  - No OpenID Connect; /.well-known/openid-configuration 404s on every host.

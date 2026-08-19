@@ -1,0 +1,97 @@
+generated: '2026-08-13'
+method: probed
+source: >-
+  https://api.keap.com/mcp (live JSON-RPC probe) +
+  https://api.infusionsoft.com/.well-known/oauth-protected-resource/mcp +
+  https://api.keap.com/.well-known/oauth-authorization-server/mcp
+name: Keap MCP Server
+status: live
+summary: >-
+  Keap operates a real, first-party REMOTE MCP server. It is undocumented — the
+  string "MCP" does not appear anywhere on developer.keap.com /
+  developer.infusionsoft.com — but it is unambiguously theirs and unambiguously
+  live: POSTing a JSON-RPC tools/list request to https://api.keap.com/mcp returns
+  a well-formed MCP error object ({"jsonrpc":"2.0","error":{"code":-32001,
+  "message":"Authentication required. Missing or invalid Authorization header."}})
+  together with a `WWW-Authenticate: Bearer realm="MCP Server"` header, while an
+  arbitrary unrouted path on the same host returns a bare 404 and the REST gateway
+  returns a completely different Apigee OAuth fault. The server advertises RFC 9728
+  protected-resource metadata and RFC 8414 authorization-server metadata, including
+  OAuth 2.1 dynamic client registration.
+
+deployment:
+  mode: remote
+  endpoint: https://api.keap.com/mcp
+  auth: oauth
+  verified: probed
+
+endpoints:
+  - url: https://api.keap.com/mcp
+    note: Canonical resource identifier declared by the protected-resource metadata.
+  - url: https://api.infusionsoft.com/mcp
+    note: >-
+      Same server on Keap's legacy Infusionsoft host; returns the identical JSON-RPC
+      error. Its protected-resource metadata still names https://api.keap.com/mcp as
+      the canonical resource.
+
+authorization:
+  protected_resource_metadata: https://api.infusionsoft.com/.well-known/oauth-protected-resource/mcp
+  authorization_server_metadata: https://api.keap.com/.well-known/oauth-authorization-server/mcp
+  issuer: https://login.labs.thryv.com
+  authorization_endpoint: https://login.labs.thryv.com/authorize
+  token_endpoint: https://login.labs.thryv.com/oauth/token
+  registration_endpoint: https://api.keap.com/mcp/auth/register
+  dynamic_client_registration: true
+  token_endpoint_auth_methods_supported: [none]
+  grant_types_supported: [authorization_code, refresh_token]
+  code_challenge_methods_supported: [S256]
+  scopes_supported: [offline_access]
+  bearer_methods_supported: [header]
+  note: >-
+    The issuer host is login.labs.thryv.com — Thryv is Keap's parent company (the
+    v2 OpenAPI also carries termsOfService https://www.thryv.com/terms-of-use and
+    contact api.keap@thryv.com), so the cross-domain issuer is expected, not a
+    mismatch. The "labs" subdomain suggests the server is still pre-GA, which is
+    consistent with it being absent from the published developer documentation.
+
+tools:
+  status: auth-gated
+  count: null
+  note: >-
+    tools/list requires a bearer token, and obtaining one requires an interactive
+    Keap user login through login.labs.thryv.com, so the live tool schemas could
+    NOT be enumerated anonymously. No tool list is published anywhere (there is no
+    llms.txt, no MCP documentation page, and no first-party MCP package on npm or
+    PyPI). Nothing is asserted here about tool names or input schemas — see
+    mcp/keap-tool-crosswalk.yml for the REST surface an authenticated introspection
+    would be expected to map onto, recorded as candidates only.
+
+third_party_servers:
+  - name: keap-mcp-server
+    registry: npm
+    url: https://www.npmjs.com/package/keap-mcp-server
+    version: 1.0.2
+    published: '2026-02-15'
+    official: false
+    publisher: suge212
+    note: >-
+      Community-built stdio MCP server wrapping the Keap v1 + v2 REST API. NOT
+      first-party and NOT the server above; recorded for completeness only and
+      deliberately excluded from the deployment block.
+
+evidence:
+  - url: https://api.keap.com/mcp
+    method: POST
+    body: '{"jsonrpc":"2.0","id":1,"method":"tools/list"}'
+    http_status: 401
+    response: 'JSON-RPC error -32001 "Authentication required. Missing or invalid Authorization header."'
+    www_authenticate: 'Bearer realm="MCP Server", charset="UTF-8"'
+  - url: https://api.infusionsoft.com/.well-known/oauth-protected-resource/mcp
+    http_status: 200
+    content_type: application/json
+  - url: https://api.keap.com/.well-known/oauth-authorization-server/mcp
+    http_status: 200
+    content_type: application/json
+  - url: https://api.infusionsoft.com/zzz-not-a-real-path
+    http_status: 404
+    note: Control probe proving /mcp is a routed surface, not a catch-all.

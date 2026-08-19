@@ -1,0 +1,837 @@
+openapi: 3.1.0
+info:
+  title: Keap Product Interest Bundles API
+  description: Keap Public API Documentation
+  termsOfService: https://www.thryv.com/terms-of-use
+  contact:
+    name: Keap
+    url: https://developer.keap.com/get-support
+    email: api.keap@thryv.com
+  license:
+    name: Apache 2.0
+    url: https://www.apache.org/licenses/LICENSE-2.0
+  version: v2
+servers:
+- url: https://api.infusionsoft.com/crm
+tags:
+- name: Product Interest Bundles
+paths:
+  /rest/v2/productInterestBundles:
+    get:
+      tags:
+      - Product Interest Bundles
+      summary: List Product Interest Bundles
+      description: Retrieves a list of Product Interest Bundles
+      operationId: listProductInterestBundles
+      parameters:
+      - name: filter
+        in: query
+        description: 'Filter to apply, allowed fields are:
+
+          - (String) `name`
+
+          '
+        required: false
+        schema:
+          type: string
+      - name: page_token
+        in: query
+        description: Page token
+        required: false
+        schema:
+          type: string
+      - name: order_by
+        in: query
+        description: 'Attribute and direction to order items.
+
+          One of the following fields:
+
+          - `name`
+
+
+          One of the following directions:
+
+          - `asc`
+
+          - `desc`
+
+          '
+        required: false
+        schema:
+          type: string
+      - name: page_size
+        in: query
+        description: Total number of items to return per page
+        required: false
+        schema:
+          type: integer
+          format: int32
+          maximum: 1000
+          minimum: 0
+        example: 0
+      responses:
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '409':
+          description: Conflict
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '501':
+          description: Method Not Implemented
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '405':
+          description: Method Not Allowed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListProductInterestBundleResponse'
+    post:
+      tags:
+      - Product Interest Bundles
+      summary: Create a Product Interest Bundle
+      description: Creates a new Product Interest Bundle.
+      operationId: createProductInterestBundle
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateProductInterestBundleRequest'
+        required: true
+      responses:
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '409':
+          description: Conflict
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '501':
+          description: Method Not Implemented
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '405':
+          description: Method Not Allowed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProductInterestBundle'
+  /rest/v2/productInterestBundles/{id}/interests:
+    post:
+      tags:
+      - Product Interest Bundles
+      summary: Create a Product Interest in an existing Bundle
+      description: Creates a new Product Interest in an existing Bundle.
+      operationId: addProductInterest
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AddProductInterestRequest'
+        required: true
+      responses:
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '409':
+          description: Conflict
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '501':
+          description: Method Not Implemented
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '405':
+          description: Method Not Allowed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProductInterest'
+  /rest/v2/productInterestBundles/{id}:
+    get:
+      tags:
+      - Product Interest Bundles
+      summary: Get a Product Interest Bundle
+      description: Gets a single Product Interest Bundle.
+      operationId: getProductInterestBundle
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '409':
+          description: Conflict
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '501':
+          description: Method Not Implemented
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '405':
+          description: Method Not Allowed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProductInterestBundle'
+    delete:
+      tags:
+      - Product Interest Bundles
+      summary: Delete a Product Interest Bundle
+      description: Deletes an existing Product Interest Bundle.
+      operationId: deleteProductInterestBundle
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '409':
+          description: Conflict
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '501':
+          description: Method Not Implemented
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '405':
+          description: Method Not Allowed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '204':
+          description: No Content
+    patch:
+      tags:
+      - Product Interest Bundles
+      summary: Update a Product Interest Bundle
+      description: Updates an existing Product Interest Bundle.
+      operationId: updateProductInterestBundle
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: update_mask
+        in: query
+        description: An optional list of properties to be updated. If set, only the provided properties
+          will be updated and others will be skipped.
+        required: false
+        schema:
+          type: array
+          items:
+            type: string
+            enum:
+            - name
+            - description
+          uniqueItems: true
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateProductInterestBundleRequest'
+        required: true
+      responses:
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '409':
+          description: Conflict
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '501':
+          description: Method Not Implemented
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '405':
+          description: Method Not Allowed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProductInterestBundle'
+  /rest/v2/productInterestBundles/{id}/interests/{interest_id}:
+    delete:
+      tags:
+      - Product Interest Bundles
+      summary: Delete a Product Interest from an existing Bundle
+      description: Deletes an existing Product Interest from an existing Bundle.
+      operationId: removeProductInterest
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: interest_id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '409':
+          description: Conflict
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '501':
+          description: Method Not Implemented
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '405':
+          description: Method Not Allowed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '204':
+          description: No Content
+    patch:
+      tags:
+      - Product Interest Bundles
+      summary: Update a Product Interest in an existing Bundle
+      description: Updates an existing Product Interest in an existing Bundle.
+      operationId: updateProductInterest
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: interest_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: update_mask
+        in: query
+        description: An optional list of properties to be updated. If set, only the provided properties
+          will be updated and others will be skipped.
+        required: false
+        schema:
+          type: array
+          items:
+            type: string
+            enum:
+            - quantity
+            - price
+            - discount_percent
+          uniqueItems: true
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateProductInterestRequest'
+        required: true
+      responses:
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '409':
+          description: Conflict
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '501':
+          description: Method Not Implemented
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '405':
+          description: Method Not Allowed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProductInterest'
+components:
+  schemas:
+    AddProductInterestRequest:
+      type: object
+      properties:
+        type:
+          type: string
+          description: The product interest type.
+          enum:
+          - PRODUCT
+          - SUBSCRIPTION_PLAN
+          example: PRODUCT
+        entity_id:
+          type: string
+          description: "The `product_id` (when the `type` is set to `PRODUCT`)\n or the `subscription_plan_id`\
+            \ (when the `type` is set to `SUBSCRIPTION_PLAN`).\n"
+          example: 123
+        price:
+          type: number
+          format: double
+          description: The price per unit of the product.
+          example: 10000
+        quantity:
+          type: integer
+          format: int32
+          description: Defaults to `1`.
+          example: 1
+        discount_percent:
+          type: integer
+          format: int32
+          description: Defaults to `0`.
+          example: 10
+      required:
+      - entity_id
+      - price
+      - type
+    CreateProductInterestBundleRequest:
+      type: object
+      properties:
+        name:
+          type: string
+          description: Product interest bundle name
+          example: Premium Bundle
+        description:
+          type: string
+          description: Product interest bundle description
+          example: Bundle of premium products
+      required:
+      - description
+      - name
+    CurrencyValue:
+      type: object
+      properties:
+        amount:
+          type: integer
+          format: int64
+          description: The price amount in the smallest currency unit
+          example: 10000
+        currency_code:
+          type: string
+          description: Three-letter ISO currency code
+          example: USD
+        formatted_amount:
+          type: string
+          description: The product amount formatted using the tenant's currency locale
+          example: $100.00
+    Error:
+      type: object
+      properties:
+        code:
+          type: integer
+          format: int32
+        message:
+          type: string
+        status:
+          type: string
+        details:
+          type: array
+          items:
+            $ref: '#/components/schemas/ErrorDetails'
+    ErrorDetails:
+      type: object
+      properties:
+        domain:
+          type: string
+        resource:
+          type: string
+    ListProductInterestBundleResponse:
+      type: object
+      properties:
+        product_interest_bundles:
+          type: array
+          items:
+            $ref: '#/components/schemas/ProductInterestBundle'
+        next_page_token:
+          type: string
+    ProductInterest:
+      type: object
+      properties:
+        id:
+          type: string
+          description: The product interest ID
+          example: 456
+        type:
+          type: string
+          description: The product interest type
+          enum:
+          - PRODUCT
+          - SUBSCRIPTION_PLAN
+          example: PRODUCT
+        quantity:
+          type: integer
+          format: int32
+          description: The quantity of product.
+          example: 1
+        price:
+          $ref: '#/components/schemas/CurrencyValue'
+          description: The price per unit of the product.
+        interest_id:
+          type: string
+          description: The interest ID
+          example: 789
+        discount_percent:
+          type: integer
+          format: int32
+          description: The percent to discount the product. Percent represented in a whole number, for
+            example 10 is 10%
+          example: 10
+    ProductInterestBundle:
+      type: object
+      properties:
+        id:
+          type: string
+          description: The product interest bundle ID
+          example: 123
+        name:
+          type: string
+          description: Product interest bundle name
+          example: Premium Bundle
+        description:
+          type: string
+          description: Product interest bundle description
+          example: Bundle of premium products
+        product_interests:
+          type: array
+          description: Product interests
+          items:
+            $ref: '#/components/schemas/ProductInterest'
+        subscription_plan_interests:
+          type: array
+          description: Subscription plan interests
+          items:
+            $ref: '#/components/schemas/ProductInterest'
+    UpdateProductInterestBundleRequest:
+      type: object
+      properties:
+        name:
+          type: string
+          description: Product interest bundle name
+          example: Premium Bundle
+        description:
+          type: string
+          description: Product interest bundle description
+          example: Bundle of premium products
+    UpdateProductInterestRequest:
+      type: object
+      properties:
+        price:
+          type: number
+          format: double
+          description: The price per unit of the product.
+          example: 10000
+        quantity:
+          type: integer
+          format: int32
+          description: The quantity of product.
+          example: 1
+        discount_percent:
+          type: integer
+          format: int32
+          description: The percent to discount the product.
+          example: 10
+  securitySchemes:
+    oauth2:
+      type: oauth2
+      flows:
+        authorizationCode:
+          authorizationUrl: https://accounts.infusionsoft.com/app/oauth/authorize
+          tokenUrl: https://api.infusionsoft.com/token
+          scopes: {}
+security:
+- oauth2: []

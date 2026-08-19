@@ -1,0 +1,660 @@
+openapi: 3.1.0
+info:
+  title: Keap Subscription Plans API
+  description: Keap Public API Documentation
+  termsOfService: https://www.thryv.com/terms-of-use
+  contact:
+    name: Keap
+    url: https://developer.keap.com/get-support
+    email: api.keap@thryv.com
+  license:
+    name: Apache 2.0
+    url: https://www.apache.org/licenses/LICENSE-2.0
+  version: v2
+servers:
+- url: https://api.infusionsoft.com/crm
+tags:
+- name: Subscription Plans
+paths:
+  /rest/v2/products/{product_id}/subscriptions:
+    get:
+      tags:
+      - Subscription Plans
+      summary: List Subscription Plans
+      description: Retrieves a list of Subscription Plans
+      operationId: listSubscriptionPlans
+      parameters:
+      - name: product_id
+        in: path
+        description: product_id
+        required: true
+        schema:
+          type: string
+        example: '''-'' can be used for a wildcard (/v2/products/-/subscriptions'
+      - name: filter
+        in: query
+        description: 'Filter to apply, allowed fields are:
+
+          - (Boolean) `active`: true or false
+
+          - (BillingCycle) `cycle_type`: DAILY, WEEKLY, MONTHLY, YEARLY
+
+
+          You will need to apply the `==` operator to check the equality of one of the filters with your
+          searched
+
+          word, in the encoded form `%3D%3D`. For the filters listed above, here are some examples:
+
+          - `filter=active%3D%3Dtrue`
+
+          - `filter=cycle_type%3D%3DDAILY`
+
+          - `filter=active%3D%3Dfalse%3Bcycle_type%3D%3DWEEKLY`
+
+          '
+        required: false
+        schema:
+          type: string
+      - name: page_token
+        in: query
+        description: Page token
+        required: false
+        schema:
+          type: string
+      - name: order_by
+        in: query
+        description: 'Attribute and direction to order items.
+
+          One of the following fields:
+
+          - `id`
+
+          - `product_id`
+
+
+          One of the following directions:
+
+          - `asc`
+
+          - `desc`
+
+          '
+        required: false
+        schema:
+          type: string
+      - name: page_size
+        in: query
+        description: Total number of items to return per page
+        required: false
+        schema:
+          type: integer
+          format: int32
+          maximum: 1000
+          minimum: 0
+        example: 0
+      responses:
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '409':
+          description: Conflict
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '501':
+          description: Method Not Implemented
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '405':
+          description: Method Not Allowed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListSubscriptionPlansResponse'
+    post:
+      tags:
+      - Subscription Plans
+      summary: Create Subscription Plan
+      description: Creates a Subscription Plan
+      operationId: createSubscriptionPlans
+      parameters:
+      - name: product_id
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateSubscriptionPlanRequest'
+        required: true
+      responses:
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '409':
+          description: Conflict
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '501':
+          description: Method Not Implemented
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '405':
+          description: Method Not Allowed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SubscriptionPlan'
+  /rest/v2/products/{product_id}/subscriptions/{subscription_plan_id}:
+    get:
+      tags:
+      - Subscription Plans
+      summary: Get Subscription Plan
+      description: Retrieves a Subscription Plan
+      operationId: fetchSubscriptionPlan
+      parameters:
+      - name: product_id
+        in: path
+        description: product_id
+        required: true
+        schema:
+          type: string
+      - name: subscription_plan_id
+        in: path
+        description: subscription_plan_id
+        required: true
+        schema:
+          type: string
+      responses:
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '409':
+          description: Conflict
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '501':
+          description: Method Not Implemented
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '405':
+          description: Method Not Allowed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SubscriptionPlan'
+    delete:
+      tags:
+      - Subscription Plans
+      summary: Delete Subscription Plan
+      description: Deletes a Subscription Plan
+      operationId: deleteSubscriptionPlan
+      parameters:
+      - name: product_id
+        in: path
+        description: product_id
+        required: true
+        schema:
+          type: string
+      - name: subscription_plan_id
+        in: path
+        description: subscription_plan_id
+        required: true
+        schema:
+          type: string
+      responses:
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '409':
+          description: Conflict
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '501':
+          description: Method Not Implemented
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '405':
+          description: Method Not Allowed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '204':
+          description: No Content
+    patch:
+      tags:
+      - Subscription Plans
+      summary: Update Subscription Plan
+      description: Updates a Subscription Plan
+      operationId: updateSubscriptionPlan
+      parameters:
+      - name: product_id
+        in: path
+        description: product_id
+        required: true
+        schema:
+          type: string
+      - name: subscription_plan_id
+        in: path
+        description: subscription_plan_id
+        required: true
+        schema:
+          type: string
+      - name: update_mask
+        in: query
+        description: An optional list of properties to be updated. If set, only the provided properties
+          will be updated and others will be skipped.
+        required: false
+        schema:
+          type: array
+          items:
+            type: string
+            enum:
+            - active
+            - allow_prorating
+            - cycle_type
+            - display_order_index
+            - frequency
+            - plan_price
+            - total_cycles
+          uniqueItems: true
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateSubscriptionPlanRequest'
+        required: true
+      responses:
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '409':
+          description: Conflict
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '501':
+          description: Method Not Implemented
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '405':
+          description: Method Not Allowed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SubscriptionPlan'
+components:
+  schemas:
+    CreateSubscriptionPlanRequest:
+      type: object
+      properties:
+        active:
+          type: boolean
+          description: Whether the subscription plan is active.
+          example: true
+        frequency:
+          type: integer
+          format: int32
+          default: 1
+          description: The frequency of the subscription plan. Must be greater than 0. Default is 1.
+          example: 1
+        allow_prorating:
+          type: boolean
+          description: Allow prorating of the subscription plan.
+          example: false
+        cycle_type:
+          type: string
+          description: The cycle type of the subscription plan.
+          enum:
+          - DAILY
+          - WEEKLY
+          - MONTHLY
+          - YEARLY
+          example: MONTHLY
+        display_order_index:
+          type: integer
+          format: int32
+          default: 0
+          description: The order that this plan will be displayed to the user. Lower values indicate higher
+            priority in order.
+          example: 0
+        plan_price:
+          type: number
+          format: double
+          description: The price of the subscription plan in the smallest currency unit. Must be greater
+            than or equal to 0.
+          example: 10000
+        total_cycles:
+          type: integer
+          format: int32
+          default: 0
+          description: How many cycles the subscription plan will have. 0 means infinite.
+          example: 12
+      required:
+      - cycle_type
+      - plan_price
+    CurrencyValue:
+      type: object
+      properties:
+        amount:
+          type: integer
+          format: int64
+          description: The price amount in the smallest currency unit
+          example: 10000
+        currency_code:
+          type: string
+          description: Three-letter ISO currency code
+          example: USD
+        formatted_amount:
+          type: string
+          description: The product amount formatted using the tenant's currency locale
+          example: $100.00
+    Error:
+      type: object
+      properties:
+        code:
+          type: integer
+          format: int32
+        message:
+          type: string
+        status:
+          type: string
+        details:
+          type: array
+          items:
+            $ref: '#/components/schemas/ErrorDetails'
+    ErrorDetails:
+      type: object
+      properties:
+        domain:
+          type: string
+        resource:
+          type: string
+    ListSubscriptionPlansResponse:
+      type: object
+      properties:
+        subscriptions:
+          type: array
+          items:
+            $ref: '#/components/schemas/SubscriptionPlan'
+        next_page_token:
+          type: string
+    SubscriptionPlan:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Subscription plan ID
+          example: 123
+        frequency:
+          type: integer
+          format: int32
+          description: Interval at which a customer receives a product or service as part of a subscription
+            plan.
+          example: 1
+        active:
+          type: boolean
+          description: If the subscription plan is active or not.
+          example: true
+        subscription_plan_name:
+          type: string
+          description: Plan name
+          example: Premium Monthly
+        cycle_type:
+          type: string
+          description: The cycle type of the subscription plan.
+          enum:
+          - YEARLY
+          - MONTHLY
+          - WEEKLY
+          - DAILY
+          example: MONTHLY
+        total_cycles:
+          type: integer
+          format: int32
+          description: Total number of cycles the plan will run before ending. Value of 0 indicates plan
+            will never end.
+          example: 12
+        plan_price:
+          $ref: '#/components/schemas/CurrencyValue'
+          description: Price of the plan
+        display_order_index:
+          type: integer
+          format: int32
+          description: The order index where this plan will be displayed on a page against other plans.
+            Smaller number indicates plan will be displayed higher in the list.
+          example: 1
+    UpdateSubscriptionPlanRequest:
+      type: object
+      properties:
+        active:
+          type: boolean
+          description: Whether the subscription plan is active.
+          example: true
+        frequency:
+          type: integer
+          format: int32
+          description: The frequency of the subscription plan. Must be greater than 0.
+          example: 1
+        allow_prorating:
+          type: boolean
+          description: Allow prorating of the subscription plan.
+          example: false
+        cycle_type:
+          type: string
+          description: The cycle type of the subscription plan.
+          enum:
+          - DAILY
+          - WEEKLY
+          - MONTHLY
+          - YEARLY
+          example: MONTHLY
+        display_order_index:
+          type: integer
+          format: int32
+          description: The order that this plan will be displayed to the user.
+          example: 0
+        plan_price:
+          type: number
+          format: double
+          description: The price of the subscription plan in the smallest currency unit. Must be greater
+            than or equal to 0.
+          example: 10000
+        total_cycles:
+          type: integer
+          format: int32
+          description: How many cycles the subscription plan will have. 0 means infinite.
+          example: 12
+      required:
+      - cycle_type
+      - plan_price
+  securitySchemes:
+    oauth2:
+      type: oauth2
+      flows:
+        authorizationCode:
+          authorizationUrl: https://accounts.infusionsoft.com/app/oauth/authorize
+          tokenUrl: https://api.infusionsoft.com/token
+          scopes: {}
+security:
+- oauth2: []

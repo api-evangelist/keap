@@ -1,0 +1,861 @@
+openapi: 3.1.0
+info:
+  title: Keap Campaign API
+  description: Keap Public API Documentation
+  termsOfService: https://www.thryv.com/terms-of-use
+  contact:
+    name: Keap
+    url: https://developer.keap.com/get-support
+    email: api.keap@thryv.com
+  license:
+    name: Apache 2.0
+    url: https://www.apache.org/licenses/LICENSE-2.0
+  version: v2
+servers:
+- url: https://api.infusionsoft.com/crm
+tags:
+- name: Campaign
+paths:
+  /rest/v2/campaigns/{campaign_id}/sequences/{sequence_id}:removeContacts:
+    post:
+      tags:
+      - Campaign
+      summary: Remove Contacts from Campaign Sequence
+      description: 'Removes a list of contacts from a campaign sequence
+
+        Response contains a map of the provided list of Contact Ids related to their individual result.'
+      operationId: removeContactsFromCampaignSequence
+      parameters:
+      - name: campaign_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: sequence_id
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RemoveContactsFromSequenceRequest'
+        required: true
+      responses:
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '409':
+          description: Conflict
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '501':
+          description: Method Not Implemented
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '405':
+          description: Method Not Allowed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RemoveContactsFromSequenceResponse'
+  /rest/v2/campaigns/{campaign_id}/sequences/{sequence_id}:addContacts:
+    post:
+      tags:
+      - Campaign
+      summary: Add Contacts to Campaign Sequence
+      description: 'Adds a list of contacts to a campaign sequence
+
+        Response contains a map of the provided list of Contact Ids related to their individual result.'
+      operationId: addContactsToCampaignSequence
+      parameters:
+      - name: campaign_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: sequence_id
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AddContactsToSequenceRequest'
+        required: true
+      responses:
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '409':
+          description: Conflict
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '501':
+          description: Method Not Implemented
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '405':
+          description: Method Not Allowed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AddContactsToSequenceResponse'
+  /rest/v2/campaigns:
+    get:
+      tags:
+      - Campaign
+      summary: List Campaigns
+      description: Retrieves a list of campaigns for the authenticated user
+      operationId: listCampaigns
+      parameters:
+      - name: filter
+        in: query
+        description: 'Filter to apply, allowed fields are:
+
+          - (String) `name`
+
+
+          You will need to apply the `==` operator to check the equality of the filter with your searched
+
+          text, in the encoded form `%3D%3D`.
+
+          The search will look for the text anywhere in the campaign name.
+
+          - `filter=name%3D%3DSpring Campaign`
+
+          - `filter=name%3D%3DTag New Contacts`
+
+          '
+        required: false
+        schema:
+          type: string
+      - name: page_token
+        in: query
+        description: Page token
+        required: false
+        schema:
+          type: string
+      - name: order_by
+        in: query
+        description: 'Attribute and direction to order items.
+
+          One of the following fields:
+
+          - `name`
+
+          - `publisheddate`
+
+          - `id`
+
+          - `completedContactCount`
+
+          - `activeContacts`
+
+          - `datecreated`
+
+          - `lastupdated`
+
+
+          One of the following directions:
+
+          - `asc`
+
+          - `desc`'
+        required: false
+        schema:
+          type: string
+      - name: page_size
+        in: query
+        description: Total number of items to return per page
+        required: false
+        schema:
+          type: integer
+          format: int32
+          maximum: 1000
+          minimum: 0
+        example: 0
+      responses:
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '409':
+          description: Conflict
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '501':
+          description: Method Not Implemented
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '405':
+          description: Method Not Allowed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListCampaignsResponse'
+  /rest/v2/campaigns/{campaign_id}:
+    get:
+      tags:
+      - Campaign
+      summary: Retrieve a Campaign
+      description: Retrieves a single campaign
+      operationId: getCampaign
+      parameters:
+      - name: campaign_id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '409':
+          description: Conflict
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '501':
+          description: Method Not Implemented
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '405':
+          description: Method Not Allowed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Campaign'
+  /rest/v2/campaigns/{campaign_id}/sequences:
+    get:
+      tags:
+      - Campaign
+      summary: Retrieve a list of Sequences for a Campaign
+      description: Retrieves a list of Sequences (published) for a Campaign
+      operationId: getCampaignSequences
+      parameters:
+      - name: campaign_id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '409':
+          description: Conflict
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '501':
+          description: Method Not Implemented
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '405':
+          description: Method Not Allowed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListCampaignSequenceResponse'
+  /rest/v2/campaigns/{campaign_id}/goals:
+    get:
+      tags:
+      - Campaign
+      summary: Retrieve a list of Goals for a Campaign
+      description: Retrieves a list of Goals (published) for a Campaign
+      operationId: getCampaignGoals
+      parameters:
+      - name: campaign_id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '409':
+          description: Conflict
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '501':
+          description: Method Not Implemented
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '405':
+          description: Method Not Allowed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListCampaignGoalsResponse'
+components:
+  schemas:
+    AddContactsToSequenceRequest:
+      type: object
+      properties:
+        contact_ids:
+          type: array
+          description: List of contact IDs to add to the sequence
+          example:
+          - '123'
+          - '456'
+          - '789'
+          items:
+            type: string
+      required:
+      - contact_ids
+    AddContactsToSequenceResponse:
+      type: object
+      properties:
+        add_to_sequence_results:
+          type: object
+          additionalProperties:
+            type: string
+            enum:
+            - SUCCESS
+            - ALREADY_IN_SEQUENCE
+            - CONTACT_DOES_NOT_EXIST
+            - FAILED
+          description: A map containing the contact ID as key and the result of adding them to the sequence
+            as value
+    Campaign:
+      type: object
+      properties:
+        id:
+          type: string
+          description: The unique identifier of the campaign
+          example: 123
+        name:
+          type: string
+          description: The name of the campaign
+          example: Summer Sale Campaign
+        locked:
+          type: boolean
+          description: Whether the campaign is locked for editing
+          example: false
+        date_created:
+          type: string
+          format: date-time
+          description: The date and time when the campaign was created. In ISO-8601 format
+          example: '2024-05-21T14:30:00Z'
+        published_date:
+          type: string
+          format: date-time
+          description: The date and time when the campaign was published. In ISO-8601 format
+          example: '2024-05-21T14:30:00Z'
+        published_status:
+          type: boolean
+          description: Whether the campaign is published
+          example: true
+        error_message:
+          type: string
+          description: Error message if the campaign has issues
+          example: Invalid sequence configuration
+        time_zone:
+          type: string
+          description: The timezone of the campaign
+          example: America/New_York
+        published_time_zone:
+          type: string
+          description: The timezone used when the campaign was published
+          example: America/New_York
+        created_by_global_id:
+          type: string
+          description: The global ID of the user who created the campaign
+          example: user_abc123
+        active_contact_count:
+          type: integer
+          format: int32
+          description: Number of contacts currently active in this campaign
+          example: 250
+        completed_contact_count:
+          type: integer
+          format: int32
+          description: Number of contacts who have completed this campaign
+          example: 1500
+    Error:
+      type: object
+      properties:
+        code:
+          type: integer
+          format: int32
+        message:
+          type: string
+        status:
+          type: string
+        details:
+          type: array
+          items:
+            $ref: '#/components/schemas/ErrorDetails'
+    ErrorDetails:
+      type: object
+      properties:
+        domain:
+          type: string
+        resource:
+          type: string
+    Goal:
+      type: object
+      properties:
+        id:
+          type: string
+          description: The unique identifier of the goal
+          example: 789
+        name:
+          type: string
+          description: The name of the goal
+          example: Form Submission
+        type:
+          type: string
+          description: The type of goal
+          enum:
+          - WebForm
+          - LandingPage
+          - Survey
+          - LinkClick
+          - EmailOpened
+          - Score
+          - Purchase
+          - FailedPurchase
+          - Quote
+          - WebsiteTrigger
+          - InternalForm
+          - SmartForm
+          - AppointmentEvent
+          - Task
+          - StageMove
+          - Note
+          - Tag
+          - PipelineStageMove
+          - UnlayerLandingPage
+          - GroSocial
+          - TwitterForm
+          - API
+          - WordPress
+          - NewLandingPage
+          - IntegrationTrigger
+          example: WebForm
+        historical_contact_counts:
+          $ref: '#/components/schemas/HistoricalCounts'
+          description: Historical contact counts for this goal
+        next_sequence_ids:
+          type: array
+          description: IDs of sequences that follow this goal
+          example:
+          - '101'
+          - '102'
+          items:
+            type: string
+          uniqueItems: true
+        previous_sequence_ids:
+          type: array
+          description: IDs of sequences that precede this goal
+          example:
+          - '99'
+          - '100'
+          items:
+            type: string
+          uniqueItems: true
+    HistoricalCounts:
+      type: object
+      properties:
+        24_hours:
+          type: integer
+          format: int32
+          description: Number of contacts in the last 24 hours
+          example: 50
+        30_days:
+          type: integer
+          format: int32
+          description: Number of contacts in the last 30 days
+          example: 1200
+    Item:
+      type: object
+      properties:
+        id:
+          type: string
+          description: The unique identifier of the item
+          example: 101
+        name:
+          type: string
+          description: The name of the item
+          example: Send Welcome Email
+        type:
+          type: string
+          description: The type of flow item
+          enum:
+          - Start
+          - Wait
+          - DelayTimer
+          - ContactTimer
+          - DateTimer
+          - AppointmentTimer
+          - Email
+          - BardEmail
+          - UnlayerEmail
+          - EmailConfirm
+          - Voice
+          - Fax
+          - Letter
+          - AutomatedSms
+          - UnlayerEmailConfirm
+          - Tag
+          - Opportunity
+          - Note
+          - Task
+          - CompleteTasks
+          - Appointment
+          - AssignOwner
+          - FieldValue
+          - Fulfillment
+          - CreateOrder
+          - Deal
+          - AddToSequence
+          - CancelSubscription
+          - MoveOpportunity
+          - Http
+          - CustomerHub
+          - HttpRequest
+          - IntegrationAction
+          - ActionSet
+          example: Email
+        next_item_id:
+          type: string
+          description: The ID of the next item in the sequence
+          example: 102
+        previous_item_id:
+          type: string
+          description: The ID of the previous item in the sequence
+          example: 100
+    ListCampaignGoalsResponse:
+      type: object
+      properties:
+        goals:
+          type: array
+          items:
+            $ref: '#/components/schemas/Goal'
+        next_page_token:
+          type: string
+        campaign_id:
+          type: string
+    ListCampaignSequenceResponse:
+      type: object
+      properties:
+        sequences:
+          type: array
+          items:
+            $ref: '#/components/schemas/Sequence'
+        next_page_token:
+          type: string
+        campaign_id:
+          type: string
+    ListCampaignsResponse:
+      type: object
+      properties:
+        campaigns:
+          type: array
+          items:
+            $ref: '#/components/schemas/Campaign'
+        next_page_token:
+          type: string
+    RemoveContactsFromSequenceRequest:
+      type: object
+      properties:
+        contact_ids:
+          type: array
+          description: List of contact IDs to remove from the sequence
+          example:
+          - '123'
+          - '456'
+          - '789'
+          items:
+            type: string
+      required:
+      - contact_ids
+    RemoveContactsFromSequenceResponse:
+      type: object
+      properties:
+        remove_from_sequence_results:
+          type: object
+          additionalProperties:
+            type: string
+            enum:
+            - SUCCESS
+            - CONTACT_DOES_NOT_EXIST
+            - FAILED
+          description: A map containing the contact ID as key and the result of removing them from the
+            sequence as value
+    Sequence:
+      type: object
+      properties:
+        id:
+          type: string
+          description: The unique identifier of the sequence
+          example: 456
+        name:
+          type: string
+          description: The name of the sequence
+          example: Welcome Series
+        paths:
+          type: array
+          description: List of paths in this sequence
+          items:
+            $ref: '#/components/schemas/SequencePath'
+        active_contact_count:
+          type: integer
+          format: int32
+          description: Number of contacts currently in this sequence
+          example: 75
+        active_contact_count_completed:
+          type: integer
+          format: int32
+          description: Number of contacts who have completed this sequence
+          example: 500
+        historical_contact_count:
+          $ref: '#/components/schemas/HistoricalCounts'
+          description: Historical contact counts for this sequence
+    SequencePath:
+      type: object
+      properties:
+        id:
+          type: string
+          description: The unique identifier of the sequence path
+          example: 201
+        items:
+          type: array
+          description: List of items in this sequence path
+          items:
+            $ref: '#/components/schemas/Item'
+  securitySchemes:
+    oauth2:
+      type: oauth2
+      flows:
+        authorizationCode:
+          authorizationUrl: https://accounts.infusionsoft.com/app/oauth/authorize
+          tokenUrl: https://api.infusionsoft.com/token
+          scopes: {}
+security:
+- oauth2: []

@@ -1,18 +1,64 @@
-generated: '2026-07-11'
-method: derived
-source: openapi/keap-openapi.yml
+generated: '2026-08-13'
+method: searched
+source: >-
+  https://developer.infusionsoft.com/getting-started-oauth-keys/ +
+  https://developer.infusionsoft.com/authentication/ +
+  openapi/_original/keap-v2-openapi.json +
+  well-known/keap-oauth-authorization-server-mcp.json
+docs: https://developer.infusionsoft.com/getting-started-oauth-keys/
+summary: >-
+  Keap has effectively no OAuth scope model on its REST API. Both published pages state
+  the same thing in the same words — "The scopes required by your application. The only
+  current valid value is scope=full. Defaults to full" — and the securitySchemes block
+  in both live contracts declares an EMPTY scopes object. An integration that needs to
+  read one contact and an integration that can delete every order in the account request
+  and receive exactly the same grant across all 540 operations. The newer MCP server
+  does have its own scope list, but it contains one entry (`offline_access`) and that
+  scope governs refresh-token issuance, not data access.
+scope_model: single-scope
+scope_count: 1
+least_privilege_possible: false
 schemes:
-- name: oauth2
-  source: openapi/keap-openapi.yml
-  flows:
-  - flow: authorizationCode
-    authorizationUrl: https://accounts.infusionsoft.com/app/oauth/authorize
-    tokenUrl: https://api.infusionsoft.com/token
-  description: Keap uses OAuth 2.0 for authentication. See https://developer.infusionsoft.com/getting-started-oauth-keys/
+  - name: oauth2
+    surface: REST v1 + v2
+    source: openapi/_original/keap-v2-openapi.json
+    flows:
+      - flow: authorizationCode
+        authorizationUrl: https://accounts.infusionsoft.com/app/oauth/authorize
+        tokenUrl: https://api.infusionsoft.com/token
+    declared_scopes_in_spec: 0
+    declared_scopes_note: >-
+      components.securitySchemes.oauth2.flows.authorizationCode.scopes is `{}` in both
+      the v1 and v2 contracts, so the scope value comes from the documentation, not the
+      spec.
 scopes:
-- scope: full
-  description: Full access to the Keap CRM REST API.
-  flows:
-  - authorizationCode
-  sources:
-  - openapi/keap-openapi.yml
+  - scope: full
+    description: >-
+      Full access to the Keap CRM REST API — every resource, every method, read and
+      write, across both v1 and v2.
+    flows: [authorizationCode]
+    default: true
+    only_valid_value: true
+    source: https://developer.infusionsoft.com/getting-started-oauth-keys/
+    covers_operations: 540
+mcp_scopes:
+  surface: https://api.keap.com/mcp
+  source: well-known/keap-oauth-authorization-server-mcp.json
+  scopes_supported:
+    - scope: offline_access
+      description: >-
+        Standard OAuth scope permitting issuance of a refresh token. It is an
+        authorization-lifetime scope, not a data-access scope — the MCP server publishes
+        no resource-level scopes.
+non_oauth_permission_model:
+  note: >-
+    Where Keap does have differential permission, it is in the CREDENTIAL TYPE rather
+    than in a scope: a Personal Access Token acts as its creating user and inherits that
+    user's record visibility and edit permissions, while a Service Account Key has
+    admin access to all stored data. That distinction is the only least-privilege lever
+    available, and it cannot be requested through the OAuth flow.
+  detail: authentication/keap-authentication.yml
+gaps:
+  - No per-resource or read/write scope separation on any of the 540 operations.
+  - The spec declares an empty scopes map, so tooling that reads only the OpenAPI sees zero scopes.
+  - Consent screens cannot communicate what an application will actually access.

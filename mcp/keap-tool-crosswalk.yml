@@ -1,0 +1,897 @@
+generated: '2026-08-13'
+method: derived
+source: openapi/_original/keap-v2-openapi.json + openapi/_original/keap-v1-openapi.json + live probe of
+  https://api.keap.com/mcp
+summary: 'Keap runs a live first-party remote MCP server at https://api.keap.com/mcp, but tools/list is
+  OAuth-gated and no tool list is published anywhere, so the MCP side of this crosswalk is EMPTY BY MEASUREMENT,
+  not by omission. What is recorded here is the complete, verified REST operation inventory the server
+  would have to draw on: 540 operationIds across the v2 (399) and v1 (141) contracts, grouped by tag.
+  Every operationId below was read out of Keap''s own published OpenAPI. No MCP tool name is invented,
+  and no binding is asserted. Re-run this artifact after an authenticated tools/list to fill in crosswalk[]
+  and move rest_only[] entries across.'
+surfaces:
+  openapi:
+    v2: openapi/_original/keap-v2-openapi.json
+    v1: openapi/_original/keap-v1-openapi.json
+    split: openapi/keap-*-api-openapi.yml (32 per-tag documents)
+    gated: false
+    source: https://crm.infusionsoft.com/app/v3/api-docs/V2 and /V1
+  graphql:
+    present: false
+    note: No GraphQL surface found on any Keap host.
+  mcp:
+    url: https://api.keap.com/mcp
+    gated: true
+    note: 'JSON-RPC -32001 Authentication required; WWW-Authenticate: Bearer realm="MCP Server". OAuth
+      2.1 + DCR via login.labs.thryv.com.'
+  xmlrpc:
+    url: https://api.infusionsoft.com/crm/xmlrpc
+    deprecated: true
+    note: Keap marks XML-RPC Deprecated in its own developer guide; excluded from this crosswalk.
+crosswalk: []
+mcp_only: []
+rest_only:
+- version: v2
+  tag: Affiliate
+  operation_count: 48
+  operations:
+  - addAffiliate
+  - addAffiliateToProgram
+  - addCommissionProgram
+  - addCommissionProgramResource
+  - assignProductCommissionProgram
+  - assignSubscriptionCommissionProgram
+  - createAffiliateCustomField
+  - createAffiliateCustomFieldGroup
+  - createAffiliateCustomFieldTab
+  - createDefaultCommissionProgram
+  - createRedirectLink
+  - deleteAffiliate
+  - deleteAffiliateCommissionProgram
+  - deleteAffiliateCustomField
+  - deleteAffiliateCustomFieldGroup
+  - deleteAffiliateCustomFieldTab
+  - deleteCommissionProgramResource
+  - deleteRedirectLink
+  - getAffiliate
+  - getAffiliateCommissionTotal
+  - getAffiliateCommissions
+  - getAffiliateCustomFieldGroup
+  - getAffiliateCustomFieldTab
+  - getAffiliateCustomFields
+  - getCommissionProgram
+  - getRedirectLink
+  - getReferralsByAffiliateId
+  - listAffiliate
+  - listAffiliateCommissionPrograms
+  - listAffiliateCustomFieldGroups
+  - listAffiliateCustomFieldTabs
+  - listAffiliateLinks
+  - listAffiliatePayments
+  - listCommissionProgramResources
+  - listSummaries
+  - removeAffiliateFromProgram
+  - removeProductCommissionFromCommissions
+  - removeSubscriptionPlanCommissionFromCommissions
+  - updateAffiliate
+  - updateAffiliateCustomField
+  - updateAffiliateCustomFieldGroup
+  - updateAffiliateCustomFieldTab
+  - updateCommissionProgram
+  - updateCommissionProgramResource
+  - updateDefaultCommissionProgram
+  - updateProductCommissionProgram
+  - updateRedirectLink
+  - updateSubscriptionCommissionProgram
+  reason: MCP tools/list is auth-gated; no published tool binds to these operations yet.
+- version: v2
+  tag: Automation
+  operation_count: 10
+  operations:
+  - achieveGoal
+  - addContactsToAutomationSequence
+  - bulkAssignmentAutomationsCategories
+  - bulkUnpublishAutomations
+  - deleteAutomation
+  - getAutomation
+  - listAllAutomationIds
+  - listAutomations
+  - renameAutomationV2
+  - unpublishAutomation
+  reason: MCP tools/list is auth-gated; no published tool binds to these operations yet.
+- version: v2
+  tag: AutomationCategory
+  operation_count: 4
+  operations:
+  - createCategory
+  - deleteCategories
+  - listCategories
+  - patchCategory
+  reason: MCP tools/list is auth-gated; no published tool binds to these operations yet.
+- version: v2
+  tag: Business Profile
+  operation_count: 2
+  operations:
+  - getBusinessProfile
+  - updateBusinessProfile
+  reason: MCP tools/list is auth-gated; no published tool binds to these operations yet.
+- version: v2
+  tag: Campaign
+  operation_count: 6
+  operations:
+  - addContactsToCampaignSequence
+  - getCampaign
+  - getCampaignGoals
+  - getCampaignSequences
+  - listCampaigns
+  - removeContactsFromCampaignSequence
+  reason: MCP tools/list is auth-gated; no published tool binds to these operations yet.
+- version: v2
+  tag: Category Discounts
+  operation_count: 7
+  operations:
+  - createCategoryDiscount
+  - createCategoryDiscountCriteria
+  - deleteCategoryDiscount
+  - deleteCategoryDiscountCriteria
+  - getCategoryDiscount
+  - listCategoryDiscounts
+  - updateCategoryDiscount
+  reason: MCP tools/list is auth-gated; no published tool binds to these operations yet.
+- version: v2
+  tag: Company
+  operation_count: 22
+  operations:
+  - addTagToCompany
+  - createCompany
+  - createCompanyCustomField
+  - createCompanyCustomFieldGroup
+  - createCompanyCustomFieldTab
+  - deleteCompany
+  - deleteCompanyCustomField
+  - deleteCompanyCustomFieldGroup
+  - deleteCompanyCustomFieldTab
+  - getCompany
+  - getCompanyCustomFieldGroup
+  - getCompanyCustomFieldTab
+  - listCompanies
+  - listCompanyCustomFieldGroups
+  - listCompanyCustomFieldTabs
+  - listTagsForCompany
+  - removeTagFromCompany
+  - retrieveCompanyCustomFieldModel
+  - updateCompany
+  - updateCompanyCustomField
+  - updateCompanyCustomFieldGroup
+  - updateCompanyCustomFieldTab
+  reason: MCP tools/list is auth-gated; no published tool binds to these operations yet.
+- version: v2
+  tag: Contact
+  operation_count: 27
+  operations:
+  - createContact
+  - createContactCustomField
+  - createContactCustomFieldGroup
+  - createContactCustomFieldTab
+  - createContactLinkType
+  - deleteContact
+  - deleteContactCustomField
+  - deleteContactCustomFieldGroup
+  - deleteContactCustomFieldTab
+  - deleteContactLinkType
+  - getContact
+  - getContactCustomFieldGroup
+  - getContactCustomFieldTab
+  - linkContacts
+  - listContactCustomFieldGroups
+  - listContactCustomFieldTabs
+  - listContactLinkTypes
+  - listContactLinks
+  - listContacts
+  - listTagsForContact
+  - mergeContacts
+  - retrieveContactModel
+  - unlinkContacts
+  - updateContact
+  - updateContactCustomFieldGroup
+  - updateContactCustomFieldTab
+  - updateContactLinkType
+  reason: MCP tools/list is auth-gated; no published tool binds to these operations yet.
+- version: v2
+  tag: Email
+  operation_count: 10
+  operations:
+  - createEmail
+  - createEmails
+  - deleteEmail
+  - deleteEmails
+  - getEmail
+  - getEmailTemplate
+  - listEmailTemplates
+  - listEmails
+  - sendEmail
+  - sendEmailTemplate
+  reason: MCP tools/list is auth-gated; no published tool binds to these operations yet.
+- version: v2
+  tag: Email Address
+  operation_count: 3
+  operations:
+  - getEmailAddressStatus
+  - listEmailAddressStatuses
+  - updateEmailAddressOptStatus
+  reason: MCP tools/list is auth-gated; no published tool binds to these operations yet.
+- version: v2
+  tag: Files
+  operation_count: 6
+  operations:
+  - createFile
+  - deleteFile
+  - getFile
+  - getFileData_1
+  - listFiles
+  - updateFile
+  reason: MCP tools/list is auth-gated; no published tool binds to these operations yet.
+- version: v2
+  tag: Free Trial Discounts
+  operation_count: 7
+  operations:
+  - createFreeTrialDiscount
+  - createFreeTrialDiscountCriteria
+  - deleteFreeTrialDiscount
+  - deleteFreeTrialDiscountCriteria
+  - getFreeTrialDiscount
+  - listFreeTrialDiscounts
+  - updateFreeTrialDiscount
+  reason: MCP tools/list is auth-gated; no published tool binds to these operations yet.
+- version: v2
+  tag: Integrations
+  operation_count: 4
+  operations:
+  - achieveIntegrationsWordPressOptInGoal
+  - addIntegrationsWordPressOptIn
+  - deleteIntegrationsWordPressOptIn
+  - listIntegrationsWordPressOptInOptions
+  reason: MCP tools/list is auth-gated; no published tool binds to these operations yet.
+- version: v2
+  tag: Lead Source Categories
+  operation_count: 5
+  operations:
+  - createLeadSourceCategory
+  - deleteLeadSourceCategory
+  - getLeadSourceCategory
+  - listLeadSourceCategories
+  - updateLeadSourceCategory
+  reason: MCP tools/list is auth-gated; no published tool binds to these operations yet.
+- version: v2
+  tag: Lead Source Expenses
+  operation_count: 5
+  operations:
+  - createLeadSourceExpense
+  - deleteLeadSourceExpense
+  - getLeadSourceExpense
+  - listLeadSourceExpenses
+  - updateLeadSourceExpense
+  reason: MCP tools/list is auth-gated; no published tool binds to these operations yet.
+- version: v2
+  tag: Lead Source Recurring Expenses
+  operation_count: 6
+  operations:
+  - createLeadSourceRecurringExpense
+  - deleteLeadSourceRecurringExpense
+  - getLeadSourceRecurringExpense
+  - listExpensesIncurredFromLeadSourceRecurringExpense
+  - listLeadSourceRecurringExpenses
+  - updateLeadSourceRecurringExpense
+  reason: MCP tools/list is auth-gated; no published tool binds to these operations yet.
+- version: v2
+  tag: Lead Sources
+  operation_count: 5
+  operations:
+  - createLeadSource
+  - deleteLeadSource
+  - getLeadSource
+  - listLeadSources
+  - updateLeadSource
+  reason: MCP tools/list is auth-gated; no published tool binds to these operations yet.
+- version: v2
+  tag: LeadScore
+  operation_count: 1
+  operations:
+  - getLeadScoreDetails
+  reason: MCP tools/list is auth-gated; no published tool binds to these operations yet.
+- version: v2
+  tag: Locale
+  operation_count: 4
+  operations:
+  - getCountryByCode
+  - getProvinceByCode
+  - listCountries
+  - listProvincesForCountry
+  reason: MCP tools/list is auth-gated; no published tool binds to these operations yet.
+- version: v2
+  tag: Merchants
+  operation_count: 1
+  operations:
+  - listMerchants
+  reason: MCP tools/list is auth-gated; no published tool binds to these operations yet.
+- version: v2
+  tag: Note
+  operation_count: 21
+  operations:
+  - createNote
+  - createNoteCustomField
+  - createNoteCustomFieldGroup
+  - createNoteCustomFieldTab
+  - deleteNote
+  - deleteNoteCustomFieldGroup
+  - deleteNoteCustomFieldTab
+  - deleteNotesCustomField
+  - getNote
+  - getNoteCustomFieldGroup
+  - getNoteCustomFieldTab
+  - listAllNotes
+  - listNoteCustomFieldGroups
+  - listNoteCustomFieldTabs
+  - listNoteTemplates
+  - listNotes
+  - retrieveNoteModel
+  - updateNote
+  - updateNoteCustomFieldGroup
+  - updateNoteCustomFieldTab
+  - updateNotesCustomField
+  reason: MCP tools/list is auth-gated; no published tool binds to these operations yet.
+- version: v2
+  tag: Opportunity
+  operation_count: 26
+  operations:
+  - createOpportunity
+  - createOpportunityCustomFieldGroup
+  - createOpportunityCustomFieldTab
+  - createOpportunityCustomFields
+  - createOpportunityStage
+  - deleteOpportunitiesCustomField
+  - deleteOpportunity
+  - deleteOpportunityCustomFieldGroup
+  - deleteOpportunityCustomFieldTab
+  - deleteOpportunityStage
+  - getOpportunity
+  - getOpportunityCustomFieldGroup
+  - getOpportunityCustomFieldTab
+  - getOpportunityStage
+  - getOpportunityStageMove
+  - listOpportunities
+  - listOpportunityCustomFieldGroups
+  - listOpportunityCustomFieldTabs
+  - listOpportunityStageMoves
+  - listOpportunityStages
+  - retrieveOpportunityCustomFieldModel
+  - updateOpportunity
+  - updateOpportunityCustomField
+  - updateOpportunityCustomFieldGroup
+  - updateOpportunityCustomFieldTab
+  - updateOpportunityStage
+  reason: MCP tools/list is auth-gated; no published tool binds to these operations yet.
+- version: v2
+  tag: Order Total Discounts
+  operation_count: 7
+  operations:
+  - createOrderTotalDiscount
+  - createOrderTotalDiscountCriteria
+  - deleteOrderTotalDiscount
+  - deleteOrderTotalDiscountCriteria
+  - getOrderTotalDiscount
+  - listOrderTotalDiscounts
+  - updateOrderTotalDiscount
+  reason: MCP tools/list is auth-gated; no published tool binds to these operations yet.
+- version: v2
+  tag: Orders
+  operation_count: 29
+  operations:
+  - applyCommissionOnOrderItems
+  - applyTax
+  - attachFileToOrder
+  - createOrder
+  - createOrderCustomField
+  - createOrderCustomFieldGroup
+  - createOrderCustomFieldTab
+  - createOrderItem
+  - createPaymentForAnOrder
+  - deleteOrder
+  - deleteOrderCustomField
+  - deleteOrderCustomFieldGroup
+  - deleteOrderCustomFieldTab
+  - deleteOrderItem
+  - detachFileFromOrder
+  - getOrder
+  - getOrderCustomFieldGroup
+  - getOrderCustomFieldTab
+  - getOrderItem
+  - listOrderCustomFieldGroups
+  - listOrderCustomFieldTabs
+  - listOrderPayments
+  - listOrders
+  - retrieveOrderCustomFieldModel
+  - updateOrder
+  - updateOrderCustomField
+  - updateOrderCustomFieldGroup
+  - updateOrderCustomFieldTab
+  - updateOrderItem
+  reason: MCP tools/list is auth-gated; no published tool binds to these operations yet.
+- version: v2
+  tag: Payment Method Configs
+  operation_count: 1
+  operations:
+  - createPaymentMethodConfig
+  reason: MCP tools/list is auth-gated; no published tool binds to these operations yet.
+- version: v2
+  tag: Payment Methods
+  operation_count: 4
+  operations:
+  - deactivatePaymentMethod
+  - deletePaymentMethod
+  - listPaymentMethods
+  - listPaymentMethods_1
+  reason: MCP tools/list is auth-gated; no published tool binds to these operations yet.
+- version: v2
+  tag: Product Categories
+  operation_count: 9
+  operations:
+  - assignProductsToCategory
+  - createImageFile
+  - createProductCategory
+  - deleteImageFile
+  - deleteProductCategory
+  - getProductCategory
+  - listAssignedProducts
+  - listProductCategories
+  - updateProductCategory
+  reason: MCP tools/list is auth-gated; no published tool binds to these operations yet.
+- version: v2
+  tag: Product Discounts
+  operation_count: 7
+  operations:
+  - createProductDiscount
+  - createProductDiscountCriteria
+  - deleteProductDiscount
+  - deleteProductDiscountCriteria
+  - getProductDiscount
+  - listProductDiscounts
+  - updateProductDiscount
+  reason: MCP tools/list is auth-gated; no published tool binds to these operations yet.
+- version: v2
+  tag: Product Interest Bundles
+  operation_count: 8
+  operations:
+  - addProductInterest
+  - createProductInterestBundle
+  - deleteProductInterestBundle
+  - getProductInterestBundle
+  - listProductInterestBundles
+  - removeProductInterest
+  - updateProductInterest
+  - updateProductInterestBundle
+  reason: MCP tools/list is auth-gated; no published tool binds to these operations yet.
+- version: v2
+  tag: Products
+  operation_count: 17
+  operations:
+  - addProductOptionListOptionValue
+  - adjustInventory
+  - createProduct
+  - createProductImage
+  - createProductOption
+  - deleteProduct
+  - deleteProductImage
+  - deleteProductOption
+  - deleteProductOptionListOptionValue
+  - getFileData
+  - getProduct
+  - getProductOption
+  - listProductOptions
+  - listProducts
+  - updateProduct
+  - updateProductOption
+  - updateProductOptionListOptionValue
+  reason: MCP tools/list is auth-gated; no published tool binds to these operations yet.
+- version: v2
+  tag: Referral
+  operation_count: 2
+  operations:
+  - createReferral
+  - listReferrals
+  reason: MCP tools/list is auth-gated; no published tool binds to these operations yet.
+- version: v2
+  tag: Reporting
+  operation_count: 4
+  operations:
+  - listReports
+  - retrieveReport
+  - retrieveReportModel
+  - runReport
+  reason: MCP tools/list is auth-gated; no published tool binds to these operations yet.
+- version: v2
+  tag: Sales
+  operation_count: 3
+  operations:
+  - listPayments
+  - listTransactions
+  - setMerchantGatewayAsDefault
+  reason: MCP tools/list is auth-gated; no published tool binds to these operations yet.
+- version: v2
+  tag: Settings
+  operation_count: 3
+  operations:
+  - getApplicationConfigurations
+  - getContactOptionTypes
+  - isApplicationEnabled
+  reason: MCP tools/list is auth-gated; no published tool binds to these operations yet.
+- version: v2
+  tag: Shipping
+  operation_count: 1
+  operations:
+  - listShippingMethods
+  reason: MCP tools/list is auth-gated; no published tool binds to these operations yet.
+- version: v2
+  tag: Shipping Discounts
+  operation_count: 7
+  operations:
+  - createShippingDiscount
+  - createShippingDiscountCriteria
+  - deleteShippingDiscount
+  - deleteShippingDiscountCriteria
+  - getShippingDiscount
+  - listShippingDiscounts
+  - updateShippingDiscount
+  reason: MCP tools/list is auth-gated; no published tool binds to these operations yet.
+- version: v2
+  tag: Subscription Plans
+  operation_count: 5
+  operations:
+  - createSubscriptionPlans
+  - deleteSubscriptionPlan
+  - fetchSubscriptionPlan
+  - listSubscriptionPlans
+  - updateSubscriptionPlan
+  reason: MCP tools/list is auth-gated; no published tool binds to these operations yet.
+- version: v2
+  tag: Subscriptions
+  operation_count: 20
+  operations:
+  - cancelSubscription
+  - createSubscription
+  - createSubscriptionCustomField
+  - createSubscriptionCustomFieldGroup
+  - createSubscriptionCustomFieldTab
+  - deleteSubscriptionCustomField
+  - deleteSubscriptionCustomFieldGroup
+  - deleteSubscriptionCustomFieldTab
+  - getSubscription
+  - getSubscriptionCustomFieldGroup
+  - getSubscriptionCustomFieldTab
+  - invoiceSubscription
+  - listSubscriptionCustomFieldGroups
+  - listSubscriptionCustomFieldTabs
+  - listSubscriptions
+  - retrieveSubscriptionCustomFieldModel
+  - updateSubscription
+  - updateSubscriptionCustomField
+  - updateSubscriptionCustomFieldGroup
+  - updateSubscriptionCustomFieldTab
+  reason: MCP tools/list is auth-gated; no published tool binds to these operations yet.
+- version: v2
+  tag: Tags
+  operation_count: 14
+  operations:
+  - applyTags
+  - createTag
+  - createTagCategory
+  - deleteTag
+  - deleteTagCategory
+  - getCategory
+  - getTag
+  - listCompaniesForTagId
+  - listContactsWithTagId
+  - listTagCategories
+  - listTags
+  - removeTags
+  - updateTag
+  - updateTagCategory
+  reason: MCP tools/list is auth-gated; no published tool binds to these operations yet.
+- version: v2
+  tag: Task
+  operation_count: 19
+  operations:
+  - createTask
+  - createTaskCustomField
+  - createTaskCustomFieldGroup
+  - createTaskCustomFieldTab
+  - deleteTask
+  - deleteTaskCustomField
+  - deleteTaskCustomFieldGroup
+  - deleteTaskCustomFieldTab
+  - getTask
+  - getTaskCustomFieldGroup
+  - getTaskCustomFieldTab
+  - listTaskCustomFieldGroups
+  - listTaskCustomFieldTabs
+  - listTasks
+  - retrieveTaskModel
+  - updateTask
+  - updateTaskCustomField
+  - updateTaskCustomFieldGroup
+  - updateTaskCustomFieldTab
+  reason: MCP tools/list is auth-gated; no published tool binds to these operations yet.
+- version: v2
+  tag: User Groups
+  operation_count: 2
+  operations:
+  - getUserGroup
+  - listUserGroups
+  reason: MCP tools/list is auth-gated; no published tool binds to these operations yet.
+- version: v2
+  tag: Users
+  operation_count: 5
+  operations:
+  - getUserById
+  - getUserInfo
+  - getUserSignature
+  - listPaginatedUsers
+  - updateUser
+  reason: MCP tools/list is auth-gated; no published tool binds to these operations yet.
+- version: v2
+  tag: Webforms
+  operation_count: 2
+  operations:
+  - getHtml
+  - listWebforms
+  reason: MCP tools/list is auth-gated; no published tool binds to these operations yet.
+- version: v1
+  tag: Account Info
+  operation_count: 2
+  operations:
+  - getAccountProfile
+  - updateAccountInfo
+  reason: MCP tools/list is auth-gated; no published tool binds to these operations yet.
+- version: v1
+  tag: Affiliate
+  operation_count: 10
+  operations:
+  - createAffiliate
+  - getAffiliate
+  - listAffiliateClawbacks
+  - listAffiliateRedirectLinks
+  - listAffiliates
+  - listCommissions
+  - listPayments
+  - listPrograms
+  - listSummaries
+  - retrieveAffiliateModel
+  reason: MCP tools/list is auth-gated; no published tool binds to these operations yet.
+- version: v1
+  tag: Appointment
+  operation_count: 8
+  operations:
+  - createAppointment
+  - createAppointmentCustomField
+  - deleteAppointment
+  - getAppointment
+  - listAppointments
+  - retrieveAppointmentModel
+  - updateAppointment
+  - updatePropertiesOnAppointment
+  reason: MCP tools/list is auth-gated; no published tool binds to these operations yet.
+- version: v1
+  tag: Campaign
+  operation_count: 7
+  operations:
+  - addContactToCampaignSequence
+  - addContactsToCampaignSequence
+  - createAchieveApiGoalEvent
+  - getCampaign
+  - listCampaigns
+  - removeContactFromCampaignSequence
+  - removeContactsFromCampaignSequence
+  reason: MCP tools/list is auth-gated; no published tool binds to these operations yet.
+- version: v1
+  tag: Company
+  operation_count: 6
+  operations:
+  - createCompany
+  - getCompany
+  - listCompanies
+  - retrieveCompanyModel
+  - updateCompany
+  - updateCompany_1
+  reason: MCP tools/list is auth-gated; no published tool binds to these operations yet.
+- version: v1
+  tag: Contact
+  operation_count: 17
+  operations:
+  - applyTagsToContactId
+  - createContact
+  - createCreditCard
+  - createCustomField
+  - createEmailForContact
+  - createOrUpdateContact
+  - deleteContact
+  - getContact
+  - insertUTMs
+  - listAppliedTags
+  - listContacts
+  - listCreditCards
+  - listEmailsForContact
+  - removeTagsFromContact
+  - removeTagsFromContact_1
+  - retrieveContactModel
+  - updatePropertiesOnContact
+  reason: MCP tools/list is auth-gated; no published tool binds to these operations yet.
+- version: v1
+  tag: E-Commerce
+  operation_count: 16
+  operations:
+  - createOrder
+  - createOrderItemsOnOrder
+  - createPaymentOnOrder
+  - createSubscription
+  - deleteOrder
+  - deleteOrderOrderItem
+  - getOrder
+  - getTransaction
+  - listOrderPayments
+  - listOrders
+  - listSubscriptions
+  - listTransactions
+  - listTransactionsForOrder
+  - replacePaymentPlan
+  - retrieveOrderModel
+  - retrieveSubscriptionModel
+  reason: MCP tools/list is auth-gated; no published tool binds to these operations yet.
+- version: v1
+  tag: Email
+  operation_count: 7
+  operations:
+  - createEmail
+  - createEmails
+  - deleteEmail
+  - deleteEmails
+  - getEmail
+  - listEmails
+  - sendEmail
+  reason: MCP tools/list is auth-gated; no published tool binds to these operations yet.
+- version: v1
+  tag: Email Address
+  operation_count: 1
+  operations:
+  - replaceEmailAddress
+  reason: MCP tools/list is auth-gated; no published tool binds to these operations yet.
+- version: v1
+  tag: File
+  operation_count: 5
+  operations:
+  - createFile
+  - deleteFile
+  - getFile
+  - listFiles
+  - updateFile
+  reason: MCP tools/list is auth-gated; no published tool binds to these operations yet.
+- version: v1
+  tag: Locale
+  operation_count: 3
+  operations:
+  - defaultOptions
+  - listCountries
+  - listCountries_1
+  reason: MCP tools/list is auth-gated; no published tool binds to these operations yet.
+- version: v1
+  tag: Merchant
+  operation_count: 1
+  operations:
+  - getMerchantAccounts
+  reason: MCP tools/list is auth-gated; no published tool binds to these operations yet.
+- version: v1
+  tag: Note
+  operation_count: 8
+  operations:
+  - createNote
+  - createNoteCustomField
+  - deleteNote
+  - getNote
+  - listNotes
+  - retrieveNoteModel
+  - updateNote
+  - updatePropertiesOnNote
+  reason: MCP tools/list is auth-gated; no published tool binds to these operations yet.
+- version: v1
+  tag: Opportunity
+  operation_count: 7
+  operations:
+  - createOpportunity
+  - getOpportunity
+  - listOpportunities
+  - listOpportunityStagePipelines
+  - retrieveOpportunityModel
+  - updateOpportunity
+  - updatePropertiesOnOpportunity
+  reason: MCP tools/list is auth-gated; no published tool binds to these operations yet.
+- version: v1
+  tag: Product
+  operation_count: 11
+  operations:
+  - createProduct
+  - createProductImage
+  - createProductSubscription
+  - deleteProduct
+  - deleteProductImage
+  - deleteProductSubscription
+  - listProducts
+  - listProductsFromSyncToken
+  - retrieveProduct
+  - retrieveProductSubscription
+  - updateProduct
+  reason: MCP tools/list is auth-gated; no published tool binds to these operations yet.
+- version: v1
+  tag: REST Hooks
+  operation_count: 8
+  operations:
+  - create_a_hook_subscription
+  - delete_a_hook_subscription
+  - list_hook_event_types
+  - list_stored_hook_subscriptions
+  - retrieve_a_hook_subscription
+  - update_a_hook_subscription
+  - verify_a_hook_subscription
+  - verify_a_hook_subscription_delayed
+  reason: MCP tools/list is auth-gated; no published tool binds to these operations yet.
+- version: v1
+  tag: Setting
+  operation_count: 3
+  operations:
+  - getApplicationEnabled
+  - getConfiguration
+  - getContactOptionTypes
+  reason: MCP tools/list is auth-gated; no published tool binds to these operations yet.
+- version: v1
+  tag: Tags
+  operation_count: 9
+  operations:
+  - applyTagToContactIds
+  - createTag
+  - createTagCategory
+  - getTag
+  - listCompaniesForTagId
+  - listContactsForTagId
+  - listTags
+  - removeTagFromContactId
+  - removeTagFromContactIds
+  reason: MCP tools/list is auth-gated; no published tool binds to these operations yet.
+- version: v1
+  tag: Task
+  operation_count: 9
+  operations:
+  - createTask
+  - createTaskCustomField
+  - deleteTask
+  - getTask
+  - listTasks
+  - listTasksForCurrentUser
+  - retrieveTaskModel
+  - updatePropertiesOnTask
+  - updateTask
+  reason: MCP tools/list is auth-gated; no published tool binds to these operations yet.
+- version: v1
+  tag: Users
+  operation_count: 3
+  operations:
+  - createUser
+  - getUserSignature
+  - listUsers
+  reason: MCP tools/list is auth-gated; no published tool binds to these operations yet.
+coverage:
+  rest_operations_total: 540
+  rest_operations_v2: 399
+  rest_operations_v1: 141
+  mcp_tools_known: 0
+  bound: 0
+  mcp_only: 0
+  rest_only: 540
+  confidence: not-measurable-anonymously

@@ -1,0 +1,80 @@
+generated: '2026-08-13'
+method: probed
+source: live HTTPS probes of every Keap apis.yml + OpenAPI servers[] host, 2026-08-13
+summary: >-
+  Two real /.well-known documents are served, and both belong to the Keap remote
+  MCP server rather than the REST API: RFC 9728 OAuth Protected Resource Metadata
+  at /.well-known/oauth-protected-resource/mcp and RFC 8414 Authorization Server
+  Metadata at /.well-known/oauth-authorization-server/mcp, on BOTH api.keap.com
+  and api.infusionsoft.com. Every classic path (security.txt, openid-configuration,
+  api-catalog, ai-plugin.json, agent-card.json, agent.json, llms.txt) misses on
+  every host. IMPORTANT FALSE-POSITIVE NOTE: crm.infusionsoft.com and
+  accounts.infusionsoft.com answer HTTP 200 with the same 6,388-byte
+  single-page-app login shell for EVERY /.well-known/* path and for /llms.txt.
+  Those are catch-all HTML responses, not documents, and are recorded as misses.
+hosts_probed:
+  - keap.com
+  - developer.keap.com
+  - developer.infusionsoft.com
+  - api.infusionsoft.com
+  - api.keap.com
+  - crm.infusionsoft.com
+  - accounts.infusionsoft.com
+hits:
+  - host: api.infusionsoft.com
+    path: /.well-known/oauth-protected-resource/mcp
+    status: 200
+    content_type: application/json
+    file: keap-oauth-protected-resource-mcp.json
+    rfc: RFC 9728
+    note: resource https://api.keap.com/mcp; scopes_supported [offline_access]; bearer via header.
+  - host: api.keap.com
+    path: /.well-known/oauth-protected-resource/mcp
+    status: 200
+    content_type: application/json
+    file: keap-oauth-protected-resource-mcp.json
+    rfc: RFC 9728
+    note: Byte-identical to the api.infusionsoft.com copy; saved once.
+  - host: api.keap.com
+    path: /.well-known/oauth-authorization-server/mcp
+    status: 200
+    content_type: application/json
+    file: keap-oauth-authorization-server-mcp.json
+    rfc: RFC 8414
+    note: >-
+      issuer https://login.labs.thryv.com; supports authorization_code + refresh_token,
+      PKCE S256, and DYNAMIC CLIENT REGISTRATION at https://api.keap.com/mcp/auth/register
+      with token_endpoint_auth_methods_supported ["none"] (public clients).
+misses:
+  - path: /.well-known/security.txt
+    status: 404
+    hosts: [keap.com, developer.keap.com, developer.infusionsoft.com, api.infusionsoft.com]
+    note: 200 on crm./accounts.infusionsoft.com is the SPA login shell, not a security.txt.
+  - path: /.well-known/openid-configuration
+    status: 404
+    hosts: [keap.com, developer.keap.com, developer.infusionsoft.com, api.infusionsoft.com, api.keap.com]
+  - path: /.well-known/oauth-authorization-server
+    status: 404
+    hosts: [keap.com, developer.keap.com, developer.infusionsoft.com, api.infusionsoft.com]
+    note: Only the /mcp-suffixed variant is served.
+  - path: /.well-known/oauth-protected-resource
+    status: 404
+    hosts: [api.infusionsoft.com, api.keap.com]
+    note: Only the /mcp-suffixed variant is served.
+  - path: /.well-known/api-catalog
+    status: 404
+    hosts: [keap.com, developer.keap.com, developer.infusionsoft.com, api.infusionsoft.com]
+  - path: /.well-known/ai-plugin.json
+    status: 404
+    hosts: [keap.com, developer.keap.com, developer.infusionsoft.com, api.infusionsoft.com]
+  - path: /.well-known/agent-card.json
+    status: 404
+    hosts: [keap.com, developer.keap.com, developer.infusionsoft.com, api.infusionsoft.com]
+  - path: /.well-known/agent.json
+    status: 404
+    hosts: [keap.com, developer.keap.com, developer.infusionsoft.com, api.infusionsoft.com]
+  - path: /llms.txt
+    status: 404
+    hosts: [keap.com, developer.keap.com, developer.infusionsoft.com, api.infusionsoft.com]
+security_txt: false
+agent_card: false

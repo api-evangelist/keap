@@ -1,0 +1,108 @@
+generated: '2026-08-13'
+method: derived
+source: openapi/_original/keap-v2-openapi.json + openapi/_original/keap-v1-openapi.json
+format: vendor-json
+rfc9457: false
+summary: >-
+  Keap declares an identical error block on EVERY operation — 8 error statuses on all
+  399 v2 operations and 10 on all 141 v1 operations, uniformly, with no
+  operation-specific error documentation anywhere. The envelope is a
+  `google.rpc.Status` shape (code / message / status / details[]), not RFC 9457
+  problem+json, and the media type is application/json. Two consequences matter for
+  agents: (1) 429 is NOT declared on any operation even though Keap documents hard
+  rate limits and tells clients to expect it, so the single most likely runtime
+  failure is invisible to a spec-driven client; (2) because the error set is uniform,
+  the spec gives no signal about which operations can actually 409 or 412 — that has
+  to be learned at runtime.
+envelope:
+  media_type: application/json
+  schema: Error
+  fields:
+    - name: code
+      type: integer
+      format: int32
+      note: Numeric status code; mirrors the HTTP status in observed Keap responses.
+    - name: message
+      type: string
+      note: Human-readable message.
+    - name: status
+      type: string
+      note: Symbolic status string (google.rpc.Code style, e.g. INVALID_ARGUMENT).
+    - name: details
+      type: array
+      items: ErrorDetails
+      note: 'v2 only. ErrorDetails carries {domain, resource} — no field-level path.'
+  example_gateway_error:
+    note: >-
+      The Apigee gateway in front of the API returns a DIFFERENT envelope for
+      auth failures before the API is reached, observed live at
+      https://api.infusionsoft.com/crm/rest/v1/swagger.json —
+      {"fault":{"faultstring":"Invalid access token","detail":{"errorcode":"oauth.v2.InvalidAccessToken"}}}.
+      Clients must handle both shapes.
+problem_types:
+  - status: 400
+    title: Bad Request
+    declared_on: {v2: 399, v1: 141}
+    remediation: >-
+      Validate filter expressions, update_mask field names and enum values. Keap's
+      filter mini-language rejects unknown field names.
+  - status: 401
+    title: Unauthorized
+    declared_on: {v2: 399, v1: 141}
+    remediation: >-
+      Access token expired or missing. Refresh using the rotating refresh token; the
+      new refresh token must be persisted. May also surface as the Apigee
+      oauth.v2.InvalidAccessToken fault envelope.
+  - status: 403
+    title: Forbidden
+    declared_on: {v2: 399, v1: 141}
+    remediation: >-
+      Token is valid but the acting identity lacks permission. Personal Access Tokens
+      inherit the creating user's visibility and edit permissions; a Service Account
+      Key has admin scope.
+  - status: 404
+    title: Not Found
+    declared_on: {v2: 399, v1: 141}
+  - status: 405
+    title: Method Not Allowed
+    declared_on: {v2: 399, v1: 141}
+  - status: 406
+    title: Not Acceptable
+    declared_on: {v1: 141}
+    note: v1 only.
+  - status: 409
+    title: Conflict
+    declared_on: {v2: 399, v1: 141}
+    remediation: >-
+      Duplicate or conflicting resource state. Note there is no idempotency key to
+      distinguish a genuine conflict from a safely-retried request.
+  - status: 412
+    title: Precondition Failed
+    declared_on: {v1: 141}
+    note: v1 only.
+  - status: 500
+    title: Internal Server Error
+    declared_on: {v2: 399, v1: 141}
+  - status: 501
+    title: Method Not Implemented
+    declared_on: {v2: 399, v1: 141}
+undeclared_runtime_statuses:
+  - status: 429
+    title: Too Many Requests
+    documented_at: https://developer.infusionsoft.com/api-token-quota-and-usage-measurements/
+    declared_in_spec: false
+    remediation: >-
+      Back off exponentially and honour Retry-After if present. Read
+      x-keap-tenant-throttle-available and x-keap-product-quota-available on every
+      response to avoid it. See rate-limits/keap-rate-limits.yml.
+error_reference_page:
+  published: false
+  note: >-
+    Keap publishes no error-code reference page. Searched the developer portal page
+    inventory (39 pages via its WordPress REST API) — there is a FAQ and a Known
+    Issues page, but no error catalogue. Nothing is invented here.
+gaps:
+  - No 429 declared on any of the 540 operations.
+  - No field-level validation error structure (ErrorDetails carries only domain/resource).
+  - No enumerated symbolic error codes published.
+  - Uniform error block means the spec cannot tell a client which errors are actually reachable per operation.

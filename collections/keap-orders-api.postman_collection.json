@@ -1,0 +1,335 @@
+{
+  "item": [
+    {
+      "id": "a9d2af67-83c5-4b6b-b808-28a0167b8be0",
+      "name": "Orders",
+      "description": {
+        "content": "Manage e-commerce orders.",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "6a8c5324-fbbe-4f8a-bc70-904f42a7a3cf",
+          "name": "List orders",
+          "request": {
+            "name": "List orders",
+            "description": {},
+            "url": {
+              "path": [
+                "v2",
+                "orders"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "limit",
+                  "value": "100"
+                },
+                {
+                  "disabled": false,
+                  "key": "page_token",
+                  "value": "<string>"
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "9c251ac8-9dad-4738-9deb-6eecf74c32b1",
+              "name": "A page of orders.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v2",
+                    "orders"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "limit",
+                      "value": "100"
+                    },
+                    {
+                      "key": "page_token",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"orders\": [\n    {\n      \"id\": \"string\",\n      \"title\": \"string\",\n      \"status\": \"string\",\n      \"total\": 7660.345642547169,\n      \"contact\": {\n        \"id\": \"string\",\n        \"given_name\": \"string\",\n        \"family_name\": \"string\",\n        \"email_addresses\": [\n          {\n            \"email\": \"GARb6iFIF6xF2G@lhAjfrwboUPCMsRZ.mpbs\",\n            \"field\": \"string\"\n          },\n          {\n            \"email\": \"x0vbW@MsmrsC.gr\",\n            \"field\": \"string\"\n          }\n        ],\n        \"phone_numbers\": [\n          {\n            \"number\": \"string\",\n            \"field\": \"string\"\n          },\n          {\n            \"number\": \"string\",\n            \"field\": \"string\"\n          }\n        ],\n        \"company\": {\n          \"id\": \"string\",\n          \"company_name\": \"string\"\n        }\n      },\n      \"order_items\": [\n        {\n          \"product_id\": \"string\",\n          \"quantity\": 3767,\n          \"price\": 2278.847019663689\n        },\n        {\n          \"product_id\": \"string\",\n          \"quantity\": 7007,\n          \"price\": 7468.79660528008\n        }\n      ]\n    },\n    {\n      \"id\": \"string\",\n      \"title\": \"string\",\n      \"status\": \"string\",\n      \"total\": 113.88351971916899,\n      \"contact\": {\n        \"id\": \"string\",\n        \"given_name\": \"string\",\n        \"family_name\": \"string\",\n        \"email_addresses\": [\n          {\n            \"email\": \"KwPiM-a5uDXx6g8@HBbKOhlHzTrMHxa.pgt\",\n            \"field\": \"string\"\n          },\n          {\n            \"email\": \"XC560hU2Q89mskp@IUQWRoTErKnGNzbhagfxkFHLGydKKza.mpt\",\n            \"field\": \"string\"\n          }\n        ],\n        \"phone_numbers\": [\n          {\n            \"number\": \"string\",\n            \"field\": \"string\"\n          },\n          {\n            \"number\": \"string\",\n            \"field\": \"string\"\n          }\n        ],\n        \"company\": {\n          \"id\": \"string\",\n          \"company_name\": \"string\"\n        }\n      },\n      \"order_items\": [\n        {\n          \"product_id\": \"string\",\n          \"quantity\": 7712,\n          \"price\": 4636.119701460936\n        },\n        {\n          \"product_id\": \"string\",\n          \"quantity\": 3011,\n          \"price\": 2270.9523867446337\n        }\n      ]\n    }\n  ],\n  \"next_page_token\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "af23594f-7ec8-440c-b1cb-2e958a1ce10b",
+          "name": "Create an order",
+          "request": {
+            "name": "Create an order",
+            "description": {},
+            "url": {
+              "path": [
+                "v2",
+                "orders"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"id\": \"<string>\",\n  \"title\": \"<string>\",\n  \"status\": \"<string>\",\n  \"total\": \"<double>\",\n  \"contact\": {\n    \"id\": \"<string>\",\n    \"given_name\": \"<string>\",\n    \"family_name\": \"<string>\",\n    \"email_addresses\": [\n      {\n        \"email\": \"<email>\",\n        \"field\": \"<string>\"\n      },\n      {\n        \"email\": \"<email>\",\n        \"field\": \"<string>\"\n      }\n    ],\n    \"phone_numbers\": [\n      {\n        \"number\": \"<string>\",\n        \"field\": \"<string>\"\n      },\n      {\n        \"number\": \"<string>\",\n        \"field\": \"<string>\"\n      }\n    ],\n    \"company\": {\n      \"id\": \"<string>\",\n      \"company_name\": \"<string>\"\n    }\n  },\n  \"order_items\": [\n    {\n      \"product_id\": \"<string>\",\n      \"quantity\": \"<integer>\",\n      \"price\": \"<number>\"\n    },\n    {\n      \"product_id\": \"<string>\",\n      \"quantity\": \"<integer>\",\n      \"price\": \"<number>\"\n    }\n  ]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "4fc819c4-a6c4-4c6a-b32a-e97f13388ec3",
+              "name": "Order created.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v2",
+                    "orders"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"id\": \"<string>\",\n  \"title\": \"<string>\",\n  \"status\": \"<string>\",\n  \"total\": \"<double>\",\n  \"contact\": {\n    \"id\": \"string\",\n    \"given_name\": \"string\",\n    \"family_name\": \"string\",\n    \"email_addresses\": [\n      {\n        \"email\": \"hqo@dZbPZJqaMLaeVIYflX.apw\",\n        \"field\": \"string\"\n      },\n      {\n        \"email\": \"ZuXLX5gSV2E8baY@qv.now\",\n        \"field\": \"string\"\n      }\n    ],\n    \"phone_numbers\": [\n      {\n        \"number\": \"string\",\n        \"field\": \"string\"\n      },\n      {\n        \"number\": \"string\",\n        \"field\": \"string\"\n      }\n    ],\n    \"company\": {\n      \"id\": \"string\",\n      \"company_name\": \"string\"\n    }\n  },\n  \"order_items\": [\n    {\n      \"product_id\": \"<string>\",\n      \"quantity\": \"<integer>\",\n      \"price\": \"<number>\"\n    },\n    {\n      \"product_id\": \"<string>\",\n      \"quantity\": \"<integer>\",\n      \"price\": \"<number>\"\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Created",
+              "code": 201,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "8be43666-3a99-48d0-b098-e5eb2015abc4",
+          "name": "Get an order",
+          "request": {
+            "name": "Get an order",
+            "description": {},
+            "url": {
+              "path": [
+                "v2",
+                "orders",
+                ":id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "id",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "0f16fd39-6806-410c-a730-acddb0492ce1",
+              "name": "Order.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v2",
+                    "orders",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"string\",\n  \"title\": \"string\",\n  \"status\": \"string\",\n  \"total\": 7615.406352552394,\n  \"contact\": {\n    \"id\": \"string\",\n    \"given_name\": \"string\",\n    \"family_name\": \"string\",\n    \"email_addresses\": [\n      {\n        \"email\": \"R8DHFTG@ikTeFknidK.jgdv\",\n        \"field\": \"string\"\n      },\n      {\n        \"email\": \"kVBTaQkE@N.vbh\",\n        \"field\": \"string\"\n      }\n    ],\n    \"phone_numbers\": [\n      {\n        \"number\": \"string\",\n        \"field\": \"string\"\n      },\n      {\n        \"number\": \"string\",\n        \"field\": \"string\"\n      }\n    ],\n    \"company\": {\n      \"id\": \"string\",\n      \"company_name\": \"string\"\n    }\n  },\n  \"order_items\": [\n    {\n      \"product_id\": \"string\",\n      \"quantity\": 9937,\n      \"price\": 2182.317237414154\n    },\n    {\n      \"product_id\": \"string\",\n      \"quantity\": 5419,\n      \"price\": 9218.293768425216\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://api.infusionsoft.com/crm/rest",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "oauth2",
+    "oauth2": [
+      {
+        "key": "scope",
+        "value": "full"
+      },
+      {
+        "key": "accessTokenUrl",
+        "value": "https://api.infusionsoft.com/token"
+      },
+      {
+        "key": "authUrl",
+        "value": "https://accounts.infusionsoft.com/app/oauth/authorize"
+      },
+      {
+        "key": "grant_type",
+        "value": "authorization_code"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "4024f91d-ea4f-400e-9eec-6ca8014f4a04",
+    "name": "Keap REST Campaigns Orders API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "Curated OpenAPI 3.1 description of the Keap (formerly Infusionsoft) REST v2 API.\nCovers a representative subset of contacts, companies, opportunities, orders,\nproducts, tasks, campaigns, and tags. Derived from the official Keap v2 OpenAPI\ndocument published at https://developer.infusionsoft.com/docs/restv2/ which is\nserved by the api.infusionsoft.com host.\n\n\nContact Support:\n Name: Keap\n Email: api@keap.com",
+      "type": "text/plain"
+    }
+  }
+}

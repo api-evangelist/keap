@@ -1,0 +1,94 @@
+generated: '2026-08-13'
+method: searched
+source: >-
+  https://developer.infusionsoft.com/developer-guide/ +
+  https://developer.infusionsoft.com/legacy-key-deprecation/ +
+  https://developer.infusionsoft.com/legacy-key-migration/ +
+  https://status.thryv.com/ +
+  openapi/_original/keap-v2-openapi.json
+summary: >-
+  Keap publishes an explicit, three-state API lifecycle table in its developer guide
+  — REST v2 "Default", REST v1 "Current", XML-RPC "Deprecated" — plus a named,
+  in-flight deprecation of Legacy API Keys with a documented migration path and
+  scheduled brownouts. Status is reported through the parent company's Statuspage,
+  which carries a dedicated "Keap" component. What is missing is machine-readable
+  deprecation: no Sunset or Deprecation response headers (RFC 8594) are documented,
+  no operation in either contract carries `deprecated: true`, and no retirement date
+  is published for XML-RPC or Legacy Keys.
+versioning:
+  scheme: path-segment major version
+  pattern: https://api.infusionsoft.com/crm/rest/{v1|v2}
+  current: v2
+  note: >-
+    The v2 OpenAPI reports info.version "v2" from the live endpoint; the dated
+    snapshot on the docs host reports "2.70.0.872719-hf-202511041049", so a build
+    identifier exists internally but is not part of the request contract.
+api_versions:
+  - version: v2
+    status: Default
+    base_url: https://api.infusionsoft.com/crm/rest/v2
+    alternate_host: https://api.keap.com/crm/rest/v2
+    reference: https://developer.infusionsoft.com/docs/restv2/
+    spec: https://crm.infusionsoft.com/app/v3/api-docs/V2
+    operations: 399
+  - version: v1
+    status: Current
+    base_url: https://api.infusionsoft.com/crm/rest/v1
+    reference: https://developer.infusionsoft.com/docs/rest/
+    spec: https://crm.infusionsoft.com/app/v3/api-docs/V1
+    operations: 141
+    note: >-
+      Still the only surface carrying REST Hooks (webhook subscriptions),
+      Appointments, and the Account Info endpoints — v1 is not a strict subset of v2.
+  - version: XML-RPC
+    status: Deprecated
+    base_url: https://api.infusionsoft.com/crm/xmlrpc
+    reference: https://developer.infusionsoft.com/docs/xml-rpc/
+    table_schema: https://developer.infusionsoft.com/docs/table-schema/
+    retirement_date: null
+    note: >-
+      Marked "Deprecated" in Keap's own developer-guide status table. No sunset date
+      is published. Keap advises migrating to REST to "future-proof against XMLRPC
+      API deprecation".
+deprecations:
+  - item: Legacy API Key (XML-RPC)
+    status: deprecating
+    announced_page: https://developer.infusionsoft.com/legacy-key-deprecation/
+    migration_page: https://developer.infusionsoft.com/legacy-key-migration/
+    replacement: [Service Account Key, Personal Access Token, OAuth2]
+    interim_workaround: >-
+      Legacy Keys continue to work on XML-RPC if sent as `Authorization: Bearer <key>`
+      against https://api.infusionsoft.com/crm/xmlrpc.
+    brownouts: true
+    brownout_schedule: https://docs.google.com/document/d/1TyiF0U3TO09hz-d0R26E9wb9EIBS1wpGrCyl2WjSxCU/preview
+    retirement_date: null
+    note: >-
+      Keap states it plans to deactivate all Legacy Keys "at a point in the near
+      future" and is running periodic brownouts to help consumers find affected
+      integrations. No dated deadline is published.
+  - item: XML-RPC API
+    status: deprecated
+    retirement_date: null
+deprecated_operations:
+  count: 0
+  note: >-
+    Scanned all 540 operations in the v1 and v2 contracts — none carries
+    `deprecated: true`. The deprecation signalling lives only in prose.
+sunset_headers:
+  rfc8594: false
+  deprecation_header: false
+  sunset_header: false
+  note: Not documented and not declared in either OpenAPI.
+status_page:
+  url: https://status.thryv.com/
+  provider: Atlassian Statuspage
+  api: https://status.thryv.com/api/v2/summary.json
+  component: Keap
+  note: >-
+    status.keap.com and status.infusionsoft.com both 301 to status.thryv.com, the
+    parent company's page, which lists "Keap" as a first-class component alongside
+    Authentication, Payments and Clients (CRM).
+known_issues: https://developer.infusionsoft.com/support/known-issues/
+sla:
+  published: false
+  note: No public API SLA or uptime commitment was found on any Keap or Thryv page.

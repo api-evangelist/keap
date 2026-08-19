@@ -1,0 +1,127 @@
+generated: '2026-08-13'
+method: searched
+source: >-
+  openapi/_original/keap-v2-openapi.json + openapi/_original/keap-v1-openapi.json +
+  https://developer.infusionsoft.com/api-token-quota-and-usage-measurements/ +
+  https://developer.infusionsoft.com/getting-started-oauth-keys/ +
+  https://developer.infusionsoft.com/pat-and-sak/
+summary: >-
+  The Keap v2 REST API follows Google API Improvement Proposal (AIP) conventions
+  almost throughout — `page_size`/`page_token`/`next_page_token` pagination,
+  `order_by`, `filter` with an `==`/`>`/`<` comparison mini-language, `update_mask`
+  on every PATCH, `fields` for sparse responses, and a `google.rpc.Status`-shaped
+  error envelope. v1 uses an older `limit`/`offset` style. The single biggest gap for
+  agent use is idempotency: Keap supports NO idempotency key of any kind, on any of
+  its 540 operations, while explicitly telling integrators to retry with exponential
+  backoff on 429 — an unsafe combination for POST.
+authentication:
+  styles: [oauth2-authorization-code, personal-access-token, service-account-key]
+  header: 'Authorization: Bearer <token>'
+  alternate_header: >-
+    X-Keap-API-Key is documented on the Postman quick-start page for PAT/SAK, and
+    conflicts with the Bearer form documented everywhere else. Bearer is what the
+    OpenAPI declares.
+  scopes: 'Single scope only: `full`. See scopes/keap-scopes.yml.'
+  token_rotation: >-
+    Refresh tokens are single-use and rotate — every refresh returns a NEW refresh
+    token that must be persisted or the chain breaks.
+  detail: authentication/keap-authentication.yml
+idempotency:
+  supported: false
+  header: null
+  scope: null
+  retention: null
+  note: >-
+    VERIFIED ABSENT. Grepped both published contracts for "idempoten" (case-insensitive)
+    across all 540 operations, all parameters and all component headers — zero
+    occurrences — and no Keap documentation page mentions idempotency, request keys or
+    de-duplication. This is a real finding, not an unchecked field: Keap's own
+    rate-limit guidance instructs clients to retry with exponential backoff on 429,
+    so a retried POST /rest/v2/contacts or POST /rest/v2/orders can duplicate a
+    record with nothing in the contract to prevent it.
+pagination:
+  v2:
+    style: cursor
+    request_params:
+      - name: page_size
+        in: query
+      - name: page_token
+        in: query
+    response_fields:
+      - next_page_token
+    ordering: order_by
+    note: Google AIP-158 style. Present on 57 list operations.
+  v1:
+    style: offset
+    request_params:
+      - name: limit
+        in: query
+      - name: offset
+        in: query
+    response_fields: [count, next, previous]
+filtering:
+  param: filter
+  style: >-
+    Field-scoped expression language using `==` for equality with prefix wildcards
+    (`email==john*`), and `>`/`<`/`>=`/`<=` comparison operators on numeric fields
+    (`contact_id>5`, URL-encoded). Multiple criteria are comma-joined. Set-valued
+    fields accept comma lists (`ids==1,2,3`).
+  discovery: >-
+    Filterable fields are enumerated per-resource in the OpenAPI parameter description,
+    and custom fields are filterable by field_name as returned by GET /v2/{resource}/model.
+  note: Standard fields take precedence over a custom field of the same name.
+field_selection:
+  param: fields
+  style: Comma-separated sparse field list; present on 21 operations.
+partial_update:
+  param: update_mask
+  style: >-
+    Google AIP-134 field mask, supplied as a query parameter on PATCH. Present on 60
+    operations. Fields omitted from update_mask are left untouched; this is the ONLY
+    way to do a partial update — there is no JSON Merge Patch or JSON Patch media type.
+custom_fields:
+  discovery: 'GET /rest/v2/{resource}/model'
+  sub_resources:
+    - '/model/customFields'
+    - '/model/customFields/tabs'
+    - '/model/customFields/groups'
+  note: >-
+    Custom fields are first-class and writable through dedicated model endpoints on
+    contacts, companies, opportunities, orders, tasks, notes and subscriptions.
+metadata:
+  supported: false
+  note: No generic metadata/key-value bag; extensibility is via custom fields.
+request_tracing:
+  request_id_header: null
+  tenant_header: x-keap-tenant-id
+  note: >-
+    No request-id/correlation header is documented or declared. The only per-request
+    identity header returned is x-keap-tenant-id (e.g. ab103.infusionsoft.com), which
+    identifies the Keap application instance, not the request.
+versioning:
+  style: path segment
+  detail: lifecycle/keap-lifecycle.yml
+errors:
+  envelope: google.rpc.Status shape
+  media_type: application/json
+  fields: [code, message, status, details]
+  rfc9457: false
+  detail: errors/keap-problem-types.yml
+rate_limiting:
+  signalled_by: x-keap-product-quota-*, x-keap-product-throttle-*, x-keap-tenant-throttle-*
+  exhaustion_status: 429
+  retry_after: conditional
+  detail: rate-limits/keap-rate-limits.yml
+webhooks:
+  style: REST Hooks (subscription-managed webhooks)
+  managed_via: 'v1 only — POST /rest/v1/hooks'
+  detail: asyncapi/keap-resthooks-asyncapi.yml
+media_types:
+  request: application/json
+  response: application/json
+  note: File endpoints additionally accept multipart uploads.
+gaps:
+  - No idempotency mechanism of any kind.
+  - No 429 response declared in either OpenAPI despite documented rate limits.
+  - No request-id / correlation header.
+  - v1 and v2 use incompatible pagination styles, and v1 still owns webhooks.

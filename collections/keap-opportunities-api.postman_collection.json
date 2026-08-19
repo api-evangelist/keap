@@ -1,0 +1,443 @@
+{
+  "item": [
+    {
+      "id": "8af3448e-001e-4e1b-976b-0cbc70e84538",
+      "name": "Opportunities",
+      "description": {
+        "content": "Manage sales opportunities.",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "782a4b97-184d-4033-b933-f3d081fd663a",
+          "name": "List opportunities",
+          "request": {
+            "name": "List opportunities",
+            "description": {},
+            "url": {
+              "path": [
+                "v2",
+                "opportunities"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "limit",
+                  "value": "100"
+                },
+                {
+                  "disabled": false,
+                  "key": "page_token",
+                  "value": "<string>"
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "c4430517-5025-497c-b4ca-50149f5b1bd9",
+              "name": "A page of opportunities.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v2",
+                    "opportunities"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "limit",
+                      "value": "100"
+                    },
+                    {
+                      "key": "page_token",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"opportunities\": [\n    {\n      \"id\": \"string\",\n      \"opportunity_title\": \"string\",\n      \"contact\": {\n        \"id\": \"string\",\n        \"given_name\": \"string\",\n        \"family_name\": \"string\",\n        \"email_addresses\": [\n          {\n            \"email\": \"VQLemWKdL1tY0gg@pnByGIGhhwyUkOLtwigeGojh.if\",\n            \"field\": \"string\"\n          },\n          {\n            \"email\": \"jNVKyx@VwSfDLnIWrjRCaaRsEiLnRbijdvNu.ren\",\n            \"field\": \"string\"\n          }\n        ],\n        \"phone_numbers\": [\n          {\n            \"number\": \"string\",\n            \"field\": \"string\"\n          },\n          {\n            \"number\": \"string\",\n            \"field\": \"string\"\n          }\n        ],\n        \"company\": {\n          \"id\": \"string\",\n          \"company_name\": \"string\"\n        }\n      },\n      \"stage\": {\n        \"id\": \"string\",\n        \"name\": \"string\"\n      },\n      \"estimated_close_date\": \"2022-11-20\"\n    },\n    {\n      \"id\": \"string\",\n      \"opportunity_title\": \"string\",\n      \"contact\": {\n        \"id\": \"string\",\n        \"given_name\": \"string\",\n        \"family_name\": \"string\",\n        \"email_addresses\": [\n          {\n            \"email\": \"UuCFJQZJ1@z.nqe\",\n            \"field\": \"string\"\n          },\n          {\n            \"email\": \"pxyK8nhd@hUcoZxFqhOHrMmDbDNuYEFwkH.yflb\",\n            \"field\": \"string\"\n          }\n        ],\n        \"phone_numbers\": [\n          {\n            \"number\": \"string\",\n            \"field\": \"string\"\n          },\n          {\n            \"number\": \"string\",\n            \"field\": \"string\"\n          }\n        ],\n        \"company\": {\n          \"id\": \"string\",\n          \"company_name\": \"string\"\n        }\n      },\n      \"stage\": {\n        \"id\": \"string\",\n        \"name\": \"string\"\n      },\n      \"estimated_close_date\": \"2000-09-24\"\n    }\n  ],\n  \"next_page_token\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "f8626939-18e3-42d3-8ba9-3206f5d88c8b",
+          "name": "Create an opportunity",
+          "request": {
+            "name": "Create an opportunity",
+            "description": {},
+            "url": {
+              "path": [
+                "v2",
+                "opportunities"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"id\": \"<string>\",\n  \"opportunity_title\": \"<string>\",\n  \"contact\": {\n    \"id\": \"<string>\",\n    \"given_name\": \"<string>\",\n    \"family_name\": \"<string>\",\n    \"email_addresses\": [\n      {\n        \"email\": \"<email>\",\n        \"field\": \"<string>\"\n      },\n      {\n        \"email\": \"<email>\",\n        \"field\": \"<string>\"\n      }\n    ],\n    \"phone_numbers\": [\n      {\n        \"number\": \"<string>\",\n        \"field\": \"<string>\"\n      },\n      {\n        \"number\": \"<string>\",\n        \"field\": \"<string>\"\n      }\n    ],\n    \"company\": {\n      \"id\": \"<string>\",\n      \"company_name\": \"<string>\"\n    }\n  },\n  \"stage\": {\n    \"id\": \"<string>\",\n    \"name\": \"<string>\"\n  },\n  \"estimated_close_date\": \"<date>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "1e762cb2-74c3-4477-b5cc-35f749b56bc0",
+              "name": "Opportunity created.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v2",
+                    "opportunities"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"id\": \"<string>\",\n  \"opportunity_title\": \"<string>\",\n  \"contact\": {\n    \"id\": \"string\",\n    \"given_name\": \"string\",\n    \"family_name\": \"string\",\n    \"email_addresses\": [\n      {\n        \"email\": \"1UeG6nTtMuSd@rCbWyklUfGKcAeai.zuk\",\n        \"field\": \"string\"\n      },\n      {\n        \"email\": \"FG9@yhkyylVsjgKO.nwr\",\n        \"field\": \"string\"\n      }\n    ],\n    \"phone_numbers\": [\n      {\n        \"number\": \"string\",\n        \"field\": \"string\"\n      },\n      {\n        \"number\": \"string\",\n        \"field\": \"string\"\n      }\n    ],\n    \"company\": {\n      \"id\": \"string\",\n      \"company_name\": \"string\"\n    }\n  },\n  \"stage\": {\n    \"id\": \"<string>\",\n    \"name\": \"<string>\"\n  },\n  \"estimated_close_date\": \"<date>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Created",
+              "code": 201,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "ebe4dd3c-4cbb-4cdb-8f77-f35626d47591",
+          "name": "Get an opportunity",
+          "request": {
+            "name": "Get an opportunity",
+            "description": {},
+            "url": {
+              "path": [
+                "v2",
+                "opportunities",
+                ":id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "id",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "c140889e-b46a-4190-a3f5-7be69e8147d4",
+              "name": "Opportunity.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v2",
+                    "opportunities",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"string\",\n  \"opportunity_title\": \"string\",\n  \"contact\": {\n    \"id\": \"string\",\n    \"given_name\": \"string\",\n    \"family_name\": \"string\",\n    \"email_addresses\": [\n      {\n        \"email\": \"EpEd@sRwo.wt\",\n        \"field\": \"string\"\n      },\n      {\n        \"email\": \"1pae0@YxdRKVEatWPh.ylz\",\n        \"field\": \"string\"\n      }\n    ],\n    \"phone_numbers\": [\n      {\n        \"number\": \"string\",\n        \"field\": \"string\"\n      },\n      {\n        \"number\": \"string\",\n        \"field\": \"string\"\n      }\n    ],\n    \"company\": {\n      \"id\": \"string\",\n      \"company_name\": \"string\"\n    }\n  },\n  \"stage\": {\n    \"id\": \"string\",\n    \"name\": \"string\"\n  },\n  \"estimated_close_date\": \"2023-05-19\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "8d2afe56-2144-45a1-93ed-2a6e70017c9c",
+          "name": "Patch an opportunity",
+          "request": {
+            "name": "Patch an opportunity",
+            "description": {},
+            "url": {
+              "path": [
+                "v2",
+                "opportunities",
+                ":id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "id",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "method": "PATCH",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"id\": \"<string>\",\n  \"opportunity_title\": \"<string>\",\n  \"contact\": {\n    \"id\": \"<string>\",\n    \"given_name\": \"<string>\",\n    \"family_name\": \"<string>\",\n    \"email_addresses\": [\n      {\n        \"email\": \"<email>\",\n        \"field\": \"<string>\"\n      },\n      {\n        \"email\": \"<email>\",\n        \"field\": \"<string>\"\n      }\n    ],\n    \"phone_numbers\": [\n      {\n        \"number\": \"<string>\",\n        \"field\": \"<string>\"\n      },\n      {\n        \"number\": \"<string>\",\n        \"field\": \"<string>\"\n      }\n    ],\n    \"company\": {\n      \"id\": \"<string>\",\n      \"company_name\": \"<string>\"\n    }\n  },\n  \"stage\": {\n    \"id\": \"<string>\",\n    \"name\": \"<string>\"\n  },\n  \"estimated_close_date\": \"<date>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "21346a5b-b03e-4a2f-a566-10c141674f77",
+              "name": "Updated opportunity.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v2",
+                    "opportunities",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  }
+                ],
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"id\": \"<string>\",\n  \"opportunity_title\": \"<string>\",\n  \"contact\": {\n    \"id\": \"string\",\n    \"given_name\": \"string\",\n    \"family_name\": \"string\",\n    \"email_addresses\": [\n      {\n        \"email\": \"1UeG6nTtMuSd@rCbWyklUfGKcAeai.zuk\",\n        \"field\": \"string\"\n      },\n      {\n        \"email\": \"FG9@yhkyylVsjgKO.nwr\",\n        \"field\": \"string\"\n      }\n    ],\n    \"phone_numbers\": [\n      {\n        \"number\": \"string\",\n        \"field\": \"string\"\n      },\n      {\n        \"number\": \"string\",\n        \"field\": \"string\"\n      }\n    ],\n    \"company\": {\n      \"id\": \"string\",\n      \"company_name\": \"string\"\n    }\n  },\n  \"stage\": {\n    \"id\": \"<string>\",\n    \"name\": \"<string>\"\n  },\n  \"estimated_close_date\": \"<date>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://api.infusionsoft.com/crm/rest",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "oauth2",
+    "oauth2": [
+      {
+        "key": "scope",
+        "value": "full"
+      },
+      {
+        "key": "accessTokenUrl",
+        "value": "https://api.infusionsoft.com/token"
+      },
+      {
+        "key": "authUrl",
+        "value": "https://accounts.infusionsoft.com/app/oauth/authorize"
+      },
+      {
+        "key": "grant_type",
+        "value": "authorization_code"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "ff3f8d16-a4ab-48c6-a0f0-6f59982e1c6b",
+    "name": "Keap REST Campaigns Opportunities API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "Curated OpenAPI 3.1 description of the Keap (formerly Infusionsoft) REST v2 API.\nCovers a representative subset of contacts, companies, opportunities, orders,\nproducts, tasks, campaigns, and tags. Derived from the official Keap v2 OpenAPI\ndocument published at https://developer.infusionsoft.com/docs/restv2/ which is\nserved by the api.infusionsoft.com host.\n\n\nContact Support:\n Name: Keap\n Email: api@keap.com",
+      "type": "text/plain"
+    }
+  }
+}

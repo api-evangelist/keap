@@ -1,0 +1,715 @@
+generated: '2026-08-13'
+method: derived
+source: openapi/_original/keap-v2-openapi.json
+summary: 'Entity-relationship graph derived from the 384 component schemas and 237 paths of Keap''s published
+  v2 OpenAPI. Keap''s data core is a classic small-business CRM + commerce model: Contact is the hub,
+  Company and Opportunity hang off it on the sales side, Order/Subscription/Product/Discount form a commerce
+  cluster, Affiliate is the single largest subsystem by operation count (48 operations, more than Contacts),
+  and Tag/Note/Task/File attach to records across the graph. Relationships below are read from $ref links
+  and from *_id id-reference fields; a belongs_to whose target is inferred from a field name is labelled
+  as such and is NOT asserted as verified.'
+id_style:
+  format: string and integer both appear
+  note: No typed/prefixed object ids (no cus_/ord_ style prefixes). Ids are opaque numerics rendered as
+    strings in v2.
+custom_fields:
+  supported: true
+  discovery: GET /rest/v2/{resource}/model
+  note: contacts, companies, opportunities, orders, tasks, notes and subscriptions each expose /model/customFields
+    plus /tabs and /groups.
+entity_count: 90
+resource_count: 37
+relationship_count: 123
+resources:
+- resource: affiliates
+  operations: 48
+  path_count: 28
+- resource: contacts
+  operations: 36
+  path_count: 22
+- resource: discounts
+  operations: 35
+  path_count: 20
+- resource: orders
+  operations: 29
+  path_count: 16
+- resource: opportunities
+  operations: 26
+  path_count: 13
+- resource: products
+  operations: 22
+  path_count: 11
+- resource: companies
+  operations: 22
+  path_count: 11
+- resource: subscriptions
+  operations: 20
+  path_count: 11
+- resource: tasks
+  operations: 19
+  path_count: 9
+- resource: notes
+  operations: 16
+  path_count: 9
+- resource: leadSources
+  operations: 16
+  path_count: 7
+- resource: tags
+  operations: 14
+  path_count: 8
+- resource: emails
+  operations: 10
+  path_count: 8
+- resource: automations
+  operations: 9
+  path_count: 8
+- resource: productCategories
+  operations: 9
+  path_count: 5
+- resource: productInterestBundles
+  operations: 8
+  path_count: 4
+- resource: files
+  operations: 6
+  path_count: 3
+- resource: campaigns
+  operations: 6
+  path_count: 6
+- resource: leadSourceCategories
+  operations: 5
+  path_count: 2
+- resource: reporting
+  operations: 4
+  path_count: 4
+- resource: integrations
+  operations: 4
+  path_count: 3
+- resource: automationCategory
+  operations: 4
+  path_count: 2
+- resource: users
+  operations: 4
+  path_count: 3
+- resource: locales
+  operations: 4
+  path_count: 4
+- resource: sales
+  operations: 3
+  path_count: 3
+- resource: emailAddresses
+  operations: 3
+  path_count: 2
+- resource: settings
+  operations: 3
+  path_count: 3
+- resource: referrals
+  operations: 2
+  path_count: 1
+- resource: businessProfile
+  operations: 2
+  path_count: 1
+- resource: webforms
+  operations: 2
+  path_count: 2
+- resource: userGroups
+  operations: 2
+  path_count: 2
+- resource: paymentMethodConfigs
+  operations: 1
+  path_count: 1
+- resource: easy-automations
+  operations: 1
+  path_count: 1
+- resource: shipping
+  operations: 1
+  path_count: 1
+- resource: paymentMethods
+  operations: 1
+  path_count: 1
+- resource: oauth
+  operations: 1
+  path_count: 1
+- resource: merchants
+  operations: 1
+  path_count: 1
+relationships:
+- from: AffiliateLink
+  to: affiliate
+  type: belongs_to
+  via: affiliate_id
+  note: id-reference field; target inferred from field name
+- from: Campaign
+  to: created_by_global
+  type: belongs_to
+  via: created_by_global_id
+  note: id-reference field; target inferred from field name
+- from: CheckListItemDetails
+  to: instance
+  type: belongs_to
+  via: instance_id
+  note: id-reference field; target inferred from field name
+- from: Company
+  to: CustomFieldValue
+  type: has_many
+  via: custom_fields
+- from: Company
+  to: owner
+  type: belongs_to
+  via: owner_id
+  note: id-reference field; target inferred from field name
+- from: Company
+  to: account
+  type: belongs_to
+  via: account_id
+  note: id-reference field; target inferred from field name
+- from: Contact
+  to: Link
+  type: has_many
+  via: links
+- from: Contact
+  to: BasicCompany
+  type: has_one
+  via: company
+- from: Contact
+  to: CustomFieldValue
+  type: has_many
+  via: custom_fields
+- from: Contact
+  to: leadsource
+  type: belongs_to
+  via: leadsource_id
+  note: id-reference field; target inferred from field name
+- from: Contact
+  to: owner
+  type: belongs_to
+  via: owner_id
+  note: id-reference field; target inferred from field name
+- from: Contact
+  to: ContactUtmResponse
+  type: has_many
+  via: utm_parameters
+- from: Contact
+  to: account
+  type: belongs_to
+  via: account_id
+  note: id-reference field; target inferred from field name
+- from: CustomFieldGroup
+  to: tab
+  type: belongs_to
+  via: tab_id
+  note: id-reference field; target inferred from field name
+- from: CustomFieldMetaData
+  to: CustomFieldOption
+  type: has_many
+  via: options
+- from: CustomFieldMetaData
+  to: group
+  type: belongs_to
+  via: group_id
+  note: id-reference field; target inferred from field name
+- from: EmailSent
+  to: contact
+  type: belongs_to
+  via: contact_id
+  note: id-reference field; target inferred from field name
+- from: EmailSent
+  to: original_provider
+  type: belongs_to
+  via: original_provider_id
+  note: id-reference field; target inferred from field name
+- from: EmailSent
+  to: provider_source
+  type: belongs_to
+  via: provider_source_id
+  note: id-reference field; target inferred from field name
+- from: EmailSentWithContent
+  to: contact
+  type: belongs_to
+  via: contact_id
+  note: id-reference field; target inferred from field name
+- from: EmailSentWithContent
+  to: original_provider
+  type: belongs_to
+  via: original_provider_id
+  note: id-reference field; target inferred from field name
+- from: EmailSentWithContent
+  to: provider_source
+  type: belongs_to
+  via: provider_source_id
+  note: id-reference field; target inferred from field name
+- from: FileMetadata
+  to: contact
+  type: belongs_to
+  via: contact_id
+  note: id-reference field; target inferred from field name
+- from: FileMetadata
+  to: created_by
+  type: belongs_to
+  via: created_by_id
+  note: id-reference field; target inferred from field name
+- from: FreeTrialDiscount
+  to: subscription_plan
+  type: belongs_to
+  via: subscription_plan_id
+  note: id-reference field; target inferred from field name
+- from: GetNoteResponse
+  to: contact
+  type: belongs_to
+  via: contact_id
+  note: id-reference field; target inferred from field name
+- from: GetNoteResponse
+  to: BasicUser
+  type: has_one
+  via: assigned_to_user
+- from: GetNoteResponse
+  to: last_updated_by_user
+  type: belongs_to
+  via: last_updated_by_user_id
+  note: id-reference field; target inferred from field name
+- from: GetNoteResponse
+  to: created_by_user
+  type: belongs_to
+  via: created_by_user_id
+  note: id-reference field; target inferred from field name
+- from: GetNoteResponse
+  to: CustomFieldValueObject
+  type: has_many
+  via: custom_fields
+- from: GetUserInfoResponse
+  to: keap
+  type: belongs_to
+  via: keap_id
+  note: id-reference field; target inferred from field name
+- from: GetUserInfoResponse
+  to: tenant
+  type: belongs_to
+  via: tenant_id
+  note: id-reference field; target inferred from field name
+- from: InvoiceOrderPayment
+  to: invoice
+  type: belongs_to
+  via: invoice_id
+  note: id-reference field; target inferred from field name
+- from: InvoiceOrderPayment
+  to: payment
+  type: belongs_to
+  via: payment_id
+  note: id-reference field; target inferred from field name
+- from: InvoiceOrderPayment
+  to: refund_invoice_payment
+  type: belongs_to
+  via: refund_invoice_payment_id
+  note: id-reference field; target inferred from field name
+- from: Item
+  to: next_item
+  type: belongs_to
+  via: next_item_id
+  note: id-reference field; target inferred from field name
+- from: Item
+  to: previous_item
+  type: belongs_to
+  via: previous_item_id
+  note: id-reference field; target inferred from field name
+- from: LeadSource
+  to: lead_source_category
+  type: belongs_to
+  via: lead_source_category_id
+  note: id-reference field; target inferred from field name
+- from: LeadSourceExpense
+  to: lead_source
+  type: belongs_to
+  via: lead_source_id
+  note: id-reference field; target inferred from field name
+- from: LeadSourceExpense
+  to: lead_source_recurring_expense
+  type: belongs_to
+  via: lead_source_recurring_expense_id
+  note: id-reference field; target inferred from field name
+- from: LeadSourceRecurringExpense
+  to: lead_source
+  type: belongs_to
+  via: lead_source_id
+  note: id-reference field; target inferred from field name
+- from: Link
+  to: linked_contact
+  type: belongs_to
+  via: linked_contact_id
+  note: id-reference field; target inferred from field name
+- from: Link
+  to: link_type
+  type: belongs_to
+  via: link_type_id
+  note: id-reference field; target inferred from field name
+- from: Note
+  to: contact
+  type: belongs_to
+  via: contact_id
+  note: id-reference field; target inferred from field name
+- from: Note
+  to: BasicUser
+  type: has_one
+  via: assigned_to_user
+- from: Note
+  to: last_updated_by_user
+  type: belongs_to
+  via: last_updated_by_user_id
+  note: id-reference field; target inferred from field name
+- from: Note
+  to: created_by_user
+  type: belongs_to
+  via: created_by_user_id
+  note: id-reference field; target inferred from field name
+- from: Note
+  to: CustomFieldValueObject
+  type: has_many
+  via: custom_fields
+- from: NoteTemplate
+  to: assignment_user
+  type: belongs_to
+  via: assignment_user_id
+  note: id-reference field; target inferred from field name
+- from: OpportunityStageMove
+  to: opportunity
+  type: belongs_to
+  via: opportunity_id
+  note: id-reference field; target inferred from field name
+- from: OpportunityStageMove
+  to: move_from_stage
+  type: belongs_to
+  via: move_from_stage_id
+  note: id-reference field; target inferred from field name
+- from: OpportunityStageMove
+  to: move_to_stage
+  type: belongs_to
+  via: move_to_stage_id
+  note: id-reference field; target inferred from field name
+- from: OpportunityStageMove
+  to: user
+  type: belongs_to
+  via: user_id
+  note: id-reference field; target inferred from field name
+- from: OrderItem
+  to: OrderItemProduct
+  type: has_one
+  via: product
+- from: OrderItem
+  to: subscription
+  type: belongs_to
+  via: subscription_id
+  note: id-reference field; target inferred from field name
+- from: OrderItem
+  to: SubscriptionPlan
+  type: has_one
+  via: subscription_plan
+- from: OrderV2
+  to: BasicContact
+  type: has_one
+  via: contact
+- from: OrderV2
+  to: lead_affiliate
+  type: belongs_to
+  via: lead_affiliate_id
+  note: id-reference field; target inferred from field name
+- from: OrderV2
+  to: sales_affiliate
+  type: belongs_to
+  via: sales_affiliate_id
+  note: id-reference field; target inferred from field name
+- from: OrderV2
+  to: ShippingInformation
+  type: has_one
+  via: shipping_information
+- from: OrderV2
+  to: OrderItem
+  type: has_many
+  via: order_items
+- from: OrderV2
+  to: invoice
+  type: belongs_to
+  via: invoice_id
+  note: id-reference field; target inferred from field name
+- from: OrderV2
+  to: CustomFieldValue
+  type: has_many
+  via: custom_fields
+- from: Payment
+  to: refund_payment
+  type: belongs_to
+  via: refund_payment_id
+  note: id-reference field; target inferred from field name
+- from: Payment
+  to: contact
+  type: belongs_to
+  via: contact_id
+  note: id-reference field; target inferred from field name
+- from: Payment
+  to: external_transaction
+  type: belongs_to
+  via: external_transaction_id
+  note: id-reference field; target inferred from field name
+- from: Payment
+  to: merchant_account
+  type: belongs_to
+  via: merchant_account_id
+  note: id-reference field; target inferred from field name
+- from: PaymentResult
+  to: invoice
+  type: belongs_to
+  via: invoice_id
+  note: id-reference field; target inferred from field name
+- from: PaymentResult
+  to: transaction
+  type: belongs_to
+  via: transaction_id
+  note: id-reference field; target inferred from field name
+- from: ProductCategory
+  to: parent_category
+  type: belongs_to
+  via: parent_category_id
+  note: id-reference field; target inferred from field name
+- from: ProductDiscount
+  to: product
+  type: belongs_to
+  via: product_id
+  note: id-reference field; target inferred from field name
+- from: ProductInterest
+  to: interest
+  type: belongs_to
+  via: interest_id
+  note: id-reference field; target inferred from field name
+- from: ProductInterestBundle
+  to: ProductInterest
+  type: has_many
+  via: product_interests
+- from: ProductInterestBundle
+  to: ProductInterest
+  type: has_many
+  via: subscription_plan_interests
+- from: ProductOption
+  to: product
+  type: belongs_to
+  via: product_id
+  note: id-reference field; target inferred from field name
+- from: Referral
+  to: contact
+  type: belongs_to
+  via: contact_id
+  note: id-reference field; target inferred from field name
+- from: Referral
+  to: referral_partner
+  type: belongs_to
+  via: referral_partner_id
+  note: id-reference field; target inferred from field name
+- from: RestAffiliate
+  to: contact
+  type: belongs_to
+  via: contact_id
+  note: id-reference field; target inferred from field name
+- from: RestAffiliate
+  to: unique_site
+  type: belongs_to
+  via: unique_site_id
+  note: id-reference field; target inferred from field name
+- from: RestAffiliate
+  to: parent_affiliate
+  type: belongs_to
+  via: parent_affiliate_id
+  note: id-reference field; target inferred from field name
+- from: RestAffiliate
+  to: CustomFieldValue
+  type: has_many
+  via: custom_fields
+- from: RestOpportunityStage
+  to: ChecklistItem
+  type: has_many
+  via: checklist_items
+- from: RestV2Opportunity
+  to: OpportunityContact
+  type: has_one
+  via: contact
+- from: RestV2Opportunity
+  to: OpportunityStage
+  type: has_one
+  via: stage
+- from: RestV2Opportunity
+  to: RestV2User
+  type: has_one
+  via: user
+- from: RestV2Opportunity
+  to: CustomField
+  type: has_many
+  via: custom_fields
+- from: RestV2Opportunity
+  to: affiliate
+  type: belongs_to
+  via: affiliate_id
+  note: id-reference field; target inferred from field name
+- from: RestV2Opportunity
+  to: status
+  type: belongs_to
+  via: status_id
+  note: id-reference field; target inferred from field name
+- from: RestV2Product_Detail
+  to: SubscriptionPlan_Detail
+  type: has_many
+  via: subscription_plans
+- from: RestV2Product_List
+  to: SubscriptionPlan_List
+  type: has_many
+  via: subscription_plans
+- from: Sequence
+  to: SequencePath
+  type: has_many
+  via: paths
+- from: SequencePath
+  to: Item
+  type: has_many
+  via: items
+- from: Subscription
+  to: contact
+  type: belongs_to
+  via: contact_id
+  note: id-reference field; target inferred from field name
+- from: Subscription
+  to: product
+  type: belongs_to
+  via: product_id
+  note: id-reference field; target inferred from field name
+- from: Subscription
+  to: subscription_plan
+  type: belongs_to
+  via: subscription_plan_id
+  note: id-reference field; target inferred from field name
+- from: Subscription
+  to: merchant_account
+  type: belongs_to
+  via: merchant_account_id
+  note: id-reference field; target inferred from field name
+- from: Subscription
+  to: payment_method
+  type: belongs_to
+  via: payment_method_id
+  note: id-reference field; target inferred from field name
+- from: Subscription
+  to: lead_affiliate
+  type: belongs_to
+  via: lead_affiliate_id
+  note: id-reference field; target inferred from field name
+- from: Subscription
+  to: sale_affiliate
+  type: belongs_to
+  via: sale_affiliate_id
+  note: id-reference field; target inferred from field name
+- from: Subscription
+  to: shipping_option
+  type: belongs_to
+  via: shipping_option_id
+  note: id-reference field; target inferred from field name
+- from: Subscription
+  to: CustomFieldValue
+  type: has_many
+  via: custom_fields
+- from: Tag
+  to: CategoryReference
+  type: has_one
+  via: category
+- from: Task
+  to: assigned_to_user
+  type: belongs_to
+  via: assigned_to_user_id
+  note: id-reference field; target inferred from field name
+- from: Task
+  to: created_by_user
+  type: belongs_to
+  via: created_by_user_id
+  note: id-reference field; target inferred from field name
+- from: Task
+  to: last_updated_by_user
+  type: belongs_to
+  via: last_updated_by_user_id
+  note: id-reference field; target inferred from field name
+- from: Task
+  to: contact
+  type: belongs_to
+  via: contact_id
+  note: id-reference field; target inferred from field name
+- from: Task
+  to: opportunity
+  type: belongs_to
+  via: opportunity_id
+  note: id-reference field; target inferred from field name
+- from: Task
+  to: CustomFieldValueObject
+  type: has_many
+  via: custom_fields
+- from: UpdateNoteResponse
+  to: contact
+  type: belongs_to
+  via: contact_id
+  note: id-reference field; target inferred from field name
+- from: UpdateNoteResponse
+  to: BasicUser
+  type: has_one
+  via: assigned_to_user
+- from: UpdateNoteResponse
+  to: last_updated_by_user
+  type: belongs_to
+  via: last_updated_by_user_id
+  note: id-reference field; target inferred from field name
+- from: UpdateNoteResponse
+  to: created_by_user
+  type: belongs_to
+  via: created_by_user_id
+  note: id-reference field; target inferred from field name
+- from: UpdateNoteResponse
+  to: CustomFieldValueObject
+  type: has_many
+  via: custom_fields
+- from: UpdateTagResponse
+  to: CategoryReference
+  type: has_one
+  via: category
+- from: UpdateTaskResponse
+  to: assigned_to_user
+  type: belongs_to
+  via: assigned_to_user_id
+  note: id-reference field; target inferred from field name
+- from: UpdateTaskResponse
+  to: created_by_user
+  type: belongs_to
+  via: created_by_user_id
+  note: id-reference field; target inferred from field name
+- from: UpdateTaskResponse
+  to: last_updated_by_user
+  type: belongs_to
+  via: last_updated_by_user_id
+  note: id-reference field; target inferred from field name
+- from: UpdateTaskResponse
+  to: contact
+  type: belongs_to
+  via: contact_id
+  note: id-reference field; target inferred from field name
+- from: UpdateTaskResponse
+  to: opportunity
+  type: belongs_to
+  via: opportunity_id
+  note: id-reference field; target inferred from field name
+- from: UpdateTaskResponse
+  to: CustomFieldValueObject
+  type: has_many
+  via: custom_fields
+- from: User
+  to: global_user
+  type: belongs_to
+  via: global_user_id
+  note: id-reference field; target inferred from field name
+- from: User
+  to: keap
+  type: belongs_to
+  via: keap_id
+  note: id-reference field; target inferred from field name
+- from: Webform
+  to: funnel
+  type: belongs_to
+  via: funnel_id
+  note: id-reference field; target inferred from field name

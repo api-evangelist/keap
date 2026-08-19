@@ -1,0 +1,544 @@
+{
+  "item": [
+    {
+      "id": "8d44d7ec-0217-4c10-8021-6abef1ba7da3",
+      "name": "Contacts",
+      "description": {
+        "content": "Manage Keap contacts.",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "980790eb-648c-4f1a-ad2c-530b2669ce58",
+          "name": "List contacts",
+          "request": {
+            "name": "List contacts",
+            "description": {},
+            "url": {
+              "path": [
+                "v2",
+                "contacts"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "limit",
+                  "value": "100"
+                },
+                {
+                  "disabled": false,
+                  "key": "page_token",
+                  "value": "<string>"
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "81ae9899-b211-4a3f-8afc-82f93fd20c68",
+              "name": "A page of contacts.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v2",
+                    "contacts"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "limit",
+                      "value": "100"
+                    },
+                    {
+                      "key": "page_token",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"contacts\": [\n    {\n      \"id\": \"string\",\n      \"given_name\": \"string\",\n      \"family_name\": \"string\",\n      \"email_addresses\": [\n        {\n          \"email\": \"dzlp4uocp@vWvWmLUCxwDKACfu.lhsn\",\n          \"field\": \"string\"\n        },\n        {\n          \"email\": \"L6FCoC7Yzw@ZWjZBlAnPBgRtBTSFXaCYElbjl.kbya\",\n          \"field\": \"string\"\n        }\n      ],\n      \"phone_numbers\": [\n        {\n          \"number\": \"string\",\n          \"field\": \"string\"\n        },\n        {\n          \"number\": \"string\",\n          \"field\": \"string\"\n        }\n      ],\n      \"company\": {\n        \"id\": \"string\",\n        \"company_name\": \"string\"\n      }\n    },\n    {\n      \"id\": \"string\",\n      \"given_name\": \"string\",\n      \"family_name\": \"string\",\n      \"email_addresses\": [\n        {\n          \"email\": \"ylImtiUt3jS@Xnnbr.jh\",\n          \"field\": \"string\"\n        },\n        {\n          \"email\": \"ctnCm@Nd.km\",\n          \"field\": \"string\"\n        }\n      ],\n      \"phone_numbers\": [\n        {\n          \"number\": \"string\",\n          \"field\": \"string\"\n        },\n        {\n          \"number\": \"string\",\n          \"field\": \"string\"\n        }\n      ],\n      \"company\": {\n        \"id\": \"string\",\n        \"company_name\": \"string\"\n      }\n    }\n  ],\n  \"next_page_token\": \"string\",\n  \"count\": 3517\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "1f0f2d26-c17d-4544-b641-ed51d9fe3a85",
+          "name": "Create a contact",
+          "request": {
+            "name": "Create a contact",
+            "description": {},
+            "url": {
+              "path": [
+                "v2",
+                "contacts"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"id\": \"<string>\",\n  \"given_name\": \"<string>\",\n  \"family_name\": \"<string>\",\n  \"email_addresses\": [\n    {\n      \"email\": \"<email>\",\n      \"field\": \"<string>\"\n    },\n    {\n      \"email\": \"<email>\",\n      \"field\": \"<string>\"\n    }\n  ],\n  \"phone_numbers\": [\n    {\n      \"number\": \"<string>\",\n      \"field\": \"<string>\"\n    },\n    {\n      \"number\": \"<string>\",\n      \"field\": \"<string>\"\n    }\n  ],\n  \"company\": {\n    \"id\": \"<string>\",\n    \"company_name\": \"<string>\"\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "c24f6230-aa81-488f-881b-5d1224d64598",
+              "name": "Contact created.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v2",
+                    "contacts"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"id\": \"<string>\",\n  \"given_name\": \"<string>\",\n  \"family_name\": \"<string>\",\n  \"email_addresses\": [\n    {\n      \"email\": \"<email>\",\n      \"field\": \"<string>\"\n    },\n    {\n      \"email\": \"<email>\",\n      \"field\": \"<string>\"\n    }\n  ],\n  \"phone_numbers\": [\n    {\n      \"number\": \"<string>\",\n      \"field\": \"<string>\"\n    },\n    {\n      \"number\": \"<string>\",\n      \"field\": \"<string>\"\n    }\n  ],\n  \"company\": {\n    \"id\": \"<string>\",\n    \"company_name\": \"<string>\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Created",
+              "code": 201,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"string\",\n  \"given_name\": \"string\",\n  \"family_name\": \"string\",\n  \"email_addresses\": [\n    {\n      \"email\": \"2ideV@SaGwZHza.ryph\",\n      \"field\": \"string\"\n    },\n    {\n      \"email\": \"HWxA13GwpFYuKq@VWBvhickmiMNCKmWAyc.nmh\",\n      \"field\": \"string\"\n    }\n  ],\n  \"phone_numbers\": [\n    {\n      \"number\": \"string\",\n      \"field\": \"string\"\n    },\n    {\n      \"number\": \"string\",\n      \"field\": \"string\"\n    }\n  ],\n  \"company\": {\n    \"id\": \"string\",\n    \"company_name\": \"string\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "2ebd1f93-893e-4c96-b895-bdfa717c2e8d",
+          "name": "Get a contact by ID",
+          "request": {
+            "name": "Get a contact by ID",
+            "description": {},
+            "url": {
+              "path": [
+                "v2",
+                "contacts",
+                ":id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "id",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "87aed128-ee89-4bac-8875-e9854a4c6716",
+              "name": "Contact.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v2",
+                    "contacts",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"string\",\n  \"given_name\": \"string\",\n  \"family_name\": \"string\",\n  \"email_addresses\": [\n    {\n      \"email\": \"2ideV@SaGwZHza.ryph\",\n      \"field\": \"string\"\n    },\n    {\n      \"email\": \"HWxA13GwpFYuKq@VWBvhickmiMNCKmWAyc.nmh\",\n      \"field\": \"string\"\n    }\n  ],\n  \"phone_numbers\": [\n    {\n      \"number\": \"string\",\n      \"field\": \"string\"\n    },\n    {\n      \"number\": \"string\",\n      \"field\": \"string\"\n    }\n  ],\n  \"company\": {\n    \"id\": \"string\",\n    \"company_name\": \"string\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "964dd794-fad5-4439-9ea9-571c74f1d19a",
+          "name": "Patch a contact",
+          "request": {
+            "name": "Patch a contact",
+            "description": {},
+            "url": {
+              "path": [
+                "v2",
+                "contacts",
+                ":id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "id",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "PATCH",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"id\": \"<string>\",\n  \"given_name\": \"<string>\",\n  \"family_name\": \"<string>\",\n  \"email_addresses\": [\n    {\n      \"email\": \"<email>\",\n      \"field\": \"<string>\"\n    },\n    {\n      \"email\": \"<email>\",\n      \"field\": \"<string>\"\n    }\n  ],\n  \"phone_numbers\": [\n    {\n      \"number\": \"<string>\",\n      \"field\": \"<string>\"\n    },\n    {\n      \"number\": \"<string>\",\n      \"field\": \"<string>\"\n    }\n  ],\n  \"company\": {\n    \"id\": \"<string>\",\n    \"company_name\": \"<string>\"\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "76a93217-e914-415e-8e55-64348346dbf7",
+              "name": "Updated contact.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v2",
+                    "contacts",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"id\": \"<string>\",\n  \"given_name\": \"<string>\",\n  \"family_name\": \"<string>\",\n  \"email_addresses\": [\n    {\n      \"email\": \"<email>\",\n      \"field\": \"<string>\"\n    },\n    {\n      \"email\": \"<email>\",\n      \"field\": \"<string>\"\n    }\n  ],\n  \"phone_numbers\": [\n    {\n      \"number\": \"<string>\",\n      \"field\": \"<string>\"\n    },\n    {\n      \"number\": \"<string>\",\n      \"field\": \"<string>\"\n    }\n  ],\n  \"company\": {\n    \"id\": \"<string>\",\n    \"company_name\": \"<string>\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"string\",\n  \"given_name\": \"string\",\n  \"family_name\": \"string\",\n  \"email_addresses\": [\n    {\n      \"email\": \"2ideV@SaGwZHza.ryph\",\n      \"field\": \"string\"\n    },\n    {\n      \"email\": \"HWxA13GwpFYuKq@VWBvhickmiMNCKmWAyc.nmh\",\n      \"field\": \"string\"\n    }\n  ],\n  \"phone_numbers\": [\n    {\n      \"number\": \"string\",\n      \"field\": \"string\"\n    },\n    {\n      \"number\": \"string\",\n      \"field\": \"string\"\n    }\n  ],\n  \"company\": {\n    \"id\": \"string\",\n    \"company_name\": \"string\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "412b5676-3728-451f-8c09-56311397f129",
+          "name": "Delete a contact",
+          "request": {
+            "name": "Delete a contact",
+            "description": {},
+            "url": {
+              "path": [
+                "v2",
+                "contacts",
+                ":id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "id",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "method": "DELETE",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "de9032ca-b14d-46f9-8d62-738a265667da",
+              "name": "Contact deleted.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v2",
+                    "contacts",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "No Content",
+              "code": 204,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://api.infusionsoft.com/crm/rest",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "oauth2",
+    "oauth2": [
+      {
+        "key": "scope",
+        "value": "full"
+      },
+      {
+        "key": "accessTokenUrl",
+        "value": "https://api.infusionsoft.com/token"
+      },
+      {
+        "key": "authUrl",
+        "value": "https://accounts.infusionsoft.com/app/oauth/authorize"
+      },
+      {
+        "key": "grant_type",
+        "value": "authorization_code"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "508f79c9-15f9-4b4e-84cf-d0246cbfd65a",
+    "name": "Keap REST Campaigns Contacts API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "Curated OpenAPI 3.1 description of the Keap (formerly Infusionsoft) REST v2 API.\nCovers a representative subset of contacts, companies, opportunities, orders,\nproducts, tasks, campaigns, and tags. Derived from the official Keap v2 OpenAPI\ndocument published at https://developer.infusionsoft.com/docs/restv2/ which is\nserved by the api.infusionsoft.com host.\n\n\nContact Support:\n Name: Keap\n Email: api@keap.com",
+      "type": "text/plain"
+    }
+  }
+}

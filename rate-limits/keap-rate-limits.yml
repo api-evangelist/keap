@@ -1,0 +1,144 @@
+generated: '2026-08-13'
+method: searched
+source: >-
+  https://developer.infusionsoft.com/api-token-quota-and-usage-measurements/ +
+  https://developer.infusionsoft.com/pat-and-sak/ +
+  https://developer.infusionsoft.com/docs/usage-guidelines/
+docs: https://developer.infusionsoft.com/api-token-quota-and-usage-measurements/
+limit_count: 8
+summary: >-
+  Keap publishes an unusually complete rate-limit contract: three independent
+  enforcement layers (per key/secret pair, per key, per application instance/tenant),
+  each with its own family of informational response headers, plus an unmetered
+  per-second spike policy. As of 2026-06-08 a tenant-level ceiling applies to every
+  request regardless of token type.
+enforcement_layers:
+  - layer: token
+    scope: per OAuth2 client key/secret pair, across all Keap applications it accesses
+    limits:
+      - window: minute
+        limit: 1500
+        unit: queries
+      - window: day
+        limit: 150000
+        unit: queries
+        reset: 00:00 UTC
+  - layer: token
+    scope: per Personal Access Token or Service Account Key (single authorized Keap application)
+    limits:
+      - window: second
+        limit: 10
+        unit: queries
+      - window: minute
+        limit: 240
+        unit: queries
+      - window: day
+        limit: 30000
+        unit: queries
+        reset: 00:00 UTC
+  - layer: tenant
+    scope: per Keap application instance, all tokens combined
+    effective: '2026-06-08'
+    limits:
+      - window: minute
+        limit: 10000
+        unit: requests
+      - window: day
+        limit: 250000
+        unit: requests
+        reset: 00:00 UTC
+  - layer: spike
+    scope: per-second spike policy, all consumers
+    limits:
+      - window: second
+        limit: 25
+        unit: calls
+    metrics_returned: false
+    note: Keap states no metrics headers are returned for the spike policy.
+response_headers:
+  quota:
+    - name: x-keap-product-quota-limit
+      type: integer
+      example: '150000'
+      description: Maximum bucket size of requests before rejection begins.
+    - name: x-keap-product-quota-time-unit
+      type: string
+      example: day
+      description: Rolling period the bucket applies over.
+    - name: x-keap-product-quota-interval
+      type: integer
+      example: '1'
+      description: Length of the rolling period.
+    - name: x-keap-product-quota-available
+      type: integer
+      example: '149999'
+      description: Total remaining calls in the quota for the rolling period.
+    - name: x-keap-product-quota-used
+      type: integer
+      example: '1'
+      description: Calls made against the bucket during the period.
+    - name: x-keap-product-quota-expiry-time
+      type: integer
+      example: '158663200'
+      description: Timecode at which the quota bucket will be fully drained.
+  throttle:
+    - name: x-keap-product-throttle-limit
+      type: integer
+      example: '1500'
+      description: Maximum calls allowed inside the throttle period.
+    - name: x-keap-product-throttle-time-unit
+      type: string
+      example: minute
+    - name: x-keap-product-throttle-interval
+      type: integer
+      example: '1'
+    - name: x-keap-product-throttle-available
+      type: integer
+      example: '1499'
+    - name: x-keap-product-throttle-used
+      type: integer
+      example: '1'
+  tenant:
+    - name: x-keap-tenant-id
+      type: string
+      example: ab103.infusionsoft.com
+      description: Fully qualified tenant name.
+    - name: x-keap-tenant-throttle-limit
+      type: integer
+      example: '10000'
+      description: Keap-set maximum calls per minute per application instance (effective 2026-06-08).
+    - name: x-keap-tenant-throttle-time-unit
+      type: string
+      example: minute
+    - name: x-keap-tenant-throttle-interval
+      type: integer
+      example: '1'
+    - name: x-keap-tenant-throttle-available
+      type: integer
+      example: '9999'
+    - name: x-keap-tenant-throttle-used
+      type: integer
+      example: '1'
+exhaustion:
+  status_code: 429
+  retry_after: >-
+    Keap's guidance says to "respect the retry-after header if present" — it is
+    documented as conditional, not guaranteed. Retry-After is NOT declared in the
+    OpenAPI, and no 429 response is declared on any of the 540 operations, so an
+    agent must treat 429 as an undeclared runtime status.
+  guidance:
+    - Monitor x-keap-tenant-throttle-available and x-keap-product-quota-available on every response.
+    - Use exponential backoff (Keap links the AWS exponential-backoff-and-jitter article) on 429.
+    - Batch operations where the API supports it.
+    - Cache slow-changing data such as tags, custom fields and contact records.
+    - Audit AI-powered automations and bulk workflows for traffic spikes.
+restricted_uses:
+  source: https://developer.infusionsoft.com/docs/usage-guidelines/
+  note: >-
+    Keap states that sustaining more than one API call per second "indicates a
+    severe problem", and prohibits continuous/overtly frequent data synchronization
+    or export, infinite loops, calling without error handling, and unfiltered
+    searches/queries.
+gaps:
+  - The 429 status is documented in prose but is absent from all 540 OpenAPI operations.
+  - No RateLimit-* (RFC 9239-style) standard headers; all signalling is x-keap-* vendor headers.

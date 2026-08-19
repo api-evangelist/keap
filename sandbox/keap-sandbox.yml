@@ -1,0 +1,70 @@
+generated: '2026-08-13'
+method: searched
+source: >-
+  https://developer.infusionsoft.com/resources/sandbox-application/ +
+  https://developer.infusionsoft.com/pat-and-sak/ +
+  https://developer.infusionsoft.com/postman-quick-start/
+docs: https://developer.infusionsoft.com/resources/sandbox-application/
+summary: >-
+  Keap's sandbox is a FULL SEPARATE KEAP APPLICATION, not a test mode on the
+  production API. There are no test-vs-live key prefixes, no test cards, no test
+  clocks and no fixture/trigger tooling — a developer requests a free, capacity-limited
+  Keap app and points the same production API host and the same OAuth/PAT credentials
+  at it. That shape matters for agents: there is no way to tell from a token or a
+  base URL whether a call is hitting a sandbox or a live customer's CRM.
+model: separate-application
+test_mode_signalling:
+  key_prefixes: none
+  header: none
+  base_url_difference: none
+  note: >-
+    Sandbox and production both use https://api.infusionsoft.com/crm/rest/v1|v2 and
+    the same credential types. The tenant is distinguished only by the
+    x-keap-tenant-id response header (e.g. ab103.infusionsoft.com).
+sandbox_application:
+  cost: free
+  cost_note: >-
+    No charge for the monthly service. A credit card IS collected so fax functionality
+    can be tested; the only charge that can be incurred is $0.15/fax.
+  request_url: https://developer.infusionsoft.com/resources/sandbox-application/
+  limits:
+    user_licenses: 3
+    contacts: 250
+    emails_per_month: 250
+  reclamation_policy: >-
+    Keap periodically disables sandbox applications inactive for long periods. The
+    owner is notified first and gets a two-week grace period, during which a form can
+    be submitted to keep the sandbox.
+  functionality_note: Some functionality of sandbox applications is limited (not enumerated by Keap).
+credentials:
+  - type: OAuth2 client (key/secret)
+    issued_by: https://keys.developer.keap.com/my-apps
+    note: Vendor API keys are issued from the developer key portal.
+  - type: Personal Access Token
+    scope: single Keap application, acting as the creating user
+    note: Any app user can create one; inherits that user's visibility and edit permissions.
+  - type: Service Account Key
+    scope: single Keap application, admin access to all stored data
+    note: Admin-only to create.
+test_values:
+  cards: none_published
+  bank_accounts: none_published
+  identifiers: none_published
+  note: >-
+    Keap publishes no magic/test card numbers, bank accounts or simulator identifiers.
+    Nothing is invented here.
+tooling:
+  test_clocks: false
+  fixtures: false
+  triggers: false
+  console: >-
+    Redoc-rendered interactive reference at https://developer.infusionsoft.com/docs/restv2/
+    and https://developer.infusionsoft.com/docs/rest/
+  postman:
+    collection: https://documenter.getpostman.com/view/2915979/UVByKWEZ
+    quickstart: https://developer.infusionsoft.com/postman-quick-start/
+    note: >-
+      The Postman quick start documents an X-Keap-API-Key header carrying a PAT/SAK.
+      Note this conflicts with the PAT/SAK page itself, which documents
+      "Authorization: Bearer <key>". Both are published by Keap; the Bearer form is
+      the one the OpenAPI declares.

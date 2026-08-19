@@ -1,0 +1,154 @@
+generated: '2026-08-13'
+method: derived
+source: >-
+  openapi/_original/keap-v2-openapi.json + openapi/_original/keap-v1-openapi.json +
+  well-known/keap-oauth-authorization-server-mcp.json +
+  well-known/keap-oauth-protected-resource-mcp.json +
+  https://developer.infusionsoft.com/getting-started-oauth-keys/ +
+  https://keap.com/legal
+summary: >-
+  Keap conforms to OAuth 2.0 (authorization code + refresh, with rotating refresh
+  tokens) on the REST API, and its newer MCP surface goes further — RFC 9728
+  protected-resource metadata, RFC 8414 authorization-server metadata, PKCE S256 and
+  OAuth 2.1 dynamic client registration. The v2 REST contract follows Google's AIP
+  conventions closely enough to be worth recording as a de-facto design standard. It
+  does NOT conform to RFC 9457 problem details, does not implement OpenID Connect,
+  publishes no idempotency mechanism, and does not implement RFC 8594 deprecation
+  headers. On compliance: Keap publishes a HIPAA Business Associate Agreement for the
+  CRM, but no SOC 2 / ISO 27001 / PCI attestation is published on any Keap or Thryv
+  page reachable without a sales conversation.
+standards:
+  - id: oauth2
+    name: OAuth 2.0 (RFC 6749)
+    conforms: true
+    evidence: >-
+      securitySchemes.oauth2 with authorizationCode flow in both contracts;
+      authorizationUrl https://accounts.infusionsoft.com/app/oauth/authorize,
+      tokenUrl https://api.infusionsoft.com/token. Documented at
+      https://developer.infusionsoft.com/getting-started-oauth-keys/
+  - id: oauth2-refresh-rotation
+    name: Rotating refresh tokens
+    conforms: true
+    evidence: >-
+      "Once a Refresh Token is used to receive a new Access Token, you will be
+      returned a new Refresh Token as well" —
+      https://developer.infusionsoft.com/getting-started-oauth-keys/
+  - id: rfc9728
+    name: OAuth 2.0 Protected Resource Metadata
+    conforms: true
+    scope: MCP server only
+    evidence: >-
+      https://api.infusionsoft.com/.well-known/oauth-protected-resource/mcp returns
+      200 application/json declaring resource https://api.keap.com/mcp,
+      authorization_servers and bearer_methods_supported.
+  - id: rfc8414
+    name: OAuth 2.0 Authorization Server Metadata
+    conforms: true
+    scope: MCP server only
+    evidence: >-
+      https://api.keap.com/.well-known/oauth-authorization-server/mcp returns 200 with
+      issuer, authorization_endpoint, token_endpoint, registration_endpoint,
+      grant_types_supported and code_challenge_methods_supported.
+  - id: rfc7636
+    name: PKCE
+    conforms: true
+    scope: MCP server only
+    evidence: 'code_challenge_methods_supported: ["S256"] in the AS metadata.'
+  - id: rfc7591
+    name: OAuth 2.0 Dynamic Client Registration
+    conforms: true
+    scope: MCP server only
+    evidence: 'registration_endpoint https://api.keap.com/mcp/auth/register; token_endpoint_auth_methods_supported ["none"].'
+  - id: mcp
+    name: Model Context Protocol
+    conforms: true
+    evidence: >-
+      https://api.keap.com/mcp answers JSON-RPC 2.0 with a well-formed MCP error
+      object and WWW-Authenticate: Bearer realm="MCP Server". Tool schemas are
+      auth-gated and were not enumerated.
+  - id: openapi
+    name: OpenAPI 3.1.0
+    conforms: true
+    evidence: >-
+      Both live contracts declare openapi 3.1.0 and parse cleanly; 540 operations,
+      100% with operationId and summary.
+  - id: google-aip
+    name: Google API Improvement Proposals (design conventions)
+    conforms: partial
+    scope: v2 only
+    evidence: >-
+      page_size/page_token/next_page_token (AIP-158), update_mask field masks
+      (AIP-134), order_by, and a google.rpc.Status error envelope. v1 uses
+      limit/offset and does not follow AIP.
+  - id: resthooks
+    name: REST Hooks (subscription webhooks)
+    conforms: true
+    scope: v1 only
+    evidence: >-
+      POST /rest/v1/hooks with X-Hook-Secret verification handshake, documented at
+      https://developer.infusionsoft.com/rest-hook-documentation/
+  - id: rfc9457
+    name: Problem Details for HTTP APIs
+    conforms: false
+    evidence: >-
+      Errors use a google.rpc.Status shape (code/message/status/details) served as
+      application/json, not application/problem+json.
+  - id: idempotency
+    name: Idempotency keys (draft-ietf-httpapi-idempotency-key-header)
+    conforms: false
+    evidence: >-
+      Zero occurrences of "idempoten" across all 540 operations and all documentation
+      pages.
+  - id: rfc8594
+    name: Sunset / Deprecation HTTP headers
+    conforms: false
+    evidence: >-
+      Deprecation is announced only in prose; no Sunset or Deprecation header is
+      documented, and no operation carries deprecated:true.
+  - id: oidc
+    name: OpenID Connect
+    conforms: false
+    evidence: >-
+      /.well-known/openid-configuration 404s on every Keap host (the 200 on
+      crm./accounts.infusionsoft.com is a single-page-app shell, not a discovery
+      document).
+  - id: rate-limit-headers
+    name: RateLimit header fields for HTTP (IETF draft)
+    conforms: false
+    evidence: >-
+      Rate limiting is signalled entirely with vendor x-keap-* headers; no
+      RateLimit-Limit/Remaining/Reset.
+  - id: graphql
+    name: GraphQL
+    conforms: false
+    evidence: No /graphql surface found on any Keap host.
+compliance:
+  - program: HIPAA
+    status: published
+    artifact: Business Associate Agreement (CRM)
+    url: https://keap.com/legal/keap-crm-business-associate-agreement-baa
+  - program: SMS/TCPA
+    status: published
+    artifact: SMS compliance policy
+    url: https://keap.com/legal/sms-compliance
+  - program: Payment card processing
+    status: published
+    artifact: Keap Pay processing agreement + prohibited businesses list
+    url: https://keap.com/legal/keap-pay-processing-agreement
+  - program: SOC 2
+    status: not-published
+    note: No public attestation, trust centre or report request page found.
+  - program: ISO 27001
+    status: not-published
+  - program: PCI DSS
+    status: not-published
+    note: Keap Pay processes cards, but no PCI attestation is published publicly.
+  - program: GDPR / privacy
+    status: published
+    artifact: Privacy policy and privacy choices
+    url: https://www.thryv.com/privacy/
+trust_center:
+  published: false
+  note: >-
+    Probed trust.keap.com (no DNS), keap.com/trust (404), keap.com/security (404),
+    www.thryv.com/trust (404). No trust centre exists.

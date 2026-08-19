@@ -1,0 +1,105 @@
+generated: '2026-08-13'
+method: searched
+source: https://keap.com/pricing
+docs: https://keap.com/pricing
+currency: USD
+plan_count: 1
+addon_count: 9
+summary: >-
+  Keap has consolidated to a SINGLE published product tier — "Keap Platform" — after
+  its acquisition by Thryv; the older Pro/Max/Max Classic ladder is no longer on the
+  public pricing page. Everything else on that page is an add-on. There is no
+  API-specific or developer-specific plan: API access is a feature of the product
+  subscription, and the API rate limits in rate-limits/keap-rate-limits.yml are set
+  by token type and tenant, not by plan. A free trial exists and requires no credit
+  card, but is feature-limited (25 email sends, no payments, no text messaging).
+plans:
+  - name: Keap Platform
+    price: 299
+    currency: USD
+    billing_period: month
+    annual_price: 2988
+    annual_note: $2,988/year when billed annually; monthly billing also offered.
+    price_qualifier: starting at
+    included:
+      user_licenses: 2
+      contacts: null
+      contacts_note: >-
+        Contact quota is not stated as a number on the public page — it is described
+        as customizable and routed through a sales chat. Recorded as null rather than
+        guessed.
+    api_access: included
+    implementation: >-
+      Required; implementation packages are sold separately, with discounts stated as
+      possible.
+    url: https://keap.com/pricing
+addons:
+  - name: Additional user
+    price: 39
+    currency: USD
+    billing_period: month
+    unit: per user
+  - name: Text Marketing Tier 1
+    price: 0
+    currency: USD
+    billing_period: month
+    included: 500 messages, 100 voice minutes
+    note: Included with the platform. U.S. only.
+  - name: Text Marketing Tier 2
+    price: 24
+    currency: USD
+    billing_period: month
+    included: 1,000 messages, 300 voice minutes
+  - name: Text Marketing Tier 3
+    price: 39
+    currency: USD
+    billing_period: month
+    included: 2,500 messages, 500 voice minutes
+  - name: Text Marketing Tier 4
+    price: 79
+    currency: USD
+    billing_period: month
+    included: 5,000 messages, 800 voice minutes
+  - name: Text Marketing Tier 5
+    price: 139
+    currency: USD
+    billing_period: month
+    included: 10,000 messages, 1,000 voice minutes
+  - name: Text Marketing Tier 6
+    price: 279
+    currency: USD
+    billing_period: month
+    included: 25,000 messages, 2,000 voice minutes
+  - name: Text message add-on
+    price: 6
+    currency: USD
+    billing_period: month
+    included: 500 texts
+  - name: Local number add-on
+    price: 10
+    currency: USD
+    billing_period: month
+overage:
+  - unit: text message
+    price: 0.015
+    currency: USD
+  - unit: voice minute
+    price: 0.01
+    currency: USD
+  - unit: fax
+    price: 0.15
+    currency: USD
+    scope: sandbox and production
+    source: https://developer.infusionsoft.com/resources/sandbox-application/
+trial:
+  available: true
+  credit_card_required: false
+  limits:
+    - 25 email send limit
+    - No payments
+    - No text capability
+developer_pricing:
+  api_metered: false
+  note: >-
+    No per-call or per-seat API pricing is published. Developer sandbox applications
+    are free of monthly charge (see sandbox/keap-sandbox.yml).

@@ -1,0 +1,49 @@
+overlay: 1.0.0
+info:
+  title: API Evangelist enhancements for Keap Note API
+  version: 1.0.0
+extends: openapi/keap-note-api-openapi.yml
+x-provenance:
+  generated: '2026-08-13'
+  method: generated
+  source: >-
+    Derived from openapi/keap-note-api-openapi.yml, which is a per-tag split of Keap's own published contract at
+    https://crm.infusionsoft.com/app/v3/api-docs/V2. The actions below record enhancements API Evangelist would apply for
+    discovery and agent use; the original spec is never mutated.
+actions:
+  - target: $.info
+    update:
+      x-apis-io-provider: keap
+      x-apis-io-api-version: 'v2'
+      x-apis-io-lifecycle-status: Default
+      x-apis-io-source: https://crm.infusionsoft.com/app/v3/api-docs/V2
+  - target: $.info
+    update:
+      x-rate-limits:
+        docs: https://developer.infusionsoft.com/api-token-quota-and-usage-measurements/
+        oauth_client: 1500/minute, 150000/day
+        pat_or_sak: 10/second, 240/minute, 30000/day
+        tenant: 10000/minute, 250000/day (effective 2026-06-08)
+        exhaustion_status: 429
+        headers:
+          - x-keap-product-quota-available
+          - x-keap-product-throttle-available
+          - x-keap-tenant-throttle-available
+      x-idempotency:
+        supported: false
+        note: >-
+          Keap publishes no idempotency key. Retrying a POST after a 429 or a timeout
+          can create a duplicate record.
+      x-error-envelope:
+        shape: google.rpc.Status
+        fields: [code, message, status, details]
+        rfc9457: false
+      x-conventions: conventions/keap-conventions.yml
+  - target: $.servers
+    update:
+      - url: https://api.keap.com/crm
+        description: >-
+          Alternate production host. Keap's own SDK source spec
+          (github.com/infusionsoft/keap-sdk sdks/v2/swagger.yml) names this host while
+          the live api-docs endpoint names api.infusionsoft.com; both resolve to the
+          same gateway.

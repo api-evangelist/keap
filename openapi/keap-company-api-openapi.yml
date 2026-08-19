@@ -1,0 +1,2566 @@
+openapi: 3.1.0
+info:
+  title: Keap Company API
+  description: Keap Public API Documentation
+  termsOfService: https://www.thryv.com/terms-of-use
+  contact:
+    name: Keap
+    url: https://developer.keap.com/get-support
+    email: api.keap@thryv.com
+  license:
+    name: Apache 2.0
+    url: https://www.apache.org/licenses/LICENSE-2.0
+  version: v2
+servers:
+- url: https://api.infusionsoft.com/crm
+tags:
+- name: Company
+paths:
+  /rest/v2/companies:
+    get:
+      tags:
+      - Company
+      summary: List Companies
+      description: Retrieves a list of all Companies.<br/><br/>
+      operationId: listCompanies
+      parameters:
+      - name: filter
+        in: query
+        description: "Filter to apply, allowed fields are:\n- (String) `company_name` - exact match on\
+          \ company name (equality only)\n- (String) `name` - company name with support for a wildcard\
+          \ at the end (e.g. `smith*`)\n- (String) `email` - exact match on email\n- (String) `city` -\
+          \ company city (Contact.City) with support for a prefix wildcard at the end (e.g. `Chan*`)\n\
+          - (String) `state` - company state/region (Contact.State) with support for a prefix wildcard\
+          \ at the end (e.g. `Ar*`)\n- (String) `since_time` - companies updated on or after this time\n\
+          - (String) `until_time` - companies updated on or before this time\n- (Number) `company_id`\
+          \ - supports comparison operators: `==`, `>`, `<`, `>=`, `<=`\n\nFor equality filters, use the\
+          \ `==` operator in encoded form `%3D%3D`:\n- `filter=company_name%3D%3DCompany`\n- `filter=email%3D%3Dtest@gmail.com`\n\
+          - `filter=city%3D%3DChandler`\n- `filter=since_time%3D%3D2025-04-16T20:33:02.321Z`\n- `filter=until_time%3D%3D2025-08-16T20:33:02.321Z`\n\
+          \nFor wildcard name/city/state search (prefix only, case-insensitive):\n- `filter=name%3D%3DAcme%2A`\
+          \ (starts with \"Acme\")\n- `filter=city%3D%3DChan%2A` (city starts with \"Chan\")\n- `filter=city%3D%3DChandler%3Bstate%3D%3DArizona`\
+          \ (combined city + state filter)\n\nFor company_id comparison:\n- `filter=company_id%3E5` (company_id\
+          \ > 5)\n- `filter=company_id%3E%3D10` (company_id >= 10)\n\nCustom fields can be filtered by\
+          \ their field name (case-insensitive). A standard\nfield above takes precedence over a custom\
+          \ field with the same name. The supported\noperators depend on the custom field's type:\n- Text-like\
+          \ fields (text, text area, name, email, phone, website, social security\n  number) and single-value\
+          \ choice fields with text options (dropdown, radio,\n  state): `==` only, with optional trailing\
+          \ wildcard (e.g. `Industry%3D%3DTech%2A`)\n- Yes/No and drilldown fields: `==` only\n- Numeric\
+          \ fields (whole number, decimal, currency, percent, year, month, day of\n  week, user): `==`,\
+          \ `>`, `<`, `>=`, `<=`\n- Date fields: `==`, `>`, `<`, `>=`, `<=` using full ISO 8601 (same\
+          \ as `since_time`/`until_time`)\n- Multi-select fields: `==` matches records that contain the\
+          \ given option\nExamples (for a custom field named `Height`):\n- `filter=Height%3D%3DTall`\n\
+          - `filter=Height%3E100`\nCustom field filtering on non-indexed fields is supported but may be\
+          \ slower.\n"
+        required: false
+        schema:
+          type: string
+      - name: page_token
+        in: query
+        description: Page token
+        required: false
+        schema:
+          type: string
+      - name: order_by
+        in: query
+        description: 'Attribute and direction to order items.
+
+          One of the following fields:
+
+          - `id`
+
+          - `create_time`
+
+          - `name`
+
+          - `email`
+
+
+          One of the following directions:
+
+          - `asc`
+
+          - `desc`'
+        required: false
+        schema:
+          type: string
+      - name: page_size
+        in: query
+        description: Total number of items to return per page
+        required: false
+        schema:
+          type: integer
+          format: int32
+          maximum: 1000
+          minimum: 0
+        example: 0
+      - name: fields
+        in: query
+        description: Comma-delimited list of Company properties to include in the response. (Fields such
+          as `notes`, `fax_number`, `address`, `email_address`, `phone_number`, `update_time`, `create_time`
+          and `custom_fields` aren't included, by default.)
+        schema:
+          type: string
+      responses:
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '409':
+          description: Conflict
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '501':
+          description: Method Not Implemented
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '405':
+          description: Method Not Allowed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListCompaniesResponse'
+    post:
+      tags:
+      - Company
+      summary: Create a Company
+      description: Creates a new Company.`country_code` is required if `region` is specified.
+      operationId: createCompany
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateCompanyRequest'
+        required: true
+      responses:
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '409':
+          description: Conflict
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '501':
+          description: Method Not Implemented
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '405':
+          description: Method Not Allowed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Company'
+  /rest/v2/companies/{company_id}/tags/{tag_id}:
+    post:
+      tags:
+      - Company
+      summary: Add Tag to Company
+      description: Applies a Tag to a Company.
+      operationId: addTagToCompany
+      parameters:
+      - name: company_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: tag_id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '409':
+          description: Conflict
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '501':
+          description: Method Not Implemented
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '405':
+          description: Method Not Allowed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '204':
+          description: No Content
+    delete:
+      tags:
+      - Company
+      summary: Remove Tag
+      description: Remove a Tag from a Company.
+      operationId: removeTagFromCompany
+      parameters:
+      - name: company_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: tag_id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '409':
+          description: Conflict
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '501':
+          description: Method Not Implemented
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '405':
+          description: Method Not Allowed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '204':
+          description: No Content
+  /rest/v2/companies/model/customFields:
+    post:
+      tags:
+      - Company
+      summary: Create a Company Custom Field
+      description: Creates a custom field of the specified type and options to the Company object
+      operationId: createCompanyCustomField
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateCustomFieldRequest'
+        required: true
+      responses:
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '409':
+          description: Conflict
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '501':
+          description: Method Not Implemented
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '405':
+          description: Method Not Allowed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CustomFieldMetaData'
+  /rest/v2/companies/model/customFields/tabs:
+    get:
+      tags:
+      - Company
+      summary: List Company Custom Field Tabs
+      description: Retrieves a list of custom field tabs for the Company record type.
+      operationId: listCompanyCustomFieldTabs
+      responses:
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '409':
+          description: Conflict
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '501':
+          description: Method Not Implemented
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '405':
+          description: Method Not Allowed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListCustomFieldTabsResponse'
+    post:
+      tags:
+      - Company
+      summary: Create a Company Custom Field Tab
+      description: Creates a new custom field tab for the Company record type.
+      operationId: createCompanyCustomFieldTab
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateCustomFieldTabRequest'
+        required: true
+      responses:
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '409':
+          description: Conflict
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '501':
+          description: Method Not Implemented
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '405':
+          description: Method Not Allowed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CustomFieldTab'
+  /rest/v2/companies/model/customFields/groups:
+    get:
+      tags:
+      - Company
+      summary: List Company Custom Field Groups
+      description: Retrieves a list of custom field groups for the Company record type. Optionally filter
+        by tab_id to scope to a specific tab.
+      operationId: listCompanyCustomFieldGroups
+      parameters:
+      - name: tab_id
+        in: query
+        description: Optional tab id to scope groups to a single tab
+        required: false
+        schema:
+          type: string
+      responses:
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '409':
+          description: Conflict
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '501':
+          description: Method Not Implemented
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '405':
+          description: Method Not Allowed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListCustomFieldGroupsResponse'
+    post:
+      tags:
+      - Company
+      summary: Create a Company Custom Field Group
+      description: Creates a new custom field group for the Company record type. If `tab_id` is omitted,
+        the group is added to the default 'Custom Fields' tab.
+      operationId: createCompanyCustomFieldGroup
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateCustomFieldGroupRequest'
+        required: true
+      responses:
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '409':
+          description: Conflict
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '501':
+          description: Method Not Implemented
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '405':
+          description: Method Not Allowed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CustomFieldGroup'
+  /rest/v2/companies/{company_id}:
+    get:
+      tags:
+      - Company
+      summary: Retrieve a Company
+      description: Retrieves a single Company
+      operationId: getCompany
+      parameters:
+      - name: company_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: fields
+        in: query
+        description: 'Comma-delimited list of Company properties to include in the response. (Available
+          fields are: `address`, `custom_fields`, `email_address`, `fax_number`, `phone_number`, `website`,
+          `notes`)'
+        schema:
+          type: string
+      responses:
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '409':
+          description: Conflict
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '501':
+          description: Method Not Implemented
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '405':
+          description: Method Not Allowed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Company'
+    delete:
+      tags:
+      - Company
+      summary: Delete a Company
+      description: Deletes the specified Company
+      operationId: deleteCompany
+      parameters:
+      - name: company_id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '409':
+          description: Conflict
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '501':
+          description: Method Not Implemented
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '405':
+          description: Method Not Allowed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '204':
+          description: No Content
+    patch:
+      tags:
+      - Company
+      summary: Update a Company
+      description: Updates a Company with the values provided in the request
+      operationId: updateCompany
+      parameters:
+      - name: company_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: update_mask
+        in: query
+        description: An optional list of properties to be updated. If set, only the provided properties
+          will be updated and others will be skipped.
+        required: false
+        schema:
+          type: array
+          items:
+            type: string
+            enum:
+            - id
+            - company_name
+            - address
+            - phone_number
+            - fax_number
+            - email_address
+            - notes
+            - website
+            - custom_fields
+            - create_time
+            - update_time
+            - anniversary_date
+            - assistant_name
+            - assistant_phone
+            - billing_information
+            - birth_date
+            - contact_type
+            - first_name
+            - job_title
+            - last_name
+            - middle_name
+            - preferred_name
+            - owner_id
+            - referral_code
+            - spouse_name
+            - suffix
+            - title
+            - account_id
+            - created_by
+            - groups
+            - last_updated_by
+          uniqueItems: true
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateCompanyRequest'
+        required: true
+      responses:
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '409':
+          description: Conflict
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '501':
+          description: Method Not Implemented
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '405':
+          description: Method Not Allowed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Company'
+  /rest/v2/companies/model/customFields/{custom_field_id}:
+    delete:
+      tags:
+      - Company
+      summary: Delete a Company Custom Field
+      description: Deletes a custom field from the company model
+      operationId: deleteCompanyCustomField
+      parameters:
+      - name: custom_field_id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '409':
+          description: Conflict
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '501':
+          description: Method Not Implemented
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '405':
+          description: Method Not Allowed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '204':
+          description: No Content
+    patch:
+      tags:
+      - Company
+      summary: Update a Company Custom Field
+      description: Updates a custom field of the specified type and options to the Company object
+      operationId: updateCompanyCustomField
+      parameters:
+      - name: custom_field_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: update_mask
+        in: query
+        description: An optional list of properties to be updated. If set, only the provided properties
+          will be updated and others will be skipped.
+        required: false
+        schema:
+          type: array
+          items:
+            type: string
+            enum:
+            - group_id
+            - label
+            - options
+          uniqueItems: true
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateCustomFieldMetaDataRequest'
+        required: true
+      responses:
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '409':
+          description: Conflict
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '501':
+          description: Method Not Implemented
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '405':
+          description: Method Not Allowed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CustomFieldMetaData'
+  /rest/v2/companies/model/customFields/tabs/{tab_id}:
+    get:
+      tags:
+      - Company
+      summary: Retrieve a Company Custom Field Tab
+      description: Retrieves a single custom field tab by id for the Company record type.
+      operationId: getCompanyCustomFieldTab
+      parameters:
+      - name: tab_id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '409':
+          description: Conflict
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '501':
+          description: Method Not Implemented
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '405':
+          description: Method Not Allowed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CustomFieldTab'
+    delete:
+      tags:
+      - Company
+      summary: Delete a Company Custom Field Tab
+      description: Deletes a custom field tab. Returns 409 Conflict if the tab still contains groups.
+      operationId: deleteCompanyCustomFieldTab
+      parameters:
+      - name: tab_id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '409':
+          description: Conflict
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '501':
+          description: Method Not Implemented
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '405':
+          description: Method Not Allowed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '204':
+          description: No Content
+    patch:
+      tags:
+      - Company
+      summary: Update a Company Custom Field Tab
+      description: Updates an existing custom field tab. Only fields listed in `update_mask` are applied.
+      operationId: updateCompanyCustomFieldTab
+      parameters:
+      - name: tab_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: update_mask
+        in: query
+        description: Comma-separated list of fields to update
+        required: true
+        schema:
+          type: array
+          items:
+            type: string
+            enum:
+            - name
+            - order
+          uniqueItems: true
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateCustomFieldTabRequest'
+        required: true
+      responses:
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '409':
+          description: Conflict
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '501':
+          description: Method Not Implemented
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '405':
+          description: Method Not Allowed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CustomFieldTab'
+  /rest/v2/companies/model/customFields/groups/{group_id}:
+    get:
+      tags:
+      - Company
+      summary: Retrieve a Company Custom Field Group
+      description: Retrieves a single custom field group by id for the Company record type.
+      operationId: getCompanyCustomFieldGroup
+      parameters:
+      - name: group_id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '409':
+          description: Conflict
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '501':
+          description: Method Not Implemented
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '405':
+          description: Method Not Allowed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CustomFieldGroup'
+    delete:
+      tags:
+      - Company
+      summary: Delete a Company Custom Field Group
+      description: Deletes a custom field group. Returns 409 Conflict if the group still contains custom
+        fields.
+      operationId: deleteCompanyCustomFieldGroup
+      parameters:
+      - name: group_id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '409':
+          description: Conflict
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '501':
+          description: Method Not Implemented
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '405':
+          description: Method Not Allowed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '204':
+          description: No Content
+    patch:
+      tags:
+      - Company
+      summary: Update a Company Custom Field Group
+      description: Updates an existing custom field group. Only fields listed in `update_mask` are applied.
+      operationId: updateCompanyCustomFieldGroup
+      parameters:
+      - name: group_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: update_mask
+        in: query
+        description: Comma-separated list of fields to update
+        required: true
+        schema:
+          type: array
+          items:
+            type: string
+            enum:
+            - name
+            - tab_id
+            - order
+          uniqueItems: true
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateCustomFieldGroupRequest'
+        required: true
+      responses:
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '409':
+          description: Conflict
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '501':
+          description: Method Not Implemented
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '405':
+          description: Method Not Allowed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CustomFieldGroup'
+  /rest/v2/companies/{company_id}/tags:
+    get:
+      tags:
+      - Company
+      summary: List Applied Tags
+      description: Retrieves a list of tags applied to the specified Company
+      operationId: listTagsForCompany
+      parameters:
+      - name: company_id
+        in: path
+        description: Company identifier
+        required: true
+        schema:
+          type: string
+      - name: filter
+        in: query
+        description: 'Filter to apply, allowed fields are:
+
+          - (String) `name`
+
+          - (String) `description`
+
+          - (String) `category_id` (use `category_id==NONE` to filter tags not assigned to any category)
+
+          - (String) `since_applied_time`
+
+          - (String) `until_applied_time`
+
+          - (String) `since_create_time`
+
+          - (String) `until_create_time`
+
+          - (String) `since_update_time`
+
+          - (String) `until_update_time`
+
+
+          You will need to apply the `==` operator to check the equality of one of the filters with your
+          searched
+
+          word, in the encoded form `%3D%3D`. For the filters listed above, here are some examples:
+
+          - `filter=name%3D%3DCustomer`
+
+          - `filter=category_id%3D%3D123`
+
+          - `filter=category_id%3D%3DNONE`
+
+          - `filter=since_applied_time%3D%3D2025-04-16T20:33:02.321Z;until_applied_time%3D%3D2025-08-16T20:33:02.321Z;`
+
+          '
+        required: false
+        schema:
+          type: string
+      - name: page_token
+        in: query
+        description: Page token
+        required: false
+        schema:
+          type: string
+      - name: order_by
+        in: query
+        description: 'Attribute and direction to order items.
+
+          One of the following fields:
+
+          - `name`
+
+          - `create_time`
+
+          - `update_time`
+
+          - `applied_time`
+
+          - `category_id`
+
+
+          One of the following directions:
+
+          - `asc`
+
+          - `desc`'
+        required: false
+        schema:
+          type: string
+      - name: page_size
+        in: query
+        description: Total number of items to return per page
+        required: false
+        schema:
+          type: integer
+          format: int32
+          maximum: 1000
+          minimum: 0
+        example: 0
+      responses:
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '409':
+          description: Conflict
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '501':
+          description: Method Not Implemented
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '405':
+          description: Method Not Allowed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListCompanyTagsResponse'
+  /rest/v2/companies/model:
+    get:
+      tags:
+      - Company
+      summary: Retrieve Company Custom Field Model
+      description: Get the custom fields for the Company object
+      operationId: retrieveCompanyCustomFieldModel
+      responses:
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '409':
+          description: Conflict
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '501':
+          description: Method Not Implemented
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '405':
+          description: Method Not Allowed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ObjectModel'
+components:
+  schemas:
+    Address:
+      type: object
+      properties:
+        country:
+          type: string
+          deprecated: true
+          description: Deprecated. The long-name descriptive version of the Country Code. Please use 'country_code'
+            for POST/PATCH operations. Maximum length is 100 characters.
+          example: United States of America
+        line1:
+          type: string
+          description: Street address line 1. Maximum length is 75 characters for the BILLING address
+            and 100 characters for the SHIPPING and OTHER addresses.
+          example: 123
+        line2:
+          type: string
+          description: Street address line 2. Maximum length is 75 characters for the BILLING address
+            and 100 characters for the SHIPPING and OTHER addresses.
+          example: Suite 100
+        locality:
+          type: string
+          description: The municipality to which the address belongs. Maximum length is 50 characters
+            for the BILLING address and 100 characters for the SHIPPING and OTHER addresses.
+          example: Phoenix
+        region:
+          type: string
+          deprecated: true
+          description: The long-name descriptive version of the Region Code. Please use 'region_code'
+            for POST/PATCH operations. Maximum length is 50 characters.
+          example: Arizona
+        field:
+          type: string
+          description: Address type field
+          enum:
+          - ADDRESS_FIELD_UNSPECIFIED
+          - BILLING
+          - SHIPPING
+          - OTHER
+          example: BILLING
+        country_code:
+          type: string
+          description: An ISO 3166-2 Country Code (https://en.wikipedia.org/wiki/ISO_3166-1_alpha-3)
+          example: USA
+        postal_code:
+          type: string
+          description: Postal or ZIP code. Maximum length is 15 characters for the BILLING and OTHER addresses
+            and 20 characters for the SHIPPING address.
+          example: 85001
+        region_code:
+          type: string
+          description: An ISO 3166-2 Province Code, such as one of the US States (https://en.wikipedia.org/wiki/ISO_3166-2:US)
+          example: US-AZ
+        zip_code:
+          type: string
+          description: ZIP code (US). Maximum length is 15 characters for the BILLING and OTHER addresses
+            and 20 characters for the SHIPPING address.
+          example: 85001
+        zip_four:
+          type: string
+          description: ZIP+4 extension. Maximum length is 10 characters.
+          example: 1234
+    AppliedTag:
+      type: object
+      description: Tag with application timestamp
+      properties:
+        tag:
+          $ref: '#/components/schemas/Tag'
+          description: The tag applied
+        applied_time:
+          type: string
+          description: The time the tag was applied to the contact, in ISO 8601 format
+    CategoryReference:
+      type: object
+      properties:
+        id:
+          type: string
+          description: The unique identifier for the tag category
+          example: 123
+      required:
+      - id
+    Company:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Unique identifier
+          example: 123
+        address:
+          $ref: '#/components/schemas/Address'
+          description: The company's address
+        notes:
+          type: string
+          description: Notes about the company
+          example: Key enterprise client since 2020
+        website:
+          type: string
+          description: The company's website URL
+          example: https://www.thryv.com
+        suffix:
+          type: string
+          description: Name suffix
+          example: Jr
+        title:
+          type: string
+          description: Name prefix or salutation
+          example: Dr.
+        groups:
+          type: string
+          description: Comma-delimited list of tag IDs applied to this company
+          example: 1,5,12
+        company_name:
+          type: string
+          description: The name of the company
+          example: Thryv
+        custom_fields:
+          type: array
+          items:
+            $ref: '#/components/schemas/CustomFieldValue'
+        email_address:
+          $ref: '#/components/schemas/EmailAddress'
+        fax_number:
+          $ref: '#/components/schemas/FaxNumber'
+        phone_number:
+          $ref: '#/components/schemas/PhoneNumber'
+        update_time:
+          type: string
+          description: Last update timestamp (ISO-8601)
+          example: '2024-03-15T10:30:00Z'
+        create_time:
+          type: string
+          description: Creation timestamp (ISO-8601)
+          example: '2024-01-10T08:00:00Z'
+        anniversary_date:
+          type: string
+          description: The anniversary date
+          example: '2015-06-20'
+        assistant_name:
+          type: string
+          description: The name of the company contact's assistant
+          example: Jane Doe
+        assistant_phone:
+          type: string
+          description: The phone number of the company contact's assistant
+          example: 555-123-4567
+        billing_information:
+          type: string
+          description: Billing information for the company
+          example: NET 30
+        birth_date:
+          type: string
+          description: The birth date
+          example: '1985-03-15'
+        contact_type:
+          type: string
+          description: Type of contact
+          example: Vendor
+        first_name:
+          type: string
+          description: First name of the company contact
+          example: John
+        job_title:
+          type: string
+          description: Job title of the company contact
+          example: CEO
+        last_name:
+          type: string
+          description: Last name of the company contact
+          example: Smith
+        middle_name:
+          type: string
+          description: Middle name of the company contact
+          example: Robert
+        preferred_name:
+          type: string
+          description: Preferred name or nickname of the company contact
+          example: Johnny
+        owner_id:
+          type: string
+          description: ID of the user who owns this company
+          example: 45
+        referral_code:
+          type: string
+          description: Referral code
+          example: REF2024ABC
+        spouse_name:
+          type: string
+          description: Spouse's name
+          example: Jane Smith
+        account_id:
+          type: string
+          description: The company's account ID
+          example: 100
+        created_by:
+          type: string
+          description: ID of the user who created this company
+          example: 10
+        last_updated_by:
+          type: string
+          description: ID of the user who last updated this company
+          example: 10
+    CreateCompanyRequest:
+      type: object
+      description: company
+      properties:
+        address:
+          $ref: '#/components/schemas/Address'
+          description: The company's address
+        notes:
+          type: string
+          description: Notes about the company
+          example: Key enterprise client since 2020
+        website:
+          type: string
+          description: The company's website URL
+          example: https://www.thryv.com
+        suffix:
+          type: string
+          description: Name suffix
+          example: Jr
+        title:
+          type: string
+          description: Name prefix or salutation
+          example: Dr.
+        company_name:
+          type: string
+          description: The name of the company
+          example: Thryv
+        custom_fields:
+          type: array
+          items:
+            $ref: '#/components/schemas/CustomFieldValue'
+        email_address:
+          $ref: '#/components/schemas/EmailAddress'
+        fax_number:
+          $ref: '#/components/schemas/FaxNumber'
+        phone_number:
+          $ref: '#/components/schemas/PhoneNumber'
+        anniversary_date:
+          type: string
+          description: The anniversary date
+          example: '2015-06-20'
+        assistant_name:
+          type: string
+          description: The name of the company contact's assistant
+          example: Jane Doe
+        assistant_phone:
+          type: string
+          description: The phone number of the company contact's assistant
+          example: 555-123-4567
+        billing_information:
+          type: string
+          description: Billing information for the company
+          example: NET 30
+        birth_date:
+          type: string
+          description: The birth date
+          example: '1985-03-15'
+        contact_type:
+          type: string
+          description: Type of contact
+          example: Vendor
+        first_name:
+          type: string
+          description: First name of the company contact
+          example: John
+        job_title:
+          type: string
+          description: Job title of the company contact
+          example: CEO
+        last_name:
+          type: string
+          description: Last name of the company contact
+          example: Smith
+        middle_name:
+          type: string
+          description: Middle name of the company contact
+          example: Robert
+        preferred_name:
+          type: string
+          description: Preferred name or nickname of the company contact
+          example: Johnny
+        owner_id:
+          type: string
+          description: ID of the user who owns this company
+          example: 45
+        referral_code:
+          type: string
+          description: Referral code
+          example: REF2024ABC
+        spouse_name:
+          type: string
+          description: Spouse's name
+          example: Jane Smith
+    CreateCustomFieldGroupRequest:
+      type: object
+      properties:
+        name:
+          type: string
+        tab_id:
+          type: string
+    CreateCustomFieldOptionRequest:
+      type: object
+      properties:
+        label:
+          type: string
+    CreateCustomFieldRequest:
+      type: object
+      properties:
+        label:
+          type: string
+        options:
+          type: array
+          items:
+            $ref: '#/components/schemas/CreateCustomFieldOptionRequest'
+        field_type:
+          type: string
+          enum:
+          - CURRENCY
+          - DATE
+          - DATE_TIME
+          - DAY_OF_WEEK
+          - DECIMAL_NUMBER
+          - DRILLDOWN
+          - DROPDOWN
+          - EMAIL
+          - LIST_BOX
+          - MONTH
+          - NAME
+          - PERCENT
+          - PHONE_NUMBER
+          - RADIO
+          - SOCIAL_SECURITY_NUMBER
+          - STATE
+          - TEXT
+          - TEXT_AREA
+          - USER
+          - USER_LIST_BOX
+          - WEBSITE
+          - WHOLE_NUMBER
+          - YEAR
+          - YES_NO
+        group_id:
+          type: string
+          description: An optional tab group to place the field under in the interface.  If not specified,
+            will default to the 'Custom Fields' tab.
+        user_group_id:
+          type: string
+          description: An optional user group to choose from when selecting values for User or UserListBox
+            fields.
+      required:
+      - field_type
+      - label
+    CreateCustomFieldTabRequest:
+      type: object
+      properties:
+        name:
+          type: string
+    CustomFieldGroup:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        order:
+          type: integer
+          format: int32
+        tab_id:
+          type: string
+        record_type:
+          type: string
+          enum:
+          - CONTACT
+          - REFERRAL_PARTNER
+          - OPPORTUNITY
+          - TASK_NOTE_APPOINTMENT
+          - COMPANY
+          - ORDER
+          - SUBSCRIPTION
+    CustomFieldMetaData:
+      type: object
+      description: Metadata describing a custom field, including its type and options
+      properties:
+        id:
+          type: string
+          description: The unique identifier of the custom field
+          example: 123
+        label:
+          type: string
+          description: The display label of the custom field
+          example: Favorite Color
+        options:
+          type: array
+          description: The list of available options for select/radio/multiselect/drilldown field types
+          items:
+            $ref: '#/components/schemas/CustomFieldOption'
+        record_type:
+          type: string
+          description: The entity type this custom field belongs to (e.g. CONTACT, COMPANY)
+          enum:
+          - CONTACT
+          - REFERRAL_PARTNER
+          - OPPORTUNITY
+          - TASK_NOTE_APPOINTMENT
+          - COMPANY
+          - ORDER
+          - SUBSCRIPTION
+        field_type:
+          type: string
+          description: The data type of the custom field (e.g. Text, Number, Date, Select)
+          enum:
+          - CURRENCY
+          - DATE
+          - DATE_TIME
+          - DAY_OF_WEEK
+          - DECIMAL_NUMBER
+          - DRILLDOWN
+          - DROPDOWN
+          - EMAIL
+          - LIST_BOX
+          - MONTH
+          - NAME
+          - PERCENT
+          - PHONE_NUMBER
+          - RADIO
+          - SOCIAL_SECURITY_NUMBER
+          - STATE
+          - TEXT
+          - TEXT_AREA
+          - USER
+          - USER_LIST_BOX
+          - WEBSITE
+          - WHOLE_NUMBER
+          - YEAR
+          - YES_NO
+        default_value:
+          type: string
+          description: The default value for this custom field, if any
+        group_id:
+          type: string
+          description: The ID of the group this custom field belongs to
+          example: 45
+        group_name:
+          type: string
+          description: The name of the group this custom field belongs to
+          example: Personal Info
+        field_name:
+          type: string
+          description: The database column name for this custom field. Use this value when filtering contacts
+            (e.g. for field_name 'firstName1', filter with 'firstName1==John').
+          example: firstName1
+    CustomFieldOption:
+      type: object
+      properties:
+        id:
+          type: string
+        label:
+          type: string
+    CustomFieldTab:
+      type: object
+      properties:
+        id:
+          type: string
+          description: The unique identifier of the custom field tab
+          example: 123
+        name:
+          type: string
+          description: The name of the custom field tab
+          example: Personal Info
+        order:
+          type: integer
+          format: int32
+          description: The display order of the tab
+          example: 1
+        record_type:
+          type: string
+          description: The record type this tab belongs to (e.g., CONTACT, COMPANY, OPPORTUNITY, REFERRAL_PARTNER,
+            ORDER, SUBSCRIPTION, TASK_NOTE_APPOINTMENT)
+          enum:
+          - CONTACT
+          - REFERRAL_PARTNER
+          - OPPORTUNITY
+          - TASK_NOTE_APPOINTMENT
+          - COMPANY
+          - ORDER
+          - SUBSCRIPTION
+          example: CONTACT
+    CustomFieldValue:
+      type: object
+      properties:
+        id:
+          type: string
+        content:
+          description: The value of the custom field. Text custom field values have a maximum length of
+            65535 characters.
+    EmailAddress:
+      type: object
+      properties:
+        email:
+          type: string
+          description: Email address. Maximum length is 75 characters for EMAIL1 and 100 characters for
+            EMAIL2 and EMAIL3.
+          example: john.smith@example.com
+        field:
+          type: string
+          description: Email address slot
+          enum:
+          - EMAIL_FIELD_UNSPECIFIED
+          - EMAIL1
+          - EMAIL2
+          - EMAIL3
+          example: EMAIL1
+        opt_in_reason:
+          type: string
+          description: Reason for opting in
+          example: Subscribed via website form
+        is_opt_in:
+          type: boolean
+        email_opt_status:
+          type: string
+          enum:
+          - UNENGAGED_MARKETABLE
+          - SINGLE_OPT_IN
+          - DOUBLE_OPT_IN
+          - CONFIRMED
+          - UNENGAGED_NON_MARKETABLE
+          - NON_MARKETABLE
+          - LOCKDOWN
+          - BOUNCE
+          - HARD_BOUNCE
+          - MANUAL
+          - ADMIN
+          - SYSTEM
+          - LIST_UNSUBSCRIBE
+          - FEEDBACK
+          - SPAM
+          - INVALID
+          - DEACTIVATED
+    Error:
+      type: object
+      properties:
+        code:
+          type: integer
+          format: int32
+        message:
+          type: string
+        status:
+          type: string
+        details:
+          type: array
+          items:
+            $ref: '#/components/schemas/ErrorDetails'
+    ErrorDetails:
+      type: object
+      properties:
+        domain:
+          type: string
+        resource:
+          type: string
+    FaxNumber:
+      type: object
+      properties:
+        number:
+          type: string
+          description: Fax number
+          example: 5551234568
+        type:
+          type: string
+          description: Fax type
+          example: Work
+        field:
+          type: string
+          description: Fax number slot
+          enum:
+          - FAX_NUMBER_FIELD_UNSPECIFIED
+          - FAX1
+          - FAX2
+          example: FAX1
+    ListCompaniesResponse:
+      type: object
+      properties:
+        companies:
+          type: array
+          items:
+            $ref: '#/components/schemas/Company'
+        next_page_token:
+          type: string
+    ListCompanyTagsResponse:
+      type: object
+      description: List of tags applied to a company
+      properties:
+        tags:
+          type: array
+          items:
+            $ref: '#/components/schemas/AppliedTag'
+        next_page_token:
+          type: string
+    ListCustomFieldGroupsResponse:
+      type: object
+      properties:
+        groups:
+          type: array
+          items:
+            $ref: '#/components/schemas/CustomFieldGroup'
+    ListCustomFieldTabsResponse:
+      type: object
+      properties:
+        tabs:
+          type: array
+          items:
+            $ref: '#/components/schemas/CustomFieldTab'
+    ObjectModel:
+      type: object
+      properties:
+        custom_fields:
+          type: array
+          items:
+            $ref: '#/components/schemas/CustomFieldMetaData'
+        optional_properties:
+          type: array
+          description: These fields are not transmitted by default on this model, but can be requested
+            by specifying them in a comma-separated list in the optional_properties query parameter.
+          items:
+            type: string
+          uniqueItems: true
+    PhoneNumber:
+      type: object
+      properties:
+        extension:
+          type: string
+          description: Phone extension
+          example: 101
+        number:
+          type: string
+          description: Phone number. Maximum length is 40 characters for PHONE1-PHONE3 and 20 characters
+            for PHONE4-PHONE5.
+          example: 5551234567
+        type:
+          type: string
+          description: Phone type
+          example: Work
+        field:
+          type: string
+          description: Phone number slot
+          enum:
+          - PHONE_NUMBER_FIELD_UNSPECIFIED
+          - PHONE1
+          - PHONE2
+          - PHONE3
+          - PHONE4
+          - PHONE5
+          example: PHONE1
+        number_e164:
+          type: string
+          description: Phone number in E.164 format
+          example: '+15551234567'
+    Tag:
+      type: object
+      properties:
+        id:
+          type: string
+          description: The unique identifier for this tag
+          example: 123
+        name:
+          type: string
+          description: The unique name of this tag
+          example: VIP Customer
+        description:
+          type: string
+          description: A description of this tag
+          example: High-value customers
+        category:
+          $ref: '#/components/schemas/CategoryReference'
+          description: The category this tag belongs to
+        create_time:
+          type: string
+          format: date-time
+          description: The time this tag was created, in ISO 8601 format
+          example: '2024-01-10T08:00:00Z'
+        update_time:
+          type: string
+          format: date-time
+          description: The time this tag was last updated, in ISO 8601 format
+          example: '2024-03-15T10:30:00Z'
+    UpdateCompanyRequest:
+      type: object
+      description: company
+      properties:
+        address:
+          $ref: '#/components/schemas/Address'
+          description: The company's address
+        notes:
+          type: string
+          description: Notes about the company
+          example: Key enterprise client since 2020
+        website:
+          type: string
+          description: The company's website URL
+          example: https://www.thryv.com
+        suffix:
+          type: string
+          description: Name suffix
+          example: Jr
+        title:
+          type: string
+          description: Name prefix or salutation
+          example: Dr.
+        company_name:
+          type: string
+          description: The name of the company
+          example: Thryv
+        custom_fields:
+          type: array
+          items:
+            $ref: '#/components/schemas/CustomFieldValue'
+        email_address:
+          $ref: '#/components/schemas/EmailAddress'
+        fax_number:
+          $ref: '#/components/schemas/FaxNumber'
+        phone_number:
+          $ref: '#/components/schemas/PhoneNumber'
+        anniversary_date:
+          type: string
+          description: The anniversary date
+          example: '2015-06-20'
+        assistant_name:
+          type: string
+          description: The name of the company contact's assistant
+          example: Jane Doe
+        assistant_phone:
+          type: string
+          description: The phone number of the company contact's assistant
+          example: 555-123-4567
+        billing_information:
+          type: string
+          description: Billing information for the company
+          example: NET 30
+        birth_date:
+          type: string
+          description: The birth date
+          example: '1985-03-15'
+        contact_type:
+          type: string
+          description: Type of contact
+          example: Vendor
+        first_name:
+          type: string
+          description: First name of the company contact
+          example: John
+        job_title:
+          type: string
+          description: Job title of the company contact
+          example: CEO
+        last_name:
+          type: string
+          description: Last name of the company contact
+          example: Smith
+        middle_name:
+          type: string
+          description: Middle name of the company contact
+          example: Robert
+        preferred_name:
+          type: string
+          description: Preferred name or nickname of the company contact
+          example: Johnny
+        owner_id:
+          type: string
+          description: ID of the user who owns this company
+          example: 45
+        referral_code:
+          type: string
+          description: Referral code
+          example: REF2024ABC
+        spouse_name:
+          type: string
+          description: Spouse's name
+          example: Jane Smith
+    UpdateCustomFieldGroupRequest:
+      type: object
+      properties:
+        name:
+          type: string
+        order:
+          type: integer
+          format: int32
+        tab_id:
+          type: string
+    UpdateCustomFieldMetaDataRequest:
+      type: object
+      properties:
+        label:
+          type: string
+        options:
+          type: array
+          items:
+            $ref: '#/components/schemas/CustomFieldOption'
+        group_id:
+          type: string
+      required:
+      - group_id
+    UpdateCustomFieldTabRequest:
+      type: object
+      properties:
+        name:
+          type: string
+        order:
+          type: integer
+          format: int32
+  securitySchemes:
+    oauth2:
+      type: oauth2
+      flows:
+        authorizationCode:
+          authorizationUrl: https://accounts.infusionsoft.com/app/oauth/authorize
+          tokenUrl: https://api.infusionsoft.com/token
+          scopes: {}
+security:
+- oauth2: []
