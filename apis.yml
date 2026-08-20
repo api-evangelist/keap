@@ -31,6 +31,19 @@ tags:
 - E-Commerce
 - Contacts
 - Email Marketing
+- Subscription
+- Affiliate Management
+- Webhook
+- MCP
+- Payments
+tags_raw:
+- CRM
+- Sales
+- Marketing Automation
+- Small Business
+- E-Commerce
+- Contacts
+- Email Marketing
 - Subscriptions
 - Affiliate Management
 - Webhooks
@@ -50,6 +63,16 @@ apis:
   humanURL: https://developer.infusionsoft.com/rest-hook-documentation/
   baseURL: https://api.infusionsoft.com/crm/rest/v1
   tags:
+  - Webhook
+  - REST Hooks
+  - Event
+  - CRM
+  - Contacts
+  - Opportunities
+  - Invoices
+  - Order
+  - Subscription
+  tags_raw:
   - Webhooks
   - REST Hooks
   - Events
@@ -77,6 +100,8 @@ apis:
   humanURL: https://developer.infusionsoft.com/docs/restv2/
   baseURL: https://api.infusionsoft.com/crm/rest/v2
   tags:
+  - Affiliates
+  tags_raw:
   - Affiliate
   properties:
   - type: OpenAPI
@@ -267,6 +292,8 @@ apis:
   humanURL: https://developer.infusionsoft.com/docs/restv2/
   baseURL: https://api.infusionsoft.com/crm/rest/v2
   tags:
+  - File
+  tags_raw:
   - Files
   properties:
   - type: OpenAPI
@@ -438,6 +465,8 @@ apis:
   humanURL: https://developer.infusionsoft.com/docs/restv2/
   baseURL: https://api.infusionsoft.com/crm/rest/v2
   tags:
+  - Order
+  tags_raw:
   - Orders
   properties:
   - type: OpenAPI
@@ -533,6 +562,8 @@ apis:
   humanURL: https://developer.infusionsoft.com/docs/restv2/
   baseURL: https://api.infusionsoft.com/crm/rest/v2
   tags:
+  - Product
+  tags_raw:
   - Products
   properties:
   - type: OpenAPI
@@ -590,6 +621,8 @@ apis:
   humanURL: https://developer.infusionsoft.com/docs/restv2/
   baseURL: https://api.infusionsoft.com/crm/rest/v2
   tags:
+  - Subscription
+  tags_raw:
   - Subscriptions
   properties:
   - type: OpenAPI
@@ -628,6 +661,8 @@ apis:
   humanURL: https://developer.infusionsoft.com/docs/restv2/
   baseURL: https://api.infusionsoft.com/crm/rest/v2
   tags:
+  - Task
+  tags_raw:
   - Tasks
   properties:
   - type: OpenAPI
@@ -647,6 +682,8 @@ apis:
   humanURL: https://developer.infusionsoft.com/docs/restv2/
   baseURL: https://api.infusionsoft.com/crm/rest/v2
   tags:
+  - User
+  tags_raw:
   - Users
   properties:
   - type: OpenAPI
