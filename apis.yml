@@ -10,6 +10,19 @@ description: Keap (formerly Infusionsoft, now part of Thryv) is a CRM, sales and
   server at https://api.keap.com/mcp secured with OAuth 2.1, PKCE and dynamic client registration, and
   ships first-party SDKs for six languages generated in lock-step from its own spec.
 type: Index
+deliveryModel:
+  model: unknown
+  open_source: unknown
+  commercial: true
+  callable_host: true
+  label: Delivery model not determined — needs a product licence on record
+  confidence: low
+  source:
+  - openapi
+  - pricing
+  - repository-unlicensed
+  generated: '2026-08-28'
+  method: derived
 accessModel:
   pricing: unknown
   onboarding: self-serve
@@ -724,6 +737,9 @@ apis:
   - type: Authentication
     url: https://developer.infusionsoft.com/getting-started-oauth-keys/
 common:
+- type: CapabilityMap
+  url: capabilities/keap-capability-edges.yml
+  name: Keap Business Capability Map
 - type: Overlay
   url: overlays/keap-appointment-v1-overlay.yaml
 - type: Overlay
