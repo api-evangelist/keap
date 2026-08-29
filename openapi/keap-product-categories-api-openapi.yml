@@ -1,4 +1,4 @@
-openapi: 3.1.0
+openapi: 3.2.0
 info:
   title: Keap Product Categories API
   description: Keap Public API Documentation
@@ -13,6 +13,8 @@ info:
   version: v2
 servers:
 - url: https://api.infusionsoft.com/crm
+security:
+- oauth2: []
 tags:
 - name: Product Categories
 paths:
@@ -32,21 +34,17 @@ paths:
 
           - (String) `name` - Wildcard matching allowed
 
-          - (Number) `product_category_id` - supports comparison operators: `==`,`!=`, `>`, `<`, `>=`,
-          `<=`
+          - (Number) `product_category_id` - supports comparison operators: `==`,`!=`, `>`, `<`, `>=`, `<=`
 
 
-          You will need to apply the `==` operator to check the equality of one of the filters with your
-          searched
+          You will need to apply the `==` operator to check the equality of one of the filters with your searched
 
           word, in the encoded form `%3D%3D`.
 
 
-          For fields which allow wildcard matching, you may use the * wildcard character (or its encoded
-          form %2A)
+          For fields which allow wildcard matching, you may use the * wildcard character (or its encoded form %2A)
 
-          for case-insensitive partial matching on text fields. Example of a valid pattern of wildcard
-          usage:
+          for case-insensitive partial matching on text fields. Example of a valid pattern of wildcard usage:
 
           - `field==foo*` finds anything in `field` that begins with `foo`
 
@@ -231,8 +229,7 @@ paths:
       tags:
       - Product Categories
       summary: Assign Products to a Product Category
-      description: Updates the list of products assigned to a Product Category. **Note:** The full list
-        of product IDs that should remain assigned must be provided; any IDs omitted are removed automatically.
+      description: Updates the list of products assigned to a Product Category. **Note:** The full list of product IDs that should remain assigned must be provided; any IDs omitted are removed automatically.
       operationId: assignProductsToCategory
       parameters:
       - name: category_id
@@ -508,8 +505,7 @@ paths:
       tags:
       - Product Categories
       summary: Delete a Product Category
-      description: Deletes the specified Product Category, its sub-categories, and removes products from
-        it
+      description: Deletes the specified Product Category, its sub-categories, and removes products from it
       operationId: deleteProductCategory
       parameters:
       - name: category_id
@@ -582,8 +578,7 @@ paths:
           type: string
       - name: update_mask
         in: query
-        description: An optional list of properties to be updated. If set, only the provided properties
-          will be updated and others will be skipped.
+        description: An optional list of properties to be updated. If set, only the provided properties will be updated and others will be skipped.
         required: false
         schema:
           type: array
@@ -765,28 +760,6 @@ paths:
                 $ref: '#/components/schemas/ListAssignedProductsResponse'
 components:
   schemas:
-    AssignProductsRequest:
-      type: object
-      properties:
-        product_ids:
-          type: array
-          items:
-            type: string
-          uniqueItems: true
-      required:
-      - product_ids
-    AssignedProducts:
-      type: object
-      properties:
-        product_category_id:
-          type: string
-          description: The product category ID
-          example: 123
-        product_ids:
-          type: array
-          description: Assigned product IDs
-          items:
-            type: string
     CreateProductCategoryRequest:
       type: object
       description: productCategory
@@ -806,20 +779,16 @@ components:
           example: 2
       required:
       - name
-    Error:
+    AssignProductsRequest:
       type: object
       properties:
-        code:
-          type: integer
-          format: int32
-        message:
-          type: string
-        status:
-          type: string
-        details:
+        product_ids:
           type: array
           items:
-            $ref: '#/components/schemas/ErrorDetails'
+            type: string
+          uniqueItems: true
+      required:
+      - product_ids
     ErrorDetails:
       type: object
       properties:
@@ -827,24 +796,22 @@ components:
           type: string
         resource:
           type: string
-    ListAssignedProductsResponse:
+    UpdateProductCategoryRequest:
       type: object
       properties:
-        assigned_product_categories:
-          type: array
-          items:
-            $ref: '#/components/schemas/AssignedProducts'
-        next_page_token:
+        name:
           type: string
-    ListProductCategoriesResponse:
-      type: object
-      properties:
-        product_categories:
-          type: array
-          items:
-            $ref: '#/components/schemas/ProductCategory'
-        next_page_token:
+          description: The category name
+          example: Electronics
+        display_order_index:
+          type: integer
+          format: int32
+          description: Display order of the category
+          example: 0
+        parent_category_id:
           type: string
+          description: Parent category ID for subcategories
+          example: 2
     ProductCategory:
       type: object
       properties:
@@ -865,22 +832,50 @@ components:
           type: string
           description: Parent category ID for subcategories
           example: 2
-    UpdateProductCategoryRequest:
+    AssignedProducts:
       type: object
       properties:
-        name:
+        product_category_id:
           type: string
-          description: The category name
-          example: Electronics
-        display_order_index:
+          description: The product category ID
+          example: 123
+        product_ids:
+          type: array
+          description: Assigned product IDs
+          items:
+            type: string
+    ListAssignedProductsResponse:
+      type: object
+      properties:
+        assigned_product_categories:
+          type: array
+          items:
+            $ref: '#/components/schemas/AssignedProducts'
+        next_page_token:
+          type: string
+    ListProductCategoriesResponse:
+      type: object
+      properties:
+        product_categories:
+          type: array
+          items:
+            $ref: '#/components/schemas/ProductCategory'
+        next_page_token:
+          type: string
+    Error:
+      type: object
+      properties:
+        code:
           type: integer
           format: int32
-          description: Display order of the category
-          example: 0
-        parent_category_id:
+        message:
           type: string
-          description: Parent category ID for subcategories
-          example: 2
+        status:
+          type: string
+        details:
+          type: array
+          items:
+            $ref: '#/components/schemas/ErrorDetails'
   securitySchemes:
     oauth2:
       type: oauth2
@@ -889,5 +884,3 @@ components:
           authorizationUrl: https://accounts.infusionsoft.com/app/oauth/authorize
           tokenUrl: https://api.infusionsoft.com/token
           scopes: {}
-security:
-- oauth2: []

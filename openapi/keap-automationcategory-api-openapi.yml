@@ -1,6 +1,6 @@
 openapi: 3.2.0
 info:
-  title: Keap Lead Source Categories API
+  title: Keap Automation Category API
   description: Keap Public API Documentation
   termsOfService: https://www.thryv.com/terms-of-use
   contact:
@@ -16,86 +16,15 @@ servers:
 security:
 - oauth2: []
 tags:
-- name: Lead Source Categories
+- name: AutomationCategory
 paths:
-  /rest/v2/leadSourceCategories:
+  /rest/v2/automationCategory:
     get:
       tags:
-      - Lead Source Categories
-      summary: List Lead Source Categories
-      description: Retrieves a list of Lead Source Categories
-      operationId: listLeadSourceCategories
-      parameters:
-      - name: filter
-        in: query
-        description: 'Filter to apply, allowed fields are:
-
-
-          - (String) `name` - Wildcard matching allowed
-
-          - (String) `description` - Wildcard matching allowed
-
-
-          You will need to apply the `==` operator to check the equality of one of the filters with your searched
-
-          word, in the encoded form `%3D%3D`.
-
-
-          For fields which allow wildcard matching, you may use the * wildcard character (or its encoded form %2A)
-
-          for prefix matching on text fields. Example of a valid pattern of wildcard usage:
-
-          - `field==foo*` finds anything in `field` that begins with `foo`
-
-
-          For the filters listed above, here are some examples:
-
-
-          - `filter=name%3D%3Dexample`
-
-          - `filter=name%3D%3Dexam*` (starts with "exam")
-
-          - `filter=description%3D%3Dexample`
-
-          - `filter=description%3D%3Dexam*` (starts with "exam")
-
-          - `filter=name%3D%3Dexam*%3Bdescription%3D%3Dsales` (multiple filters combined)'
-        required: false
-        schema:
-          type: string
-      - name: page_token
-        in: query
-        description: Page token
-        required: false
-        schema:
-          type: string
-      - name: order_by
-        in: query
-        description: 'Attribute and direction to order items.
-
-          One of the following fields:
-
-          - `name`
-
-
-          One of the following directions:
-
-          - `asc`
-
-          - `desc`'
-        required: false
-        schema:
-          type: string
-      - name: page_size
-        in: query
-        description: Total number of items to return per page
-        required: false
-        schema:
-          type: integer
-          format: int32
-          maximum: 1000
-          minimum: 0
-        example: 0
+      - AutomationCategory
+      summary: List automation categories
+      description: Retrieves a list of automation categories
+      operationId: listCategories
       responses:
         '401':
           description: Unauthorized
@@ -150,18 +79,18 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ListLeadSourceCategoriesResponse'
+                $ref: '#/components/schemas/ListAutomationCategoryResponse'
     post:
       tags:
-      - Lead Source Categories
-      summary: Create a Lead Source Category
-      description: Creates a new Lead Source Category.
-      operationId: createLeadSourceCategory
+      - AutomationCategory
+      summary: Create automation category
+      description: Creates a single automation category
+      operationId: createCategory
       requestBody:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/CreateUpdateLeadSourceCategoryRequest'
+              $ref: '#/components/schemas/CreateAutomationCategoryRequest'
         required: true
       responses:
         '401':
@@ -217,89 +146,22 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/LeadSourceCategory'
-  /rest/v2/leadSourceCategories/{lead_source_category_id}:
-    get:
-      tags:
-      - Lead Source Categories
-      summary: Retrieve a Lead Source Category
-      description: Retrieves a single Lead Source Category for a given ID
-      operationId: getLeadSourceCategory
-      parameters:
-      - name: lead_source_category_id
-        in: path
-        description: The ID of a lead source category
-        required: true
-        schema:
-          type: string
-      responses:
-        '401':
-          description: Unauthorized
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
-        '404':
-          description: Not Found
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
-        '403':
-          description: Forbidden
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
-        '409':
-          description: Conflict
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
-        '500':
-          description: Internal Server Error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
-        '501':
-          description: Method Not Implemented
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
-        '400':
-          description: Bad Request
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
-        '405':
-          description: Method Not Allowed
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/LeadSourceCategory'
+                $ref: '#/components/schemas/AutomationCategory'
     delete:
       tags:
-      - Lead Source Categories
-      summary: Delete a Lead Source Category
-      description: Deletes the specified Lead Source Category
-      operationId: deleteLeadSourceCategory
+      - AutomationCategory
+      summary: Delete automation category
+      description: Deletes one or more automation categories based on the request parameters
+      operationId: deleteCategories
       parameters:
-      - name: lead_source_category_id
-        in: path
-        description: The ID of a lead source category
+      - name: ids
+        in: query
         required: true
         schema:
-          type: string
+          type: array
+          items:
+            type: integer
+            format: int64
       responses:
         '401':
           description: Unauthorized
@@ -351,36 +213,24 @@ paths:
                 $ref: '#/components/schemas/Error'
         '204':
           description: No Content
+  /rest/v2/automationCategory/{id}:
     patch:
       tags:
-      - Lead Source Categories
-      summary: Update a Lead Source Category
-      description: Updates a Lead Source Category
-      operationId: updateLeadSourceCategory
+      - AutomationCategory
+      summary: Update automation category
+      description: Updates part of a single automation category
+      operationId: patchCategory
       parameters:
-      - name: lead_source_category_id
+      - name: id
         in: path
-        description: The ID of a lead source category
         required: true
         schema:
           type: string
-      - name: update_mask
-        in: query
-        description: An optional list of properties to be updated. If set, only the provided properties will be updated and others will be skipped.
-        required: false
-        schema:
-          type: array
-          items:
-            type: string
-            enum:
-            - name
-            - description
-          uniqueItems: true
       requestBody:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/CreateUpdateLeadSourceCategoryRequest'
+              $ref: '#/components/schemas/PatchAutomationCategoryRequest'
         required: true
       responses:
         '401':
@@ -436,17 +286,18 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/LeadSourceCategory'
+                $ref: '#/components/schemas/AutomationCategory'
 components:
   schemas:
-    ListLeadSourceCategoriesResponse:
+    ListAutomationCategoryResponse:
       type: object
+      description: Response containing a list of automation categories
       properties:
-        lead_source_categories:
+        automation_categories:
           type: array
-          description: The lead source categories in the current page
+          description: List of automation categories
           items:
-            $ref: '#/components/schemas/LeadSourceCategory'
+            $ref: '#/components/schemas/AutomationCategory'
         next_page_token:
           type: string
     ErrorDetails:
@@ -456,6 +307,42 @@ components:
           type: string
         resource:
           type: string
+    PatchAutomationCategoryRequest:
+      type: object
+      properties:
+        name:
+          type: string
+          description: New name for the category
+          example: Marketing Campaigns
+          maxLength: 100
+          minLength: 1
+    CreateAutomationCategoryRequest:
+      type: object
+      description: Request to create an automation category
+      properties:
+        name:
+          type: string
+          description: The name of the category to create
+          example: Marketing Campaigns
+      required:
+      - name
+    AutomationCategory:
+      type: object
+      description: An automation category
+      properties:
+        id:
+          type: string
+          description: The unique identifier of the category
+          example: 1
+        name:
+          type: string
+          description: The name of the category
+          example: Marketing Campaigns
+        automation_count:
+          type: integer
+          format: int64
+          description: Number of automations in this category
+          example: 15
     Error:
       type: object
       properties:
@@ -470,42 +357,6 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/ErrorDetails'
-    CreateUpdateLeadSourceCategoryRequest:
-      type: object
-      properties:
-        name:
-          type: string
-          description: The name of the category, must be unique
-          example: Paid Advertising
-        description:
-          type: string
-          description: The description of the category
-          example: All paid marketing channels
-    LeadSourceCategory:
-      type: object
-      properties:
-        id:
-          type: string
-          description: The unique identifier for the category
-          example: 123
-        name:
-          type: string
-          description: The name of the category
-          example: Paid Advertising
-        description:
-          type: string
-          description: The description of the category
-          example: All paid marketing channels
-        create_time:
-          type: string
-          format: date-time
-          description: The date the category was created
-          example: '2024-01-10T08:00:00Z'
-        update_time:
-          type: string
-          format: date-time
-          description: The date the category was last updated
-          example: '2024-03-15T10:30:00Z'
   securitySchemes:
     oauth2:
       type: oauth2

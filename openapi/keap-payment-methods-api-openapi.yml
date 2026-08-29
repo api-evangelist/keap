@@ -1,6 +1,6 @@
 openapi: 3.2.0
 info:
-  title: Keap Lead Source Categories API
+  title: Keap Payment Methods API
   description: Keap Public API Documentation
   termsOfService: https://www.thryv.com/terms-of-use
   contact:
@@ -16,50 +16,113 @@ servers:
 security:
 - oauth2: []
 tags:
-- name: Lead Source Categories
+- name: Payment Methods
 paths:
-  /rest/v2/leadSourceCategories:
+  /rest/v2/contacts/{contact_id}/paymentMethods/{payment_method_id}:deactivate:
+    post:
+      tags:
+      - Payment Methods
+      summary: Deactivate a Contact Payment Method
+      description: Deactivate the specified payment method
+      operationId: deactivatePaymentMethod
+      parameters:
+      - name: contact_id
+        in: path
+        description: ID of the contact to which the payment method belongs.
+        required: true
+        schema:
+          type: string
+      - name: payment_method_id
+        in: path
+        description: ID of the payment method to be deactivated.
+        required: true
+        schema:
+          type: string
+      responses:
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '409':
+          description: Conflict
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '501':
+          description: Method Not Implemented
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '405':
+          description: Method Not Allowed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '204':
+          description: No Content
+  /rest/v2/paymentMethods:
     get:
       tags:
-      - Lead Source Categories
-      summary: List Lead Source Categories
-      description: Retrieves a list of Lead Source Categories
-      operationId: listLeadSourceCategories
+      - Payment Methods
+      summary: List of Payment Methods
+      description: Retrieves a list of Payment Methods
+      operationId: listPaymentMethods
       parameters:
       - name: filter
         in: query
         description: 'Filter to apply, allowed fields are:
 
+          - (String) `payment_method_id`
 
-          - (String) `name` - Wildcard matching allowed
+          - (String) `credit_card_id`
 
-          - (String) `description` - Wildcard matching allowed
+          - (String) `contact_id`
+
+          - (String) `merchant_account_id`
+
+          - (String) `since_time`
+
+          - (String) `until_time`
 
 
           You will need to apply the `==` operator to check the equality of one of the filters with your searched
 
           word, in the encoded form `%3D%3D`.
 
+          - `filter=payment_method_id%3D%3D123`
 
-          For fields which allow wildcard matching, you may use the * wildcard character (or its encoded form %2A)
+          - `filter=contact_id%3D%3D123%3Bmerchant_account_id%3D%3D567`
 
-          for prefix matching on text fields. Example of a valid pattern of wildcard usage:
-
-          - `field==foo*` finds anything in `field` that begins with `foo`
-
-
-          For the filters listed above, here are some examples:
-
-
-          - `filter=name%3D%3Dexample`
-
-          - `filter=name%3D%3Dexam*` (starts with "exam")
-
-          - `filter=description%3D%3Dexample`
-
-          - `filter=description%3D%3Dexam*` (starts with "exam")
-
-          - `filter=name%3D%3Dexam*%3Bdescription%3D%3Dsales` (multiple filters combined)'
+          '
         required: false
         schema:
           type: string
@@ -75,14 +138,20 @@ paths:
 
           One of the following fields:
 
-          - `name`
+          - `payment_method_id`
+
+          - `created_time`
+
+          - `contact_id`
+
+          - `merchant_account_id`
 
 
           One of the following directions:
 
-          - `asc`
+          - `desc`
 
-          - `desc`'
+          - `asc`'
         required: false
         schema:
           type: string
@@ -150,88 +219,72 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ListLeadSourceCategoriesResponse'
-    post:
-      tags:
-      - Lead Source Categories
-      summary: Create a Lead Source Category
-      description: Creates a new Lead Source Category.
-      operationId: createLeadSourceCategory
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/CreateUpdateLeadSourceCategoryRequest'
-        required: true
-      responses:
-        '401':
-          description: Unauthorized
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
-        '404':
-          description: Not Found
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
-        '403':
-          description: Forbidden
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
-        '409':
-          description: Conflict
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
-        '500':
-          description: Internal Server Error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
-        '501':
-          description: Method Not Implemented
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
-        '400':
-          description: Bad Request
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
-        '405':
-          description: Method Not Allowed
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
-        '201':
-          description: Created
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/LeadSourceCategory'
-  /rest/v2/leadSourceCategories/{lead_source_category_id}:
+                $ref: '#/components/schemas/ListPaymentMethodsResponse'
+  /rest/v2/contacts/{contact_id}/paymentMethods:
     get:
       tags:
-      - Lead Source Categories
-      summary: Retrieve a Lead Source Category
-      description: Retrieves a single Lead Source Category for a given ID
-      operationId: getLeadSourceCategory
+      - Payment Methods
+      summary: List of Contact Payment Methods
+      description: Retrieves a list of Contact Payment Methods
+      operationId: listPaymentMethods_1
       parameters:
-      - name: lead_source_category_id
+      - name: contact_id
         in: path
-        description: The ID of a lead source category
+        description: ID of the contact to which the payment method belongs.
         required: true
         schema:
           type: string
+      - name: filter
+        in: query
+        description: 'Filter to apply, allowed fields are:
+
+          - (String) `merchant_account_id`
+
+
+          You will need to apply the `==` operator to check the equality of one of the filters with your searched
+
+          word, in the encoded form `%3D%3D`.
+
+          - `filter=merchant_account_id%3D%3D123`
+
+
+          '
+        required: false
+        schema:
+          type: string
+      - name: page_token
+        in: query
+        description: Page token
+        required: false
+        schema:
+          type: string
+      - name: order_by
+        in: query
+        description: 'Attribute and direction to order items.
+
+          One of the following fields:
+
+          - `created_time`
+
+
+          One of the following directions:
+
+          - `desc`
+
+          - `asc`'
+        required: false
+        schema:
+          type: string
+      - name: page_size
+        in: query
+        description: Total number of items to return per page
+        required: false
+        schema:
+          type: integer
+          format: int32
+          maximum: 1000
+          minimum: 0
+        example: 0
       responses:
         '401':
           description: Unauthorized
@@ -286,17 +339,24 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/LeadSourceCategory'
+                $ref: '#/components/schemas/ListContactPaymentMethodsResponse'
+  /rest/v2/contacts/{contact_id}/paymentMethods/{payment_method_id}:
     delete:
       tags:
-      - Lead Source Categories
-      summary: Delete a Lead Source Category
-      description: Deletes the specified Lead Source Category
-      operationId: deleteLeadSourceCategory
+      - Payment Methods
+      summary: Delete a Contact Payment Method
+      description: Deletes the specified payment method
+      operationId: deletePaymentMethod
       parameters:
-      - name: lead_source_category_id
+      - name: contact_id
         in: path
-        description: The ID of a lead source category
+        description: ID of the contact to which the payment method belongs.
+        required: true
+        schema:
+          type: string
+      - name: payment_method_id
+        in: path
+        description: ID of the payment method to be deleted.
         required: true
         schema:
           type: string
@@ -351,110 +411,103 @@ paths:
                 $ref: '#/components/schemas/Error'
         '204':
           description: No Content
-    patch:
-      tags:
-      - Lead Source Categories
-      summary: Update a Lead Source Category
-      description: Updates a Lead Source Category
-      operationId: updateLeadSourceCategory
-      parameters:
-      - name: lead_source_category_id
-        in: path
-        description: The ID of a lead source category
-        required: true
-        schema:
-          type: string
-      - name: update_mask
-        in: query
-        description: An optional list of properties to be updated. If set, only the provided properties will be updated and others will be skipped.
-        required: false
-        schema:
-          type: array
-          items:
-            type: string
-            enum:
-            - name
-            - description
-          uniqueItems: true
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/CreateUpdateLeadSourceCategoryRequest'
-        required: true
-      responses:
-        '401':
-          description: Unauthorized
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
-        '404':
-          description: Not Found
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
-        '403':
-          description: Forbidden
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
-        '409':
-          description: Conflict
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
-        '500':
-          description: Internal Server Error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
-        '501':
-          description: Method Not Implemented
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
-        '400':
-          description: Bad Request
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
-        '405':
-          description: Method Not Allowed
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/LeadSourceCategory'
 components:
   schemas:
-    ListLeadSourceCategoriesResponse:
-      type: object
-      properties:
-        lead_source_categories:
-          type: array
-          description: The lead source categories in the current page
-          items:
-            $ref: '#/components/schemas/LeadSourceCategory'
-        next_page_token:
-          type: string
     ErrorDetails:
       type: object
       properties:
         domain:
           type: string
         resource:
+          type: string
+    CardInfo:
+      type: object
+      properties:
+        brand:
+          type: string
+        fingerprint:
+          type: string
+          description: A token that uniquely identifies the card info
+        card_type:
+          type: string
+          description: 'The card type. Valid values are: CREDIT, DEBIT, PREPAID.'
+          enum:
+          - CREDIT
+          - DEBIT
+          - PREPAID
+          - ACH
+        last_four:
+          type: string
+        expiration_year:
+          type: string
+          description: Four-digit expiration year
+        expiration_month:
+          type: string
+          description: Two-digit expiration month
+    PaymentMethod:
+      type: object
+      properties:
+        contact_id:
+          type: string
+          description: The id of the contact the payment method is associated with.
+          example: 123
+        payment_method_id:
+          type: string
+          description: The unique identifier of the payment method.
+          example: 123
+        credit_card_id:
+          type: string
+          description: For backward-compatibility with v1 endpoints. If present, it's the credit card id this payment method refers to.
+        merchant_account_type:
+          type: string
+          description: The merchant account type through which the payment method was tokenized.
+          enum:
+          - PAYPAL
+          - UNSUPPORTED
+          - AUTHORIZE
+          - EWAY
+          - WEPAY
+          - STRIPE
+          - KEAP_PAY
+          example: STRIPE
+        merchant_account_id:
+          type: string
+          description: The merchant account id through which the payment method was tokenize.
+        payment_method_type:
+          type: string
+          description: The type of payment method. For now, only CARD is supported.
+          enum:
+          - CARD
+        created_time:
+          type: string
+          format: date-time
+          description: When this payment method was made. In ISO-8601 format.
+          example: '2024-05-21T14:30:00Z'
+        card_info:
+          $ref: '#/components/schemas/CardInfo'
+          description: If present, it provides additional details for payment methods of payment_method_type CARD.
+        status:
+          type: string
+          description: Status of the payment method. Fow now, only EXPIRED is supported.
+          enum:
+          - EXPIRED
+    ListContactPaymentMethodsResponse:
+      type: object
+      properties:
+        records:
+          type: array
+          items:
+            $ref: '#/components/schemas/PaymentMethod'
+        next_page_token:
+          type: string
+    ListPaymentMethodsResponse:
+      type: object
+      properties:
+        payment_methods:
+          type: array
+          items:
+            $ref: '#/components/schemas/PaymentMethod'
+        next_page_token:
           type: string
     Error:
       type: object
@@ -470,42 +523,6 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/ErrorDetails'
-    CreateUpdateLeadSourceCategoryRequest:
-      type: object
-      properties:
-        name:
-          type: string
-          description: The name of the category, must be unique
-          example: Paid Advertising
-        description:
-          type: string
-          description: The description of the category
-          example: All paid marketing channels
-    LeadSourceCategory:
-      type: object
-      properties:
-        id:
-          type: string
-          description: The unique identifier for the category
-          example: 123
-        name:
-          type: string
-          description: The name of the category
-          example: Paid Advertising
-        description:
-          type: string
-          description: The description of the category
-          example: All paid marketing channels
-        create_time:
-          type: string
-          format: date-time
-          description: The date the category was created
-          example: '2024-01-10T08:00:00Z'
-        update_time:
-          type: string
-          format: date-time
-          description: The date the category was last updated
-          example: '2024-03-15T10:30:00Z'
   securitySchemes:
     oauth2:
       type: oauth2

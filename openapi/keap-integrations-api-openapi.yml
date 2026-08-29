@@ -1,6 +1,6 @@
 openapi: 3.2.0
 info:
-  title: Keap Lead Source Categories API
+  title: Keap Integrations API
   description: Keap Public API Documentation
   termsOfService: https://www.thryv.com/terms-of-use
   contact:
@@ -16,86 +16,15 @@ servers:
 security:
 - oauth2: []
 tags:
-- name: Lead Source Categories
+- name: Integrations
 paths:
-  /rest/v2/leadSourceCategories:
+  /rest/v2/integrations/wordpress/options:
     get:
       tags:
-      - Lead Source Categories
-      summary: List Lead Source Categories
-      description: Retrieves a list of Lead Source Categories
-      operationId: listLeadSourceCategories
-      parameters:
-      - name: filter
-        in: query
-        description: 'Filter to apply, allowed fields are:
-
-
-          - (String) `name` - Wildcard matching allowed
-
-          - (String) `description` - Wildcard matching allowed
-
-
-          You will need to apply the `==` operator to check the equality of one of the filters with your searched
-
-          word, in the encoded form `%3D%3D`.
-
-
-          For fields which allow wildcard matching, you may use the * wildcard character (or its encoded form %2A)
-
-          for prefix matching on text fields. Example of a valid pattern of wildcard usage:
-
-          - `field==foo*` finds anything in `field` that begins with `foo`
-
-
-          For the filters listed above, here are some examples:
-
-
-          - `filter=name%3D%3Dexample`
-
-          - `filter=name%3D%3Dexam*` (starts with "exam")
-
-          - `filter=description%3D%3Dexample`
-
-          - `filter=description%3D%3Dexam*` (starts with "exam")
-
-          - `filter=name%3D%3Dexam*%3Bdescription%3D%3Dsales` (multiple filters combined)'
-        required: false
-        schema:
-          type: string
-      - name: page_token
-        in: query
-        description: Page token
-        required: false
-        schema:
-          type: string
-      - name: order_by
-        in: query
-        description: 'Attribute and direction to order items.
-
-          One of the following fields:
-
-          - `name`
-
-
-          One of the following directions:
-
-          - `asc`
-
-          - `desc`'
-        required: false
-        schema:
-          type: string
-      - name: page_size
-        in: query
-        description: Total number of items to return per page
-        required: false
-        schema:
-          type: integer
-          format: int32
-          maximum: 1000
-          minimum: 0
-        example: 0
+      - Integrations
+      summary: List WordPress Opt-In Options
+      description: Retrieves the list of WordPress Opt-In Options available
+      operationId: listIntegrationsWordPressOptInOptions
       responses:
         '401':
           description: Unauthorized
@@ -150,18 +79,18 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ListLeadSourceCategoriesResponse'
+                $ref: '#/components/schemas/ListWordPressOptInOptionsResponse'
     post:
       tags:
-      - Lead Source Categories
-      summary: Create a Lead Source Category
-      description: Creates a new Lead Source Category.
-      operationId: createLeadSourceCategory
+      - Integrations
+      summary: Add a WordPress Opt-In Option
+      description: Adds a value to the list of WordPress Opt-In Options Available
+      operationId: addIntegrationsWordPressOptIn
       requestBody:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/CreateUpdateLeadSourceCategoryRequest'
+              $ref: '#/components/schemas/CreateIntegrationsWordPressOptInOption'
         required: true
       responses:
         '401':
@@ -217,21 +146,26 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/LeadSourceCategory'
-  /rest/v2/leadSourceCategories/{lead_source_category_id}:
-    get:
+                $ref: '#/components/schemas/WordPressOptInOption'
+  /rest/v2/integrations/wordpress/options/{option_key}:achieve:
+    post:
       tags:
-      - Lead Source Categories
-      summary: Retrieve a Lead Source Category
-      description: Retrieves a single Lead Source Category for a given ID
-      operationId: getLeadSourceCategory
+      - Integrations
+      summary: Achieve a WordPress Opt-In Goal
+      description: Achieves a WordPress Opt-In Option Goal
+      operationId: achieveIntegrationsWordPressOptInGoal
       parameters:
-      - name: lead_source_category_id
+      - name: option_key
         in: path
-        description: The ID of a lead source category
         required: true
         schema:
           type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AchieveIntegrationsWordPressOptInOptionGoalRequest'
+        required: true
       responses:
         '401':
           description: Unauthorized
@@ -281,22 +215,22 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
-        '200':
-          description: OK
+        '202':
+          description: Accepted
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/LeadSourceCategory'
+                $ref: '#/components/schemas/AchieveWordPressOptInGoalResult'
+  /rest/v2/integrations/wordpress/options/{option_key}:
     delete:
       tags:
-      - Lead Source Categories
-      summary: Delete a Lead Source Category
-      description: Deletes the specified Lead Source Category
-      operationId: deleteLeadSourceCategory
+      - Integrations
+      summary: Delete a WordPress Opt-In Option
+      description: Deletes a value from the list of WordPress Opt-In Options Available
+      operationId: deleteIntegrationsWordPressOptIn
       parameters:
-      - name: lead_source_category_id
+      - name: option_key
         in: path
-        description: The ID of a lead source category
         required: true
         schema:
           type: string
@@ -351,104 +285,19 @@ paths:
                 $ref: '#/components/schemas/Error'
         '204':
           description: No Content
-    patch:
-      tags:
-      - Lead Source Categories
-      summary: Update a Lead Source Category
-      description: Updates a Lead Source Category
-      operationId: updateLeadSourceCategory
-      parameters:
-      - name: lead_source_category_id
-        in: path
-        description: The ID of a lead source category
-        required: true
-        schema:
-          type: string
-      - name: update_mask
-        in: query
-        description: An optional list of properties to be updated. If set, only the provided properties will be updated and others will be skipped.
-        required: false
-        schema:
-          type: array
-          items:
-            type: string
-            enum:
-            - name
-            - description
-          uniqueItems: true
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/CreateUpdateLeadSourceCategoryRequest'
-        required: true
-      responses:
-        '401':
-          description: Unauthorized
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
-        '404':
-          description: Not Found
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
-        '403':
-          description: Forbidden
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
-        '409':
-          description: Conflict
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
-        '500':
-          description: Internal Server Error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
-        '501':
-          description: Method Not Implemented
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
-        '400':
-          description: Bad Request
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
-        '405':
-          description: Method Not Allowed
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/LeadSourceCategory'
 components:
   schemas:
-    ListLeadSourceCategoriesResponse:
+    CreateIntegrationsWordPressOptInOption:
       type: object
       properties:
-        lead_source_categories:
-          type: array
-          description: The lead source categories in the current page
-          items:
-            $ref: '#/components/schemas/LeadSourceCategory'
-        next_page_token:
+        key:
           type: string
+          description: The unique identifier of the opt-in option, which must be an alphanumeric string
+          example: NewsletterOptIn
+        name:
+          type: string
+          description: The display name of the opt-in option
+          example: Newsletter Opt-In
     ErrorDetails:
       type: object
       properties:
@@ -456,6 +305,34 @@ components:
           type: string
         resource:
           type: string
+    ListWordPressOptInOptionsResponse:
+      type: object
+      properties:
+        wordpress_opt_in_options:
+          type: array
+          items:
+            $ref: '#/components/schemas/WordPressOptInOption'
+        next_page_token:
+          type: string
+    WordPressOptInOption:
+      type: object
+      properties:
+        key:
+          type: string
+        name:
+          type: string
+    AchieveIntegrationsWordPressOptInOptionGoalRequest:
+      type: object
+      properties:
+        contact_id:
+          type: string
+          description: The Contact Id to Opt-In
+          example: d05dc112-3c92-4aaf-b2fa-00cc6cb452ec
+    AchieveWordPressOptInGoalResult:
+      type: object
+      properties:
+        successful:
+          type: boolean
     Error:
       type: object
       properties:
@@ -470,42 +347,6 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/ErrorDetails'
-    CreateUpdateLeadSourceCategoryRequest:
-      type: object
-      properties:
-        name:
-          type: string
-          description: The name of the category, must be unique
-          example: Paid Advertising
-        description:
-          type: string
-          description: The description of the category
-          example: All paid marketing channels
-    LeadSourceCategory:
-      type: object
-      properties:
-        id:
-          type: string
-          description: The unique identifier for the category
-          example: 123
-        name:
-          type: string
-          description: The name of the category
-          example: Paid Advertising
-        description:
-          type: string
-          description: The description of the category
-          example: All paid marketing channels
-        create_time:
-          type: string
-          format: date-time
-          description: The date the category was created
-          example: '2024-01-10T08:00:00Z'
-        update_time:
-          type: string
-          format: date-time
-          description: The date the category was last updated
-          example: '2024-03-15T10:30:00Z'
   securitySchemes:
     oauth2:
       type: oauth2

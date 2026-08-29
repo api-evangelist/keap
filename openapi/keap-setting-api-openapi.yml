@@ -1,0 +1,630 @@
+openapi: 3.2.0
+info:
+  title: Keap Setting API
+  description: Keap Public API Documentation
+  termsOfService: https://www.thryv.com/terms-of-use
+  contact:
+    name: Keap
+    url: https://developer.keap.com/get-support
+    email: api.keap@thryv.com
+  license:
+    name: Apache 2.0
+    url: https://www.apache.org/licenses/LICENSE-2.0
+  version: v1
+servers:
+- url: https://api.infusionsoft.com/crm
+security:
+- oauth2: []
+tags:
+- name: Setting
+  description: Setting-Endpoint
+paths:
+  /rest/v1/setting/contact/optionTypes:
+    get:
+      tags:
+      - Setting
+      summary: List Contact types
+      description: "Lists the Contact types in a comma-separated list.  \n*Note:* This is now provided by GET /setting/application/configuration"
+      operationId: getContactOptionTypes
+      responses:
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ModelAndView'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ModelAndView'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ModelAndView'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ModelAndView'
+        '409':
+          description: Conflict
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ModelAndView'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ModelAndView'
+        '501':
+          description: Not Implemented
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ModelAndView'
+        '405':
+          description: Method Not Allowed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ModelAndView'
+        '406':
+          description: Not Acceptable
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ModelAndView'
+        '412':
+          description: Precondition Failed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ModelAndView'
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Setting'
+      deprecated: true
+  /rest/v1/setting/application/enabled:
+    get:
+      tags:
+      - Setting
+      summary: Retrieve application status
+      description: Retrieves whether the application is enabled
+      operationId: getApplicationEnabled
+      responses:
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ModelAndView'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ModelAndView'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ModelAndView'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ModelAndView'
+        '409':
+          description: Conflict
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ModelAndView'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ModelAndView'
+        '501':
+          description: Not Implemented
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ModelAndView'
+        '405':
+          description: Method Not Allowed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ModelAndView'
+        '406':
+          description: Not Acceptable
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ModelAndView'
+        '412':
+          description: Precondition Failed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ModelAndView'
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Setting'
+  /rest/v1/setting/application/configuration:
+    get:
+      tags:
+      - Setting
+      summary: Retrieve application configuration
+      description: Get the properties for the current application's configuration
+      operationId: getConfiguration
+      responses:
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ModelAndView'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ModelAndView'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ModelAndView'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ModelAndView'
+        '409':
+          description: Conflict
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ModelAndView'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ModelAndView'
+        '501':
+          description: Not Implemented
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ModelAndView'
+        '405':
+          description: Method Not Allowed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ModelAndView'
+        '406':
+          description: Not Acceptable
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ModelAndView'
+        '412':
+          description: Precondition Failed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ModelAndView'
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RestApplicationConfiguration'
+components:
+  schemas:
+    RestApplicationConfigurationModuleOpportunity:
+      type: object
+      properties:
+        states:
+          $ref: '#/components/schemas/RestApplicationConfigurationModuleOpportunityStates'
+        default_stage:
+          type: string
+    RestApplicationConfigurationModuleTemplate:
+      type: object
+      properties:
+        default_country_code:
+          type: integer
+          format: int32
+        default_user_id:
+          type: integer
+          format: int64
+    DefaultHttpStatusCode:
+      allOf:
+      - $ref: '#/components/schemas/HttpStatusCode'
+    RestApplicationConfigurationModuleContact:
+      type: object
+      properties:
+        title_types:
+          type: string
+        suffix_types:
+          type: string
+        contact_types:
+          type: string
+        phone_types:
+          type: string
+        fax_types:
+          type: string
+        address_labels:
+          $ref: '#/components/schemas/RestApplicationConfigurationModuleContactAddressLabels'
+        disable_contact_edit_in_client_login:
+          type: boolean
+        default_new_contact_form:
+          type: string
+    RestApplicationConfigurationModuleApplicationFeaturesEnabled:
+      type: object
+      properties:
+        marketing:
+          type: boolean
+    RestApplicationConfigurationModuleAffiliateCommission:
+      type: object
+      properties:
+        levels:
+          type: integer
+          format: int32
+        calculation_type:
+          type: string
+        participant_types:
+          type: string
+    RestApplicationConfigurationModuleContactAddressLabels:
+      type: object
+      properties:
+        line_1:
+          type: string
+        line_2:
+          type: string
+        line_3:
+          type: string
+    RestApplicationConfigurationModuleAffiliate:
+      type: object
+      properties:
+        commission:
+          $ref: '#/components/schemas/RestApplicationConfigurationModuleAffiliateCommission'
+        choose_affiliate:
+          type: boolean
+        custom_affiliate_url:
+          type: string
+        display_affiliate_ip_address:
+          type: boolean
+        do_not_notify_affiliate:
+          type: boolean
+        use_referral_history_if_no_tracking_cookie:
+          type: boolean
+        skip_pay_if_unused:
+          type: boolean
+    HttpStatus:
+      allOf:
+      - $ref: '#/components/schemas/HttpStatusCode'
+      enum:
+      - 100 CONTINUE
+      - 101 SWITCHING_PROTOCOLS
+      - 102 PROCESSING
+      - 103 EARLY_HINTS
+      - 200 OK
+      - 201 CREATED
+      - 202 ACCEPTED
+      - 203 NON_AUTHORITATIVE_INFORMATION
+      - 204 NO_CONTENT
+      - 205 RESET_CONTENT
+      - 206 PARTIAL_CONTENT
+      - 207 MULTI_STATUS
+      - 208 ALREADY_REPORTED
+      - 226 IM_USED
+      - 300 MULTIPLE_CHOICES
+      - 301 MOVED_PERMANENTLY
+      - 302 FOUND
+      - 303 SEE_OTHER
+      - 304 NOT_MODIFIED
+      - 307 TEMPORARY_REDIRECT
+      - 308 PERMANENT_REDIRECT
+      - 400 BAD_REQUEST
+      - 401 UNAUTHORIZED
+      - 402 PAYMENT_REQUIRED
+      - 403 FORBIDDEN
+      - 404 NOT_FOUND
+      - 405 METHOD_NOT_ALLOWED
+      - 406 NOT_ACCEPTABLE
+      - 407 PROXY_AUTHENTICATION_REQUIRED
+      - 408 REQUEST_TIMEOUT
+      - 409 CONFLICT
+      - 410 GONE
+      - 411 LENGTH_REQUIRED
+      - 412 PRECONDITION_FAILED
+      - 413 CONTENT_TOO_LARGE
+      - 413 PAYLOAD_TOO_LARGE
+      - 414 URI_TOO_LONG
+      - 415 UNSUPPORTED_MEDIA_TYPE
+      - 416 REQUESTED_RANGE_NOT_SATISFIABLE
+      - 417 EXPECTATION_FAILED
+      - 418 I_AM_A_TEAPOT
+      - 421 MISDIRECTED_REQUEST
+      - 422 UNPROCESSABLE_CONTENT
+      - 422 UNPROCESSABLE_ENTITY
+      - 423 LOCKED
+      - 424 FAILED_DEPENDENCY
+      - 425 TOO_EARLY
+      - 426 UPGRADE_REQUIRED
+      - 428 PRECONDITION_REQUIRED
+      - 429 TOO_MANY_REQUESTS
+      - 431 REQUEST_HEADER_FIELDS_TOO_LARGE
+      - 451 UNAVAILABLE_FOR_LEGAL_REASONS
+      - 500 INTERNAL_SERVER_ERROR
+      - 501 NOT_IMPLEMENTED
+      - 502 BAD_GATEWAY
+      - 503 SERVICE_UNAVAILABLE
+      - 504 GATEWAY_TIMEOUT
+      - 505 HTTP_VERSION_NOT_SUPPORTED
+      - 506 VARIANT_ALSO_NEGOTIATES
+      - 507 INSUFFICIENT_STORAGE
+      - 508 LOOP_DETECTED
+      - 509 BANDWIDTH_LIMIT_EXCEEDED
+      - 510 NOT_EXTENDED
+      - 511 NETWORK_AUTHENTICATION_REQUIRED
+    HttpStatusCode:
+      type: object
+      properties:
+        error:
+          type: boolean
+        is1xxInformational:
+          type: boolean
+        is2xxSuccessful:
+          type: boolean
+        is3xxRedirection:
+          type: boolean
+        is4xxClientError:
+          type: boolean
+        is5xxServerError:
+          type: boolean
+    Setting:
+      type: object
+      properties:
+        value:
+          type: string
+    RestApplicationConfigurationModuleOpportunityStates:
+      type: object
+      properties:
+        active:
+          $ref: '#/components/schemas/RestApplicationConfigurationModuleOpportunityStatesActive'
+        win:
+          $ref: '#/components/schemas/RestApplicationConfigurationModuleOpportunityStatesWin'
+        loss:
+          $ref: '#/components/schemas/RestApplicationConfigurationModuleOpportunityStatesLoss'
+    RestApplicationConfiguration:
+      type: object
+      properties:
+        affiliate:
+          $ref: '#/components/schemas/RestApplicationConfigurationModuleAffiliate'
+        appointment:
+          $ref: '#/components/schemas/RestApplicationConfigurationModuleAppointment'
+        application:
+          $ref: '#/components/schemas/RestApplicationConfigurationModuleApplication'
+        contact:
+          $ref: '#/components/schemas/RestApplicationConfigurationModuleContact'
+        ecommerce:
+          $ref: '#/components/schemas/RestApplicationConfigurationModuleECommerce'
+        email:
+          $ref: '#/components/schemas/RestApplicationConfigurationModuleEMail'
+        forms:
+          $ref: '#/components/schemas/RestApplicationConfigurationModuleForms'
+        fulfillment:
+          $ref: '#/components/schemas/RestApplicationConfigurationModuleFulfillment'
+        invoice:
+          $ref: '#/components/schemas/RestApplicationConfigurationModuleInvoice'
+        note:
+          $ref: '#/components/schemas/RestApplicationConfigurationModuleNote'
+        opportunity:
+          $ref: '#/components/schemas/RestApplicationConfigurationModuleOpportunity'
+        task:
+          $ref: '#/components/schemas/RestApplicationConfigurationModuleTask'
+        template:
+          $ref: '#/components/schemas/RestApplicationConfigurationModuleTemplate'
+    RestApplicationConfigurationModuleApplicationCompany:
+      type: object
+      properties:
+        name:
+          type: string
+        country:
+          type: string
+        email:
+          type: string
+        city:
+          type: string
+        state:
+          type: string
+        zip:
+          type: string
+        phone:
+          type: string
+        website:
+          type: string
+        street_address_1:
+          type: string
+        street_address_2:
+          type: string
+        phone_ext:
+          type: string
+        caller_id_number:
+          type: string
+        web_logo_url:
+          type: string
+    RestApplicationConfigurationModuleApplication:
+      type: object
+      properties:
+        company:
+          $ref: '#/components/schemas/RestApplicationConfigurationModuleApplicationCompany'
+        time_zone:
+          type: string
+        default_view_locale:
+          type: string
+        features_enabled:
+          $ref: '#/components/schemas/RestApplicationConfigurationModuleApplicationFeaturesEnabled'
+    RestApplicationConfigurationModuleEMail:
+      type: object
+      properties:
+        default_opt_in_link:
+          type: string
+        default_opt_out_link:
+          type: string
+        whitelisted_domains:
+          type: string
+        hide_emails_to_and_from_domains:
+          type: string
+        append_contact_key_to_links:
+          type: boolean
+    RestApplicationConfigurationModuleForms:
+      type: object
+      properties:
+        spam_filters_enabled:
+          type: boolean
+    RestApplicationConfigurationModuleFulfillment:
+      type: object
+      properties:
+        default_message_to:
+          type: string
+        default_message_fields:
+          type: string
+    RestApplicationConfigurationModuleInvoice:
+      type: object
+      properties:
+        tax_label:
+          type: string
+    RestApplicationConfigurationModuleTask:
+      type: object
+      properties:
+        appointment_types:
+          type: string
+        share_opportunity_with_related_user:
+          type: boolean
+    RestApplicationConfigurationModuleNote:
+      type: object
+      properties:
+        appointment_types:
+          type: string
+        share_opportunity_with_related_user:
+          type: boolean
+    RestApplicationConfigurationModuleOpportunityStatesLoss:
+      type: object
+      properties:
+        reasons:
+          type: string
+        stage:
+          type: string
+    RestApplicationConfigurationModuleOpportunityStatesActive:
+      type: object
+      properties:
+        stages:
+          type: string
+    View:
+      type: object
+      properties:
+        contentType:
+          type: string
+    ModelAndView:
+      type: object
+      properties:
+        view:
+          $ref: '#/components/schemas/View'
+        model:
+          type: object
+          additionalProperties: {}
+        status:
+          oneOf:
+          - $ref: '#/components/schemas/DefaultHttpStatusCode'
+          - $ref: '#/components/schemas/HttpStatus'
+        modelMap:
+          type: object
+          additionalProperties: {}
+          properties:
+            empty:
+              type: boolean
+        reference:
+          type: boolean
+        empty:
+          type: boolean
+        viewName:
+          type: string
+    RestApplicationConfigurationModuleECommerce:
+      type: object
+      properties:
+        currency:
+          type: string
+        default_country:
+          type: string
+        default_merchant:
+          type: string
+        credit_card_types:
+          type: string
+        default_tax:
+          type: string
+        payment_types:
+          type: string
+        default_to_auto_charge:
+          type: boolean
+        default_charge_max_retry_attempts:
+          type: integer
+          format: int32
+        default_number_of_days_between_charge_attempts:
+          type: integer
+          format: int32
+        merchant_account_max_retry_attempts:
+          type: integer
+          format: int32
+        promo_codes:
+          type: string
+        track_cost_per_unit:
+          type: boolean
+        track_inventory:
+          type: boolean
+    RestApplicationConfigurationModuleAppointment:
+      type: object
+      properties:
+        appointment_types:
+          type: string
+        share_opportunity_with_related_user:
+          type: boolean
+    RestApplicationConfigurationModuleOpportunityStatesWin:
+      type: object
+      properties:
+        reasons:
+          type: string
+        stage:
+          type: string
+  securitySchemes:
+    oauth2:
+      type: oauth2
+      flows:
+        authorizationCode:
+          authorizationUrl: https://accounts.infusionsoft.com/app/oauth/authorize
+          tokenUrl: https://api.infusionsoft.com/token
+          scopes: {}

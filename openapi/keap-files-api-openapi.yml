@@ -1,4 +1,4 @@
-openapi: 3.1.0
+openapi: 3.2.0
 info:
   title: Keap Files API
   description: Keap Public API Documentation
@@ -13,6 +13,8 @@ info:
   version: v2
 servers:
 - url: https://api.infusionsoft.com/crm
+security:
+- oauth2: []
 tags:
 - name: Files
 paths:
@@ -34,12 +36,9 @@ paths:
 
           - (String) `user_id`
 
-          - (FileBoxCategory) `category` — one of: `ATTACHMENTS`, `CART`, `DOCUMENTS`, `HIDDEN`, `INVOICE`,
-          `LOGO`, `TICKETS`, `WEB_FORM`, `FUNNEL`
+          - (FileBoxCategory) `category` — one of: `ATTACHMENTS`, `CART`, `DOCUMENTS`, `HIDDEN`, `INVOICE`, `LOGO`, `TICKETS`, `WEB_FORM`, `FUNNEL`
 
-          - (FileBoxType) `file_box_type` — one of: `APPLICATION`, `IMAGE`, `FAX`, `ATTACHMENT`, `TICKET`,
-          `CONTACT`, `DIGITAL_PRODUCT`, `IMPORT`, `HIDDEN`, `WEB_FORM`, `STYLED_CART`, `RESAMPLED_IMAGE`,
-          `TEMPLATE_THUMBNAIL`, `FUNNEL`, `LOGO_THUMBNAIL`, `UNLAYER`, `BRANDING_CENTER_LOGO`
+          - (FileBoxType) `file_box_type` — one of: `APPLICATION`, `IMAGE`, `FAX`, `ATTACHMENT`, `TICKET`, `CONTACT`, `DIGITAL_PRODUCT`, `IMPORT`, `HIDDEN`, `WEB_FORM`, `STYLED_CART`, `RESAMPLED_IMAGE`, `TEMPLATE_THUMBNAIL`, `FUNNEL`, `LOGO_THUMBNAIL`, `UNLAYER`, `BRANDING_CENTER_LOGO`
 
           - (String) `file_name`
 
@@ -48,11 +47,9 @@ paths:
           - (String) `updated_time`
 
 
-          You will need to apply the `==` operator to check the equality of one of the filters with your
-          searched
+          You will need to apply the `==` operator to check the equality of one of the filters with your searched
 
-          word, in the encoded form `%3D%3D`. Multiple filters are combined with a semicolon (`;`, encoded
-          `%3B`)
+          word, in the encoded form `%3D%3D`. Multiple filters are combined with a semicolon (`;`, encoded `%3B`)
 
           and are ANDed together. For the filters listed above, here are some examples:
 
@@ -168,9 +165,7 @@ paths:
       tags:
       - Files
       summary: Create a file
-      description: Uploads a file using multipart/form-data. The `file` part contains the binary file
-        content; `file_name`, `is_public`, `file_association`, and optionally `contact_id` are additional
-        text parts in the same multipart request. Sending these as URL query parameters is not supported.
+      description: Uploads a file using multipart/form-data. The `file` part contains the binary file content; `file_name`, `is_public`, `file_association`, and optionally `contact_id` are additional text parts in the same multipart request. Sending these as URL query parameters is not supported.
       operationId: createFile
       requestBody:
         content:
@@ -325,8 +320,7 @@ paths:
       tags:
       - Files
       summary: Update a file
-      description: Updates a file using multipart/form-data. Note that this endpoint uses POST instead
-        of PATCH.
+      description: Updates a file using multipart/form-data. Note that this endpoint uses POST instead of PATCH.
       operationId: updateFile
       parameters:
       - name: file_id
@@ -336,8 +330,7 @@ paths:
           type: string
       - name: update_mask
         in: query
-        description: An optional list of properties to be updated. If set, only the provided properties
-          will be updated and others will be skipped.
+        description: An optional list of properties to be updated. If set, only the provided properties will be updated and others will be skipped.
         required: false
         schema:
           type: array
@@ -553,27 +546,6 @@ paths:
                 format: byte
 components:
   schemas:
-    Error:
-      type: object
-      properties:
-        code:
-          type: integer
-          format: int32
-        message:
-          type: string
-        status:
-          type: string
-        details:
-          type: array
-          items:
-            $ref: '#/components/schemas/ErrorDetails'
-    ErrorDetails:
-      type: object
-      properties:
-        domain:
-          type: string
-        resource:
-          type: string
     FileMetadata:
       type: object
       properties:
@@ -650,6 +622,13 @@ components:
           type: string
           description: Last update timestamp (ISO-8601)
           example: '2024-03-15T10:30:00Z'
+    ErrorDetails:
+      type: object
+      properties:
+        domain:
+          type: string
+        resource:
+          type: string
     ListFilesResponse:
       type: object
       properties:
@@ -659,6 +638,20 @@ components:
             $ref: '#/components/schemas/FileMetadata'
         next_page_token:
           type: string
+    Error:
+      type: object
+      properties:
+        code:
+          type: integer
+          format: int32
+        message:
+          type: string
+        status:
+          type: string
+        details:
+          type: array
+          items:
+            $ref: '#/components/schemas/ErrorDetails'
   securitySchemes:
     oauth2:
       type: oauth2
@@ -667,5 +660,3 @@ components:
           authorizationUrl: https://accounts.infusionsoft.com/app/oauth/authorize
           tokenUrl: https://api.infusionsoft.com/token
           scopes: {}
-security:
-- oauth2: []

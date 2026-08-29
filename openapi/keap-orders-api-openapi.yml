@@ -1,4 +1,4 @@
-openapi: 3.1.0
+openapi: 3.2.0
 info:
   title: Keap Orders API
   description: Keap Public API Documentation
@@ -13,6 +13,8 @@ info:
   version: v2
 servers:
 - url: https://api.infusionsoft.com/crm
+security:
+- oauth2: []
 tags:
 - name: Orders
 paths:
@@ -26,36 +28,7 @@ paths:
       parameters:
       - name: filter
         in: query
-        description: "Filter to apply, allowed fields are:\n- (String) `id` - Allowable operators: \"\
-          ==\",\"<=\", \"<\", \">=\", \">\", \"!=\"\n- (List[String]) `ids`\n- (String) `product_id`\n\
-          - (String) `contact_id`\n- (String) `invoice_id`\n- (String) `invoice_xid`\n- (Boolean) `paid`\n\
-          - (String) `created_since_time`\n- (String) `created_until_time`\n- (String) `modified_since_time`\n\
-          - (String) `modified_until_time`\n- (String) `title` - Wildcard matching allowed\n- (String)\
-          \ `order_type` (Allowed values: `ONLINE`, `OFFLINE`)\n- (String) `shipping_locality`\n- (String)\
-          \ `shipping_region_code`\n- (String) `shipping_postal_code`\n- (String) `shipping_country_code`\n\
-          \nCustom fields can be filtered by their field_name (case-insensitive, as returned\nby GET /v2/orders/model).\
-          \ A standard field above takes precedence over a custom\nfield with the same name. The supported\
-          \ operators depend on the custom field's type:\n- Text-like fields (text, text area, name, email,\
-          \ phone, website, social security\n  number) and single-value choice fields with text options\
-          \ (dropdown, radio,\n  state): `==` only, with optional trailing wildcard (e.g. `_OrderTitle0%3D%3DValue%2A`)\n\
-          - Yes/No and drilldown fields: `==` only\n- Numeric fields (whole number, decimal, currency,\
-          \ percent, year, month, day of\n  week, user): `==`, `>`, `<`, `>=`, `<=`\n- Date fields: `==`,\
-          \ `>`, `<`, `>=`, `<=` using full ISO 8601 (same as `created_since_time`/`created_until_time`)\n\
-          - Multi-select fields: `==` matches records that contain the given option\nCustom field filtering\
-          \ on non-indexed fields is supported but may be slower.\n\nYou will need to apply the `==` operator\
-          \ (or other supported operators), to check the equality\nof one of the filters with your searched\
-          \ word, in the encoded form `%3D%3D`. For the filters listed above,\nhere are some examples:\n\
-          - `filter=product_id%3D%3D123`\n- `filter=id%3C123`\n- `filter=ids%3D%3D1,10,4,24`\n- `filter=invoice_xid%3D%3Df411a79c-9a92-4960-91d9-656f910a25e8`\n\
-          - `filter=product_id%3D%3D123%3Bcontact_id%3D%3D567`\n- `filter=shipping_locality%3D%3DPhoenix`\n\
-          - `filter=shipping_region_code%3D%3DIN-MH`\n- `filter=shipping_postal_code%3D%3D85001`\n- `filter=shipping_country_code%3D%3DIND`\n\
-          \nCustom field examples (for custom fields with field_name `_OrderTitle0` and `_OrderValue1`):\n\
-          - `filter=_OrderTitle0%3D%3DTest` (custom field exact match)\n- `filter=_OrderTitle0%3D%3DTest%2A`\
-          \ (custom field prefix wildcard)\n- `filter=_OrderValue1%3E100` (custom field numeric comparison)\n\
-          - `filter=product_id%3D%3D123%3B_OrderStatus0%3D%3DActive` (combined standard + custom field\
-          \ filter)\n\nFor fields which allow wildcard matching, you may use the * wildcard character\
-          \ (or its encoded form %2A)\nfor case-insensitive partial matching on text fields. Example of\
-          \ a valid pattern of wildcard usage:\n- `field==foo*` finds anything in `field` that begins\
-          \ with `foo`\n"
+        description: "Filter to apply, allowed fields are:\n- (String) `id` - Allowable operators: \"==\",\"<=\", \"<\", \">=\", \">\", \"!=\"\n- (List[String]) `ids`\n- (String) `product_id`\n- (String) `contact_id`\n- (String) `invoice_id`\n- (String) `invoice_xid`\n- (Boolean) `paid`\n- (String) `created_since_time`\n- (String) `created_until_time`\n- (String) `modified_since_time`\n- (String) `modified_until_time`\n- (String) `title` - Wildcard matching allowed\n- (String) `order_type` (Allowed values: `ONLINE`, `OFFLINE`)\n- (String) `shipping_locality`\n- (String) `shipping_region_code`\n- (String) `shipping_postal_code`\n- (String) `shipping_country_code`\n\nCustom fields can be filtered by their field_name (case-insensitive, as returned\nby GET /v2/orders/model). A standard field above takes precedence over a custom\nfield with the same name. The supported operators depend on the custom field's type:\n- Text-like fields (text, text area, name, email, phone, website, social security\n  number) and single-value choice fields with text options (dropdown, radio,\n  state): `==` only, with optional trailing wildcard (e.g. `_OrderTitle0%3D%3DValue%2A`)\n- Yes/No and drilldown fields: `==` only\n- Numeric fields (whole number, decimal, currency, percent, year, month, day of\n  week, user): `==`, `>`, `<`, `>=`, `<=`\n- Date fields: `==`, `>`, `<`, `>=`, `<=` using full ISO 8601 (same as `created_since_time`/`created_until_time`)\n- Multi-select fields: `==` matches records that contain the given option\nCustom field filtering on non-indexed fields is supported but may be slower.\n\nYou will need to apply the `==` operator (or other supported operators), to check the equality\nof one of the filters with your searched word, in the encoded form `%3D%3D`. For the filters listed above,\nhere are some examples:\n- `filter=product_id%3D%3D123`\n- `filter=id%3C123`\n- `filter=ids%3D%3D1,10,4,24`\n- `filter=invoice_xid%3D%3Df411a79c-9a92-4960-91d9-656f910a25e8`\n- `filter=product_id%3D%3D123%3Bcontact_id%3D%3D567`\n- `filter=shipping_locality%3D%3DPhoenix`\n- `filter=shipping_region_code%3D%3DIN-MH`\n- `filter=shipping_postal_code%3D%3D85001`\n- `filter=shipping_country_code%3D%3DIND`\n\nCustom field examples (for custom fields with field_name `_OrderTitle0` and `_OrderValue1`):\n- `filter=_OrderTitle0%3D%3DTest` (custom field exact match)\n- `filter=_OrderTitle0%3D%3DTest%2A` (custom field prefix wildcard)\n- `filter=_OrderValue1%3E100` (custom field numeric comparison)\n- `filter=product_id%3D%3D123%3B_OrderStatus0%3D%3DActive` (combined standard + custom field filter)\n\nFor fields which allow wildcard matching, you may use the * wildcard character (or its encoded form %2A)\nfor case-insensitive partial matching on text fields. Example of a valid pattern of wildcard usage:\n- `field==foo*` finds anything in `field` that begins with `foo`\n"
         required: false
         schema:
           type: string
@@ -439,8 +412,7 @@ paths:
       tags:
       - Orders
       summary: Retrieve Order Payments
-      description: Retrieves a list of payments made against a given order, including historical or external
-        payments of cash or credit card
+      description: Retrieves a list of payments made against a given order, including historical or external payments of cash or credit card
       operationId: listOrderPayments
       parameters:
       - name: order_id
@@ -450,11 +422,7 @@ paths:
           type: string
       - name: filter
         in: query
-        description: "Filter to apply, allowed fields are:\n- (String) `invoice_id`\n- (String) `payment_id`\n\
-          - (String) `amount`\n- (String) `pay_status`\n- (Boolean) `skip_commission`\n\nYou will need\
-          \ to apply the `==` operator to check the equality of one of the filters with your searched\n\
-          \ word, in the encoded form `%3D%3D`. For the filters listed above, here are some examples:\n\
-          - `filter=payment_id%3D%3D123`\n- `filter=pay_status%3D%3DAPPROVED`\n- `filter=invoice_id%3D%3D456%3Bskip_commission=true`\n"
+        description: "Filter to apply, allowed fields are:\n- (String) `invoice_id`\n- (String) `payment_id`\n- (String) `amount`\n- (String) `pay_status`\n- (Boolean) `skip_commission`\n\nYou will need to apply the `==` operator to check the equality of one of the filters with your searched\n word, in the encoded form `%3D%3D`. For the filters listed above, here are some examples:\n- `filter=payment_id%3D%3D123`\n- `filter=pay_status%3D%3DAPPROVED`\n- `filter=invoice_id%3D%3D456%3Bskip_commission=true`\n"
         required: false
         schema:
           type: string
@@ -562,8 +530,7 @@ paths:
       tags:
       - Orders
       summary: Create a Payment
-      description: Creates a payment record. Alternatively, adds a record of historical or external payment
-        of cash or credit card
+      description: Creates a payment record. Alternatively, adds a record of historical or external payment of cash or credit card
       operationId: createPaymentForAnOrder
       parameters:
       - name: order_id
@@ -987,8 +954,7 @@ paths:
       tags:
       - Orders
       summary: List Order Custom Field Groups
-      description: Retrieves a list of custom field groups for the Order record type. Optionally filter
-        by tab_id to scope to a specific tab.
+      description: Retrieves a list of custom field groups for the Order record type. Optionally filter by tab_id to scope to a specific tab.
       operationId: listOrderCustomFieldGroups
       parameters:
       - name: tab_id
@@ -1056,8 +1022,7 @@ paths:
       tags:
       - Orders
       summary: Create an Order Custom Field Group
-      description: Creates a new custom field group for the Order record type. If `tab_id` is omitted,
-        the group is added to the default 'Custom Fields' tab.
+      description: Creates a new custom field group for the Order record type. If `tab_id` is omitted, the group is added to the default 'Custom Fields' tab.
       operationId: createOrderCustomFieldGroup
       requestBody:
         content:
@@ -1269,8 +1234,7 @@ paths:
           type: string
       - name: update_mask
         in: query
-        description: An optional list of properties to be updated. If set, only the provided properties
-          will be updated and others will be skipped.
+        description: An optional list of properties to be updated. If set, only the provided properties will be updated and others will be skipped.
         required: false
         schema:
           type: array
@@ -1519,8 +1483,7 @@ paths:
           type: string
       - name: update_mask
         in: query
-        description: An optional list of properties to be updated. If set, only the provided properties
-          will be updated and others will be skipped.
+        description: An optional list of properties to be updated. If set, only the provided properties will be updated and others will be skipped.
         required: false
         schema:
           type: array
@@ -1676,8 +1639,7 @@ paths:
           type: string
       - name: update_mask
         in: query
-        description: An optional list of properties to be updated. If set, only the provided properties
-          will be updated and others will be skipped.
+        description: An optional list of properties to be updated. If set, only the provided properties will be updated and others will be skipped.
         required: false
         schema:
           type: array
@@ -2037,8 +1999,7 @@ paths:
       tags:
       - Orders
       summary: Delete an Order Custom Field Group
-      description: Deletes a custom field group. Returns 409 Conflict if the group still contains custom
-        fields.
+      description: Deletes a custom field group. Returns 409 Conflict if the group still contains custom fields.
       operationId: deleteOrderCustomFieldGroup
       parameters:
       - name: group_id
@@ -2247,67 +2208,80 @@ paths:
                 $ref: '#/components/schemas/ObjectModel'
 components:
   schemas:
-    Address:
+    BasicContact:
       type: object
       properties:
-        country:
+        id:
           type: string
-          deprecated: true
-          description: Deprecated. The long-name descriptive version of the Country Code. Please use 'country_code'
-            for POST/PATCH operations. Maximum length is 100 characters.
-          example: United States of America
-        line1:
+        email:
           type: string
-          description: Street address line 1. Maximum length is 75 characters for the BILLING address
-            and 100 characters for the SHIPPING and OTHER addresses.
+        given_name:
+          type: string
+        family_name:
+          type: string
+    ErrorDetails:
+      type: object
+      properties:
+        domain:
+          type: string
+        resource:
+          type: string
+    UpdateCustomFieldMetaDataRequest:
+      type: object
+      properties:
+        label:
+          type: string
+        options:
+          type: array
+          items:
+            $ref: '#/components/schemas/CustomFieldOption'
+        group_id:
+          type: string
+      required:
+      - group_id
+    UpdateOrderItemRequest:
+      type: object
+      description: order
+      properties:
+        name:
+          type: string
+          description: The name of the order item. Must not be whitespace.
+          example: Premium Widget
+        description:
+          type: string
+          description: The description of the order item. Must not be whitespace.
+          example: High-quality widget
+        quantity:
+          type: integer
+          format: int32
+          description: The quantity. Must be greater than or equal to 1.
+          example: 2
+        notes:
+          type: string
+          description: The notes for the order item. Must not be whitespace.
+          example: Gift wrap requested
+        product_id:
+          type: string
+          description: The id of the product. Must be a valid product id. Used only for item_type PRODUCT or SUBSCRIPTION.
           example: 123
-        line2:
+        subscription_plan_id:
           type: string
-          description: Street address line 2. Maximum length is 75 characters for the BILLING address
-            and 100 characters for the SHIPPING and OTHER addresses.
-          example: Suite 100
-        locality:
+          description: The id of the subscription plan. Must be a valid subscription plan id. Used only for item_type SUBSCRIPTION.
+          example: 456
+        subscription_plan_description:
           type: string
-          description: The municipality to which the address belongs. Maximum length is 50 characters
-            for the BILLING address and 100 characters for the SHIPPING and OTHER addresses.
-          example: Phoenix
-        region:
-          type: string
-          deprecated: true
-          description: The long-name descriptive version of the Region Code. Please use 'region_code'
-            for POST/PATCH operations. Maximum length is 50 characters.
-          example: Arizona
-        field:
-          type: string
-          description: Address type field
-          enum:
-          - ADDRESS_FIELD_UNSPECIFIED
-          - BILLING
-          - SHIPPING
-          - OTHER
-          example: BILLING
-        country_code:
-          type: string
-          description: An ISO 3166-2 Country Code (https://en.wikipedia.org/wiki/ISO_3166-1_alpha-3)
-          example: USA
-        postal_code:
-          type: string
-          description: Postal or ZIP code. Maximum length is 15 characters for the BILLING and OTHER addresses
-            and 20 characters for the SHIPPING address.
-          example: 85001
-        region_code:
-          type: string
-          description: An ISO 3166-2 Province Code, such as one of the US States (https://en.wikipedia.org/wiki/ISO_3166-2:US)
-          example: US-AZ
-        zip_code:
-          type: string
-          description: ZIP code (US). Maximum length is 15 characters for the BILLING and OTHER addresses
-            and 20 characters for the SHIPPING address.
-          example: 85001
-        zip_four:
-          type: string
-          description: ZIP+4 extension. Maximum length is 10 characters.
-          example: 1234
+          description: A short description of the subscription's schedule. Used only for item_type SUBSCRIPTION. Must not be whitespace.
+          example: Monthly billing
+        price_per_unit:
+          type: number
+          format: double
+          description: The price per unit.
+          example: 29.99
+        cost_per_unit:
+          type: number
+          format: double
+          description: The cost per unit. Used for item_type PRODUCT or SUBSCRIPTION.
+          example: 15.0
     AddressInformation:
       type: object
       properties:
@@ -2337,389 +2311,71 @@ components:
           type: string
         is_invoice_to_company:
           type: boolean
-    ApplyCommissionRequest:
-      type: object
-      description: RestApplyCommissionRequest
-      properties:
-        affiliate_id:
-          type: string
-          description: The affiliate id
-          example: 123
-        pay_percent:
-          type: number
-          format: double
-          description: Commission percentage
-          example: 10.0
-        commission_amount:
-          type: number
-          format: double
-          description: Fixed commission amount
-          example: 50.0
-        payout_type:
-          type: string
-          description: The payout type
-          enum:
-          - UPFRONT
-          - PAYMENT_RECEIVED
-          example: UPFRONT
-        description:
-          type: string
-          description: Commission description
-          example: Q1 Sales Commission
-        commission_date:
-          type: string
-          format: date
-          description: Date of the commission
-          example: '2024-05-21'
-      required:
-      - affiliate_id
-      - payout_type
-    BasicContact:
+    ListCustomFieldTabsResponse:
       type: object
       properties:
-        id:
-          type: string
-        email:
-          type: string
-        given_name:
-          type: string
-        family_name:
-          type: string
-    CreateCustomFieldGroupRequest:
-      type: object
-      properties:
-        name:
-          type: string
-        tab_id:
-          type: string
-    CreateCustomFieldOptionRequest:
-      type: object
-      properties:
-        label:
-          type: string
-    CreateCustomFieldRequest:
-      type: object
-      properties:
-        label:
-          type: string
-        options:
+        tabs:
           type: array
           items:
-            $ref: '#/components/schemas/CreateCustomFieldOptionRequest'
-        field_type:
-          type: string
-          enum:
-          - CURRENCY
-          - DATE
-          - DATE_TIME
-          - DAY_OF_WEEK
-          - DECIMAL_NUMBER
-          - DRILLDOWN
-          - DROPDOWN
-          - EMAIL
-          - LIST_BOX
-          - MONTH
-          - NAME
-          - PERCENT
-          - PHONE_NUMBER
-          - RADIO
-          - SOCIAL_SECURITY_NUMBER
-          - STATE
-          - TEXT
-          - TEXT_AREA
-          - USER
-          - USER_LIST_BOX
-          - WEBSITE
-          - WHOLE_NUMBER
-          - YEAR
-          - YES_NO
-        group_id:
-          type: string
-          description: An optional tab group to place the field under in the interface.  If not specified,
-            will default to the 'Custom Fields' tab.
-        user_group_id:
-          type: string
-          description: An optional user group to choose from when selecting values for User or UserListBox
-            fields.
-      required:
-      - field_type
-      - label
-    CreateCustomFieldTabRequest:
+            $ref: '#/components/schemas/CustomFieldTab'
+    PaymentPlan:
       type: object
       properties:
-        name:
-          type: string
-    CreateOrderItemRequest:
-      type: object
-      properties:
-        name:
-          type: string
-          description: The name of the order item. Must not be whitespace. If not specified, the product
-            name will be used.
-          example: Premium Widget
-        description:
-          type: string
-          description: The description of the order item. Must not be whitespace.
-          example: High-quality widget
-        quantity:
-          type: integer
-          format: int32
-          description: The quantity. Must be greater than or equal to 1.
-          example: 2
-        notes:
-          type: string
-          description: The notes for the order item. Must not be whitespace.
-          example: Gift wrap
-        product_id:
-          type: string
-          description: The id of the product to be added to the order. Must be a valid product id. Required
-            for item_type PRODUCT or SUBSCRIPTION.
-          example: 123
-        subscription_plan_id:
-          type: string
-          description: The id of the subscription plan to be added to the order. Must be a valid subscription
-            plan id. Required only when the item_type is SUBSCRIPTION.
-          example: 456
-        subscription_plan_description:
-          type: string
-          description: A short description of the subscription's schedule. Used only for item_type SUBSCRIPTION.
-            Must not be whitespace.
-          example: Monthly subscription plan
-        item_type:
-          type: string
-          default: PRODUCT
-          description: The type of this order item. Will default to [PRODUCT] if omitted.
-          enum:
-          - PRODUCT
-          - SHIPPING
-          - TAX
-          - FINANCE_CHARGE
-          - SUBSCRIPTION
-          - DISCOUNT
-          - DISCOUNT_FREE_TRIAL
-          - DISCOUNT_ORDER_TOTAL
-          - DISCOUNT_PRODUCT
-          - DISCOUNT_PRODUCT_CATEGORY
-          - DISCOUNT_SHIPPING
-          - OTHER
-          - FEE
-          example: PRODUCT
-        price_per_unit:
-          type: number
-          format: double
-          description: The price per unit. For item_type PRODUCT or SUBSCRIPTION, if not specified, the
-            product price will be used.
-          example: 29.99
-        cost_per_unit:
-          type: number
-          format: double
-          description: The cost per unit. Used only for item_type PRODUCT or SUBSCRIPTION. If not specified,
-            the product cost will be used.
-          example: 15.0
-      required:
-      - quantity
-    CurrencyValue:
-      type: object
-      properties:
-        amount:
+        auto_charge:
+          type: boolean
+          description: Whether to auto-charge payments
+          example: true
+        max_charge_attempts:
           type: integer
           format: int64
-          description: The price amount in the smallest currency unit
-          example: 10000
-        currency_code:
-          type: string
-          description: Three-letter ISO currency code
-          example: USD
-        formatted_amount:
-          type: string
-          description: The product amount formatted using the tenant's currency locale
-          example: $100.00
-    CustomFieldGroup:
-      type: object
-      properties:
-        id:
-          type: string
-        name:
-          type: string
-        order:
+          description: Maximum charge attempts
+          example: 3
+        days_between_retries:
           type: integer
-          format: int32
-        tab_id:
+          format: int64
+          description: Days between retry attempts
+          example: 7
+        payment_method_id:
           type: string
-        record_type:
-          type: string
-          enum:
-          - CONTACT
-          - REFERRAL_PARTNER
-          - OPPORTUNITY
-          - TASK_NOTE_APPOINTMENT
-          - COMPANY
-          - ORDER
-          - SUBSCRIPTION
-    CustomFieldMetaData:
-      type: object
-      description: Metadata describing a custom field, including its type and options
-      properties:
-        id:
-          type: string
-          description: The unique identifier of the custom field
+          description: Payment method ID to charge
           example: 123
-        label:
-          type: string
-          description: The display label of the custom field
-          example: Favorite Color
-        options:
-          type: array
-          description: The list of available options for select/radio/multiselect/drilldown field types
-          items:
-            $ref: '#/components/schemas/CustomFieldOption'
-        record_type:
-          type: string
-          description: The entity type this custom field belongs to (e.g. CONTACT, COMPANY)
-          enum:
-          - CONTACT
-          - REFERRAL_PARTNER
-          - OPPORTUNITY
-          - TASK_NOTE_APPOINTMENT
-          - COMPANY
-          - ORDER
-          - SUBSCRIPTION
-        field_type:
-          type: string
-          description: The data type of the custom field (e.g. Text, Number, Date, Select)
-          enum:
-          - CURRENCY
-          - DATE
-          - DATE_TIME
-          - DAY_OF_WEEK
-          - DECIMAL_NUMBER
-          - DRILLDOWN
-          - DROPDOWN
-          - EMAIL
-          - LIST_BOX
-          - MONTH
-          - NAME
-          - PERCENT
-          - PHONE_NUMBER
-          - RADIO
-          - SOCIAL_SECURITY_NUMBER
-          - STATE
-          - TEXT
-          - TEXT_AREA
-          - USER
-          - USER_LIST_BOX
-          - WEBSITE
-          - WHOLE_NUMBER
-          - YEAR
-          - YES_NO
-        default_value:
-          type: string
-          description: The default value for this custom field, if any
-        group_id:
-          type: string
-          description: The ID of the group this custom field belongs to
-          example: 45
-        group_name:
-          type: string
-          description: The name of the group this custom field belongs to
-          example: Personal Info
-        field_name:
-          type: string
-          description: The database column name for this custom field. Use this value when filtering contacts
-            (e.g. for field_name 'firstName1', filter with 'firstName1==John').
-          example: firstName1
-    CustomFieldOption:
-      type: object
-      properties:
-        id:
-          type: string
-        label:
-          type: string
-    CustomFieldTab:
-      type: object
-      properties:
-        id:
-          type: string
-          description: The unique identifier of the custom field tab
-          example: 123
-        name:
-          type: string
-          description: The name of the custom field tab
-          example: Personal Info
-        order:
-          type: integer
-          format: int32
-          description: The display order of the tab
-          example: 1
-        record_type:
-          type: string
-          description: The record type this tab belongs to (e.g., CONTACT, COMPANY, OPPORTUNITY, REFERRAL_PARTNER,
-            ORDER, SUBSCRIPTION, TASK_NOTE_APPOINTMENT)
-          enum:
-          - CONTACT
-          - REFERRAL_PARTNER
-          - OPPORTUNITY
-          - TASK_NOTE_APPOINTMENT
-          - COMPANY
-          - ORDER
-          - SUBSCRIPTION
-          example: CONTACT
-    CustomFieldValue:
-      type: object
-      properties:
-        id:
-          type: string
-        content:
-          description: The value of the custom field. Text custom field values have a maximum length of
-            65535 characters.
-    Discount:
-      type: object
-      properties:
-        amount:
+        initial_payment_amount:
+          $ref: '#/components/schemas/CurrencyValue'
+          description: Initial payment amount
+        initial_payment_percent:
           type: number
           format: double
-          description: Discount amount
-          example: 10.0
-        special_item_id:
+          description: Initial payment as percentage
+          example: 25.0
+        initial_payment_date:
           type: string
-          description: Discount item ID
-          example: 123
-        discount_method:
+          format: date
+          description: The initial payment date. In ISO-8601 date format (e.g. 2024-05-21)
+          example: '2024-05-21'
+        plan_start_date:
           type: string
-          description: Discount method
-          enum:
-          - AMOUNT
-          - PERCENT
-          example: PERCENT
-    Error:
-      type: object
-      properties:
-        code:
+          format: date
+          description: The start date of the payment plan. In ISO-8601 date format (e.g. 2024-05-21)
+          example: '2024-05-21'
+        number_of_payments:
           type: integer
-          format: int32
-        message:
-          type: string
-        status:
-          type: string
-        details:
+          format: int64
+          description: Number of payments in the plan
+          example: 12
+        days_between_payments:
+          type: integer
+          format: int64
+          description: Days between each payment
+          example: 30
+        payment_plan_items:
           type: array
+          description: List of scheduled payment items
           items:
-            $ref: '#/components/schemas/ErrorDetails'
-    ErrorDetails:
-      type: object
-      properties:
-        domain:
-          type: string
-        resource:
-          type: string
-    FileOperationRequest:
-      type: object
-      description: File name
-      properties:
-        file_id:
-          type: string
+            $ref: '#/components/schemas/PaymentPlanItem'
       required:
-      - file_id
+      - days_between_payments
+      - number_of_payments
+      - plan_start_date
     InvoiceFile:
       type: object
       properties:
@@ -2779,122 +2435,106 @@ components:
           type: string
           description: The refund invoice payment ID, if this is a refund.
           example: 101
-    ListCustomFieldGroupsResponse:
+    UpdateOrderRequest:
       type: object
+      description: order
       properties:
-        groups:
-          type: array
-          items:
-            $ref: '#/components/schemas/CustomFieldGroup'
-    ListCustomFieldTabsResponse:
-      type: object
-      properties:
-        tabs:
-          type: array
-          items:
-            $ref: '#/components/schemas/CustomFieldTab'
-    ListOrderPaymentsResponse:
-      type: object
-      properties:
-        invoice_order_payments:
-          type: array
-          items:
-            $ref: '#/components/schemas/InvoiceOrderPayment'
-        next_page_token:
-          type: string
-    ListOrders:
-      type: object
-      properties:
-        orders:
-          type: array
-          items:
-            $ref: '#/components/schemas/OrderV2'
-        next_page_token:
-          type: string
-    ObjectModel:
-      type: object
-      properties:
-        custom_fields:
-          type: array
-          items:
-            $ref: '#/components/schemas/CustomFieldMetaData'
-        optional_properties:
-          type: array
-          description: These fields are not transmitted by default on this model, but can be requested
-            by specifying them in a comma-separated list in the optional_properties query parameter.
-          items:
-            type: string
-          uniqueItems: true
-    OrderItem:
-      type: object
-      properties:
-        id:
-          type: string
-          description: Unique identifier for the order item
-          example: 456
-        name:
-          type: string
-          description: Name of the item
-          example: Premium Widget
-        description:
-          type: string
-          description: Item description
-          example: High-quality widget with warranty
         notes:
           type: string
-          description: Additional notes
-          example: Gift wrap requested
-        quantity:
-          type: integer
-          format: int32
-          description: Quantity ordered
-          example: 2
-        discount:
-          $ref: '#/components/schemas/CurrencyValue'
-          description: If the order item is a discount type, this is the amount of the discount.
-        special:
-          $ref: '#/components/schemas/Discount'
-          description: If the line item is a discount type, the details about the discount.
-        product:
-          $ref: '#/components/schemas/OrderItemProduct'
-          description: Product details
-        subscription_id:
+          description: Internal notes
+          example: Rush delivery
+        terms:
           type: string
-          description: If the order item is a subscription type, this refers to the subscription id that
-            generated the order.
+          description: Order terms
+          example: Net 30
+        title:
+          type: string
+          description: A title for the invoice
+          example: Monthly subscription invoice
+        contact_id:
+          type: string
+          description: ID of the contact for this order
           example: 123
-        item_type:
+        order_title:
           type: string
-          description: The type of order item.
+          description: Title for the order
+          example: Online Purchase
+        order_time:
+          type: string
+          format: date-time
+          description: The date and time of the order. In ISO-8601 format (e.g. 2024-05-21T23:00:00Z)
+          example: '2024-05-21T14:30:00Z'
+        order_type:
+          type: string
+          description: The order type.
           enum:
-          - PRODUCT
-          - SHIPPING
-          - TAX
-          - SERVICE
-          - UPSELL
-          - FINANCE_CHARGE
-          - DISCOUNT
-          - PROGRAM
-          - SUBSCRIPTION
-          - DISCOUNT_FREE_TRIAL
-          - DISCOUNT_ORDER_TOTAL
-          - DISCOUNT_PRODUCT
-          - DISCOUNT_PRODUCT_CATEGORY
-          - DISCOUNT_SHIPPING
-          - TIP
-          - OTHER
-          - FEE
-          - UNKNOWN
-          example: PRODUCT
-        cost_per_unit:
-          $ref: '#/components/schemas/CurrencyValue'
-          description: Cost per unit
-        price_per_unit:
-          $ref: '#/components/schemas/CurrencyValue'
-          description: Price per unit charged to customer
-        subscription_plan:
-          $ref: '#/components/schemas/SubscriptionPlan'
-          description: If the order item is a subscription type, the details of the subscription plan.
+          - ONLINE
+          - OFFLINE
+          example: ONLINE
+        promo_codes:
+          type: array
+          description: Uses multiple strings as promo codes. The corresponding discount will be applied to the order.
+          example:
+          - SUMMER20
+          items:
+            type: string
+        lead_affiliate_id:
+          type: string
+          description: Lead affiliate ID
+          example: 456
+        sales_affiliate_id:
+          type: string
+          description: Sales affiliate ID
+          example: 789
+        shipping_address:
+          $ref: '#/components/schemas/AddressInformation'
+          description: Shipping address for the order
+        payment_plan:
+          $ref: '#/components/schemas/UpdatedPaymentPlan'
+          description: Payment plan details
+        custom_fields:
+          type: array
+          description: List of custom field values to apply to this order
+          example:
+          - id: '1'
+            content: VIP
+          - id: '2'
+            content: Preferred
+          items:
+            $ref: '#/components/schemas/CustomFieldValue'
+        sent_time:
+          type: string
+          format: date-time
+          description: The date and time the invoice was sent. In ISO-8601 format (e.g. 2024-05-21T23:00:00Z)
+          example: '2024-05-21T14:30:00Z'
+        due_time:
+          type: string
+          format: date-time
+          description: The date and time the invoice is due. In ISO-8601 format (e.g. 2024-05-21T23:00:00Z)
+          example: '2024-06-20T14:30:00Z'
+        invoice_number:
+          type: string
+          description: Invoice number
+          example: 1001
+        external_create_user:
+          type: string
+          description: The external system user that created this order.
+          example: user@example.com
+        external_create_time:
+          type: string
+          format: date-time
+          description: The date and time the order was created in the external system. In ISO-8601 format (e.g. 2024-05-21T23:00:00Z)
+          example: '2024-05-21T14:30:00Z'
+        external_update_time:
+          type: string
+          format: date-time
+          description: The date and time the order was last updated in the external system. In ISO-8601 format (e.g. 2024-05-21T23:00:00Z)
+          example: '2024-05-21T14:30:00Z'
+    CreateCustomFieldOptionRequest:
+      type: object
+      properties:
+        label:
+          type: string
     OrderItemProduct:
       type: object
       properties:
@@ -2922,6 +2562,117 @@ components:
           type: boolean
           description: Whether product is taxable
           example: true
+    CurrencyValue:
+      type: object
+      properties:
+        amount:
+          type: integer
+          format: int64
+          description: The price amount in the smallest currency unit
+          example: 10000
+        currency_code:
+          type: string
+          description: Three-letter ISO currency code
+          example: USD
+        formatted_amount:
+          type: string
+          description: The product amount formatted using the tenant's currency locale
+          example: $100.00
+    CreateCustomFieldRequest:
+      type: object
+      properties:
+        label:
+          type: string
+        options:
+          type: array
+          items:
+            $ref: '#/components/schemas/CreateCustomFieldOptionRequest'
+        field_type:
+          type: string
+          enum:
+          - CURRENCY
+          - DATE
+          - DATE_TIME
+          - DAY_OF_WEEK
+          - DECIMAL_NUMBER
+          - DRILLDOWN
+          - DROPDOWN
+          - EMAIL
+          - LIST_BOX
+          - MONTH
+          - NAME
+          - PERCENT
+          - PHONE_NUMBER
+          - RADIO
+          - SOCIAL_SECURITY_NUMBER
+          - STATE
+          - TEXT
+          - TEXT_AREA
+          - USER
+          - USER_LIST_BOX
+          - WEBSITE
+          - WHOLE_NUMBER
+          - YEAR
+          - YES_NO
+        group_id:
+          type: string
+          description: An optional tab group to place the field under in the interface.  If not specified, will default to the 'Custom Fields' tab.
+        user_group_id:
+          type: string
+          description: An optional user group to choose from when selecting values for User or UserListBox fields.
+      required:
+      - field_type
+      - label
+    CreateCustomFieldTabRequest:
+      type: object
+      properties:
+        name:
+          type: string
+    CustomFieldGroup:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        order:
+          type: integer
+          format: int32
+        tab_id:
+          type: string
+        record_type:
+          type: string
+          enum:
+          - CONTACT
+          - REFERRAL_PARTNER
+          - OPPORTUNITY
+          - TASK_NOTE_APPOINTMENT
+          - COMPANY
+          - ORDER
+          - SUBSCRIPTION
+    Error:
+      type: object
+      properties:
+        code:
+          type: integer
+          format: int32
+        message:
+          type: string
+        status:
+          type: string
+        details:
+          type: array
+          items:
+            $ref: '#/components/schemas/ErrorDetails'
+    ListOrders:
+      type: object
+      properties:
+        orders:
+          type: array
+          items:
+            $ref: '#/components/schemas/OrderV2'
+        next_page_token:
+          type: string
     OrderV2:
       type: object
       properties:
@@ -3011,13 +2762,11 @@ components:
           description: Total amount refunded
         allow_payment:
           type: boolean
-          description: Whether or not card-related payments should be allowed on this order. Applies only
-            to Keap Pro/Max edition.
+          description: Whether or not card-related payments should be allowed on this order. Applies only to Keap Pro/Max edition.
           example: true
         allow_paypal:
           type: boolean
-          description: Whether or not PayPal payments should be allowed on this order. Applies only to
-            Keap Pro/Max edition.
+          description: Whether or not PayPal payments should be allowed on this order. Applies only to Keap Pro/Max edition.
           example: false
         order_items:
           type: array
@@ -3029,8 +2778,7 @@ components:
           description: Payment plan details if applicable
         invoice_number:
           type: string
-          description: The associated invoice identifier. Applies only to Keap Pro/Max edition. Feature
-            not yet supported.
+          description: The associated invoice identifier. Applies only to Keap Pro/Max edition. Feature not yet supported.
           example: 1001
         files:
           type: array
@@ -3084,16 +2832,118 @@ components:
         external_create_time:
           type: string
           format: date-time
-          description: The date and time the order was created in the external system. In ISO-8601 format
-            (e.g. 2024-05-21T23:00:00Z)
+          description: The date and time the order was created in the external system. In ISO-8601 format (e.g. 2024-05-21T23:00:00Z)
           example: '2024-05-21T14:30:00Z'
         external_update_time:
           type: string
           format: date-time
-          description: The date and time the order was last updated in the external system. In ISO-8601
-            format (e.g. 2024-05-21T23:00:00Z)
+          description: The date and time the order was last updated in the external system. In ISO-8601 format (e.g. 2024-05-21T23:00:00Z)
           example: '2024-05-21T14:30:00Z'
-    PaymentPlan:
+    FileOperationRequest:
+      type: object
+      description: File name
+      properties:
+        file_id:
+          type: string
+      required:
+      - file_id
+    Address:
+      type: object
+      properties:
+        country:
+          type: string
+          deprecated: true
+          description: Deprecated. The long-name descriptive version of the Country Code. Please use 'country_code' for POST/PATCH operations. Maximum length is 100 characters.
+          example: United States of America
+        line1:
+          type: string
+          description: Street address line 1. Maximum length is 75 characters for the BILLING address and 100 characters for the SHIPPING and OTHER addresses.
+          example: 123
+        line2:
+          type: string
+          description: Street address line 2. Maximum length is 75 characters for the BILLING address and 100 characters for the SHIPPING and OTHER addresses.
+          example: Suite 100
+        locality:
+          type: string
+          description: The municipality to which the address belongs. Maximum length is 50 characters for the BILLING address and 100 characters for the SHIPPING and OTHER addresses.
+          example: Phoenix
+        region:
+          type: string
+          deprecated: true
+          description: The long-name descriptive version of the Region Code. Please use 'region_code' for POST/PATCH operations. Maximum length is 50 characters.
+          example: Arizona
+        field:
+          type: string
+          description: Address type field
+          enum:
+          - ADDRESS_FIELD_UNSPECIFIED
+          - BILLING
+          - SHIPPING
+          - OTHER
+          example: BILLING
+        country_code:
+          type: string
+          description: An ISO 3166-2 Country Code (https://en.wikipedia.org/wiki/ISO_3166-1_alpha-3)
+          example: USA
+        postal_code:
+          type: string
+          description: Postal or ZIP code. Maximum length is 15 characters for the BILLING and OTHER addresses and 20 characters for the SHIPPING address.
+          example: 85001
+        region_code:
+          type: string
+          description: An ISO 3166-2 Province Code, such as one of the US States (https://en.wikipedia.org/wiki/ISO_3166-2:US)
+          example: US-AZ
+        zip_code:
+          type: string
+          description: ZIP code (US). Maximum length is 15 characters for the BILLING and OTHER addresses and 20 characters for the SHIPPING address.
+          example: 85001
+        zip_four:
+          type: string
+          description: ZIP+4 extension. Maximum length is 10 characters.
+          example: 1234
+    SubscriptionPlan:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Subscription plan ID
+          example: 123
+        frequency:
+          type: integer
+          format: int32
+          description: Interval at which a customer receives a product or service as part of a subscription plan.
+          example: 1
+        active:
+          type: boolean
+          description: If the subscription plan is active or not.
+          example: true
+        subscription_plan_name:
+          type: string
+          description: Plan name
+          example: Premium Monthly
+        cycle_type:
+          type: string
+          description: The cycle type of the subscription plan.
+          enum:
+          - YEARLY
+          - MONTHLY
+          - WEEKLY
+          - DAILY
+          example: MONTHLY
+        total_cycles:
+          type: integer
+          format: int32
+          description: Total number of cycles the plan will run before ending. Value of 0 indicates plan will never end.
+          example: 12
+        plan_price:
+          $ref: '#/components/schemas/CurrencyValue'
+          description: Price of the plan
+        display_order_index:
+          type: integer
+          format: int32
+          description: The order index where this plan will be displayed on a page against other plans. Smaller number indicates plan will be displayed higher in the list.
+          example: 1
+    UpdatedPaymentPlan:
       type: object
       properties:
         auto_charge:
@@ -3112,25 +2962,22 @@ components:
           example: 7
         payment_method_id:
           type: string
-          description: Payment method ID to charge
+          description: Payment method ID
           example: 123
         initial_payment_amount:
-          $ref: '#/components/schemas/CurrencyValue'
-          description: Initial payment amount
-        initial_payment_percent:
           type: number
           format: double
-          description: Initial payment as percentage
-          example: 25.0
+          description: Initial payment amount
+          example: 50.0
         initial_payment_date:
           type: string
           format: date
-          description: The initial payment date. In ISO-8601 date format (e.g. 2024-05-21)
+          description: ISO date of the initial payment in pay plan
           example: '2024-05-21'
         plan_start_date:
           type: string
           format: date
-          description: The start date of the payment plan. In ISO-8601 date format (e.g. 2024-05-21)
+          description: ISO date of the start of pay plan
           example: '2024-05-21'
         number_of_payments:
           type: integer
@@ -3142,73 +2989,69 @@ components:
           format: int64
           description: Days between each payment
           example: 30
-        payment_plan_items:
-          type: array
-          description: List of scheduled payment items
-          items:
-            $ref: '#/components/schemas/PaymentPlanItem'
-      required:
-      - days_between_payments
-      - number_of_payments
-      - plan_start_date
-    PaymentPlanItem:
+    CreateOrderItemRequest:
       type: object
       properties:
-        status:
+        name:
           type: string
-          description: 'The status of the payment plan item. Possible values are:
-
-            - `UNPAID_MANUAL` - The item is set for manual charge, and its `amount_due` has not been completely
-            paid.
-
-            - `UNPAID_AUTOCHARGE` - The item is set for auto-charge, and its `amount_due` has not been
-            completely paid.
-
-            - `PAID` - The item has been completely paid.
-
-            - `FAILED` - The item `amount_due` has not been completely paid, and there was a failure.
-            (*Note: This status is deprecated and not currently used.*)
-
-            '
-          enum:
-          - UNPAID_MANUAL
-          - UNPAID_AUTOCHARGE
-          - PAID
-          - FAILED
-        due_date:
+          description: The name of the order item. Must not be whitespace. If not specified, the product name will be used.
+          example: Premium Widget
+        description:
           type: string
-          format: date
-          description: The due date in the application's timezone, as an ISO 8601 calendar date string
-            (date only), in the format YYYY-MM-DD
-          example: '2024-05-21'
-        amount_due:
-          $ref: '#/components/schemas/CurrencyValue'
-        amount_paid:
-          $ref: '#/components/schemas/CurrencyValue'
-    PaymentResult:
-      type: object
-      properties:
-        id:
+          description: The description of the order item. Must not be whitespace.
+          example: High-quality widget
+        quantity:
+          type: integer
+          format: int32
+          description: The quantity. Must be greater than or equal to 1.
+          example: 2
+        notes:
           type: string
-          description: Payment result ID
+          description: The notes for the order item. Must not be whitespace.
+          example: Gift wrap
+        product_id:
+          type: string
+          description: The id of the product to be added to the order. Must be a valid product id. Required for item_type PRODUCT or SUBSCRIPTION.
           example: 123
-        invoice_id:
+        subscription_plan_id:
           type: string
-          description: Associated invoice ID
+          description: The id of the subscription plan to be added to the order. Must be a valid subscription plan id. Required only when the item_type is SUBSCRIPTION.
           example: 456
-        payment_amount:
+        subscription_plan_description:
+          type: string
+          description: A short description of the subscription's schedule. Used only for item_type SUBSCRIPTION. Must not be whitespace.
+          example: Monthly subscription plan
+        item_type:
+          type: string
+          default: PRODUCT
+          description: The type of this order item. Will default to [PRODUCT] if omitted.
+          enum:
+          - PRODUCT
+          - SHIPPING
+          - TAX
+          - FINANCE_CHARGE
+          - SUBSCRIPTION
+          - DISCOUNT
+          - DISCOUNT_FREE_TRIAL
+          - DISCOUNT_ORDER_TOTAL
+          - DISCOUNT_PRODUCT
+          - DISCOUNT_PRODUCT_CATEGORY
+          - DISCOUNT_SHIPPING
+          - OTHER
+          - FEE
+          example: PRODUCT
+        price_per_unit:
           type: number
           format: double
-          description: Amount paid
-          example: 99.99
-        payment_status_message:
-          type: string
-          description: Payment status
-          example: APPROVED
-        transaction_id:
-          type: string
-          description: Transaction ID from payment processor
-          example: TXN-789
+          description: The price per unit. For item_type PRODUCT or SUBSCRIPTION, if not specified, the product price will be used.
+          example: 29.99
+        cost_per_unit:
+          type: number
+          format: double
+          description: The cost per unit. Used only for item_type PRODUCT or SUBSCRIPTION. If not specified, the product cost will be used.
+          example: 15.0
+      required:
+      - quantity
     RestCreateOrderRequest:
       type: object
       properties:
@@ -3251,8 +3094,7 @@ components:
           example: ONLINE
         promo_codes:
           type: array
-          description: Uses multiple strings as promo codes. The corresponding discount will be applied
-            to the order.
+          description: Uses multiple strings as promo codes. The corresponding discount will be applied to the order.
           example:
           - SUMMER20
           - FREESHIP
@@ -3300,20 +3142,283 @@ components:
         external_create_time:
           type: string
           format: date-time
-          description: The date and time the order was created in the external system. In ISO-8601 format
-            (e.g. 2024-05-21T23:00:00Z)
+          description: The date and time the order was created in the external system. In ISO-8601 format (e.g. 2024-05-21T23:00:00Z)
           example: '2024-05-21T14:30:00Z'
         external_update_time:
           type: string
           format: date-time
-          description: The date and time the order was last updated in the external system. In ISO-8601
-            format (e.g. 2024-05-21T23:00:00Z)
+          description: The date and time the order was last updated in the external system. In ISO-8601 format (e.g. 2024-05-21T23:00:00Z)
           example: '2024-05-21T14:30:00Z'
       required:
       - contact_id
       - order_time
       - order_title
       - order_type
+    CustomFieldTab:
+      type: object
+      properties:
+        id:
+          type: string
+          description: The unique identifier of the custom field tab
+          example: 123
+        name:
+          type: string
+          description: The name of the custom field tab
+          example: Personal Info
+        order:
+          type: integer
+          format: int32
+          description: The display order of the tab
+          example: 1
+        record_type:
+          type: string
+          description: The record type this tab belongs to (e.g., CONTACT, COMPANY, OPPORTUNITY, REFERRAL_PARTNER, ORDER, SUBSCRIPTION, TASK_NOTE_APPOINTMENT)
+          enum:
+          - CONTACT
+          - REFERRAL_PARTNER
+          - OPPORTUNITY
+          - TASK_NOTE_APPOINTMENT
+          - COMPANY
+          - ORDER
+          - SUBSCRIPTION
+          example: CONTACT
+    CreateCustomFieldGroupRequest:
+      type: object
+      properties:
+        name:
+          type: string
+        tab_id:
+          type: string
+    ListOrderPaymentsResponse:
+      type: object
+      properties:
+        invoice_order_payments:
+          type: array
+          items:
+            $ref: '#/components/schemas/InvoiceOrderPayment'
+        next_page_token:
+          type: string
+    UpdateCustomFieldGroupRequest:
+      type: object
+      properties:
+        name:
+          type: string
+        order:
+          type: integer
+          format: int32
+        tab_id:
+          type: string
+    ObjectModel:
+      type: object
+      properties:
+        custom_fields:
+          type: array
+          items:
+            $ref: '#/components/schemas/CustomFieldMetaData'
+        optional_properties:
+          type: array
+          description: These fields are not transmitted by default on this model, but can be requested by specifying them in a comma-separated list in the optional_properties query parameter.
+          items:
+            type: string
+          uniqueItems: true
+    UpdateCustomFieldTabRequest:
+      type: object
+      properties:
+        name:
+          type: string
+        order:
+          type: integer
+          format: int32
+    OrderItem:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Unique identifier for the order item
+          example: 456
+        name:
+          type: string
+          description: Name of the item
+          example: Premium Widget
+        description:
+          type: string
+          description: Item description
+          example: High-quality widget with warranty
+        notes:
+          type: string
+          description: Additional notes
+          example: Gift wrap requested
+        quantity:
+          type: integer
+          format: int32
+          description: Quantity ordered
+          example: 2
+        discount:
+          $ref: '#/components/schemas/CurrencyValue'
+          description: If the order item is a discount type, this is the amount of the discount.
+        special:
+          $ref: '#/components/schemas/Discount'
+          description: If the line item is a discount type, the details about the discount.
+        product:
+          $ref: '#/components/schemas/OrderItemProduct'
+          description: Product details
+        subscription_id:
+          type: string
+          description: If the order item is a subscription type, this refers to the subscription id that generated the order.
+          example: 123
+        item_type:
+          type: string
+          description: The type of order item.
+          enum:
+          - PRODUCT
+          - SHIPPING
+          - TAX
+          - SERVICE
+          - UPSELL
+          - FINANCE_CHARGE
+          - DISCOUNT
+          - PROGRAM
+          - SUBSCRIPTION
+          - DISCOUNT_FREE_TRIAL
+          - DISCOUNT_ORDER_TOTAL
+          - DISCOUNT_PRODUCT
+          - DISCOUNT_PRODUCT_CATEGORY
+          - DISCOUNT_SHIPPING
+          - TIP
+          - OTHER
+          - FEE
+          - UNKNOWN
+          example: PRODUCT
+        cost_per_unit:
+          $ref: '#/components/schemas/CurrencyValue'
+          description: Cost per unit
+        price_per_unit:
+          $ref: '#/components/schemas/CurrencyValue'
+          description: Price per unit charged to customer
+        subscription_plan:
+          $ref: '#/components/schemas/SubscriptionPlan'
+          description: If the order item is a subscription type, the details of the subscription plan.
+    PaymentResult:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Payment result ID
+          example: 123
+        invoice_id:
+          type: string
+          description: Associated invoice ID
+          example: 456
+        payment_amount:
+          type: number
+          format: double
+          description: Amount paid
+          example: 99.99
+        payment_status_message:
+          type: string
+          description: Payment status
+          example: APPROVED
+        transaction_id:
+          type: string
+          description: Transaction ID from payment processor
+          example: TXN-789
+    CustomFieldValue:
+      type: object
+      properties:
+        id:
+          type: string
+        content:
+          description: The value of the custom field. Text custom field values have a maximum length of 65535 characters.
+    CustomFieldMetaData:
+      type: object
+      description: Metadata describing a custom field, including its type and options
+      properties:
+        id:
+          type: string
+          description: The unique identifier of the custom field
+          example: 123
+        label:
+          type: string
+          description: The display label of the custom field
+          example: Favorite Color
+        options:
+          type: array
+          description: The list of available options for select/radio/multiselect/drilldown field types
+          items:
+            $ref: '#/components/schemas/CustomFieldOption'
+        record_type:
+          type: string
+          description: The entity type this custom field belongs to (e.g. CONTACT, COMPANY)
+          enum:
+          - CONTACT
+          - REFERRAL_PARTNER
+          - OPPORTUNITY
+          - TASK_NOTE_APPOINTMENT
+          - COMPANY
+          - ORDER
+          - SUBSCRIPTION
+        field_type:
+          type: string
+          description: The data type of the custom field (e.g. Text, Number, Date, Select)
+          enum:
+          - CURRENCY
+          - DATE
+          - DATE_TIME
+          - DAY_OF_WEEK
+          - DECIMAL_NUMBER
+          - DRILLDOWN
+          - DROPDOWN
+          - EMAIL
+          - LIST_BOX
+          - MONTH
+          - NAME
+          - PERCENT
+          - PHONE_NUMBER
+          - RADIO
+          - SOCIAL_SECURITY_NUMBER
+          - STATE
+          - TEXT
+          - TEXT_AREA
+          - USER
+          - USER_LIST_BOX
+          - WEBSITE
+          - WHOLE_NUMBER
+          - YEAR
+          - YES_NO
+        default_value:
+          type: string
+          description: The default value for this custom field, if any
+        group_id:
+          type: string
+          description: The ID of the group this custom field belongs to
+          example: 45
+        group_name:
+          type: string
+          description: The name of the group this custom field belongs to
+          example: Personal Info
+        field_name:
+          type: string
+          description: The database column name for this custom field. Use this value when filtering contacts (e.g. for field_name 'firstName1', filter with 'firstName1==John').
+          example: firstName1
+    Discount:
+      type: object
+      properties:
+        amount:
+          type: number
+          format: double
+          description: Discount amount
+          example: 10.0
+        special_item_id:
+          type: string
+          description: Discount item ID
+          example: 123
+        discount_method:
+          type: string
+          description: Discount method
+          enum:
+          - AMOUNT
+          - PERCENT
+          example: PERCENT
     RestCreatePaymentRequest:
       type: object
       properties:
@@ -3322,13 +3427,10 @@ components:
           description: The notes for this payment.
         payment_method_id:
           type: string
-          description: The payment method id to charge immediately against this order. Omit if you want
-            to add a payment record instead.
+          description: The payment method id to charge immediately against this order. Omit if you want to add a payment record instead.
         payment_method_type:
           type: string
-          description: The manual payment method type for manually recording a payment. Value must match
-            against the list of types defined under your application's Order Settings. Ignored if payment_method_id
-            is provided.
+          description: The manual payment method type for manually recording a payment. Value must match against the list of types defined under your application's Order Settings. Ignored if payment_method_id is provided.
         payment_time:
           type: string
           format: date-time
@@ -3337,8 +3439,7 @@ components:
         payment_amount:
           type: number
           format: double
-          description: The amount to pay. Must not exceed the current balance of the order. Must be greater
-            than 0 if charging with a payment_method_id
+          description: The amount to pay. Must not exceed the current balance of the order. Must be greater than 0 if charging with a payment_method_id
         apply_to_commissions:
           type: boolean
           description: Whether to apply this payment to commissions.
@@ -3367,6 +3468,43 @@ components:
       required:
       - apply_to_commissions
       - payment_amount
+    ListCustomFieldGroupsResponse:
+      type: object
+      properties:
+        groups:
+          type: array
+          items:
+            $ref: '#/components/schemas/CustomFieldGroup'
+    PaymentPlanItem:
+      type: object
+      properties:
+        status:
+          type: string
+          description: 'The status of the payment plan item. Possible values are:
+
+            - `UNPAID_MANUAL` - The item is set for manual charge, and its `amount_due` has not been completely paid.
+
+            - `UNPAID_AUTOCHARGE` - The item is set for auto-charge, and its `amount_due` has not been completely paid.
+
+            - `PAID` - The item has been completely paid.
+
+            - `FAILED` - The item `amount_due` has not been completely paid, and there was a failure. (*Note: This status is deprecated and not currently used.*)
+
+            '
+          enum:
+          - UNPAID_MANUAL
+          - UNPAID_AUTOCHARGE
+          - PAID
+          - FAILED
+        due_date:
+          type: string
+          format: date
+          description: The due date in the application's timezone, as an ISO 8601 calendar date string (date only), in the format YYYY-MM-DD
+          example: '2024-05-21'
+        amount_due:
+          $ref: '#/components/schemas/CurrencyValue'
+        amount_paid:
+          $ref: '#/components/schemas/CurrencyValue'
     ShippingInformation:
       type: object
       properties:
@@ -3397,272 +3535,50 @@ components:
           type: boolean
           description: Whether to invoice to company
           example: false
-    SubscriptionPlan:
+    CustomFieldOption:
       type: object
       properties:
         id:
           type: string
-          description: Subscription plan ID
-          example: 123
-        frequency:
-          type: integer
-          format: int32
-          description: Interval at which a customer receives a product or service as part of a subscription
-            plan.
-          example: 1
-        active:
-          type: boolean
-          description: If the subscription plan is active or not.
-          example: true
-        subscription_plan_name:
-          type: string
-          description: Plan name
-          example: Premium Monthly
-        cycle_type:
-          type: string
-          description: The cycle type of the subscription plan.
-          enum:
-          - YEARLY
-          - MONTHLY
-          - WEEKLY
-          - DAILY
-          example: MONTHLY
-        total_cycles:
-          type: integer
-          format: int32
-          description: Total number of cycles the plan will run before ending. Value of 0 indicates plan
-            will never end.
-          example: 12
-        plan_price:
-          $ref: '#/components/schemas/CurrencyValue'
-          description: Price of the plan
-        display_order_index:
-          type: integer
-          format: int32
-          description: The order index where this plan will be displayed on a page against other plans.
-            Smaller number indicates plan will be displayed higher in the list.
-          example: 1
-    UpdateCustomFieldGroupRequest:
-      type: object
-      properties:
-        name:
-          type: string
-        order:
-          type: integer
-          format: int32
-        tab_id:
-          type: string
-    UpdateCustomFieldMetaDataRequest:
-      type: object
-      properties:
         label:
           type: string
-        options:
-          type: array
-          items:
-            $ref: '#/components/schemas/CustomFieldOption'
-        group_id:
-          type: string
-      required:
-      - group_id
-    UpdateCustomFieldTabRequest:
+    ApplyCommissionRequest:
       type: object
+      description: RestApplyCommissionRequest
       properties:
-        name:
+        affiliate_id:
           type: string
-        order:
-          type: integer
-          format: int32
-    UpdateOrderItemRequest:
-      type: object
-      description: order
-      properties:
-        name:
+          description: The affiliate id
+          example: 123
+        pay_percent:
+          type: number
+          format: double
+          description: Commission percentage
+          example: 10.0
+        commission_amount:
+          type: number
+          format: double
+          description: Fixed commission amount
+          example: 50.0
+        payout_type:
           type: string
-          description: The name of the order item. Must not be whitespace.
-          example: Premium Widget
+          description: The payout type
+          enum:
+          - UPFRONT
+          - PAYMENT_RECEIVED
+          example: UPFRONT
         description:
           type: string
-          description: The description of the order item. Must not be whitespace.
-          example: High-quality widget
-        quantity:
-          type: integer
-          format: int32
-          description: The quantity. Must be greater than or equal to 1.
-          example: 2
-        notes:
-          type: string
-          description: The notes for the order item. Must not be whitespace.
-          example: Gift wrap requested
-        product_id:
-          type: string
-          description: The id of the product. Must be a valid product id. Used only for item_type PRODUCT
-            or SUBSCRIPTION.
-          example: 123
-        subscription_plan_id:
-          type: string
-          description: The id of the subscription plan. Must be a valid subscription plan id. Used only
-            for item_type SUBSCRIPTION.
-          example: 456
-        subscription_plan_description:
-          type: string
-          description: A short description of the subscription's schedule. Used only for item_type SUBSCRIPTION.
-            Must not be whitespace.
-          example: Monthly billing
-        price_per_unit:
-          type: number
-          format: double
-          description: The price per unit.
-          example: 29.99
-        cost_per_unit:
-          type: number
-          format: double
-          description: The cost per unit. Used for item_type PRODUCT or SUBSCRIPTION.
-          example: 15.0
-    UpdateOrderRequest:
-      type: object
-      description: order
-      properties:
-        notes:
-          type: string
-          description: Internal notes
-          example: Rush delivery
-        terms:
-          type: string
-          description: Order terms
-          example: Net 30
-        title:
-          type: string
-          description: A title for the invoice
-          example: Monthly subscription invoice
-        contact_id:
-          type: string
-          description: ID of the contact for this order
-          example: 123
-        order_title:
-          type: string
-          description: Title for the order
-          example: Online Purchase
-        order_time:
-          type: string
-          format: date-time
-          description: The date and time of the order. In ISO-8601 format (e.g. 2024-05-21T23:00:00Z)
-          example: '2024-05-21T14:30:00Z'
-        order_type:
-          type: string
-          description: The order type.
-          enum:
-          - ONLINE
-          - OFFLINE
-          example: ONLINE
-        promo_codes:
-          type: array
-          description: Uses multiple strings as promo codes. The corresponding discount will be applied
-            to the order.
-          example:
-          - SUMMER20
-          items:
-            type: string
-        lead_affiliate_id:
-          type: string
-          description: Lead affiliate ID
-          example: 456
-        sales_affiliate_id:
-          type: string
-          description: Sales affiliate ID
-          example: 789
-        shipping_address:
-          $ref: '#/components/schemas/AddressInformation'
-          description: Shipping address for the order
-        payment_plan:
-          $ref: '#/components/schemas/UpdatedPaymentPlan'
-          description: Payment plan details
-        custom_fields:
-          type: array
-          description: List of custom field values to apply to this order
-          example:
-          - id: '1'
-            content: VIP
-          - id: '2'
-            content: Preferred
-          items:
-            $ref: '#/components/schemas/CustomFieldValue'
-        sent_time:
-          type: string
-          format: date-time
-          description: The date and time the invoice was sent. In ISO-8601 format (e.g. 2024-05-21T23:00:00Z)
-          example: '2024-05-21T14:30:00Z'
-        due_time:
-          type: string
-          format: date-time
-          description: The date and time the invoice is due. In ISO-8601 format (e.g. 2024-05-21T23:00:00Z)
-          example: '2024-06-20T14:30:00Z'
-        invoice_number:
-          type: string
-          description: Invoice number
-          example: 1001
-        external_create_user:
-          type: string
-          description: The external system user that created this order.
-          example: user@example.com
-        external_create_time:
-          type: string
-          format: date-time
-          description: The date and time the order was created in the external system. In ISO-8601 format
-            (e.g. 2024-05-21T23:00:00Z)
-          example: '2024-05-21T14:30:00Z'
-        external_update_time:
-          type: string
-          format: date-time
-          description: The date and time the order was last updated in the external system. In ISO-8601
-            format (e.g. 2024-05-21T23:00:00Z)
-          example: '2024-05-21T14:30:00Z'
-    UpdatedPaymentPlan:
-      type: object
-      properties:
-        auto_charge:
-          type: boolean
-          description: Whether to auto-charge payments
-          example: true
-        max_charge_attempts:
-          type: integer
-          format: int64
-          description: Maximum charge attempts
-          example: 3
-        days_between_retries:
-          type: integer
-          format: int64
-          description: Days between retry attempts
-          example: 7
-        payment_method_id:
-          type: string
-          description: Payment method ID
-          example: 123
-        initial_payment_amount:
-          type: number
-          format: double
-          description: Initial payment amount
-          example: 50.0
-        initial_payment_date:
+          description: Commission description
+          example: Q1 Sales Commission
+        commission_date:
           type: string
           format: date
-          description: ISO date of the initial payment in pay plan
+          description: Date of the commission
           example: '2024-05-21'
-        plan_start_date:
-          type: string
-          format: date
-          description: ISO date of the start of pay plan
-          example: '2024-05-21'
-        number_of_payments:
-          type: integer
-          format: int64
-          description: Number of payments in the plan
-          example: 12
-        days_between_payments:
-          type: integer
-          format: int64
-          description: Days between each payment
-          example: 30
+      required:
+      - affiliate_id
+      - payout_type
   securitySchemes:
     oauth2:
       type: oauth2
@@ -3671,5 +3587,3 @@ components:
           authorizationUrl: https://accounts.infusionsoft.com/app/oauth/authorize
           tokenUrl: https://api.infusionsoft.com/token
           scopes: {}
-security:
-- oauth2: []

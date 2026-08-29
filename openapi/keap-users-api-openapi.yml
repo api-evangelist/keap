@@ -1,8 +1,6 @@
-openapi: 3.1.0
+openapi: 3.2.0
 info:
   title: Keap Users API
-  description: Keap Public API Documentation
-  termsOfService: https://www.thryv.com/terms-of-use
   contact:
     name: Keap
     url: https://developer.keap.com/get-support
@@ -10,12 +8,261 @@ info:
   license:
     name: Apache 2.0
     url: https://www.apache.org/licenses/LICENSE-2.0
-  version: v2
+  termsOfService: https://www.thryv.com/terms-of-use
+  version: '1.0'
+  description: 'Operations tagged Users across 2 of this provider''s published API definitions: keap-v1-openapi.json, keap-v2-openapi.json. Each path carries the servers of the definition it was published in.'
 servers:
 - url: https://api.infusionsoft.com/crm
+security:
+- oauth2: []
 tags:
 - name: Users
+  description: Users-Endpoint
 paths:
+  /rest/v1/users:
+    get:
+      tags:
+      - Users
+      summary: List Users
+      description: Retrieves a list of all users
+      operationId: listUsers
+      parameters:
+      - name: restUserQueryCommand
+        in: query
+        required: true
+        schema:
+          $ref: '#/components/schemas/RestUserQueryCommand'
+      responses:
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ModelAndView'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ModelAndView'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ModelAndView'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ModelAndView'
+        '409':
+          description: Conflict
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ModelAndView'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ModelAndView'
+        '501':
+          description: Not Implemented
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ModelAndView'
+        '405':
+          description: Method Not Allowed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ModelAndView'
+        '406':
+          description: Not Acceptable
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ModelAndView'
+        '412':
+          description: Precondition Failed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ModelAndView'
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Users'
+    post:
+      tags:
+      - Users
+      summary: Create a User
+      description: 'Creates a new user record. NB: Users will be invited to the application and remain in the "Invited" status until the user accepts the invite. "Inactive" users will not take up a user license.'
+      operationId: createUser
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateUser'
+        required: true
+      responses:
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ModelAndView'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ModelAndView'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ModelAndView'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ModelAndView'
+        '409':
+          description: Conflict
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ModelAndView'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ModelAndView'
+        '501':
+          description: Not Implemented
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ModelAndView'
+        '405':
+          description: Method Not Allowed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ModelAndView'
+        '406':
+          description: Not Acceptable
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ModelAndView'
+        '412':
+          description: Precondition Failed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ModelAndView'
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RestUser'
+    servers:
+    - url: https://api.infusionsoft.com/crm
+  /rest/v1/users/{userId}/signature:
+    get:
+      tags:
+      - Users
+      summary: Get User email signature
+      description: Retrieves a HTML snippet that contains the user's email signature.
+      operationId: getUserSignature
+      parameters:
+      - name: userId
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ModelAndView'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ModelAndView'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ModelAndView'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ModelAndView'
+        '409':
+          description: Conflict
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ModelAndView'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ModelAndView'
+        '501':
+          description: Not Implemented
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ModelAndView'
+        '405':
+          description: Method Not Allowed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ModelAndView'
+        '406':
+          description: Not Acceptable
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ModelAndView'
+        '412':
+          description: Precondition Failed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ModelAndView'
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: string
+    servers:
+    - url: https://api.infusionsoft.com/crm
   /rest/v2/users/{user_id}:
     get:
       tags:
@@ -98,8 +345,7 @@ paths:
           type: string
       - name: update_mask
         in: query
-        description: An optional list of properties to be updated. If set, only the provided properties
-          will be updated and others will be skipped.
+        description: An optional list of properties to be updated. If set, only the provided properties will be updated and others will be skipped.
         required: false
         schema:
           type: array
@@ -178,6 +424,8 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/User'
+    servers:
+    - url: https://api.infusionsoft.com/crm
   /rest/v2/users:
     get:
       tags:
@@ -201,8 +449,7 @@ paths:
           - (Set[String]) `user_ids`
 
 
-          You will need to apply the `==` operator to check the equality of one of the filters with your
-          searched
+          You will need to apply the `==` operator to check the equality of one of the filters with your searched
 
           word, in the encoded form `%3D%3D`.
 
@@ -308,6 +555,8 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ListUsersPaginatedResponse'
+    servers:
+    - url: https://api.infusionsoft.com/crm
   /rest/v2/users/{user_id}/signature:
     get:
       tags:
@@ -376,13 +625,14 @@ paths:
             application/json:
               schema:
                 type: string
+    servers:
+    - url: https://api.infusionsoft.com/crm
   /rest/v2/oauth/connect/userinfo:
     get:
       tags:
       - Users
       summary: Retrieve User Info
-      description: Retrieves information for the current authenticated end-user, as outlined by the [OpenID
-        Connect specification](http://openid.net/specs/openid-connect-core-1_0.html#UserInfo).
+      description: Retrieves information for the current authenticated end-user, as outlined by the [OpenID Connect specification](http://openid.net/specs/openid-connect-core-1_0.html#UserInfo).
       operationId: getUserInfo
       responses:
         '401':
@@ -439,229 +689,285 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/GetUserInfoResponse'
+    servers:
+    - url: https://api.infusionsoft.com/crm
 components:
   schemas:
+    DefaultHttpStatusCode:
+      allOf:
+      - $ref: '#/components/schemas/HttpStatusCode'
+    RestUserQueryCommand:
+      type: object
+      properties:
+        limit:
+          type: integer
+          format: int32
+        offset:
+          type: integer
+          format: int32
+        include_inactive:
+          type: boolean
+        include_partners:
+          type: boolean
+        includeInactive:
+          type: boolean
+        includePartners:
+          type: boolean
+    RestUser:
+      type: object
+      properties:
+        address:
+          $ref: '#/components/schemas/Address'
+        website:
+          type: string
+        partner:
+          type: boolean
+        status:
+          type: string
+          enum:
+          - Active
+          - Invited
+          - Inactive
+        company_name:
+          type: string
+        email_address:
+          type: string
+        phone_numbers:
+          type: array
+          items:
+            $ref: '#/components/schemas/PhoneNumber'
+        fax_numbers:
+          type: array
+          items:
+            $ref: '#/components/schemas/FaxNumber'
+        given_name:
+          type: string
+        family_name:
+          type: string
+        middle_name:
+          type: string
+        preferred_name:
+          type: string
+        time_zone:
+          type: string
+        job_title:
+          type: string
+        infusionsoft_id:
+          type: string
+        date_created:
+          type: string
+          format: date-time
+        created_by:
+          type: integer
+          format: int64
+        last_updated:
+          type: string
+          format: date-time
+        last_updated_by:
+          type: integer
+          format: int64
+        global_user_id:
+          type: integer
+          format: int64
+        id:
+          type: integer
+          format: int64
+      required:
+      - id
+    CreateUser:
+      type: object
+      description: user
+      properties:
+        email:
+          type: string
+        partner:
+          type: boolean
+        admin:
+          type: boolean
+        given_name:
+          type: string
+      required:
+      - email
+      - given_name
+    PhoneNumber:
+      type: object
+      properties:
+        number:
+          type: string
+        extension:
+          type: string
+        field:
+          type: string
+          enum:
+          - PHONE1
+          - PHONE2
+          - PHONE3
+          - PHONE4
+          - PHONE5
+        type:
+          type: string
+        number_e164:
+          type: string
+      required:
+      - field
     Address:
       type: object
       properties:
-        country:
-          type: string
-          deprecated: true
-          description: Deprecated. The long-name descriptive version of the Country Code. Please use 'country_code'
-            for POST/PATCH operations. Maximum length is 100 characters.
-          example: United States of America
         line1:
           type: string
-          description: Street address line 1. Maximum length is 75 characters for the BILLING address
-            and 100 characters for the SHIPPING and OTHER addresses.
-          example: 123
         line2:
           type: string
-          description: Street address line 2. Maximum length is 75 characters for the BILLING address
-            and 100 characters for the SHIPPING and OTHER addresses.
-          example: Suite 100
         locality:
           type: string
-          description: The municipality to which the address belongs. Maximum length is 50 characters
-            for the BILLING address and 100 characters for the SHIPPING and OTHER addresses.
-          example: Phoenix
         region:
           type: string
-          deprecated: true
-          description: The long-name descriptive version of the Region Code. Please use 'region_code'
-            for POST/PATCH operations. Maximum length is 50 characters.
-          example: Arizona
-        field:
-          type: string
-          description: Address type field
-          enum:
-          - ADDRESS_FIELD_UNSPECIFIED
-          - BILLING
-          - SHIPPING
-          - OTHER
-          example: BILLING
-        country_code:
-          type: string
-          description: An ISO 3166-2 Country Code (https://en.wikipedia.org/wiki/ISO_3166-1_alpha-3)
-          example: USA
-        postal_code:
-          type: string
-          description: Postal or ZIP code. Maximum length is 15 characters for the BILLING and OTHER addresses
-            and 20 characters for the SHIPPING address.
-          example: 85001
-        region_code:
-          type: string
-          description: An ISO 3166-2 Province Code, such as one of the US States (https://en.wikipedia.org/wiki/ISO_3166-2:US)
-          example: US-AZ
         zip_code:
           type: string
-          description: ZIP code (US). Maximum length is 15 characters for the BILLING and OTHER addresses
-            and 20 characters for the SHIPPING address.
-          example: 85001
         zip_four:
           type: string
-          description: ZIP+4 extension. Maximum length is 10 characters.
-          example: 1234
-    EmailAddress:
+        country_code:
+          type: string
+    View:
       type: object
       properties:
-        email:
+        contentType:
           type: string
-          description: Email address. Maximum length is 75 characters for EMAIL1 and 100 characters for
-            EMAIL2 and EMAIL3.
-          example: john.smith@example.com
-        field:
-          type: string
-          description: Email address slot
-          enum:
-          - EMAIL_FIELD_UNSPECIFIED
-          - EMAIL1
-          - EMAIL2
-          - EMAIL3
-          example: EMAIL1
-        opt_in_reason:
-          type: string
-          description: Reason for opting in
-          example: Subscribed via website form
-        is_opt_in:
-          type: boolean
-        email_opt_status:
-          type: string
-          enum:
-          - UNENGAGED_MARKETABLE
-          - SINGLE_OPT_IN
-          - DOUBLE_OPT_IN
-          - CONFIRMED
-          - UNENGAGED_NON_MARKETABLE
-          - NON_MARKETABLE
-          - LOCKDOWN
-          - BOUNCE
-          - HARD_BOUNCE
-          - MANUAL
-          - ADMIN
-          - SYSTEM
-          - LIST_UNSUBSCRIBE
-          - FEEDBACK
-          - SPAM
-          - INVALID
-          - DEACTIVATED
-    EmailAddressRequest:
+    ModelAndView:
       type: object
       properties:
-        email:
-          type: string
-          description: Email address. Maximum length is 75 characters for EMAIL1 and 100 characters for
-            EMAIL2 and EMAIL3.
-          example: john.smith@example.com
-        field:
-          type: string
-          description: Email address slot
-          enum:
-          - EMAIL_FIELD_UNSPECIFIED
-          - EMAIL1
-          - EMAIL2
-          - EMAIL3
-          example: EMAIL1
-        opt_in_reason:
-          type: string
-          description: Reason for opting in
-          example: Subscribed via website form
-    Error:
-      type: object
-      properties:
-        code:
-          type: integer
-          format: int32
-        message:
-          type: string
+        view:
+          $ref: '#/components/schemas/View'
+        model:
+          type: object
+          additionalProperties: {}
         status:
+          oneOf:
+          - $ref: '#/components/schemas/DefaultHttpStatusCode'
+          - $ref: '#/components/schemas/HttpStatus'
+        modelMap:
+          type: object
+          additionalProperties: {}
+          properties:
+            empty:
+              type: boolean
+        reference:
+          type: boolean
+        empty:
+          type: boolean
+        viewName:
           type: string
-        details:
-          type: array
-          items:
-            $ref: '#/components/schemas/ErrorDetails'
-    ErrorDetails:
-      type: object
-      properties:
-        domain:
-          type: string
-        resource:
-          type: string
+    HttpStatus:
+      allOf:
+      - $ref: '#/components/schemas/HttpStatusCode'
+      enum:
+      - 100 CONTINUE
+      - 101 SWITCHING_PROTOCOLS
+      - 102 PROCESSING
+      - 103 EARLY_HINTS
+      - 200 OK
+      - 201 CREATED
+      - 202 ACCEPTED
+      - 203 NON_AUTHORITATIVE_INFORMATION
+      - 204 NO_CONTENT
+      - 205 RESET_CONTENT
+      - 206 PARTIAL_CONTENT
+      - 207 MULTI_STATUS
+      - 208 ALREADY_REPORTED
+      - 226 IM_USED
+      - 300 MULTIPLE_CHOICES
+      - 301 MOVED_PERMANENTLY
+      - 302 FOUND
+      - 303 SEE_OTHER
+      - 304 NOT_MODIFIED
+      - 307 TEMPORARY_REDIRECT
+      - 308 PERMANENT_REDIRECT
+      - 400 BAD_REQUEST
+      - 401 UNAUTHORIZED
+      - 402 PAYMENT_REQUIRED
+      - 403 FORBIDDEN
+      - 404 NOT_FOUND
+      - 405 METHOD_NOT_ALLOWED
+      - 406 NOT_ACCEPTABLE
+      - 407 PROXY_AUTHENTICATION_REQUIRED
+      - 408 REQUEST_TIMEOUT
+      - 409 CONFLICT
+      - 410 GONE
+      - 411 LENGTH_REQUIRED
+      - 412 PRECONDITION_FAILED
+      - 413 CONTENT_TOO_LARGE
+      - 413 PAYLOAD_TOO_LARGE
+      - 414 URI_TOO_LONG
+      - 415 UNSUPPORTED_MEDIA_TYPE
+      - 416 REQUESTED_RANGE_NOT_SATISFIABLE
+      - 417 EXPECTATION_FAILED
+      - 418 I_AM_A_TEAPOT
+      - 421 MISDIRECTED_REQUEST
+      - 422 UNPROCESSABLE_CONTENT
+      - 422 UNPROCESSABLE_ENTITY
+      - 423 LOCKED
+      - 424 FAILED_DEPENDENCY
+      - 425 TOO_EARLY
+      - 426 UPGRADE_REQUIRED
+      - 428 PRECONDITION_REQUIRED
+      - 429 TOO_MANY_REQUESTS
+      - 431 REQUEST_HEADER_FIELDS_TOO_LARGE
+      - 451 UNAVAILABLE_FOR_LEGAL_REASONS
+      - 500 INTERNAL_SERVER_ERROR
+      - 501 NOT_IMPLEMENTED
+      - 502 BAD_GATEWAY
+      - 503 SERVICE_UNAVAILABLE
+      - 504 GATEWAY_TIMEOUT
+      - 505 HTTP_VERSION_NOT_SUPPORTED
+      - 506 VARIANT_ALSO_NEGOTIATES
+      - 507 INSUFFICIENT_STORAGE
+      - 508 LOOP_DETECTED
+      - 509 BANDWIDTH_LIMIT_EXCEEDED
+      - 510 NOT_EXTENDED
+      - 511 NETWORK_AUTHENTICATION_REQUIRED
     FaxNumber:
       type: object
       properties:
         number:
           type: string
-          description: Fax number
-          example: 5551234568
-        type:
-          type: string
-          description: Fax type
-          example: Work
         field:
           type: string
-          description: Fax number slot
           enum:
-          - FAX_NUMBER_FIELD_UNSPECIFIED
           - FAX1
           - FAX2
-          example: FAX1
-    GetUserInfoResponse:
+        type:
+          type: string
+      required:
+      - field
+    HttpStatusCode:
       type: object
-      description: User information response
       properties:
-        email:
-          type: string
-          description: The user's email address
-          example: john.smith@example.com
-        sub:
-          type: string
-          description: The subject identifier
-          example: 12345
-        id:
-          type: string
-          description: The global user identifier
-          example: 123456
-        keap_id:
-          type: string
-          description: The keap user identifier
-          example: john.smith@example.com
-        family_name:
-          type: string
-          description: The user's last name
-          example: Smith
-        given_name:
-          type: string
-          description: The user's first name
-          example: John
-        middle_name:
-          type: string
-          description: The user's middle name
-          example: Robert
-        preferred_name:
-          type: string
-          description: The user's preferred name
-          example: Johnny
-        is_admin:
+        error:
           type: boolean
-          description: Whether the user is an admin
-          example: true
-        tenant_id:
-          type: string
-          description: The tenant ID the user belongs to
-          example: xyz789
-    ListUsersPaginatedResponse:
+        is1xxInformational:
+          type: boolean
+        is2xxSuccessful:
+          type: boolean
+        is3xxRedirection:
+          type: boolean
+        is4xxClientError:
+          type: boolean
+        is5xxServerError:
+          type: boolean
+    Users:
       type: object
-      description: Paginated response containing a list of users
       properties:
         users:
           type: array
-          description: List of users
           items:
-            $ref: '#/components/schemas/User'
-        next_page_token:
+            $ref: '#/components/schemas/RestUser'
+        count:
+          type: integer
+          format: int32
+        next:
           type: string
-    PhoneNumber:
+        previous:
+          type: string
+    PhoneNumber_2:
       type: object
       properties:
         extension:
@@ -670,8 +976,7 @@ components:
           example: 101
         number:
           type: string
-          description: Phone number. Maximum length is 40 characters for PHONE1-PHONE3 and 20 characters
-            for PHONE4-PHONE5.
+          description: Phone number. Maximum length is 40 characters for PHONE1-PHONE3 and 20 characters for PHONE4-PHONE5.
           example: 5551234567
         type:
           type: string
@@ -692,78 +997,73 @@ components:
           type: string
           description: Phone number in E.164 format
           example: '+15551234567'
-    SocialAccount:
+    ErrorDetails:
       type: object
       properties:
-        name:
+        domain:
           type: string
-          description: Social account username or handle. Maximum length is 255 characters.
-          example: '@thryv'
-        type:
+        resource:
           type: string
-          description: Social account type
+    Address_2:
+      type: object
+      properties:
+        country:
+          type: string
+          deprecated: true
+          description: Deprecated. The long-name descriptive version of the Country Code. Please use 'country_code' for POST/PATCH operations. Maximum length is 100 characters.
+          example: United States of America
+        line1:
+          type: string
+          description: Street address line 1. Maximum length is 75 characters for the BILLING address and 100 characters for the SHIPPING and OTHER addresses.
+          example: 123
+        line2:
+          type: string
+          description: Street address line 2. Maximum length is 75 characters for the BILLING address and 100 characters for the SHIPPING and OTHER addresses.
+          example: Suite 100
+        locality:
+          type: string
+          description: The municipality to which the address belongs. Maximum length is 50 characters for the BILLING address and 100 characters for the SHIPPING and OTHER addresses.
+          example: Phoenix
+        region:
+          type: string
+          deprecated: true
+          description: The long-name descriptive version of the Region Code. Please use 'region_code' for POST/PATCH operations. Maximum length is 50 characters.
+          example: Arizona
+        field:
+          type: string
+          description: Address type field
           enum:
-          - SOCIAL_ACCOUNT_TYPE_UNSPECIFIED
-          - FACEBOOK
-          - LINKED_IN
-          - TWITTER
-          - INSTAGRAM
-          - SNAPCHAT
-          - YOUTUBE
-          - PINTEREST
-          example: FACEBOOK
-      required:
-      - type
-    UpdateUserRequest:
-      type: object
-      description: user
-      properties:
-        address:
-          $ref: '#/components/schemas/Address'
-          description: The user's address
-        title:
+          - ADDRESS_FIELD_UNSPECIFIED
+          - BILLING
+          - SHIPPING
+          - OTHER
+          example: BILLING
+        country_code:
           type: string
-          description: The user's job title
-          example: Sales Manager
-        website:
+          description: An ISO 3166-2 Country Code (https://en.wikipedia.org/wiki/ISO_3166-1_alpha-3)
+          example: USA
+        postal_code:
           type: string
-          description: The user's website URL
-          example: https://example.com
-        company_name:
+          description: Postal or ZIP code. Maximum length is 15 characters for the BILLING and OTHER addresses and 20 characters for the SHIPPING address.
+          example: 85001
+        region_code:
           type: string
-          description: The user's company name
-          example: Acme Corp
-        email_address:
-          $ref: '#/components/schemas/EmailAddressRequest'
-          description: The user's email address
-        family_name:
+          description: An ISO 3166-2 Province Code, such as one of the US States (https://en.wikipedia.org/wiki/ISO_3166-2:US)
+          example: US-AZ
+        zip_code:
           type: string
-          description: The user's last name
-          example: Smith
-        fax_numbers:
-          type: array
-          description: List of user's fax numbers
-          items:
-            $ref: '#/components/schemas/FaxNumber'
-        given_name:
+          description: ZIP code (US). Maximum length is 15 characters for the BILLING and OTHER addresses and 20 characters for the SHIPPING address.
+          example: 85001
+        zip_four:
           type: string
-          description: The user's first name
-          example: John
-        phone_numbers:
-          type: array
-          description: List of user's phone numbers
-          items:
-            $ref: '#/components/schemas/PhoneNumber'
-        time_zone:
-          type: string
-          description: The user's timezone in IANA format
-          example: America/New_York
+          description: ZIP+4 extension. Maximum length is 10 characters.
+          example: 1234
     User:
       type: object
       description: A user in the system
       properties:
         address:
-          $ref: '#/components/schemas/Address'
+          $ref: '#/components/schemas/Address_2'
           description: The user's address
         title:
           type: string
@@ -830,12 +1130,12 @@ components:
           type: array
           description: List of user's phone numbers
           items:
-            $ref: '#/components/schemas/PhoneNumber'
+            $ref: '#/components/schemas/PhoneNumber_2'
         fax_numbers:
           type: array
           description: List of user's fax numbers
           items:
-            $ref: '#/components/schemas/FaxNumber'
+            $ref: '#/components/schemas/FaxNumber_2'
         email_addresses:
           type: array
           description: List of user's email addresses
@@ -870,6 +1170,222 @@ components:
           format: date-time
           description: When the user was last updated, in ISO-8601 format
           example: '2024-05-21T15:00:00Z'
+    Error:
+      type: object
+      properties:
+        code:
+          type: integer
+          format: int32
+        message:
+          type: string
+        status:
+          type: string
+        details:
+          type: array
+          items:
+            $ref: '#/components/schemas/ErrorDetails'
+    ListUsersPaginatedResponse:
+      type: object
+      description: Paginated response containing a list of users
+      properties:
+        users:
+          type: array
+          description: List of users
+          items:
+            $ref: '#/components/schemas/User'
+        next_page_token:
+          type: string
+    UpdateUserRequest:
+      type: object
+      description: user
+      properties:
+        address:
+          $ref: '#/components/schemas/Address_2'
+          description: The user's address
+        title:
+          type: string
+          description: The user's job title
+          example: Sales Manager
+        website:
+          type: string
+          description: The user's website URL
+          example: https://example.com
+        company_name:
+          type: string
+          description: The user's company name
+          example: Acme Corp
+        email_address:
+          $ref: '#/components/schemas/EmailAddressRequest'
+          description: The user's email address
+        family_name:
+          type: string
+          description: The user's last name
+          example: Smith
+        fax_numbers:
+          type: array
+          description: List of user's fax numbers
+          items:
+            $ref: '#/components/schemas/FaxNumber_2'
+        given_name:
+          type: string
+          description: The user's first name
+          example: John
+        phone_numbers:
+          type: array
+          description: List of user's phone numbers
+          items:
+            $ref: '#/components/schemas/PhoneNumber_2'
+        time_zone:
+          type: string
+          description: The user's timezone in IANA format
+          example: America/New_York
+    EmailAddressRequest:
+      type: object
+      properties:
+        email:
+          type: string
+          description: Email address. Maximum length is 75 characters for EMAIL1 and 100 characters for EMAIL2 and EMAIL3.
+          example: john.smith@example.com
+        field:
+          type: string
+          description: Email address slot
+          enum:
+          - EMAIL_FIELD_UNSPECIFIED
+          - EMAIL1
+          - EMAIL2
+          - EMAIL3
+          example: EMAIL1
+        opt_in_reason:
+          type: string
+          description: Reason for opting in
+          example: Subscribed via website form
+    GetUserInfoResponse:
+      type: object
+      description: User information response
+      properties:
+        email:
+          type: string
+          description: The user's email address
+          example: john.smith@example.com
+        sub:
+          type: string
+          description: The subject identifier
+          example: 12345
+        id:
+          type: string
+          description: The global user identifier
+          example: 123456
+        keap_id:
+          type: string
+          description: The keap user identifier
+          example: john.smith@example.com
+        family_name:
+          type: string
+          description: The user's last name
+          example: Smith
+        given_name:
+          type: string
+          description: The user's first name
+          example: John
+        middle_name:
+          type: string
+          description: The user's middle name
+          example: Robert
+        preferred_name:
+          type: string
+          description: The user's preferred name
+          example: Johnny
+        is_admin:
+          type: boolean
+          description: Whether the user is an admin
+          example: true
+        tenant_id:
+          type: string
+          description: The tenant ID the user belongs to
+          example: xyz789
+    FaxNumber_2:
+      type: object
+      properties:
+        number:
+          type: string
+          description: Fax number
+          example: 5551234568
+        type:
+          type: string
+          description: Fax type
+          example: Work
+        field:
+          type: string
+          description: Fax number slot
+          enum:
+          - FAX_NUMBER_FIELD_UNSPECIFIED
+          - FAX1
+          - FAX2
+          example: FAX1
+    EmailAddress:
+      type: object
+      properties:
+        email:
+          type: string
+          description: Email address. Maximum length is 75 characters for EMAIL1 and 100 characters for EMAIL2 and EMAIL3.
+          example: john.smith@example.com
+        field:
+          type: string
+          description: Email address slot
+          enum:
+          - EMAIL_FIELD_UNSPECIFIED
+          - EMAIL1
+          - EMAIL2
+          - EMAIL3
+          example: EMAIL1
+        opt_in_reason:
+          type: string
+          description: Reason for opting in
+          example: Subscribed via website form
+        is_opt_in:
+          type: boolean
+        email_opt_status:
+          type: string
+          enum:
+          - UNENGAGED_MARKETABLE
+          - SINGLE_OPT_IN
+          - DOUBLE_OPT_IN
+          - CONFIRMED
+          - UNENGAGED_NON_MARKETABLE
+          - NON_MARKETABLE
+          - LOCKDOWN
+          - BOUNCE
+          - HARD_BOUNCE
+          - MANUAL
+          - ADMIN
+          - SYSTEM
+          - LIST_UNSUBSCRIBE
+          - FEEDBACK
+          - SPAM
+          - INVALID
+          - DEACTIVATED
+    SocialAccount:
+      type: object
+      properties:
+        name:
+          type: string
+          description: Social account username or handle. Maximum length is 255 characters.
+          example: '@thryv'
+        type:
+          type: string
+          description: Social account type
+          enum:
+          - SOCIAL_ACCOUNT_TYPE_UNSPECIFIED
+          - FACEBOOK
+          - LINKED_IN
+          - TWITTER
+          - INSTAGRAM
+          - SNAPCHAT
+          - YOUTUBE
+          - PINTEREST
+          example: FACEBOOK
+      required:
+      - type
   securitySchemes:
     oauth2:
       type: oauth2
@@ -878,5 +1394,6 @@ components:
           authorizationUrl: https://accounts.infusionsoft.com/app/oauth/authorize
           tokenUrl: https://api.infusionsoft.com/token
           scopes: {}
-security:
-- oauth2: []
+x-refined-from:
+- keap-v1-openapi.json
+- keap-v2-openapi.json

@@ -1,8 +1,6 @@
-openapi: 3.1.0
+openapi: 3.2.0
 info:
   title: Keap Tags API
-  description: Keap Public API Documentation
-  termsOfService: https://www.thryv.com/terms-of-use
   contact:
     name: Keap
     url: https://developer.keap.com/get-support
@@ -10,12 +8,784 @@ info:
   license:
     name: Apache 2.0
     url: https://www.apache.org/licenses/LICENSE-2.0
-  version: v2
+  termsOfService: https://www.thryv.com/terms-of-use
+  version: '1.0'
+  description: 'Operations tagged Tags across 2 of this provider''s published API definitions: keap-v1-openapi.json, keap-v2-openapi.json. Each path carries the servers of the definition it was published in.'
 servers:
 - url: https://api.infusionsoft.com/crm
+security:
+- oauth2: []
 tags:
 - name: Tags
+  description: Tag-Company-Endpoint
 paths:
+  /rest/v1/tags/{tagId}/contacts:
+    get:
+      tags:
+      - Tags
+      summary: List Tagged Contacts
+      description: Retrieves a list of contacts that have the given tag applied
+      operationId: listContactsForTagId
+      parameters:
+      - name: tagId
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      - name: queryCommand
+        in: query
+        required: true
+        schema:
+          $ref: '#/components/schemas/RestQueryCommand'
+      responses:
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ModelAndView'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ModelAndView'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ModelAndView'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ModelAndView'
+        '409':
+          description: Conflict
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ModelAndView'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ModelAndView'
+        '501':
+          description: Not Implemented
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ModelAndView'
+        '405':
+          description: Method Not Allowed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ModelAndView'
+        '406':
+          description: Not Acceptable
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ModelAndView'
+        '412':
+          description: Precondition Failed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ModelAndView'
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TaggedContactList'
+    post:
+      tags:
+      - Tags
+      summary: Apply Tag to Contacts
+      description: Apply a tag to a list of contacts
+      operationId: applyTagToContactIds
+      parameters:
+      - name: tagId
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SetOfIds'
+        required: true
+      responses:
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ModelAndView'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ModelAndView'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ModelAndView'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ModelAndView'
+        '409':
+          description: Conflict
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ModelAndView'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ModelAndView'
+        '501':
+          description: Not Implemented
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ModelAndView'
+        '405':
+          description: Method Not Allowed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ModelAndView'
+        '406':
+          description: Not Acceptable
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ModelAndView'
+        '412':
+          description: Precondition Failed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ModelAndView'
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties:
+                  type: string
+                  enum:
+                  - SUCCESS
+                  - DUPLICATE
+                  - CONTACT_NOT_FOUND
+                  - TAG_ID_NOT_FOUND
+                  - FAILURE
+                  - NO_PERMISSION
+    delete:
+      tags:
+      - Tags
+      summary: Remove Tag from Contacts
+      description: Remove a tag from a list of contacts
+      operationId: removeTagFromContactIds
+      parameters:
+      - name: tagId
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      - name: ids
+        in: query
+        required: true
+        schema:
+          type: array
+          items:
+            type: integer
+            format: int64
+          uniqueItems: true
+      responses:
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ModelAndView'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ModelAndView'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ModelAndView'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ModelAndView'
+        '409':
+          description: Conflict
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ModelAndView'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ModelAndView'
+        '501':
+          description: Not Implemented
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ModelAndView'
+        '405':
+          description: Method Not Allowed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ModelAndView'
+        '406':
+          description: Not Acceptable
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ModelAndView'
+        '412':
+          description: Precondition Failed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ModelAndView'
+        '204':
+          description: No Content
+    servers:
+    - url: https://api.infusionsoft.com/crm
+  /rest/v1/tags/categories:
+    post:
+      tags:
+      - Tags
+      summary: Create Tag Category
+      description: Create a new tag category
+      operationId: createTagCategory
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateTagCategory'
+        required: true
+      responses:
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ModelAndView'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ModelAndView'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ModelAndView'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ModelAndView'
+        '409':
+          description: Conflict
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ModelAndView'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ModelAndView'
+        '501':
+          description: Not Implemented
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ModelAndView'
+        '405':
+          description: Method Not Allowed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ModelAndView'
+        '406':
+          description: Not Acceptable
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ModelAndView'
+        '412':
+          description: Precondition Failed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ModelAndView'
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TagCategory'
+    servers:
+    - url: https://api.infusionsoft.com/crm
+  /rest/v1/tags:
+    get:
+      tags:
+      - Tags
+      summary: List Tags
+      description: Retrieve a list of tags defined in the application
+      operationId: listTags
+      parameters:
+      - name: restTagQueryCommand
+        in: query
+        required: true
+        schema:
+          $ref: '#/components/schemas/RestTagQueryCommand'
+      responses:
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ModelAndView'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ModelAndView'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ModelAndView'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ModelAndView'
+        '409':
+          description: Conflict
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ModelAndView'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ModelAndView'
+        '501':
+          description: Not Implemented
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ModelAndView'
+        '405':
+          description: Method Not Allowed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ModelAndView'
+        '406':
+          description: Not Acceptable
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ModelAndView'
+        '412':
+          description: Precondition Failed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ModelAndView'
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Tags'
+    post:
+      tags:
+      - Tags
+      summary: Create Tag
+      description: Create a new tag
+      operationId: createTag
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateTag'
+        required: true
+      responses:
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ModelAndView'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ModelAndView'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ModelAndView'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ModelAndView'
+        '409':
+          description: Conflict
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ModelAndView'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ModelAndView'
+        '501':
+          description: Not Implemented
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ModelAndView'
+        '405':
+          description: Method Not Allowed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ModelAndView'
+        '406':
+          description: Not Acceptable
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ModelAndView'
+        '412':
+          description: Precondition Failed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ModelAndView'
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Tag'
+    servers:
+    - url: https://api.infusionsoft.com/crm
+  /rest/v1/tags/{tagId}/companies:
+    get:
+      tags:
+      - Tags
+      summary: List Tagged Companies
+      description: Retrieves a list of companies that have the given tag applied
+      operationId: listCompaniesForTagId
+      parameters:
+      - name: tagId
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      - name: queryCommand
+        in: query
+        required: true
+        schema:
+          $ref: '#/components/schemas/RestQueryCommand'
+      responses:
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ModelAndView'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ModelAndView'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ModelAndView'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ModelAndView'
+        '409':
+          description: Conflict
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ModelAndView'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ModelAndView'
+        '501':
+          description: Not Implemented
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ModelAndView'
+        '405':
+          description: Method Not Allowed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ModelAndView'
+        '406':
+          description: Not Acceptable
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ModelAndView'
+        '412':
+          description: Precondition Failed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ModelAndView'
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TaggedCompanyList'
+    servers:
+    - url: https://api.infusionsoft.com/crm
+  /rest/v1/tags/{id}:
+    get:
+      tags:
+      - Tags
+      summary: Retrieve a Tag
+      description: Retrieves a single tag
+      operationId: getTag
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ModelAndView'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ModelAndView'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ModelAndView'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ModelAndView'
+        '409':
+          description: Conflict
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ModelAndView'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ModelAndView'
+        '501':
+          description: Not Implemented
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ModelAndView'
+        '405':
+          description: Method Not Allowed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ModelAndView'
+        '406':
+          description: Not Acceptable
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ModelAndView'
+        '412':
+          description: Precondition Failed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ModelAndView'
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Tag'
+    servers:
+    - url: https://api.infusionsoft.com/crm
+  /rest/v1/tags/{tagId}/contacts/{contactId}:
+    delete:
+      tags:
+      - Tags
+      summary: Remove Tag from Contact
+      description: Remove a tag from a Contact
+      operationId: removeTagFromContactId
+      parameters:
+      - name: tagId
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      - name: contactId
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ModelAndView'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ModelAndView'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ModelAndView'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ModelAndView'
+        '409':
+          description: Conflict
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ModelAndView'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ModelAndView'
+        '501':
+          description: Not Implemented
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ModelAndView'
+        '405':
+          description: Method Not Allowed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ModelAndView'
+        '406':
+          description: Not Acceptable
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ModelAndView'
+        '412':
+          description: Precondition Failed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ModelAndView'
+        '204':
+          description: No Content
+    servers:
+    - url: https://api.infusionsoft.com/crm
   /rest/v2/tags:
     get:
       tags:
@@ -48,11 +818,9 @@ paths:
           - (String) `until_update_time`
 
 
-          You will need to apply the `==` operator to check the equality of one of the filters with your
-          searched
+          You will need to apply the `==` operator to check the equality of one of the filters with your searched
 
-          word, in the encoded form `%3D%3D`. If NONE is passed in for `category_id` or `description`,
-          it will check
+          word, in the encoded form `%3D%3D`. If NONE is passed in for `category_id` or `description`, it will check
 
           for the non-existence of that field. For the filters listed above, here are some examples:
 
@@ -228,7 +996,9 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Tag'
+                $ref: '#/components/schemas/Tag_2'
+    servers:
+    - url: https://api.infusionsoft.com/crm
   /rest/v2/tags/{tag_id}/contacts:removeTags:
     post:
       tags:
@@ -299,6 +1069,8 @@ paths:
                 $ref: '#/components/schemas/Error'
         '204':
           description: No Content
+    servers:
+    - url: https://api.infusionsoft.com/crm
   /rest/v2/tags/{tag_id}/contacts:applyTags:
     post:
       tags:
@@ -373,6 +1145,8 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ApplyTagsResponse'
+    servers:
+    - url: https://api.infusionsoft.com/crm
   /rest/v2/tags/categories:
     get:
       tags:
@@ -400,11 +1174,9 @@ paths:
           - (String) `until_update_time`
 
 
-          You will need to apply the `==` operator to check the equality of one of the filters with your
-          searched
+          You will need to apply the `==` operator to check the equality of one of the filters with your searched
 
-          word, in the encoded form `%3D%3D`. If NONE is passed in for `name` or `description`, it will
-          check for the
+          word, in the encoded form `%3D%3D`. If NONE is passed in for `name` or `description`, it will check for the
 
           non-existence of that field. For the filters listed above, here are some examples:
 
@@ -574,7 +1346,9 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/TagCategory'
+                $ref: '#/components/schemas/TagCategory_2'
+    servers:
+    - url: https://api.infusionsoft.com/crm
   /rest/v2/tags/{tag_id}:
     get:
       tags:
@@ -642,7 +1416,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Tag'
+                $ref: '#/components/schemas/Tag_2'
     delete:
       tags:
       - Tags
@@ -720,8 +1494,7 @@ paths:
           type: string
       - name: update_mask
         in: query
-        description: An optional list of properties to be updated. If set, only the provided properties
-          will be updated and others will be skipped.
+        description: An optional list of properties to be updated. If set, only the provided properties will be updated and others will be skipped.
         required: false
         schema:
           type: array
@@ -793,6 +1566,8 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/UpdateTagResponse'
+    servers:
+    - url: https://api.infusionsoft.com/crm
   /rest/v2/tags/categories/{tag_category_id}:
     get:
       tags:
@@ -938,8 +1713,7 @@ paths:
           type: string
       - name: update_mask
         in: query
-        description: An optional list of properties to be updated. If set, only the provided properties
-          will be updated and others will be skipped.
+        description: An optional list of properties to be updated. If set, only the provided properties will be updated and others will be skipped.
         required: false
         schema:
           type: array
@@ -1010,6 +1784,8 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/UpdateTagCategoryResponse'
+    servers:
+    - url: https://api.infusionsoft.com/crm
   /rest/v2/tags/{tag_id}/contacts:
     get:
       tags:
@@ -1040,14 +1816,11 @@ paths:
           - (String) `until_applied_time`
 
 
-          You will need to apply the `==` operator to check the equality of one of the filters with your
-          searched
+          You will need to apply the `==` operator to check the equality of one of the filters with your searched
 
-          word, in the encoded form `%3D%3D`. If NONE is passed in for `email`, `given_name`, or `family_name`,
-          it
+          word, in the encoded form `%3D%3D`. If NONE is passed in for `email`, `given_name`, or `family_name`, it
 
-          will check for the non-existence of that field. For the filters listed above, here are some
-          examples:
+          will check for the non-existence of that field. For the filters listed above, here are some examples:
 
           - `filter=given_name%3D%3DJohn`
 
@@ -1155,6 +1928,8 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ListTaggedContactsResponse'
+    servers:
+    - url: https://api.infusionsoft.com/crm
   /rest/v2/tags/{tag_id}/companies:
     get:
       tags:
@@ -1183,13 +1958,11 @@ paths:
           - (String) `until_applied_time`
 
 
-          You will need to apply the `==` operator to check the equality of one of the filters with your
-          searched
+          You will need to apply the `==` operator to check the equality of one of the filters with your searched
 
           word, in the encoded form `%3D%3D`. If NONE is passed in for `email`, it
 
-          will check for the non-existence of that field. For the filters listed above, here are some
-          examples:
+          will check for the non-existence of that field. For the filters listed above, here are some examples:
 
           - `filter=company_name%3D%3DCompany`
 
@@ -1293,37 +2066,515 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ListTaggedCompaniesResponse'
+    servers:
+    - url: https://api.infusionsoft.com/crm
 components:
   schemas:
+    TaggedContact:
+      type: object
+      properties:
+        contact:
+          $ref: '#/components/schemas/BasicContact'
+        date_applied:
+          type: string
+          format: date-time
+    DefaultHttpStatusCode:
+      allOf:
+      - $ref: '#/components/schemas/HttpStatusCode'
+    BasicContact:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        email:
+          type: string
+        first_name:
+          type: string
+        last_name:
+          type: string
+    CreateTagCategory:
+      type: object
+      properties:
+        name:
+          type: string
+          description: The category name
+        description:
+          type: string
+          description: The category description
+      required:
+      - name
+    TaggedCompanyList:
+      type: object
+      properties:
+        companies:
+          type: array
+          items:
+            $ref: '#/components/schemas/TaggedCompany'
+        count:
+          type: integer
+          format: int32
+        next:
+          type: string
+        previous:
+          type: string
+    CategoryReference:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          description: The id for the tag category
+      required:
+      - id
+    HttpStatus:
+      allOf:
+      - $ref: '#/components/schemas/HttpStatusCode'
+      enum:
+      - 100 CONTINUE
+      - 101 SWITCHING_PROTOCOLS
+      - 102 PROCESSING
+      - 103 EARLY_HINTS
+      - 200 OK
+      - 201 CREATED
+      - 202 ACCEPTED
+      - 203 NON_AUTHORITATIVE_INFORMATION
+      - 204 NO_CONTENT
+      - 205 RESET_CONTENT
+      - 206 PARTIAL_CONTENT
+      - 207 MULTI_STATUS
+      - 208 ALREADY_REPORTED
+      - 226 IM_USED
+      - 300 MULTIPLE_CHOICES
+      - 301 MOVED_PERMANENTLY
+      - 302 FOUND
+      - 303 SEE_OTHER
+      - 304 NOT_MODIFIED
+      - 307 TEMPORARY_REDIRECT
+      - 308 PERMANENT_REDIRECT
+      - 400 BAD_REQUEST
+      - 401 UNAUTHORIZED
+      - 402 PAYMENT_REQUIRED
+      - 403 FORBIDDEN
+      - 404 NOT_FOUND
+      - 405 METHOD_NOT_ALLOWED
+      - 406 NOT_ACCEPTABLE
+      - 407 PROXY_AUTHENTICATION_REQUIRED
+      - 408 REQUEST_TIMEOUT
+      - 409 CONFLICT
+      - 410 GONE
+      - 411 LENGTH_REQUIRED
+      - 412 PRECONDITION_FAILED
+      - 413 CONTENT_TOO_LARGE
+      - 413 PAYLOAD_TOO_LARGE
+      - 414 URI_TOO_LONG
+      - 415 UNSUPPORTED_MEDIA_TYPE
+      - 416 REQUESTED_RANGE_NOT_SATISFIABLE
+      - 417 EXPECTATION_FAILED
+      - 418 I_AM_A_TEAPOT
+      - 421 MISDIRECTED_REQUEST
+      - 422 UNPROCESSABLE_CONTENT
+      - 422 UNPROCESSABLE_ENTITY
+      - 423 LOCKED
+      - 424 FAILED_DEPENDENCY
+      - 425 TOO_EARLY
+      - 426 UPGRADE_REQUIRED
+      - 428 PRECONDITION_REQUIRED
+      - 429 TOO_MANY_REQUESTS
+      - 431 REQUEST_HEADER_FIELDS_TOO_LARGE
+      - 451 UNAVAILABLE_FOR_LEGAL_REASONS
+      - 500 INTERNAL_SERVER_ERROR
+      - 501 NOT_IMPLEMENTED
+      - 502 BAD_GATEWAY
+      - 503 SERVICE_UNAVAILABLE
+      - 504 GATEWAY_TIMEOUT
+      - 505 HTTP_VERSION_NOT_SUPPORTED
+      - 506 VARIANT_ALSO_NEGOTIATES
+      - 507 INSUFFICIENT_STORAGE
+      - 508 LOOP_DETECTED
+      - 509 BANDWIDTH_LIMIT_EXCEEDED
+      - 510 NOT_EXTENDED
+      - 511 NETWORK_AUTHENTICATION_REQUIRED
+    HttpStatusCode:
+      type: object
+      properties:
+        error:
+          type: boolean
+        is1xxInformational:
+          type: boolean
+        is2xxSuccessful:
+          type: boolean
+        is3xxRedirection:
+          type: boolean
+        is4xxClientError:
+          type: boolean
+        is5xxServerError:
+          type: boolean
+    RestQueryCommand:
+      type: object
+      properties:
+        limit:
+          type: integer
+          format: int32
+        offset:
+          type: integer
+          format: int32
+    Tag:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          description: The id for the tag
+        name:
+          type: string
+          description: The tag name
+        description:
+          type: string
+          description: The tag description
+        category:
+          $ref: '#/components/schemas/TagCategory'
+          description: The tag category reference
+      required:
+      - id
+      - name
+    RestTagQueryCommand:
+      type: object
+      properties:
+        limit:
+          type: integer
+          format: int32
+        offset:
+          type: integer
+          format: int32
+        category:
+          type: integer
+          format: int64
+        name:
+          type: string
+    TaggedContactList:
+      type: object
+      properties:
+        contacts:
+          type: array
+          items:
+            $ref: '#/components/schemas/TaggedContact'
+        count:
+          type: integer
+          format: int32
+        next:
+          type: string
+        previous:
+          type: string
+    SetOfIds:
+      type: object
+      properties:
+        ids:
+          type: array
+          items:
+            type: integer
+            format: int64
+          properties:
+            empty:
+              type: boolean
+          uniqueItems: true
+      required:
+      - ids
+    BasicCompany:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        email:
+          type: string
+        company_name:
+          type: string
+    View:
+      type: object
+      properties:
+        contentType:
+          type: string
+    ModelAndView:
+      type: object
+      properties:
+        view:
+          $ref: '#/components/schemas/View'
+        model:
+          type: object
+          additionalProperties: {}
+        status:
+          oneOf:
+          - $ref: '#/components/schemas/DefaultHttpStatusCode'
+          - $ref: '#/components/schemas/HttpStatus'
+        modelMap:
+          type: object
+          additionalProperties: {}
+          properties:
+            empty:
+              type: boolean
+        reference:
+          type: boolean
+        empty:
+          type: boolean
+        viewName:
+          type: string
+    Tags:
+      type: object
+      properties:
+        tags:
+          type: array
+          items:
+            $ref: '#/components/schemas/Tag'
+        count:
+          type: integer
+          format: int32
+        next:
+          type: string
+        previous:
+          type: string
+    TaggedCompany:
+      type: object
+      properties:
+        company:
+          $ref: '#/components/schemas/BasicCompany'
+        date_applied:
+          type: string
+          format: date-time
+    CreateTag:
+      type: object
+      properties:
+        name:
+          type: string
+          description: The tag name
+        description:
+          type: string
+          description: The tag description
+        category:
+          $ref: '#/components/schemas/CategoryReference'
+          description: The tag category reference
+      required:
+      - name
+    TagCategory:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          description: The id for the tag category
+        name:
+          type: string
+          description: The category name
+        description:
+          type: string
+          description: The category description
+      required:
+      - id
+      - name
+    TaggedContact_2:
+      type: object
+      properties:
+        id:
+          type: string
+        email:
+          type: string
+        given_name:
+          type: string
+        family_name:
+          type: string
+        applied_time:
+          type: string
+          format: date-time
+          description: The time the tag was applied to the contact, in ISO 8601 format.
+          example: '2023-10-01T12:00:00Z'
+    CreateUpdateTagRequest:
+      type: object
+      description: tag
+      properties:
+        name:
+          type: string
+          description: Name of the tag, up to 255 characters will be saved
+          example: VIP Customer
+        description:
+          type: string
+          description: Description of the tag
+          example: High-value customers
+        category:
+          $ref: '#/components/schemas/CategoryReference_2'
+          description: Category of the tag. If not provided, the tag will not be assigned to a category.
+    ErrorDetails:
+      type: object
+      properties:
+        domain:
+          type: string
+        resource:
+          type: string
+    UpdateTagCategoryResponse:
+      type: object
+      properties:
+        id:
+          type: string
+          description: The unique identifier for this tag category
+          example: 123
+        name:
+          type: string
+          description: The unique name of this tag category
+          example: Customer Segments
+        description:
+          type: string
+          description: A description of this tag category
+          example: Tags for customer segmentation
+        create_time:
+          type: string
+          format: date-time
+          description: The time this tag category was created, in ISO 8601 format
+          example: '2024-01-10T08:00:00Z'
+        update_time:
+          type: string
+          format: date-time
+          description: The time this tag category was last updated, in ISO 8601 format
+          example: '2024-03-15T10:30:00Z'
+    CategoryReference_2:
+      type: object
+      properties:
+        id:
+          type: string
+          description: The unique identifier for the tag category
+          example: 123
+      required:
+      - id
+    ListTaggedCompaniesResponse:
+      type: object
+      properties:
+        tagged_companies:
+          type: array
+          items:
+            $ref: '#/components/schemas/TaggedCompany_2'
+        next_page_token:
+          type: string
+    PhoneNumber:
+      type: object
+      properties:
+        extension:
+          type: string
+          description: Phone extension
+          example: 101
+        number:
+          type: string
+          description: Phone number. Maximum length is 40 characters for PHONE1-PHONE3 and 20 characters for PHONE4-PHONE5.
+          example: 5551234567
+        type:
+          type: string
+          description: Phone type
+          example: Work
+        field:
+          type: string
+          description: Phone number slot
+          enum:
+          - PHONE_NUMBER_FIELD_UNSPECIFIED
+          - PHONE1
+          - PHONE2
+          - PHONE3
+          - PHONE4
+          - PHONE5
+          example: PHONE1
+        number_e164:
+          type: string
+          description: Phone number in E.164 format
+          example: '+15551234567'
+    CreateUpdateTagCategoryRequest:
+      type: object
+      description: tagCategory
+      properties:
+        name:
+          type: string
+          description: The name of the tag category, must be unique
+          example: Customer Segments
+        description:
+          type: string
+          description: A description of the tag category
+          example: Tags for customer segmentation
+    ListTagCategoriesResponse:
+      type: object
+      properties:
+        tag_categories:
+          type: array
+          items:
+            $ref: '#/components/schemas/TagCategory_2'
+        next_page_token:
+          type: string
+    ListTagsResponse:
+      type: object
+      properties:
+        tags:
+          type: array
+          items:
+            $ref: '#/components/schemas/Tag_2'
+        next_page_token:
+          type: string
+    Error:
+      type: object
+      properties:
+        code:
+          type: integer
+          format: int32
+        message:
+          type: string
+        status:
+          type: string
+        details:
+          type: array
+          items:
+            $ref: '#/components/schemas/ErrorDetails'
+    GetTagCategoryResponse:
+      type: object
+      properties:
+        id:
+          type: string
+          description: The unique identifier for this tag category
+          example: 123
+        name:
+          type: string
+          description: The unique name of this tag category
+          example: Customer Segments
+        description:
+          type: string
+          description: A description of this tag category
+          example: Tags for customer segmentation
+        create_time:
+          type: string
+          format: date-time
+          description: The time this tag category was created, in ISO 8601 format
+          example: '2024-01-10T08:00:00Z'
+        update_time:
+          type: string
+          format: date-time
+          description: The time this tag category was last updated, in ISO 8601 format
+          example: '2024-03-15T10:30:00Z'
     Address:
       type: object
       properties:
         country:
           type: string
           deprecated: true
-          description: Deprecated. The long-name descriptive version of the Country Code. Please use 'country_code'
-            for POST/PATCH operations. Maximum length is 100 characters.
+          description: Deprecated. The long-name descriptive version of the Country Code. Please use 'country_code' for POST/PATCH operations. Maximum length is 100 characters.
           example: United States of America
         line1:
           type: string
-          description: Street address line 1. Maximum length is 75 characters for the BILLING address
-            and 100 characters for the SHIPPING and OTHER addresses.
+          description: Street address line 1. Maximum length is 75 characters for the BILLING address and 100 characters for the SHIPPING and OTHER addresses.
           example: 123
         line2:
           type: string
-          description: Street address line 2. Maximum length is 75 characters for the BILLING address
-            and 100 characters for the SHIPPING and OTHER addresses.
+          description: Street address line 2. Maximum length is 75 characters for the BILLING address and 100 characters for the SHIPPING and OTHER addresses.
           example: Suite 100
         locality:
           type: string
-          description: The municipality to which the address belongs. Maximum length is 50 characters
-            for the BILLING address and 100 characters for the SHIPPING and OTHER addresses.
+          description: The municipality to which the address belongs. Maximum length is 50 characters for the BILLING address and 100 characters for the SHIPPING and OTHER addresses.
           example: Phoenix
         region:
           type: string
           deprecated: true
-          description: The long-name descriptive version of the Region Code. Please use 'region_code'
-            for POST/PATCH operations. Maximum length is 50 characters.
+          description: The long-name descriptive version of the Region Code. Please use 'region_code' for POST/PATCH operations. Maximum length is 50 characters.
           example: Arizona
         field:
           type: string
@@ -1340,8 +2591,7 @@ components:
           example: USA
         postal_code:
           type: string
-          description: Postal or ZIP code. Maximum length is 15 characters for the BILLING and OTHER addresses
-            and 20 characters for the SHIPPING address.
+          description: Postal or ZIP code. Maximum length is 15 characters for the BILLING and OTHER addresses and 20 characters for the SHIPPING address.
           example: 85001
         region_code:
           type: string
@@ -1349,13 +2599,40 @@ components:
           example: US-AZ
         zip_code:
           type: string
-          description: ZIP code (US). Maximum length is 15 characters for the BILLING and OTHER addresses
-            and 20 characters for the SHIPPING address.
+          description: ZIP code (US). Maximum length is 15 characters for the BILLING and OTHER addresses and 20 characters for the SHIPPING address.
           example: 85001
         zip_four:
           type: string
           description: ZIP+4 extension. Maximum length is 10 characters.
           example: 1234
+    Tag_2:
+      type: object
+      properties:
+        id:
+          type: string
+          description: The unique identifier for this tag
+          example: 123
+        name:
+          type: string
+          description: The unique name of this tag
+          example: VIP Customer
+        description:
+          type: string
+          description: A description of this tag
+          example: High-value customers
+        category:
+          $ref: '#/components/schemas/CategoryReference_2'
+          description: The category this tag belongs to
+        create_time:
+          type: string
+          format: date-time
+          description: The time this tag was created, in ISO 8601 format
+          example: '2024-01-10T08:00:00Z'
+        update_time:
+          type: string
+          format: date-time
+          description: The time this tag was last updated, in ISO 8601 format
+          example: '2024-03-15T10:30:00Z'
     ApplyRemoveTagRequest:
       type: object
       properties:
@@ -1370,6 +2647,67 @@ components:
           uniqueItems: true
       required:
       - contact_ids
+    FaxNumber:
+      type: object
+      properties:
+        number:
+          type: string
+          description: Fax number
+          example: 5551234568
+        type:
+          type: string
+          description: Fax type
+          example: Work
+        field:
+          type: string
+          description: Fax number slot
+          enum:
+          - FAX_NUMBER_FIELD_UNSPECIFIED
+          - FAX1
+          - FAX2
+          example: FAX1
+    EmailAddress:
+      type: object
+      properties:
+        email:
+          type: string
+          description: Email address. Maximum length is 75 characters for EMAIL1 and 100 characters for EMAIL2 and EMAIL3.
+          example: john.smith@example.com
+        field:
+          type: string
+          description: Email address slot
+          enum:
+          - EMAIL_FIELD_UNSPECIFIED
+          - EMAIL1
+          - EMAIL2
+          - EMAIL3
+          example: EMAIL1
+        opt_in_reason:
+          type: string
+          description: Reason for opting in
+          example: Subscribed via website form
+        is_opt_in:
+          type: boolean
+        email_opt_status:
+          type: string
+          enum:
+          - UNENGAGED_MARKETABLE
+          - SINGLE_OPT_IN
+          - DOUBLE_OPT_IN
+          - CONFIRMED
+          - UNENGAGED_NON_MARKETABLE
+          - NON_MARKETABLE
+          - LOCKDOWN
+          - BOUNCE
+          - HARD_BOUNCE
+          - MANUAL
+          - ADMIN
+          - SYSTEM
+          - LIST_UNSUBSCRIBE
+          - FEEDBACK
+          - SPAM
+          - INVALID
+          - DEACTIVATED
     ApplyTagsResponse:
       type: object
       properties:
@@ -1377,15 +2715,41 @@ components:
           type: object
           additionalProperties:
             type: string
-    CategoryReference:
+    UpdateTagResponse:
       type: object
       properties:
         id:
           type: string
-          description: The unique identifier for the tag category
+          description: The unique identifier for this tag
           example: 123
-      required:
-      - id
+        name:
+          type: string
+          description: The unique name of this tag
+          example: VIP Customer
+        description:
+          type: string
+          description: A description of this tag
+          example: High-value customers
+        category:
+          $ref: '#/components/schemas/CategoryReference_2'
+          description: The category this tag belongs to
+        create_time:
+          type: string
+          format: date-time
+          description: The time this tag was created, in ISO 8601 format
+          example: '2024-01-10T08:00:00Z'
+        update_time:
+          type: string
+          format: date-time
+          description: The time this tag was last updated, in ISO 8601 format
+          example: '2024-03-15T10:30:00Z'
+    CustomFieldValue:
+      type: object
+      properties:
+        id:
+          type: string
+        content:
+          description: The value of the custom field. Text custom field values have a maximum length of 65535 characters.
     Company:
       type: object
       properties:
@@ -1506,270 +2870,7 @@ components:
           type: string
           description: ID of the user who last updated this company
           example: 10
-    CreateUpdateTagCategoryRequest:
-      type: object
-      description: tagCategory
-      properties:
-        name:
-          type: string
-          description: The name of the tag category, must be unique
-          example: Customer Segments
-        description:
-          type: string
-          description: A description of the tag category
-          example: Tags for customer segmentation
-    CreateUpdateTagRequest:
-      type: object
-      description: tag
-      properties:
-        name:
-          type: string
-          description: Name of the tag, up to 255 characters will be saved
-          example: VIP Customer
-        description:
-          type: string
-          description: Description of the tag
-          example: High-value customers
-        category:
-          $ref: '#/components/schemas/CategoryReference'
-          description: Category of the tag. If not provided, the tag will not be assigned to a category.
-    CustomFieldValue:
-      type: object
-      properties:
-        id:
-          type: string
-        content:
-          description: The value of the custom field. Text custom field values have a maximum length of
-            65535 characters.
-    EmailAddress:
-      type: object
-      properties:
-        email:
-          type: string
-          description: Email address. Maximum length is 75 characters for EMAIL1 and 100 characters for
-            EMAIL2 and EMAIL3.
-          example: john.smith@example.com
-        field:
-          type: string
-          description: Email address slot
-          enum:
-          - EMAIL_FIELD_UNSPECIFIED
-          - EMAIL1
-          - EMAIL2
-          - EMAIL3
-          example: EMAIL1
-        opt_in_reason:
-          type: string
-          description: Reason for opting in
-          example: Subscribed via website form
-        is_opt_in:
-          type: boolean
-        email_opt_status:
-          type: string
-          enum:
-          - UNENGAGED_MARKETABLE
-          - SINGLE_OPT_IN
-          - DOUBLE_OPT_IN
-          - CONFIRMED
-          - UNENGAGED_NON_MARKETABLE
-          - NON_MARKETABLE
-          - LOCKDOWN
-          - BOUNCE
-          - HARD_BOUNCE
-          - MANUAL
-          - ADMIN
-          - SYSTEM
-          - LIST_UNSUBSCRIBE
-          - FEEDBACK
-          - SPAM
-          - INVALID
-          - DEACTIVATED
-    Error:
-      type: object
-      properties:
-        code:
-          type: integer
-          format: int32
-        message:
-          type: string
-        status:
-          type: string
-        details:
-          type: array
-          items:
-            $ref: '#/components/schemas/ErrorDetails'
-    ErrorDetails:
-      type: object
-      properties:
-        domain:
-          type: string
-        resource:
-          type: string
-    FaxNumber:
-      type: object
-      properties:
-        number:
-          type: string
-          description: Fax number
-          example: 5551234568
-        type:
-          type: string
-          description: Fax type
-          example: Work
-        field:
-          type: string
-          description: Fax number slot
-          enum:
-          - FAX_NUMBER_FIELD_UNSPECIFIED
-          - FAX1
-          - FAX2
-          example: FAX1
-    GetTagCategoryResponse:
-      type: object
-      properties:
-        id:
-          type: string
-          description: The unique identifier for this tag category
-          example: 123
-        name:
-          type: string
-          description: The unique name of this tag category
-          example: Customer Segments
-        description:
-          type: string
-          description: A description of this tag category
-          example: Tags for customer segmentation
-        create_time:
-          type: string
-          format: date-time
-          description: The time this tag category was created, in ISO 8601 format
-          example: '2024-01-10T08:00:00Z'
-        update_time:
-          type: string
-          format: date-time
-          description: The time this tag category was last updated, in ISO 8601 format
-          example: '2024-03-15T10:30:00Z'
-    ListTagCategoriesResponse:
-      type: object
-      properties:
-        tag_categories:
-          type: array
-          items:
-            $ref: '#/components/schemas/TagCategory'
-        next_page_token:
-          type: string
-    ListTaggedCompaniesResponse:
-      type: object
-      properties:
-        tagged_companies:
-          type: array
-          items:
-            $ref: '#/components/schemas/TaggedCompany'
-        next_page_token:
-          type: string
-    ListTaggedContactsResponse:
-      type: object
-      properties:
-        contacts:
-          type: array
-          items:
-            $ref: '#/components/schemas/TaggedContact'
-        next_page_token:
-          type: string
-    ListTagsResponse:
-      type: object
-      properties:
-        tags:
-          type: array
-          items:
-            $ref: '#/components/schemas/Tag'
-        next_page_token:
-          type: string
-    PhoneNumber:
-      type: object
-      properties:
-        extension:
-          type: string
-          description: Phone extension
-          example: 101
-        number:
-          type: string
-          description: Phone number. Maximum length is 40 characters for PHONE1-PHONE3 and 20 characters
-            for PHONE4-PHONE5.
-          example: 5551234567
-        type:
-          type: string
-          description: Phone type
-          example: Work
-        field:
-          type: string
-          description: Phone number slot
-          enum:
-          - PHONE_NUMBER_FIELD_UNSPECIFIED
-          - PHONE1
-          - PHONE2
-          - PHONE3
-          - PHONE4
-          - PHONE5
-          example: PHONE1
-        number_e164:
-          type: string
-          description: Phone number in E.164 format
-          example: '+15551234567'
-    Tag:
-      type: object
-      properties:
-        id:
-          type: string
-          description: The unique identifier for this tag
-          example: 123
-        name:
-          type: string
-          description: The unique name of this tag
-          example: VIP Customer
-        description:
-          type: string
-          description: A description of this tag
-          example: High-value customers
-        category:
-          $ref: '#/components/schemas/CategoryReference'
-          description: The category this tag belongs to
-        create_time:
-          type: string
-          format: date-time
-          description: The time this tag was created, in ISO 8601 format
-          example: '2024-01-10T08:00:00Z'
-        update_time:
-          type: string
-          format: date-time
-          description: The time this tag was last updated, in ISO 8601 format
-          example: '2024-03-15T10:30:00Z'
-    TagCategory:
-      type: object
-      properties:
-        id:
-          type: string
-          description: The unique identifier for this tag category
-          example: 123
-        name:
-          type: string
-          description: The unique name of this tag category
-          example: Customer Segments
-        description:
-          type: string
-          description: A description of this tag category
-          example: Tags for customer segmentation
-        create_time:
-          type: string
-          format: date-time
-          description: The time this tag category was created, in ISO 8601 format
-          example: '2024-01-10T08:00:00Z'
-        update_time:
-          type: string
-          format: date-time
-          description: The time this tag category was last updated, in ISO 8601 format
-          example: '2024-03-15T10:30:00Z'
-    TaggedCompany:
+    TaggedCompany_2:
       type: object
       properties:
         company:
@@ -1780,23 +2881,16 @@ components:
           format: date-time
           description: The time the tag was applied to the company, in ISO 8601 format.
           example: '2023-10-01T12:00:00Z'
-    TaggedContact:
+    ListTaggedContactsResponse:
       type: object
       properties:
-        id:
+        contacts:
+          type: array
+          items:
+            $ref: '#/components/schemas/TaggedContact_2'
+        next_page_token:
           type: string
-        email:
-          type: string
-        given_name:
-          type: string
-        family_name:
-          type: string
-        applied_time:
-          type: string
-          format: date-time
-          description: The time the tag was applied to the contact, in ISO 8601 format.
-          example: '2023-10-01T12:00:00Z'
-    UpdateTagCategoryResponse:
+    TagCategory_2:
       type: object
       properties:
         id:
@@ -1821,34 +2915,6 @@ components:
           format: date-time
           description: The time this tag category was last updated, in ISO 8601 format
           example: '2024-03-15T10:30:00Z'
-    UpdateTagResponse:
-      type: object
-      properties:
-        id:
-          type: string
-          description: The unique identifier for this tag
-          example: 123
-        name:
-          type: string
-          description: The unique name of this tag
-          example: VIP Customer
-        description:
-          type: string
-          description: A description of this tag
-          example: High-value customers
-        category:
-          $ref: '#/components/schemas/CategoryReference'
-          description: The category this tag belongs to
-        create_time:
-          type: string
-          format: date-time
-          description: The time this tag was created, in ISO 8601 format
-          example: '2024-01-10T08:00:00Z'
-        update_time:
-          type: string
-          format: date-time
-          description: The time this tag was last updated, in ISO 8601 format
-          example: '2024-03-15T10:30:00Z'
   securitySchemes:
     oauth2:
       type: oauth2
@@ -1857,5 +2923,6 @@ components:
           authorizationUrl: https://accounts.infusionsoft.com/app/oauth/authorize
           tokenUrl: https://api.infusionsoft.com/token
           scopes: {}
-security:
-- oauth2: []
+x-refined-from:
+- keap-v1-openapi.json
+- keap-v2-openapi.json

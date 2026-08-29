@@ -736,6 +736,196 @@ apis:
     url: https://developer.infusionsoft.com/docs/rest/
   - type: Authentication
     url: https://developer.infusionsoft.com/getting-started-oauth-keys/
+- aid: keap:keap-account-info-api
+  name: Keap Account Info API
+  description: Account Info-Endpoint
+  humanURL: https://developer.infusionsoft.com/docs/restv2/
+  baseURL: https://api.infusionsoft.com/crm/rest/v2
+  tags:
+  - Account Info
+  properties:
+  - type: OpenAPI
+    url: openapi/keap-account-info-api-openapi.yml
+- aid: keap:keap-automationcategory-api
+  name: Keap Automation Category API
+  description: The AutomationCategory API from Keap — 2 operation(s) for automationcategory.
+  humanURL: https://developer.infusionsoft.com/docs/restv2/
+  baseURL: https://api.infusionsoft.com/crm/rest/v2
+  tags:
+  - AutomationCategory
+  properties:
+  - type: OpenAPI
+    url: openapi/keap-automationcategory-api-openapi.yml
+- aid: keap:keap-business-profile-api
+  name: Keap Business Profile API
+  description: The Business Profile API from Keap — 1 operation(s) for business profile.
+  humanURL: https://developer.infusionsoft.com/docs/restv2/
+  baseURL: https://api.infusionsoft.com/crm/rest/v2
+  tags:
+  - Business Profile
+  properties:
+  - type: OpenAPI
+    url: openapi/keap-business-profile-api-openapi.yml
+- aid: keap:keap-email-address-api
+  name: Keap Email Address API
+  description: Email-Addresses-Endpoint
+  humanURL: https://developer.infusionsoft.com/docs/restv2/
+  baseURL: https://api.infusionsoft.com/crm/rest/v2
+  tags:
+  - Email Address
+  properties:
+  - type: OpenAPI
+    url: openapi/keap-email-address-api-openapi.yml
+- aid: keap:keap-integrations-api
+  name: Keap Integrations API
+  description: The Integrations API from Keap — 3 operation(s) for integrations.
+  humanURL: https://developer.infusionsoft.com/docs/restv2/
+  baseURL: https://api.infusionsoft.com/crm/rest/v2
+  tags:
+  - Integrations
+  properties:
+  - type: OpenAPI
+    url: openapi/keap-integrations-api-openapi.yml
+- aid: keap:keap-leadscore-api
+  name: Keap Lead Score API
+  description: The LeadScore API from Keap — 1 operation(s) for leadscore.
+  humanURL: https://developer.infusionsoft.com/docs/restv2/
+  baseURL: https://api.infusionsoft.com/crm/rest/v2
+  tags:
+  - LeadScore
+  properties:
+  - type: OpenAPI
+    url: openapi/keap-leadscore-api-openapi.yml
+- aid: keap:keap-locale-api
+  name: Keap Locale API
+  description: Locale-Endpoint
+  humanURL: https://developer.infusionsoft.com/docs/restv2/
+  baseURL: https://api.infusionsoft.com/crm/rest/v2
+  tags:
+  - Locale
+  properties:
+  - type: OpenAPI
+    url: openapi/keap-locale-api-openapi.yml
+- aid: keap:keap-merchant-api
+  name: Keap Merchant API
+  description: Merchant-Endpoint
+  humanURL: https://developer.infusionsoft.com/docs/restv2/
+  baseURL: https://api.infusionsoft.com/crm/rest/v2
+  tags:
+  - Merchant
+  properties:
+  - type: OpenAPI
+    url: openapi/keap-merchant-api-openapi.yml
+- aid: keap:keap-merchants-api
+  name: Keap Merchants API
+  description: The Merchants API from Keap — 1 operation(s) for merchants.
+  humanURL: https://developer.infusionsoft.com/docs/restv2/
+  baseURL: https://api.infusionsoft.com/crm/rest/v2
+  tags:
+  - Merchants
+  properties:
+  - type: OpenAPI
+    url: openapi/keap-merchants-api-openapi.yml
+- aid: keap:keap-payment-method-configs-api
+  name: Keap Payment Method Configs API
+  description: The Payment Method Configs API from Keap — 1 operation(s) for payment method configs.
+  humanURL: https://developer.infusionsoft.com/docs/restv2/
+  baseURL: https://api.infusionsoft.com/crm/rest/v2
+  tags:
+  - Payment Method Configs
+  properties:
+  - type: OpenAPI
+    url: openapi/keap-payment-method-configs-api-openapi.yml
+- aid: keap:keap-payment-methods-api
+  name: Keap Payment Methods API
+  description: The Payment Methods API from Keap — 4 operation(s) for payment methods.
+  humanURL: https://developer.infusionsoft.com/docs/restv2/
+  baseURL: https://api.infusionsoft.com/crm/rest/v2
+  tags:
+  - Payment Methods
+  properties:
+  - type: OpenAPI
+    url: openapi/keap-payment-methods-api-openapi.yml
+- aid: keap:keap-referral-api
+  name: Keap Referral API
+  description: The Referral API from Keap — 1 operation(s) for referral.
+  humanURL: https://developer.infusionsoft.com/docs/restv2/
+  baseURL: https://api.infusionsoft.com/crm/rest/v2
+  tags:
+  - Referral
+  properties:
+  - type: OpenAPI
+    url: openapi/keap-referral-api-openapi.yml
+- aid: keap:keap-reporting-api
+  name: Keap Reporting API
+  description: The Reporting API from Keap — 4 operation(s) for reporting.
+  humanURL: https://developer.infusionsoft.com/docs/restv2/
+  baseURL: https://api.infusionsoft.com/crm/rest/v2
+  tags:
+  - Reporting
+  properties:
+  - type: OpenAPI
+    url: openapi/keap-reporting-api-openapi.yml
+- aid: keap:keap-sales-api
+  name: Keap Sales API
+  description: The Sales API from Keap — 3 operation(s) for sales.
+  humanURL: https://developer.infusionsoft.com/docs/restv2/
+  baseURL: https://api.infusionsoft.com/crm/rest/v2
+  tags:
+  - Sales
+  properties:
+  - type: OpenAPI
+    url: openapi/keap-sales-api-openapi.yml
+- aid: keap:keap-setting-api
+  name: Keap Setting API
+  description: Setting-Endpoint
+  humanURL: https://developer.infusionsoft.com/docs/restv2/
+  baseURL: https://api.infusionsoft.com/crm/rest/v2
+  tags:
+  - Setting
+  properties:
+  - type: OpenAPI
+    url: openapi/keap-setting-api-openapi.yml
+- aid: keap:keap-settings-api
+  name: Keap Settings API
+  description: The Settings API from Keap — 3 operation(s) for settings.
+  humanURL: https://developer.infusionsoft.com/docs/restv2/
+  baseURL: https://api.infusionsoft.com/crm/rest/v2
+  tags:
+  - Settings
+  properties:
+  - type: OpenAPI
+    url: openapi/keap-settings-api-openapi.yml
+- aid: keap:keap-shipping-api
+  name: Keap Shipping API
+  description: The Shipping API from Keap — 1 operation(s) for shipping.
+  humanURL: https://developer.infusionsoft.com/docs/restv2/
+  baseURL: https://api.infusionsoft.com/crm/rest/v2
+  tags:
+  - Shipping
+  properties:
+  - type: OpenAPI
+    url: openapi/keap-shipping-api-openapi.yml
+- aid: keap:keap-user-groups-api
+  name: Keap User Groups API
+  description: The User Groups API from Keap — 2 operation(s) for user groups.
+  humanURL: https://developer.infusionsoft.com/docs/restv2/
+  baseURL: https://api.infusionsoft.com/crm/rest/v2
+  tags:
+  - User Groups
+  properties:
+  - type: OpenAPI
+    url: openapi/keap-user-groups-api-openapi.yml
+- aid: keap:keap-webforms-api
+  name: Keap Webforms API
+  description: The Webforms API from Keap — 2 operation(s) for webforms.
+  humanURL: https://developer.infusionsoft.com/docs/restv2/
+  baseURL: https://api.infusionsoft.com/crm/rest/v2
+  tags:
+  - Webforms
+  properties:
+  - type: OpenAPI
+    url: openapi/keap-webforms-api-openapi.yml
 common:
 - type: CapabilityMap
   url: capabilities/keap-capability-edges.yml

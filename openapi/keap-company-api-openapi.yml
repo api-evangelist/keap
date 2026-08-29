@@ -1,8 +1,6 @@
-openapi: 3.1.0
+openapi: 3.2.0
 info:
   title: Keap Company API
-  description: Keap Public API Documentation
-  termsOfService: https://www.thryv.com/terms-of-use
   contact:
     name: Keap
     url: https://developer.keap.com/get-support
@@ -10,12 +8,588 @@ info:
   license:
     name: Apache 2.0
     url: https://www.apache.org/licenses/LICENSE-2.0
-  version: v2
+  termsOfService: https://www.thryv.com/terms-of-use
+  version: '1.0'
+  description: 'Operations tagged Company across 2 of this provider''s published API definitions: keap-v1-openapi.json, keap-v2-openapi.json. Each path carries the servers of the definition it was published in.'
 servers:
 - url: https://api.infusionsoft.com/crm
+security:
+- oauth2: []
 tags:
 - name: Company
+  description: Companies-Endpoint
 paths:
+  /rest/v1/companies:
+    get:
+      tags:
+      - Company
+      summary: List Companies
+      description: Retrieves a list of all companies
+      operationId: listCompanies
+      parameters:
+      - name: companyQueryCommand
+        in: query
+        required: true
+        schema:
+          $ref: '#/components/schemas/CompanyQueryCommand'
+      - name: optional_properties
+        in: query
+        description: Comma-delimited list of Company properties to include in the response. (Fields such as `notes`, `fax_number` and `custom_fields` aren't included, by default.)
+        schema:
+          type: string
+      responses:
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ModelAndView'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ModelAndView'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ModelAndView'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ModelAndView'
+        '409':
+          description: Conflict
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ModelAndView'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ModelAndView'
+        '501':
+          description: Not Implemented
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ModelAndView'
+        '405':
+          description: Method Not Allowed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ModelAndView'
+        '406':
+          description: Not Acceptable
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ModelAndView'
+        '412':
+          description: Precondition Failed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ModelAndView'
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CompanyList'
+    post:
+      tags:
+      - Company
+      summary: Create a Company
+      description: 'Creates a new company as the authenticated user. NB: Company must contain at least the company name. The `country_code` is required if `region` is specified.
+
+
+        You may opt-in or mark a Company as _Marketable_ by including the following field in the request JSON with an opt-in reason. (This field is also shown in the complete request body sample.) The reason you provide here will help with compliance. Example reasons: "Customer opted-in through webform", "Company gave explicit permission."
+
+
+        ```json
+
+        "opt_in_reason": "your reason for opt-in"
+
+        ```
+
+        Note that the email address status will only be updated to unconfirmed (marketable) for email addresses that are currently in the following states:
+
+        Unengaged Marketable
+
+        Unengaged Non-Marketable
+
+        Non-Marketable
+
+        Opt-Out: Manual
+
+        All other existing statuses e.g. List Unsubscribe, Opt-Out System etc will remain non-marketable and in their existing state.'
+      operationId: createCompany
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateOrPatchCompany'
+        required: true
+      responses:
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ModelAndView'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ModelAndView'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ModelAndView'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ModelAndView'
+        '409':
+          description: Conflict
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ModelAndView'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ModelAndView'
+        '501':
+          description: Not Implemented
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ModelAndView'
+        '405':
+          description: Method Not Allowed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ModelAndView'
+        '406':
+          description: Not Acceptable
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ModelAndView'
+        '412':
+          description: Precondition Failed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ModelAndView'
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Company'
+    servers:
+    - url: https://api.infusionsoft.com/crm
+  /rest/v1/companies/{companyId}:
+    get:
+      tags:
+      - Company
+      summary: Retrieve a Company
+      description: Retrieves a single company
+      operationId: getCompany
+      parameters:
+      - name: companyId
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      - name: optional_properties
+        in: query
+        description: Comma-delimited list of Company properties to include in the response. (Fields such as `notes`, `fax_number` and `custom_fields` aren't included, by default.)
+        schema:
+          type: string
+      responses:
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ModelAndView'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ModelAndView'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ModelAndView'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ModelAndView'
+        '409':
+          description: Conflict
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ModelAndView'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ModelAndView'
+        '501':
+          description: Not Implemented
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ModelAndView'
+        '405':
+          description: Method Not Allowed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ModelAndView'
+        '406':
+          description: Not Acceptable
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ModelAndView'
+        '412':
+          description: Precondition Failed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ModelAndView'
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Company'
+    patch:
+      tags:
+      - Company
+      summary: Update a Company
+      description: 'Updates a company with only the values provided in the request.
+
+
+        You may opt-in or mark a Company as _Marketable_ by including the following field in the request JSON with an opt-in reason. (This field is also shown in the complete request body sample.) The reason you provide here will help with compliance. Example reasons: "Customer opted-in through webform", "Company gave explicit permission."
+
+
+        ```json
+
+        "opt_in_reason": "your reason for opt-in"
+
+        ```
+
+        Note that the email address status will only be updated to unconfirmed (marketable) for email addresses that are currently in the following states:
+
+        Unengaged Marketable
+
+        Unengaged Non-Marketable
+
+        Non-Marketable
+
+        Opt-Out: Manual
+
+        All other existing statuses e.g. List Unsubscribe, Opt-Out System etc will remain non-marketable and in their existing state.'
+      operationId: updateCompany
+      parameters:
+      - name: companyId
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateOrPatchCompany'
+        required: true
+      responses:
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ModelAndView'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ModelAndView'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ModelAndView'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ModelAndView'
+        '409':
+          description: Conflict
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ModelAndView'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ModelAndView'
+        '501':
+          description: Not Implemented
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ModelAndView'
+        '405':
+          description: Method Not Allowed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ModelAndView'
+        '406':
+          description: Not Acceptable
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ModelAndView'
+        '412':
+          description: Precondition Failed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ModelAndView'
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Company'
+    servers:
+    - url: https://api.infusionsoft.com/crm
+  /rest/v1/company/{companyId}:
+    patch:
+      tags:
+      - Company
+      summary: Update a Company
+      description: 'Updates a company with only the values provided in the request.
+
+
+        You may opt-in or mark a Company as _Marketable_ by including the following field in the request JSON with an opt-in reason. (This field is also shown in the complete request body sample.) The reason you provide here will help with compliance. Example reasons: "Customer opted-in through webform", "Company gave explicit permission."
+
+
+        ```json
+
+        "opt_in_reason": "your reason for opt-in"
+
+        ```
+
+        Note that the email address status will only be updated to unconfirmed (marketable) for email addresses that are currently in the following states:
+
+        Unengaged Marketable
+
+        Unengaged Non-Marketable
+
+        Non-Marketable
+
+        Opt-Out: Manual
+
+        All other existing statuses e.g. List Unsubscribe, Opt-Out System etc will remain non-marketable and in their existing state.'
+      operationId: updateCompany_1
+      parameters:
+      - name: companyId
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateOrPatchCompany'
+        required: true
+      responses:
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ModelAndView'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ModelAndView'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ModelAndView'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ModelAndView'
+        '409':
+          description: Conflict
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ModelAndView'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ModelAndView'
+        '501':
+          description: Not Implemented
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ModelAndView'
+        '405':
+          description: Method Not Allowed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ModelAndView'
+        '406':
+          description: Not Acceptable
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ModelAndView'
+        '412':
+          description: Precondition Failed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ModelAndView'
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Company'
+    servers:
+    - url: https://api.infusionsoft.com/crm
+  /rest/v1/companies/model:
+    get:
+      tags:
+      - Company
+      summary: Retrieve Company Model
+      description: Get the custom fields and optional properties for the Company object
+      operationId: retrieveCompanyModel
+      responses:
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ModelAndView'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ModelAndView'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ModelAndView'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ModelAndView'
+        '409':
+          description: Conflict
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ModelAndView'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ModelAndView'
+        '501':
+          description: Not Implemented
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ModelAndView'
+        '405':
+          description: Method Not Allowed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ModelAndView'
+        '406':
+          description: Not Acceptable
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ModelAndView'
+        '412':
+          description: Precondition Failed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ModelAndView'
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ObjectModel'
+    servers:
+    - url: https://api.infusionsoft.com/crm
   /rest/v2/companies:
     get:
       tags:
@@ -26,31 +600,7 @@ paths:
       parameters:
       - name: filter
         in: query
-        description: "Filter to apply, allowed fields are:\n- (String) `company_name` - exact match on\
-          \ company name (equality only)\n- (String) `name` - company name with support for a wildcard\
-          \ at the end (e.g. `smith*`)\n- (String) `email` - exact match on email\n- (String) `city` -\
-          \ company city (Contact.City) with support for a prefix wildcard at the end (e.g. `Chan*`)\n\
-          - (String) `state` - company state/region (Contact.State) with support for a prefix wildcard\
-          \ at the end (e.g. `Ar*`)\n- (String) `since_time` - companies updated on or after this time\n\
-          - (String) `until_time` - companies updated on or before this time\n- (Number) `company_id`\
-          \ - supports comparison operators: `==`, `>`, `<`, `>=`, `<=`\n\nFor equality filters, use the\
-          \ `==` operator in encoded form `%3D%3D`:\n- `filter=company_name%3D%3DCompany`\n- `filter=email%3D%3Dtest@gmail.com`\n\
-          - `filter=city%3D%3DChandler`\n- `filter=since_time%3D%3D2025-04-16T20:33:02.321Z`\n- `filter=until_time%3D%3D2025-08-16T20:33:02.321Z`\n\
-          \nFor wildcard name/city/state search (prefix only, case-insensitive):\n- `filter=name%3D%3DAcme%2A`\
-          \ (starts with \"Acme\")\n- `filter=city%3D%3DChan%2A` (city starts with \"Chan\")\n- `filter=city%3D%3DChandler%3Bstate%3D%3DArizona`\
-          \ (combined city + state filter)\n\nFor company_id comparison:\n- `filter=company_id%3E5` (company_id\
-          \ > 5)\n- `filter=company_id%3E%3D10` (company_id >= 10)\n\nCustom fields can be filtered by\
-          \ their field name (case-insensitive). A standard\nfield above takes precedence over a custom\
-          \ field with the same name. The supported\noperators depend on the custom field's type:\n- Text-like\
-          \ fields (text, text area, name, email, phone, website, social security\n  number) and single-value\
-          \ choice fields with text options (dropdown, radio,\n  state): `==` only, with optional trailing\
-          \ wildcard (e.g. `Industry%3D%3DTech%2A`)\n- Yes/No and drilldown fields: `==` only\n- Numeric\
-          \ fields (whole number, decimal, currency, percent, year, month, day of\n  week, user): `==`,\
-          \ `>`, `<`, `>=`, `<=`\n- Date fields: `==`, `>`, `<`, `>=`, `<=` using full ISO 8601 (same\
-          \ as `since_time`/`until_time`)\n- Multi-select fields: `==` matches records that contain the\
-          \ given option\nExamples (for a custom field named `Height`):\n- `filter=Height%3D%3DTall`\n\
-          - `filter=Height%3E100`\nCustom field filtering on non-indexed fields is supported but may be\
-          \ slower.\n"
+        description: "Filter to apply, allowed fields are:\n- (String) `company_name` - exact match on company name (equality only)\n- (String) `name` - company name with support for a wildcard at the end (e.g. `smith*`)\n- (String) `email` - exact match on email\n- (String) `city` - company city (Contact.City) with support for a prefix wildcard at the end (e.g. `Chan*`)\n- (String) `state` - company state/region (Contact.State) with support for a prefix wildcard at the end (e.g. `Ar*`)\n- (String) `since_time` - companies updated on or after this time\n- (String) `until_time` - companies updated on or before this time\n- (Number) `company_id` - supports comparison operators: `==`, `>`, `<`, `>=`, `<=`\n\nFor equality filters, use the `==` operator in encoded form `%3D%3D`:\n- `filter=company_name%3D%3DCompany`\n- `filter=email%3D%3Dtest@gmail.com`\n- `filter=city%3D%3DChandler`\n- `filter=since_time%3D%3D2025-04-16T20:33:02.321Z`\n- `filter=until_time%3D%3D2025-08-16T20:33:02.321Z`\n\nFor wildcard name/city/state search (prefix only, case-insensitive):\n- `filter=name%3D%3DAcme%2A` (starts with \"Acme\")\n- `filter=city%3D%3DChan%2A` (city starts with \"Chan\")\n- `filter=city%3D%3DChandler%3Bstate%3D%3DArizona` (combined city + state filter)\n\nFor company_id comparison:\n- `filter=company_id%3E5` (company_id > 5)\n- `filter=company_id%3E%3D10` (company_id >= 10)\n\nCustom fields can be filtered by their field name (case-insensitive). A standard\nfield above takes precedence over a custom field with the same name. The supported\noperators depend on the custom field's type:\n- Text-like fields (text, text area, name, email, phone, website, social security\n  number) and single-value choice fields with text options (dropdown, radio,\n  state): `==` only, with optional trailing wildcard (e.g. `Industry%3D%3DTech%2A`)\n- Yes/No and drilldown fields: `==` only\n- Numeric fields (whole number, decimal, currency, percent, year, month, day of\n  week, user): `==`, `>`, `<`, `>=`, `<=`\n- Date fields: `==`, `>`, `<`, `>=`, `<=` using full ISO 8601 (same as `since_time`/`until_time`)\n- Multi-select fields: `==` matches records that contain the given option\nExamples (for a custom field named `Height`):\n- `filter=Height%3D%3DTall`\n- `filter=Height%3E100`\nCustom field filtering on non-indexed fields is supported but may be slower.\n"
         required: false
         schema:
           type: string
@@ -95,9 +645,7 @@ paths:
         example: 0
       - name: fields
         in: query
-        description: Comma-delimited list of Company properties to include in the response. (Fields such
-          as `notes`, `fax_number`, `address`, `email_address`, `phone_number`, `update_time`, `create_time`
-          and `custom_fields` aren't included, by default.)
+        description: Comma-delimited list of Company properties to include in the response. (Fields such as `notes`, `fax_number`, `address`, `email_address`, `phone_number`, `update_time`, `create_time` and `custom_fields` aren't included, by default.)
         schema:
           type: string
       responses:
@@ -221,7 +769,9 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Company'
+                $ref: '#/components/schemas/Company_2'
+    servers:
+    - url: https://api.infusionsoft.com/crm
   /rest/v2/companies/{company_id}/tags/{tag_id}:
     post:
       tags:
@@ -359,6 +909,8 @@ paths:
                 $ref: '#/components/schemas/Error'
         '204':
           description: No Content
+    servers:
+    - url: https://api.infusionsoft.com/crm
   /rest/v2/companies/model/customFields:
     post:
       tags:
@@ -426,7 +978,9 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/CustomFieldMetaData'
+                $ref: '#/components/schemas/CustomFieldMetaData_2'
+    servers:
+    - url: https://api.infusionsoft.com/crm
   /rest/v2/companies/model/customFields/tabs:
     get:
       tags:
@@ -556,13 +1110,14 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/CustomFieldTab'
+    servers:
+    - url: https://api.infusionsoft.com/crm
   /rest/v2/companies/model/customFields/groups:
     get:
       tags:
       - Company
       summary: List Company Custom Field Groups
-      description: Retrieves a list of custom field groups for the Company record type. Optionally filter
-        by tab_id to scope to a specific tab.
+      description: Retrieves a list of custom field groups for the Company record type. Optionally filter by tab_id to scope to a specific tab.
       operationId: listCompanyCustomFieldGroups
       parameters:
       - name: tab_id
@@ -630,8 +1185,7 @@ paths:
       tags:
       - Company
       summary: Create a Company Custom Field Group
-      description: Creates a new custom field group for the Company record type. If `tab_id` is omitted,
-        the group is added to the default 'Custom Fields' tab.
+      description: Creates a new custom field group for the Company record type. If `tab_id` is omitted, the group is added to the default 'Custom Fields' tab.
       operationId: createCompanyCustomFieldGroup
       requestBody:
         content:
@@ -694,6 +1248,8 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/CustomFieldGroup'
+    servers:
+    - url: https://api.infusionsoft.com/crm
   /rest/v2/companies/{company_id}:
     get:
       tags:
@@ -709,9 +1265,7 @@ paths:
           type: string
       - name: fields
         in: query
-        description: 'Comma-delimited list of Company properties to include in the response. (Available
-          fields are: `address`, `custom_fields`, `email_address`, `fax_number`, `phone_number`, `website`,
-          `notes`)'
+        description: 'Comma-delimited list of Company properties to include in the response. (Available fields are: `address`, `custom_fields`, `email_address`, `fax_number`, `phone_number`, `website`, `notes`)'
         schema:
           type: string
       responses:
@@ -768,7 +1322,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Company'
+                $ref: '#/components/schemas/Company_2'
     delete:
       tags:
       - Company
@@ -846,8 +1400,7 @@ paths:
           type: string
       - name: update_mask
         in: query
-        description: An optional list of properties to be updated. If set, only the provided properties
-          will be updated and others will be skipped.
+        description: An optional list of properties to be updated. If set, only the provided properties will be updated and others will be skipped.
         required: false
         schema:
           type: array
@@ -946,7 +1499,9 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Company'
+                $ref: '#/components/schemas/Company_2'
+    servers:
+    - url: https://api.infusionsoft.com/crm
   /rest/v2/companies/model/customFields/{custom_field_id}:
     delete:
       tags:
@@ -1025,8 +1580,7 @@ paths:
           type: string
       - name: update_mask
         in: query
-        description: An optional list of properties to be updated. If set, only the provided properties
-          will be updated and others will be skipped.
+        description: An optional list of properties to be updated. If set, only the provided properties will be updated and others will be skipped.
         required: false
         schema:
           type: array
@@ -1097,7 +1651,9 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/CustomFieldMetaData'
+                $ref: '#/components/schemas/CustomFieldMetaData_2'
+    servers:
+    - url: https://api.infusionsoft.com/crm
   /rest/v2/companies/model/customFields/tabs/{tab_id}:
     get:
       tags:
@@ -1314,6 +1870,8 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/CustomFieldTab'
+    servers:
+    - url: https://api.infusionsoft.com/crm
   /rest/v2/companies/model/customFields/groups/{group_id}:
     get:
       tags:
@@ -1386,8 +1944,7 @@ paths:
       tags:
       - Company
       summary: Delete a Company Custom Field Group
-      description: Deletes a custom field group. Returns 409 Conflict if the group still contains custom
-        fields.
+      description: Deletes a custom field group. Returns 409 Conflict if the group still contains custom fields.
       operationId: deleteCompanyCustomFieldGroup
       parameters:
       - name: group_id
@@ -1532,6 +2089,8 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/CustomFieldGroup'
+    servers:
+    - url: https://api.infusionsoft.com/crm
   /rest/v2/companies/{company_id}/tags:
     get:
       tags:
@@ -1569,8 +2128,7 @@ paths:
           - (String) `until_update_time`
 
 
-          You will need to apply the `==` operator to check the equality of one of the filters with your
-          searched
+          You will need to apply the `==` operator to check the equality of one of the filters with your searched
 
           word, in the encoded form `%3D%3D`. For the filters listed above, here are some examples:
 
@@ -1682,6 +2240,8 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ListCompanyTagsResponse'
+    servers:
+    - url: https://api.infusionsoft.com/crm
   /rest/v2/companies/model:
     get:
       tags:
@@ -1743,38 +2303,743 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ObjectModel'
+                $ref: '#/components/schemas/ObjectModel_2'
+    servers:
+    - url: https://api.infusionsoft.com/crm
 components:
   schemas:
+    DefaultHttpStatusCode:
+      allOf:
+      - $ref: '#/components/schemas/HttpStatusCode'
+    ObjectModel:
+      type: object
+      properties:
+        custom_fields:
+          type: array
+          items:
+            $ref: '#/components/schemas/CustomFieldMetaData'
+        optional_properties:
+          type: array
+          items:
+            type: string
+          uniqueItems: true
+    CompanyQueryCommand:
+      type: object
+      properties:
+        limit:
+          type: integer
+          format: int32
+        offset:
+          type: integer
+          format: int32
+        company_name:
+          type: string
+        order:
+          type: string
+          enum:
+          - id
+          - date_created
+          - name
+          - email
+        order_direction:
+          type: string
+          enum:
+          - ASCENDING
+          - DESCENDING
+    CustomFieldValue:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        content: {}
+    CompanyList:
+      type: object
+      properties:
+        companies:
+          type: array
+          items:
+            $ref: '#/components/schemas/Company'
+        count:
+          type: integer
+          format: int32
+        next:
+          type: string
+        previous:
+          type: string
+    View:
+      type: object
+      properties:
+        contentType:
+          type: string
+    ModelAndView:
+      type: object
+      properties:
+        view:
+          $ref: '#/components/schemas/View'
+        model:
+          type: object
+          additionalProperties: {}
+        status:
+          oneOf:
+          - $ref: '#/components/schemas/DefaultHttpStatusCode'
+          - $ref: '#/components/schemas/HttpStatus'
+        modelMap:
+          type: object
+          additionalProperties: {}
+          properties:
+            empty:
+              type: boolean
+        reference:
+          type: boolean
+        empty:
+          type: boolean
+        viewName:
+          type: string
+    CompanyPhoneNumber:
+      type: object
+      properties:
+        number:
+          type: string
+        extension:
+          type: string
+        type:
+          type: string
+    Company:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        website:
+          type: string
+        address:
+          $ref: '#/components/schemas/CompanyAddress'
+        notes:
+          type: string
+        company_name:
+          type: string
+        phone_number:
+          $ref: '#/components/schemas/CompanyPhoneNumber'
+        fax_number:
+          $ref: '#/components/schemas/CompanyFaxNumber'
+        email_address:
+          type: string
+        email_status:
+          type: string
+          enum:
+          - UnengagedMarketable
+          - SingleOptIn
+          - DoubleOptin
+          - Confirmed
+          - UnengagedNonMarketable
+          - NonMarketable
+          - Lockdown
+          - Bounce
+          - HardBounce
+          - Manual
+          - Admin
+          - System
+          - ListUnsubscribe
+          - Feedback
+          - Spam
+          - Invalid
+          - Deactivated
+        email_opted_in:
+          type: boolean
+        custom_fields:
+          type: array
+          items:
+            $ref: '#/components/schemas/CustomFieldValue'
+    CustomFieldMetaData:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        label:
+          type: string
+        options:
+          type: array
+          items:
+            $ref: '#/components/schemas/CustomFieldOption'
+        record_type:
+          type: string
+          enum:
+          - CONTACT
+          - REFERRAL_PARTNER
+          - OPPORTUNITY
+          - TASK_NOTE_APPOINTMENT
+          - COMPANY
+          - ORDER
+          - SUBSCRIPTION
+        field_type:
+          type: string
+          enum:
+          - Currency
+          - Date
+          - DateTime
+          - DayOfWeek
+          - Drilldown
+          - Email
+          - Month
+          - ListBox
+          - Name
+          - WholeNumber
+          - DecimalNumber
+          - Percent
+          - PhoneNumber
+          - Radio
+          - Dropdown
+          - SocialSecurityNumber
+          - State
+          - Text
+          - TextArea
+          - User
+          - UserListBox
+          - Website
+          - Year
+          - YesNo
+        field_name:
+          type: string
+        default_value:
+          type: string
+    CreateOrPatchCompany:
+      type: object
+      description: company
+      properties:
+        website:
+          type: string
+        address:
+          $ref: '#/components/schemas/CompanyAddress'
+        notes:
+          type: string
+        company_name:
+          type: string
+        phone_number:
+          $ref: '#/components/schemas/CompanyPhoneNumber'
+        fax_number:
+          $ref: '#/components/schemas/CompanyFaxNumber'
+        email_address:
+          type: string
+        opt_in_reason:
+          type: string
+        custom_fields:
+          type: array
+          items:
+            $ref: '#/components/schemas/CustomFieldValue'
+      required:
+      - company_name
+    CompanyAddress:
+      type: object
+      properties:
+        line1:
+          type: string
+        line2:
+          type: string
+        locality:
+          type: string
+        region:
+          type: string
+        zip_code:
+          type: string
+        zip_four:
+          type: string
+        country_code:
+          type: string
+    CustomFieldOption:
+      type: object
+      properties:
+        id:
+          type: string
+        label:
+          type: string
+    HttpStatus:
+      allOf:
+      - $ref: '#/components/schemas/HttpStatusCode'
+      enum:
+      - 100 CONTINUE
+      - 101 SWITCHING_PROTOCOLS
+      - 102 PROCESSING
+      - 103 EARLY_HINTS
+      - 200 OK
+      - 201 CREATED
+      - 202 ACCEPTED
+      - 203 NON_AUTHORITATIVE_INFORMATION
+      - 204 NO_CONTENT
+      - 205 RESET_CONTENT
+      - 206 PARTIAL_CONTENT
+      - 207 MULTI_STATUS
+      - 208 ALREADY_REPORTED
+      - 226 IM_USED
+      - 300 MULTIPLE_CHOICES
+      - 301 MOVED_PERMANENTLY
+      - 302 FOUND
+      - 303 SEE_OTHER
+      - 304 NOT_MODIFIED
+      - 307 TEMPORARY_REDIRECT
+      - 308 PERMANENT_REDIRECT
+      - 400 BAD_REQUEST
+      - 401 UNAUTHORIZED
+      - 402 PAYMENT_REQUIRED
+      - 403 FORBIDDEN
+      - 404 NOT_FOUND
+      - 405 METHOD_NOT_ALLOWED
+      - 406 NOT_ACCEPTABLE
+      - 407 PROXY_AUTHENTICATION_REQUIRED
+      - 408 REQUEST_TIMEOUT
+      - 409 CONFLICT
+      - 410 GONE
+      - 411 LENGTH_REQUIRED
+      - 412 PRECONDITION_FAILED
+      - 413 CONTENT_TOO_LARGE
+      - 413 PAYLOAD_TOO_LARGE
+      - 414 URI_TOO_LONG
+      - 415 UNSUPPORTED_MEDIA_TYPE
+      - 416 REQUESTED_RANGE_NOT_SATISFIABLE
+      - 417 EXPECTATION_FAILED
+      - 418 I_AM_A_TEAPOT
+      - 421 MISDIRECTED_REQUEST
+      - 422 UNPROCESSABLE_CONTENT
+      - 422 UNPROCESSABLE_ENTITY
+      - 423 LOCKED
+      - 424 FAILED_DEPENDENCY
+      - 425 TOO_EARLY
+      - 426 UPGRADE_REQUIRED
+      - 428 PRECONDITION_REQUIRED
+      - 429 TOO_MANY_REQUESTS
+      - 431 REQUEST_HEADER_FIELDS_TOO_LARGE
+      - 451 UNAVAILABLE_FOR_LEGAL_REASONS
+      - 500 INTERNAL_SERVER_ERROR
+      - 501 NOT_IMPLEMENTED
+      - 502 BAD_GATEWAY
+      - 503 SERVICE_UNAVAILABLE
+      - 504 GATEWAY_TIMEOUT
+      - 505 HTTP_VERSION_NOT_SUPPORTED
+      - 506 VARIANT_ALSO_NEGOTIATES
+      - 507 INSUFFICIENT_STORAGE
+      - 508 LOOP_DETECTED
+      - 509 BANDWIDTH_LIMIT_EXCEEDED
+      - 510 NOT_EXTENDED
+      - 511 NETWORK_AUTHENTICATION_REQUIRED
+    HttpStatusCode:
+      type: object
+      properties:
+        error:
+          type: boolean
+        is1xxInformational:
+          type: boolean
+        is2xxSuccessful:
+          type: boolean
+        is3xxRedirection:
+          type: boolean
+        is4xxClientError:
+          type: boolean
+        is5xxServerError:
+          type: boolean
+    CompanyFaxNumber:
+      type: object
+      properties:
+        number:
+          type: string
+        type:
+          type: string
+    UpdateCompanyRequest:
+      type: object
+      description: company
+      properties:
+        address:
+          $ref: '#/components/schemas/Address'
+          description: The company's address
+        notes:
+          type: string
+          description: Notes about the company
+          example: Key enterprise client since 2020
+        website:
+          type: string
+          description: The company's website URL
+          example: https://www.thryv.com
+        suffix:
+          type: string
+          description: Name suffix
+          example: Jr
+        title:
+          type: string
+          description: Name prefix or salutation
+          example: Dr.
+        company_name:
+          type: string
+          description: The name of the company
+          example: Thryv
+        custom_fields:
+          type: array
+          items:
+            $ref: '#/components/schemas/CustomFieldValue_2'
+        email_address:
+          $ref: '#/components/schemas/EmailAddress'
+        fax_number:
+          $ref: '#/components/schemas/FaxNumber'
+        phone_number:
+          $ref: '#/components/schemas/PhoneNumber'
+        anniversary_date:
+          type: string
+          description: The anniversary date
+          example: '2015-06-20'
+        assistant_name:
+          type: string
+          description: The name of the company contact's assistant
+          example: Jane Doe
+        assistant_phone:
+          type: string
+          description: The phone number of the company contact's assistant
+          example: 555-123-4567
+        billing_information:
+          type: string
+          description: Billing information for the company
+          example: NET 30
+        birth_date:
+          type: string
+          description: The birth date
+          example: '1985-03-15'
+        contact_type:
+          type: string
+          description: Type of contact
+          example: Vendor
+        first_name:
+          type: string
+          description: First name of the company contact
+          example: John
+        job_title:
+          type: string
+          description: Job title of the company contact
+          example: CEO
+        last_name:
+          type: string
+          description: Last name of the company contact
+          example: Smith
+        middle_name:
+          type: string
+          description: Middle name of the company contact
+          example: Robert
+        preferred_name:
+          type: string
+          description: Preferred name or nickname of the company contact
+          example: Johnny
+        owner_id:
+          type: string
+          description: ID of the user who owns this company
+          example: 45
+        referral_code:
+          type: string
+          description: Referral code
+          example: REF2024ABC
+        spouse_name:
+          type: string
+          description: Spouse's name
+          example: Jane Smith
+    ErrorDetails:
+      type: object
+      properties:
+        domain:
+          type: string
+        resource:
+          type: string
+    UpdateCustomFieldMetaDataRequest:
+      type: object
+      properties:
+        label:
+          type: string
+        options:
+          type: array
+          items:
+            $ref: '#/components/schemas/CustomFieldOption'
+        group_id:
+          type: string
+      required:
+      - group_id
+    ListCompanyTagsResponse:
+      type: object
+      description: List of tags applied to a company
+      properties:
+        tags:
+          type: array
+          items:
+            $ref: '#/components/schemas/AppliedTag'
+        next_page_token:
+          type: string
+    CategoryReference:
+      type: object
+      properties:
+        id:
+          type: string
+          description: The unique identifier for the tag category
+          example: 123
+      required:
+      - id
+    ListCustomFieldTabsResponse:
+      type: object
+      properties:
+        tabs:
+          type: array
+          items:
+            $ref: '#/components/schemas/CustomFieldTab'
+    CreateCustomFieldOptionRequest:
+      type: object
+      properties:
+        label:
+          type: string
+    AppliedTag:
+      type: object
+      description: Tag with application timestamp
+      properties:
+        tag:
+          $ref: '#/components/schemas/Tag'
+          description: The tag applied
+        applied_time:
+          type: string
+          description: The time the tag was applied to the contact, in ISO 8601 format
+    PhoneNumber:
+      type: object
+      properties:
+        extension:
+          type: string
+          description: Phone extension
+          example: 101
+        number:
+          type: string
+          description: Phone number. Maximum length is 40 characters for PHONE1-PHONE3 and 20 characters for PHONE4-PHONE5.
+          example: 5551234567
+        type:
+          type: string
+          description: Phone type
+          example: Work
+        field:
+          type: string
+          description: Phone number slot
+          enum:
+          - PHONE_NUMBER_FIELD_UNSPECIFIED
+          - PHONE1
+          - PHONE2
+          - PHONE3
+          - PHONE4
+          - PHONE5
+          example: PHONE1
+        number_e164:
+          type: string
+          description: Phone number in E.164 format
+          example: '+15551234567'
+    ListCompaniesResponse:
+      type: object
+      properties:
+        companies:
+          type: array
+          items:
+            $ref: '#/components/schemas/Company_2'
+        next_page_token:
+          type: string
+    CreateCustomFieldRequest:
+      type: object
+      properties:
+        label:
+          type: string
+        options:
+          type: array
+          items:
+            $ref: '#/components/schemas/CreateCustomFieldOptionRequest'
+        field_type:
+          type: string
+          enum:
+          - CURRENCY
+          - DATE
+          - DATE_TIME
+          - DAY_OF_WEEK
+          - DECIMAL_NUMBER
+          - DRILLDOWN
+          - DROPDOWN
+          - EMAIL
+          - LIST_BOX
+          - MONTH
+          - NAME
+          - PERCENT
+          - PHONE_NUMBER
+          - RADIO
+          - SOCIAL_SECURITY_NUMBER
+          - STATE
+          - TEXT
+          - TEXT_AREA
+          - USER
+          - USER_LIST_BOX
+          - WEBSITE
+          - WHOLE_NUMBER
+          - YEAR
+          - YES_NO
+        group_id:
+          type: string
+          description: An optional tab group to place the field under in the interface.  If not specified, will default to the 'Custom Fields' tab.
+        user_group_id:
+          type: string
+          description: An optional user group to choose from when selecting values for User or UserListBox fields.
+      required:
+      - field_type
+      - label
+    CreateCustomFieldTabRequest:
+      type: object
+      properties:
+        name:
+          type: string
+    CustomFieldGroup:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        order:
+          type: integer
+          format: int32
+        tab_id:
+          type: string
+        record_type:
+          type: string
+          enum:
+          - CONTACT
+          - REFERRAL_PARTNER
+          - OPPORTUNITY
+          - TASK_NOTE_APPOINTMENT
+          - COMPANY
+          - ORDER
+          - SUBSCRIPTION
+    Error:
+      type: object
+      properties:
+        code:
+          type: integer
+          format: int32
+        message:
+          type: string
+        status:
+          type: string
+        details:
+          type: array
+          items:
+            $ref: '#/components/schemas/ErrorDetails'
+    CreateCompanyRequest:
+      type: object
+      description: company
+      properties:
+        address:
+          $ref: '#/components/schemas/Address'
+          description: The company's address
+        notes:
+          type: string
+          description: Notes about the company
+          example: Key enterprise client since 2020
+        website:
+          type: string
+          description: The company's website URL
+          example: https://www.thryv.com
+        suffix:
+          type: string
+          description: Name suffix
+          example: Jr
+        title:
+          type: string
+          description: Name prefix or salutation
+          example: Dr.
+        company_name:
+          type: string
+          description: The name of the company
+          example: Thryv
+        custom_fields:
+          type: array
+          items:
+            $ref: '#/components/schemas/CustomFieldValue_2'
+        email_address:
+          $ref: '#/components/schemas/EmailAddress'
+        fax_number:
+          $ref: '#/components/schemas/FaxNumber'
+        phone_number:
+          $ref: '#/components/schemas/PhoneNumber'
+        anniversary_date:
+          type: string
+          description: The anniversary date
+          example: '2015-06-20'
+        assistant_name:
+          type: string
+          description: The name of the company contact's assistant
+          example: Jane Doe
+        assistant_phone:
+          type: string
+          description: The phone number of the company contact's assistant
+          example: 555-123-4567
+        billing_information:
+          type: string
+          description: Billing information for the company
+          example: NET 30
+        birth_date:
+          type: string
+          description: The birth date
+          example: '1985-03-15'
+        contact_type:
+          type: string
+          description: Type of contact
+          example: Vendor
+        first_name:
+          type: string
+          description: First name of the company contact
+          example: John
+        job_title:
+          type: string
+          description: Job title of the company contact
+          example: CEO
+        last_name:
+          type: string
+          description: Last name of the company contact
+          example: Smith
+        middle_name:
+          type: string
+          description: Middle name of the company contact
+          example: Robert
+        preferred_name:
+          type: string
+          description: Preferred name or nickname of the company contact
+          example: Johnny
+        owner_id:
+          type: string
+          description: ID of the user who owns this company
+          example: 45
+        referral_code:
+          type: string
+          description: Referral code
+          example: REF2024ABC
+        spouse_name:
+          type: string
+          description: Spouse's name
+          example: Jane Smith
     Address:
       type: object
       properties:
         country:
           type: string
           deprecated: true
-          description: Deprecated. The long-name descriptive version of the Country Code. Please use 'country_code'
-            for POST/PATCH operations. Maximum length is 100 characters.
+          description: Deprecated. The long-name descriptive version of the Country Code. Please use 'country_code' for POST/PATCH operations. Maximum length is 100 characters.
           example: United States of America
         line1:
           type: string
-          description: Street address line 1. Maximum length is 75 characters for the BILLING address
-            and 100 characters for the SHIPPING and OTHER addresses.
+          description: Street address line 1. Maximum length is 75 characters for the BILLING address and 100 characters for the SHIPPING and OTHER addresses.
           example: 123
         line2:
           type: string
-          description: Street address line 2. Maximum length is 75 characters for the BILLING address
-            and 100 characters for the SHIPPING and OTHER addresses.
+          description: Street address line 2. Maximum length is 75 characters for the BILLING address and 100 characters for the SHIPPING and OTHER addresses.
           example: Suite 100
         locality:
           type: string
-          description: The municipality to which the address belongs. Maximum length is 50 characters
-            for the BILLING address and 100 characters for the SHIPPING and OTHER addresses.
+          description: The municipality to which the address belongs. Maximum length is 50 characters for the BILLING address and 100 characters for the SHIPPING and OTHER addresses.
           example: Phoenix
         region:
           type: string
           deprecated: true
-          description: The long-name descriptive version of the Region Code. Please use 'region_code'
-            for POST/PATCH operations. Maximum length is 50 characters.
+          description: The long-name descriptive version of the Region Code. Please use 'region_code' for POST/PATCH operations. Maximum length is 50 characters.
           example: Arizona
         field:
           type: string
@@ -1791,8 +3056,7 @@ components:
           example: USA
         postal_code:
           type: string
-          description: Postal or ZIP code. Maximum length is 15 characters for the BILLING and OTHER addresses
-            and 20 characters for the SHIPPING address.
+          description: Postal or ZIP code. Maximum length is 15 characters for the BILLING and OTHER addresses and 20 characters for the SHIPPING address.
           example: 85001
         region_code:
           type: string
@@ -1800,33 +3064,218 @@ components:
           example: US-AZ
         zip_code:
           type: string
-          description: ZIP code (US). Maximum length is 15 characters for the BILLING and OTHER addresses
-            and 20 characters for the SHIPPING address.
+          description: ZIP code (US). Maximum length is 15 characters for the BILLING and OTHER addresses and 20 characters for the SHIPPING address.
           example: 85001
         zip_four:
           type: string
           description: ZIP+4 extension. Maximum length is 10 characters.
           example: 1234
-    AppliedTag:
-      type: object
-      description: Tag with application timestamp
-      properties:
-        tag:
-          $ref: '#/components/schemas/Tag'
-          description: The tag applied
-        applied_time:
-          type: string
-          description: The time the tag was applied to the contact, in ISO 8601 format
-    CategoryReference:
+    Tag:
       type: object
       properties:
         id:
           type: string
-          description: The unique identifier for the tag category
+          description: The unique identifier for this tag
           example: 123
-      required:
-      - id
-    Company:
+        name:
+          type: string
+          description: The unique name of this tag
+          example: VIP Customer
+        description:
+          type: string
+          description: A description of this tag
+          example: High-value customers
+        category:
+          $ref: '#/components/schemas/CategoryReference'
+          description: The category this tag belongs to
+        create_time:
+          type: string
+          format: date-time
+          description: The time this tag was created, in ISO 8601 format
+          example: '2024-01-10T08:00:00Z'
+        update_time:
+          type: string
+          format: date-time
+          description: The time this tag was last updated, in ISO 8601 format
+          example: '2024-03-15T10:30:00Z'
+    FaxNumber:
+      type: object
+      properties:
+        number:
+          type: string
+          description: Fax number
+          example: 5551234568
+        type:
+          type: string
+          description: Fax type
+          example: Work
+        field:
+          type: string
+          description: Fax number slot
+          enum:
+          - FAX_NUMBER_FIELD_UNSPECIFIED
+          - FAX1
+          - FAX2
+          example: FAX1
+    EmailAddress:
+      type: object
+      properties:
+        email:
+          type: string
+          description: Email address. Maximum length is 75 characters for EMAIL1 and 100 characters for EMAIL2 and EMAIL3.
+          example: john.smith@example.com
+        field:
+          type: string
+          description: Email address slot
+          enum:
+          - EMAIL_FIELD_UNSPECIFIED
+          - EMAIL1
+          - EMAIL2
+          - EMAIL3
+          example: EMAIL1
+        opt_in_reason:
+          type: string
+          description: Reason for opting in
+          example: Subscribed via website form
+        is_opt_in:
+          type: boolean
+        email_opt_status:
+          type: string
+          enum:
+          - UNENGAGED_MARKETABLE
+          - SINGLE_OPT_IN
+          - DOUBLE_OPT_IN
+          - CONFIRMED
+          - UNENGAGED_NON_MARKETABLE
+          - NON_MARKETABLE
+          - LOCKDOWN
+          - BOUNCE
+          - HARD_BOUNCE
+          - MANUAL
+          - ADMIN
+          - SYSTEM
+          - LIST_UNSUBSCRIBE
+          - FEEDBACK
+          - SPAM
+          - INVALID
+          - DEACTIVATED
+    UpdateCustomFieldGroupRequest:
+      type: object
+      properties:
+        name:
+          type: string
+        order:
+          type: integer
+          format: int32
+        tab_id:
+          type: string
+    CreateCustomFieldGroupRequest:
+      type: object
+      properties:
+        name:
+          type: string
+        tab_id:
+          type: string
+    ObjectModel_2:
+      type: object
+      properties:
+        custom_fields:
+          type: array
+          items:
+            $ref: '#/components/schemas/CustomFieldMetaData_2'
+        optional_properties:
+          type: array
+          description: These fields are not transmitted by default on this model, but can be requested by specifying them in a comma-separated list in the optional_properties query parameter.
+          items:
+            type: string
+          uniqueItems: true
+    UpdateCustomFieldTabRequest:
+      type: object
+      properties:
+        name:
+          type: string
+        order:
+          type: integer
+          format: int32
+    CustomFieldValue_2:
+      type: object
+      properties:
+        id:
+          type: string
+        content:
+          description: The value of the custom field. Text custom field values have a maximum length of 65535 characters.
+    CustomFieldMetaData_2:
+      type: object
+      description: Metadata describing a custom field, including its type and options
+      properties:
+        id:
+          type: string
+          description: The unique identifier of the custom field
+          example: 123
+        label:
+          type: string
+          description: The display label of the custom field
+          example: Favorite Color
+        options:
+          type: array
+          description: The list of available options for select/radio/multiselect/drilldown field types
+          items:
+            $ref: '#/components/schemas/CustomFieldOption'
+        record_type:
+          type: string
+          description: The entity type this custom field belongs to (e.g. CONTACT, COMPANY)
+          enum:
+          - CONTACT
+          - REFERRAL_PARTNER
+          - OPPORTUNITY
+          - TASK_NOTE_APPOINTMENT
+          - COMPANY
+          - ORDER
+          - SUBSCRIPTION
+        field_type:
+          type: string
+          description: The data type of the custom field (e.g. Text, Number, Date, Select)
+          enum:
+          - CURRENCY
+          - DATE
+          - DATE_TIME
+          - DAY_OF_WEEK
+          - DECIMAL_NUMBER
+          - DRILLDOWN
+          - DROPDOWN
+          - EMAIL
+          - LIST_BOX
+          - MONTH
+          - NAME
+          - PERCENT
+          - PHONE_NUMBER
+          - RADIO
+          - SOCIAL_SECURITY_NUMBER
+          - STATE
+          - TEXT
+          - TEXT_AREA
+          - USER
+          - USER_LIST_BOX
+          - WEBSITE
+          - WHOLE_NUMBER
+          - YEAR
+          - YES_NO
+        default_value:
+          type: string
+          description: The default value for this custom field, if any
+        group_id:
+          type: string
+          description: The ID of the group this custom field belongs to
+          example: 45
+        group_name:
+          type: string
+          description: The name of the group this custom field belongs to
+          example: Personal Info
+        field_name:
+          type: string
+          description: The database column name for this custom field. Use this value when filtering contacts (e.g. for field_name 'firstName1', filter with 'firstName1==John').
+          example: firstName1
+    Company_2:
       type: object
       properties:
         id:
@@ -1863,7 +3312,7 @@ components:
         custom_fields:
           type: array
           items:
-            $ref: '#/components/schemas/CustomFieldValue'
+            $ref: '#/components/schemas/CustomFieldValue_2'
         email_address:
           $ref: '#/components/schemas/EmailAddress'
         fax_number:
@@ -1946,264 +3395,13 @@ components:
           type: string
           description: ID of the user who last updated this company
           example: 10
-    CreateCompanyRequest:
+    ListCustomFieldGroupsResponse:
       type: object
-      description: company
       properties:
-        address:
-          $ref: '#/components/schemas/Address'
-          description: The company's address
-        notes:
-          type: string
-          description: Notes about the company
-          example: Key enterprise client since 2020
-        website:
-          type: string
-          description: The company's website URL
-          example: https://www.thryv.com
-        suffix:
-          type: string
-          description: Name suffix
-          example: Jr
-        title:
-          type: string
-          description: Name prefix or salutation
-          example: Dr.
-        company_name:
-          type: string
-          description: The name of the company
-          example: Thryv
-        custom_fields:
+        groups:
           type: array
           items:
-            $ref: '#/components/schemas/CustomFieldValue'
-        email_address:
-          $ref: '#/components/schemas/EmailAddress'
-        fax_number:
-          $ref: '#/components/schemas/FaxNumber'
-        phone_number:
-          $ref: '#/components/schemas/PhoneNumber'
-        anniversary_date:
-          type: string
-          description: The anniversary date
-          example: '2015-06-20'
-        assistant_name:
-          type: string
-          description: The name of the company contact's assistant
-          example: Jane Doe
-        assistant_phone:
-          type: string
-          description: The phone number of the company contact's assistant
-          example: 555-123-4567
-        billing_information:
-          type: string
-          description: Billing information for the company
-          example: NET 30
-        birth_date:
-          type: string
-          description: The birth date
-          example: '1985-03-15'
-        contact_type:
-          type: string
-          description: Type of contact
-          example: Vendor
-        first_name:
-          type: string
-          description: First name of the company contact
-          example: John
-        job_title:
-          type: string
-          description: Job title of the company contact
-          example: CEO
-        last_name:
-          type: string
-          description: Last name of the company contact
-          example: Smith
-        middle_name:
-          type: string
-          description: Middle name of the company contact
-          example: Robert
-        preferred_name:
-          type: string
-          description: Preferred name or nickname of the company contact
-          example: Johnny
-        owner_id:
-          type: string
-          description: ID of the user who owns this company
-          example: 45
-        referral_code:
-          type: string
-          description: Referral code
-          example: REF2024ABC
-        spouse_name:
-          type: string
-          description: Spouse's name
-          example: Jane Smith
-    CreateCustomFieldGroupRequest:
-      type: object
-      properties:
-        name:
-          type: string
-        tab_id:
-          type: string
-    CreateCustomFieldOptionRequest:
-      type: object
-      properties:
-        label:
-          type: string
-    CreateCustomFieldRequest:
-      type: object
-      properties:
-        label:
-          type: string
-        options:
-          type: array
-          items:
-            $ref: '#/components/schemas/CreateCustomFieldOptionRequest'
-        field_type:
-          type: string
-          enum:
-          - CURRENCY
-          - DATE
-          - DATE_TIME
-          - DAY_OF_WEEK
-          - DECIMAL_NUMBER
-          - DRILLDOWN
-          - DROPDOWN
-          - EMAIL
-          - LIST_BOX
-          - MONTH
-          - NAME
-          - PERCENT
-          - PHONE_NUMBER
-          - RADIO
-          - SOCIAL_SECURITY_NUMBER
-          - STATE
-          - TEXT
-          - TEXT_AREA
-          - USER
-          - USER_LIST_BOX
-          - WEBSITE
-          - WHOLE_NUMBER
-          - YEAR
-          - YES_NO
-        group_id:
-          type: string
-          description: An optional tab group to place the field under in the interface.  If not specified,
-            will default to the 'Custom Fields' tab.
-        user_group_id:
-          type: string
-          description: An optional user group to choose from when selecting values for User or UserListBox
-            fields.
-      required:
-      - field_type
-      - label
-    CreateCustomFieldTabRequest:
-      type: object
-      properties:
-        name:
-          type: string
-    CustomFieldGroup:
-      type: object
-      properties:
-        id:
-          type: string
-        name:
-          type: string
-        order:
-          type: integer
-          format: int32
-        tab_id:
-          type: string
-        record_type:
-          type: string
-          enum:
-          - CONTACT
-          - REFERRAL_PARTNER
-          - OPPORTUNITY
-          - TASK_NOTE_APPOINTMENT
-          - COMPANY
-          - ORDER
-          - SUBSCRIPTION
-    CustomFieldMetaData:
-      type: object
-      description: Metadata describing a custom field, including its type and options
-      properties:
-        id:
-          type: string
-          description: The unique identifier of the custom field
-          example: 123
-        label:
-          type: string
-          description: The display label of the custom field
-          example: Favorite Color
-        options:
-          type: array
-          description: The list of available options for select/radio/multiselect/drilldown field types
-          items:
-            $ref: '#/components/schemas/CustomFieldOption'
-        record_type:
-          type: string
-          description: The entity type this custom field belongs to (e.g. CONTACT, COMPANY)
-          enum:
-          - CONTACT
-          - REFERRAL_PARTNER
-          - OPPORTUNITY
-          - TASK_NOTE_APPOINTMENT
-          - COMPANY
-          - ORDER
-          - SUBSCRIPTION
-        field_type:
-          type: string
-          description: The data type of the custom field (e.g. Text, Number, Date, Select)
-          enum:
-          - CURRENCY
-          - DATE
-          - DATE_TIME
-          - DAY_OF_WEEK
-          - DECIMAL_NUMBER
-          - DRILLDOWN
-          - DROPDOWN
-          - EMAIL
-          - LIST_BOX
-          - MONTH
-          - NAME
-          - PERCENT
-          - PHONE_NUMBER
-          - RADIO
-          - SOCIAL_SECURITY_NUMBER
-          - STATE
-          - TEXT
-          - TEXT_AREA
-          - USER
-          - USER_LIST_BOX
-          - WEBSITE
-          - WHOLE_NUMBER
-          - YEAR
-          - YES_NO
-        default_value:
-          type: string
-          description: The default value for this custom field, if any
-        group_id:
-          type: string
-          description: The ID of the group this custom field belongs to
-          example: 45
-        group_name:
-          type: string
-          description: The name of the group this custom field belongs to
-          example: Personal Info
-        field_name:
-          type: string
-          description: The database column name for this custom field. Use this value when filtering contacts
-            (e.g. for field_name 'firstName1', filter with 'firstName1==John').
-          example: firstName1
-    CustomFieldOption:
-      type: object
-      properties:
-        id:
-          type: string
-        label:
-          type: string
+            $ref: '#/components/schemas/CustomFieldGroup'
     CustomFieldTab:
       type: object
       properties:
@@ -2222,8 +3420,7 @@ components:
           example: 1
         record_type:
           type: string
-          description: The record type this tab belongs to (e.g., CONTACT, COMPANY, OPPORTUNITY, REFERRAL_PARTNER,
-            ORDER, SUBSCRIPTION, TASK_NOTE_APPOINTMENT)
+          description: The record type this tab belongs to (e.g., CONTACT, COMPANY, OPPORTUNITY, REFERRAL_PARTNER, ORDER, SUBSCRIPTION, TASK_NOTE_APPOINTMENT)
           enum:
           - CONTACT
           - REFERRAL_PARTNER
@@ -2233,327 +3430,6 @@ components:
           - ORDER
           - SUBSCRIPTION
           example: CONTACT
-    CustomFieldValue:
-      type: object
-      properties:
-        id:
-          type: string
-        content:
-          description: The value of the custom field. Text custom field values have a maximum length of
-            65535 characters.
-    EmailAddress:
-      type: object
-      properties:
-        email:
-          type: string
-          description: Email address. Maximum length is 75 characters for EMAIL1 and 100 characters for
-            EMAIL2 and EMAIL3.
-          example: john.smith@example.com
-        field:
-          type: string
-          description: Email address slot
-          enum:
-          - EMAIL_FIELD_UNSPECIFIED
-          - EMAIL1
-          - EMAIL2
-          - EMAIL3
-          example: EMAIL1
-        opt_in_reason:
-          type: string
-          description: Reason for opting in
-          example: Subscribed via website form
-        is_opt_in:
-          type: boolean
-        email_opt_status:
-          type: string
-          enum:
-          - UNENGAGED_MARKETABLE
-          - SINGLE_OPT_IN
-          - DOUBLE_OPT_IN
-          - CONFIRMED
-          - UNENGAGED_NON_MARKETABLE
-          - NON_MARKETABLE
-          - LOCKDOWN
-          - BOUNCE
-          - HARD_BOUNCE
-          - MANUAL
-          - ADMIN
-          - SYSTEM
-          - LIST_UNSUBSCRIBE
-          - FEEDBACK
-          - SPAM
-          - INVALID
-          - DEACTIVATED
-    Error:
-      type: object
-      properties:
-        code:
-          type: integer
-          format: int32
-        message:
-          type: string
-        status:
-          type: string
-        details:
-          type: array
-          items:
-            $ref: '#/components/schemas/ErrorDetails'
-    ErrorDetails:
-      type: object
-      properties:
-        domain:
-          type: string
-        resource:
-          type: string
-    FaxNumber:
-      type: object
-      properties:
-        number:
-          type: string
-          description: Fax number
-          example: 5551234568
-        type:
-          type: string
-          description: Fax type
-          example: Work
-        field:
-          type: string
-          description: Fax number slot
-          enum:
-          - FAX_NUMBER_FIELD_UNSPECIFIED
-          - FAX1
-          - FAX2
-          example: FAX1
-    ListCompaniesResponse:
-      type: object
-      properties:
-        companies:
-          type: array
-          items:
-            $ref: '#/components/schemas/Company'
-        next_page_token:
-          type: string
-    ListCompanyTagsResponse:
-      type: object
-      description: List of tags applied to a company
-      properties:
-        tags:
-          type: array
-          items:
-            $ref: '#/components/schemas/AppliedTag'
-        next_page_token:
-          type: string
-    ListCustomFieldGroupsResponse:
-      type: object
-      properties:
-        groups:
-          type: array
-          items:
-            $ref: '#/components/schemas/CustomFieldGroup'
-    ListCustomFieldTabsResponse:
-      type: object
-      properties:
-        tabs:
-          type: array
-          items:
-            $ref: '#/components/schemas/CustomFieldTab'
-    ObjectModel:
-      type: object
-      properties:
-        custom_fields:
-          type: array
-          items:
-            $ref: '#/components/schemas/CustomFieldMetaData'
-        optional_properties:
-          type: array
-          description: These fields are not transmitted by default on this model, but can be requested
-            by specifying them in a comma-separated list in the optional_properties query parameter.
-          items:
-            type: string
-          uniqueItems: true
-    PhoneNumber:
-      type: object
-      properties:
-        extension:
-          type: string
-          description: Phone extension
-          example: 101
-        number:
-          type: string
-          description: Phone number. Maximum length is 40 characters for PHONE1-PHONE3 and 20 characters
-            for PHONE4-PHONE5.
-          example: 5551234567
-        type:
-          type: string
-          description: Phone type
-          example: Work
-        field:
-          type: string
-          description: Phone number slot
-          enum:
-          - PHONE_NUMBER_FIELD_UNSPECIFIED
-          - PHONE1
-          - PHONE2
-          - PHONE3
-          - PHONE4
-          - PHONE5
-          example: PHONE1
-        number_e164:
-          type: string
-          description: Phone number in E.164 format
-          example: '+15551234567'
-    Tag:
-      type: object
-      properties:
-        id:
-          type: string
-          description: The unique identifier for this tag
-          example: 123
-        name:
-          type: string
-          description: The unique name of this tag
-          example: VIP Customer
-        description:
-          type: string
-          description: A description of this tag
-          example: High-value customers
-        category:
-          $ref: '#/components/schemas/CategoryReference'
-          description: The category this tag belongs to
-        create_time:
-          type: string
-          format: date-time
-          description: The time this tag was created, in ISO 8601 format
-          example: '2024-01-10T08:00:00Z'
-        update_time:
-          type: string
-          format: date-time
-          description: The time this tag was last updated, in ISO 8601 format
-          example: '2024-03-15T10:30:00Z'
-    UpdateCompanyRequest:
-      type: object
-      description: company
-      properties:
-        address:
-          $ref: '#/components/schemas/Address'
-          description: The company's address
-        notes:
-          type: string
-          description: Notes about the company
-          example: Key enterprise client since 2020
-        website:
-          type: string
-          description: The company's website URL
-          example: https://www.thryv.com
-        suffix:
-          type: string
-          description: Name suffix
-          example: Jr
-        title:
-          type: string
-          description: Name prefix or salutation
-          example: Dr.
-        company_name:
-          type: string
-          description: The name of the company
-          example: Thryv
-        custom_fields:
-          type: array
-          items:
-            $ref: '#/components/schemas/CustomFieldValue'
-        email_address:
-          $ref: '#/components/schemas/EmailAddress'
-        fax_number:
-          $ref: '#/components/schemas/FaxNumber'
-        phone_number:
-          $ref: '#/components/schemas/PhoneNumber'
-        anniversary_date:
-          type: string
-          description: The anniversary date
-          example: '2015-06-20'
-        assistant_name:
-          type: string
-          description: The name of the company contact's assistant
-          example: Jane Doe
-        assistant_phone:
-          type: string
-          description: The phone number of the company contact's assistant
-          example: 555-123-4567
-        billing_information:
-          type: string
-          description: Billing information for the company
-          example: NET 30
-        birth_date:
-          type: string
-          description: The birth date
-          example: '1985-03-15'
-        contact_type:
-          type: string
-          description: Type of contact
-          example: Vendor
-        first_name:
-          type: string
-          description: First name of the company contact
-          example: John
-        job_title:
-          type: string
-          description: Job title of the company contact
-          example: CEO
-        last_name:
-          type: string
-          description: Last name of the company contact
-          example: Smith
-        middle_name:
-          type: string
-          description: Middle name of the company contact
-          example: Robert
-        preferred_name:
-          type: string
-          description: Preferred name or nickname of the company contact
-          example: Johnny
-        owner_id:
-          type: string
-          description: ID of the user who owns this company
-          example: 45
-        referral_code:
-          type: string
-          description: Referral code
-          example: REF2024ABC
-        spouse_name:
-          type: string
-          description: Spouse's name
-          example: Jane Smith
-    UpdateCustomFieldGroupRequest:
-      type: object
-      properties:
-        name:
-          type: string
-        order:
-          type: integer
-          format: int32
-        tab_id:
-          type: string
-    UpdateCustomFieldMetaDataRequest:
-      type: object
-      properties:
-        label:
-          type: string
-        options:
-          type: array
-          items:
-            $ref: '#/components/schemas/CustomFieldOption'
-        group_id:
-          type: string
-      required:
-      - group_id
-    UpdateCustomFieldTabRequest:
-      type: object
-      properties:
-        name:
-          type: string
-        order:
-          type: integer
-          format: int32
   securitySchemes:
     oauth2:
       type: oauth2
@@ -2562,5 +3438,6 @@ components:
           authorizationUrl: https://accounts.infusionsoft.com/app/oauth/authorize
           tokenUrl: https://api.infusionsoft.com/token
           scopes: {}
-security:
-- oauth2: []
+x-refined-from:
+- keap-v1-openapi.json
+- keap-v2-openapi.json

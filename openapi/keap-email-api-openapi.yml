@@ -1,8 +1,6 @@
-openapi: 3.1.0
+openapi: 3.2.0
 info:
   title: Keap Email API
-  description: Keap Public API Documentation
-  termsOfService: https://www.thryv.com/terms-of-use
   contact:
     name: Keap
     url: https://developer.keap.com/get-support
@@ -10,12 +8,586 @@ info:
   license:
     name: Apache 2.0
     url: https://www.apache.org/licenses/LICENSE-2.0
-  version: v2
+  termsOfService: https://www.thryv.com/terms-of-use
+  version: '1.0'
+  description: 'Operations tagged Email across 2 of this provider''s published API definitions: keap-v1-openapi.json, keap-v2-openapi.json. Each path carries the servers of the definition it was published in.'
 servers:
 - url: https://api.infusionsoft.com/crm
+security:
+- oauth2: []
 tags:
 - name: Email
+  description: Emails-Endpoint
 paths:
+  /rest/v1/emails/unsync:
+    post:
+      tags:
+      - Email
+      summary: Un-sync a batch of Email Records
+      description: Un-syncs a batch of email records
+      operationId: deleteEmails
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SetOfIds'
+        required: true
+      responses:
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ModelAndView'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ModelAndView'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ModelAndView'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ModelAndView'
+        '409':
+          description: Conflict
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ModelAndView'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ModelAndView'
+        '501':
+          description: Not Implemented
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ModelAndView'
+        '405':
+          description: Method Not Allowed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ModelAndView'
+        '406':
+          description: Not Acceptable
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ModelAndView'
+        '412':
+          description: Precondition Failed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ModelAndView'
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties:
+                  type: string
+    servers:
+    - url: https://api.infusionsoft.com/crm
+  /rest/v1/emails/sync:
+    post:
+      tags:
+      - Email
+      summary: Create a set of Email Records
+      description: Create a set of records of emails sent to contacts, maximum 1000 per transaction.
+      operationId: createEmails
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EmailSentCreateListRequest'
+        required: true
+      responses:
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ModelAndView'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ModelAndView'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ModelAndView'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ModelAndView'
+        '409':
+          description: Conflict
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ModelAndView'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ModelAndView'
+        '501':
+          description: Not Implemented
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ModelAndView'
+        '405':
+          description: Method Not Allowed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ModelAndView'
+        '406':
+          description: Not Acceptable
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ModelAndView'
+        '412':
+          description: Precondition Failed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ModelAndView'
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EmailSentCreateListResponse'
+    servers:
+    - url: https://api.infusionsoft.com/crm
+  /rest/v1/emails/queue:
+    post:
+      tags:
+      - Email
+      summary: Send an Email
+      description: Send an Email to a list of Contacts
+      operationId: sendEmail
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EmailSendRequest'
+        required: true
+      responses:
+        '400':
+          description: 'Bad Request: invalid email parameters or from address domain is not authenticated'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ModelAndView'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ModelAndView'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ModelAndView'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ModelAndView'
+        '409':
+          description: Conflict
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ModelAndView'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ModelAndView'
+        '501':
+          description: Not Implemented
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ModelAndView'
+        '405':
+          description: Method Not Allowed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ModelAndView'
+        '406':
+          description: Not Acceptable
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ModelAndView'
+        '412':
+          description: Precondition Failed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ModelAndView'
+        '202':
+          description: Accepted
+    servers:
+    - url: https://api.infusionsoft.com/crm
+  /rest/v1/emails:
+    get:
+      tags:
+      - Email
+      summary: List Emails
+      description: 'Retrieve a list of emails that have been sent
+
+
+        Keap is currently investigating an issue with degraded performance
+
+        of this endpoint with very large (millions of records) record sets'
+      operationId: listEmails
+      parameters:
+      - name: emailSentQueryCommand
+        in: query
+        required: true
+        schema:
+          $ref: '#/components/schemas/EmailSentQueryCommand'
+      responses:
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ModelAndView'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ModelAndView'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ModelAndView'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ModelAndView'
+        '409':
+          description: Conflict
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ModelAndView'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ModelAndView'
+        '501':
+          description: Not Implemented
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ModelAndView'
+        '405':
+          description: Method Not Allowed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ModelAndView'
+        '406':
+          description: Not Acceptable
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ModelAndView'
+        '412':
+          description: Precondition Failed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ModelAndView'
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EmailSentQueryResultList'
+    post:
+      tags:
+      - Email
+      summary: Create an Email Record
+      description: Create a record of an email sent to a contact
+      operationId: createEmail
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EmailSentCreate'
+        required: true
+      responses:
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ModelAndView'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ModelAndView'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ModelAndView'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ModelAndView'
+        '409':
+          description: Conflict
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ModelAndView'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ModelAndView'
+        '501':
+          description: Not Implemented
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ModelAndView'
+        '405':
+          description: Method Not Allowed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ModelAndView'
+        '406':
+          description: Not Acceptable
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ModelAndView'
+        '412':
+          description: Precondition Failed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ModelAndView'
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EmailSentCreate'
+    servers:
+    - url: https://api.infusionsoft.com/crm
+  /rest/v1/emails/{id}:
+    get:
+      tags:
+      - Email
+      summary: Retrieve an Email
+      description: Retrieves a single email that has been sent
+      operationId: getEmail
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ModelAndView'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ModelAndView'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ModelAndView'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ModelAndView'
+        '409':
+          description: Conflict
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ModelAndView'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ModelAndView'
+        '501':
+          description: Not Implemented
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ModelAndView'
+        '405':
+          description: Method Not Allowed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ModelAndView'
+        '406':
+          description: Not Acceptable
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ModelAndView'
+        '412':
+          description: Precondition Failed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ModelAndView'
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EmailSentQueryResultWithContent'
+    delete:
+      tags:
+      - Email
+      summary: Delete an Email Record
+      description: Delete a specific email record
+      operationId: deleteEmail
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ModelAndView'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ModelAndView'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ModelAndView'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ModelAndView'
+        '409':
+          description: Conflict
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ModelAndView'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ModelAndView'
+        '501':
+          description: Not Implemented
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ModelAndView'
+        '405':
+          description: Method Not Allowed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ModelAndView'
+        '406':
+          description: Not Acceptable
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ModelAndView'
+        '412':
+          description: Precondition Failed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ModelAndView'
+        '204':
+          description: No Content
+    servers:
+    - url: https://api.infusionsoft.com/crm
   /rest/v2/emails:
     get:
       tags:
@@ -195,6 +767,8 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/EmailSentWithContent'
+    servers:
+    - url: https://api.infusionsoft.com/crm
   /rest/v2/emails:send:
     post:
       tags:
@@ -206,7 +780,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/EmailSendRequest'
+              $ref: '#/components/schemas/EmailSendRequest_2'
         required: true
       responses:
         '401':
@@ -259,6 +833,8 @@ paths:
                 $ref: '#/components/schemas/Error'
         '202':
           description: Accepted
+    servers:
+    - url: https://api.infusionsoft.com/crm
   /rest/v2/emails:batchRemove:
     post:
       tags:
@@ -327,6 +903,8 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/DeleteEmailsResponse'
+    servers:
+    - url: https://api.infusionsoft.com/crm
   /rest/v2/emails:batchAdd:
     post:
       tags:
@@ -395,6 +973,8 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/EmailsSentList'
+    servers:
+    - url: https://api.infusionsoft.com/crm
   /rest/v2/emails/templates:send:
     post:
       tags:
@@ -459,6 +1039,8 @@ paths:
                 $ref: '#/components/schemas/Error'
         '202':
           description: Accepted
+    servers:
+    - url: https://api.infusionsoft.com/crm
   /rest/v2/emails/{id}:
     get:
       tags:
@@ -590,6 +1172,8 @@ paths:
                 $ref: '#/components/schemas/Error'
         '204':
           description: No Content
+    servers:
+    - url: https://api.infusionsoft.com/crm
   /rest/v2/emails/templates:
     get:
       tags:
@@ -691,6 +1275,8 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ListEmailTemplatesResponse'
+    servers:
+    - url: https://api.infusionsoft.com/crm
   /rest/v2/emails/templates/{email_template_id}:
     get:
       tags:
@@ -759,8 +1345,464 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/EmailTemplate'
+    servers:
+    - url: https://api.infusionsoft.com/crm
 components:
   schemas:
+    DefaultHttpStatusCode:
+      allOf:
+      - $ref: '#/components/schemas/HttpStatusCode'
+    EmailSentQueryResultWithContent:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        subject:
+          type: string
+        headers:
+          type: string
+        contact_id:
+          type: integer
+          format: int64
+        sent_to_address:
+          type: string
+        sent_to_cc_addresses:
+          type: string
+        sent_to_bcc_addresses:
+          type: string
+        sent_from_address:
+          type: string
+        sent_from_reply_address:
+          type: string
+        sent_date:
+          type: string
+          format: date-time
+        received_date:
+          type: string
+          format: date-time
+        opened_date:
+          type: string
+          format: date-time
+        clicked_date:
+          type: string
+          format: date-time
+        original_provider:
+          type: string
+          enum:
+          - UNKNOWN
+          - INFUSIONSOFT
+          - MICROSOFT
+          - GOOGLE
+        original_provider_id:
+          type: string
+        plain_content:
+          type: string
+          description: Base64 encoded plain text
+        html_content:
+          type: string
+          description: Base64 encoded HTML
+    SetOfIds:
+      type: object
+      properties:
+        ids:
+          type: array
+          items:
+            type: integer
+            format: int64
+          properties:
+            empty:
+              type: boolean
+          uniqueItems: true
+      required:
+      - ids
+    EmailSentCreateListRequest:
+      type: object
+      description: Email records to persist, with content.
+      properties:
+        emails:
+          type: array
+          items:
+            $ref: '#/components/schemas/EmailSentCreate'
+    EmailSendRequestAttachment:
+      type: object
+      properties:
+        file_name:
+          type: string
+          description: The filename of the attached file, including extension
+        file_data:
+          type: string
+          description: The content of the attachment, encoded in Base64
+    EmailSendRequest:
+      type: object
+      properties:
+        contacts:
+          type: array
+          description: An array of Contact Ids to receive the email
+          items:
+            type: integer
+            format: int64
+        subject:
+          type: string
+          description: The subject line of the email
+        attachments:
+          type: array
+          description: Attachments to be sent with each copy of the email, maximum of 10 with size of 1MB each
+          items:
+            $ref: '#/components/schemas/EmailSendRequestAttachment'
+          uniqueItems: true
+        user_id:
+          type: integer
+          format: int64
+          description: The infusionsoft user to send the email on behalf of
+        html_content:
+          type: string
+          description: The HTML-formatted content of the email, encoded in Base64
+        plain_content:
+          type: string
+          description: The plain-text content of the email, encoded in Base64
+        address_field:
+          type: string
+          description: Email field of each Contact record to address the email to, such as 'Email', 'EmailAddress2', 'EmailAddress3' or '_CustomFieldName', defaulting to the contact's primary email
+      required:
+      - contacts
+      - subject
+      - user_id
+    EmailSentCreate:
+      type: object
+      description: Email records to persist, with content.
+      properties:
+        id:
+          type: integer
+          format: int64
+        subject:
+          type: string
+        headers:
+          type: string
+        contact_id:
+          type: integer
+          format: int64
+        sent_to_address:
+          type: string
+        sent_to_cc_addresses:
+          type: string
+        sent_to_bcc_addresses:
+          type: string
+        sent_from_address:
+          type: string
+        sent_from_reply_address:
+          type: string
+        sent_date:
+          type: string
+          format: date-time
+        received_date:
+          type: string
+          format: date-time
+        opened_date:
+          type: string
+          format: date-time
+        clicked_date:
+          type: string
+          format: date-time
+        plain_content:
+          type: string
+          description: Base64 encoded text
+        html_content:
+          type: string
+          description: Base64 encoded HTML
+        original_provider:
+          type: string
+          description: Provider that sent the email case insensitive, must be in list [GOOGLE, INFUSIONSOFT].  If omitted gets mapped to UNKNOWN.
+          enum:
+          - UNKNOWN
+          - INFUSIONSOFT
+          - MICROSOFT
+          - GOOGLE
+        original_provider_id:
+          type: string
+          description: Provider id that sent the email, must be unique when combined with provider.  If omitted a UUID without dashes is autogenerated for the record.
+        provider_source_id:
+          type: string
+          description: The email address of the synced email account that generated this message.
+      required:
+      - sent_to_address
+    View:
+      type: object
+      properties:
+        contentType:
+          type: string
+    ModelAndView:
+      type: object
+      properties:
+        view:
+          $ref: '#/components/schemas/View'
+        model:
+          type: object
+          additionalProperties: {}
+        status:
+          oneOf:
+          - $ref: '#/components/schemas/DefaultHttpStatusCode'
+          - $ref: '#/components/schemas/HttpStatus'
+        modelMap:
+          type: object
+          additionalProperties: {}
+          properties:
+            empty:
+              type: boolean
+        reference:
+          type: boolean
+        empty:
+          type: boolean
+        viewName:
+          type: string
+    EmailSentQueryCommand:
+      type: object
+      properties:
+        limit:
+          type: integer
+          format: int32
+        offset:
+          type: integer
+          format: int32
+        email:
+          type: string
+        ordered:
+          type: boolean
+        contact_id:
+          type: integer
+          format: int64
+        since_sent_date:
+          type: string
+        until_sent_date:
+          type: string
+    EmailSentQueryResultList:
+      type: object
+      properties:
+        emails:
+          type: array
+          items:
+            $ref: '#/components/schemas/EmailSentQueryResult'
+        count:
+          type: integer
+          format: int32
+        next:
+          type: string
+        previous:
+          type: string
+    EmailSentCreateError:
+      type: object
+      properties:
+        error_message:
+          type: string
+        email:
+          $ref: '#/components/schemas/EmailSentCreate'
+    HttpStatus:
+      allOf:
+      - $ref: '#/components/schemas/HttpStatusCode'
+      enum:
+      - 100 CONTINUE
+      - 101 SWITCHING_PROTOCOLS
+      - 102 PROCESSING
+      - 103 EARLY_HINTS
+      - 200 OK
+      - 201 CREATED
+      - 202 ACCEPTED
+      - 203 NON_AUTHORITATIVE_INFORMATION
+      - 204 NO_CONTENT
+      - 205 RESET_CONTENT
+      - 206 PARTIAL_CONTENT
+      - 207 MULTI_STATUS
+      - 208 ALREADY_REPORTED
+      - 226 IM_USED
+      - 300 MULTIPLE_CHOICES
+      - 301 MOVED_PERMANENTLY
+      - 302 FOUND
+      - 303 SEE_OTHER
+      - 304 NOT_MODIFIED
+      - 307 TEMPORARY_REDIRECT
+      - 308 PERMANENT_REDIRECT
+      - 400 BAD_REQUEST
+      - 401 UNAUTHORIZED
+      - 402 PAYMENT_REQUIRED
+      - 403 FORBIDDEN
+      - 404 NOT_FOUND
+      - 405 METHOD_NOT_ALLOWED
+      - 406 NOT_ACCEPTABLE
+      - 407 PROXY_AUTHENTICATION_REQUIRED
+      - 408 REQUEST_TIMEOUT
+      - 409 CONFLICT
+      - 410 GONE
+      - 411 LENGTH_REQUIRED
+      - 412 PRECONDITION_FAILED
+      - 413 CONTENT_TOO_LARGE
+      - 413 PAYLOAD_TOO_LARGE
+      - 414 URI_TOO_LONG
+      - 415 UNSUPPORTED_MEDIA_TYPE
+      - 416 REQUESTED_RANGE_NOT_SATISFIABLE
+      - 417 EXPECTATION_FAILED
+      - 418 I_AM_A_TEAPOT
+      - 421 MISDIRECTED_REQUEST
+      - 422 UNPROCESSABLE_CONTENT
+      - 422 UNPROCESSABLE_ENTITY
+      - 423 LOCKED
+      - 424 FAILED_DEPENDENCY
+      - 425 TOO_EARLY
+      - 426 UPGRADE_REQUIRED
+      - 428 PRECONDITION_REQUIRED
+      - 429 TOO_MANY_REQUESTS
+      - 431 REQUEST_HEADER_FIELDS_TOO_LARGE
+      - 451 UNAVAILABLE_FOR_LEGAL_REASONS
+      - 500 INTERNAL_SERVER_ERROR
+      - 501 NOT_IMPLEMENTED
+      - 502 BAD_GATEWAY
+      - 503 SERVICE_UNAVAILABLE
+      - 504 GATEWAY_TIMEOUT
+      - 505 HTTP_VERSION_NOT_SUPPORTED
+      - 506 VARIANT_ALSO_NEGOTIATES
+      - 507 INSUFFICIENT_STORAGE
+      - 508 LOOP_DETECTED
+      - 509 BANDWIDTH_LIMIT_EXCEEDED
+      - 510 NOT_EXTENDED
+      - 511 NETWORK_AUTHENTICATION_REQUIRED
+    EmailSentQueryResult:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        subject:
+          type: string
+        headers:
+          type: string
+        contact_id:
+          type: integer
+          format: int64
+        sent_to_address:
+          type: string
+        sent_to_cc_addresses:
+          type: string
+        sent_to_bcc_addresses:
+          type: string
+        sent_from_address:
+          type: string
+        sent_from_reply_address:
+          type: string
+        sent_date:
+          type: string
+          format: date-time
+        received_date:
+          type: string
+          format: date-time
+        opened_date:
+          type: string
+          format: date-time
+        clicked_date:
+          type: string
+          format: date-time
+        original_provider:
+          type: string
+          enum:
+          - UNKNOWN
+          - INFUSIONSOFT
+          - MICROSOFT
+          - GOOGLE
+        original_provider_id:
+          type: string
+    HttpStatusCode:
+      type: object
+      properties:
+        error:
+          type: boolean
+        is1xxInformational:
+          type: boolean
+        is2xxSuccessful:
+          type: boolean
+        is3xxRedirection:
+          type: boolean
+        is4xxClientError:
+          type: boolean
+        is5xxServerError:
+          type: boolean
+    EmailSentCreateListResponse:
+      type: object
+      properties:
+        emails:
+          type: array
+          items:
+            $ref: '#/components/schemas/EmailSentCreate'
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/EmailSentCreateError'
+    ListEmailTemplatesResponse:
+      type: object
+      properties:
+        email_templates:
+          type: array
+          items:
+            $ref: '#/components/schemas/EmailTemplateSummary'
+        next_page_token:
+          type: string
+    EmailTemplate:
+      type: object
+      description: An email template
+      properties:
+        id:
+          type: integer
+          format: int64
+          description: The id of the template
+        piece_title:
+          type: string
+          description: The title of the template
+          example: Welcome Email
+        categories:
+          type: array
+          description: The categories associated with the email
+          example:
+          - Marketing
+          - Onboarding
+          items:
+            type: string
+        from_address:
+          type: string
+          description: The from address of the email
+          example: ~Owner.Email~
+        to_address:
+          type: string
+          description: The to address of the email
+          example: ~Contact.Email~
+        cc_address:
+          type: string
+          description: The cc address of the email
+          example: manager@company.com
+        bcc_address:
+          type: string
+          description: The bcc address of the email
+          example: archive@company.com
+        subject:
+          type: string
+          description: The subject of the email
+          example: Welcome ~Contact.FirstName~!
+        text_body:
+          type: string
+          description: The text body of the email
+          example: Hello ~Contact.FirstName~, welcome!
+        html_body:
+          type: string
+          description: The HTML body of the email
+          example: <h1>Welcome ~Contact.FirstName~!</h1>
+        content_type:
+          type: string
+          description: The content type of the email
+          enum:
+          - TEXT
+          - HTML
+          - MULTIPART
+          example: HTML
+        merge_context:
+          type: string
+          description: The merge context of the email
+          example: Contact
     CreateEmailSentRequest:
       type: object
       description: Request to create an email record
@@ -807,8 +1849,7 @@ components:
         sent_time:
           type: string
           format: date-time
-          description: When the email was sent, in ISO-8601 format. If omitted, the stored sent_time will
-            be null.
+          description: When the email was sent, in ISO-8601 format. If omitted, the stored sent_time will be null.
           example: '2024-05-21T14:30:00Z'
         received_time:
           type: string
@@ -844,8 +1885,7 @@ components:
           example: INFUSIONSOFT
         original_provider_id:
           type: string
-          description: Provider id that sent the email, must be unique when combined with provider. If
-            omitted a UUID without dashes is autogenerated for the record.
+          description: Provider id that sent the email, must be unique when combined with provider. If omitted a UUID without dashes is autogenerated for the record.
           example: msg_abc123
         provider_source_id:
           type: string
@@ -853,156 +1893,6 @@ components:
           example: sync@company.com
       required:
       - sent_to_address
-    CreateEmailsSentRequest:
-      type: object
-      description: Email records to persist, with content.
-      properties:
-        emails:
-          type: array
-          description: Collection of email records to create, maximum 1000
-          items:
-            $ref: '#/components/schemas/CreateEmailSentRequest'
-      required:
-      - emails
-    DeleteEmailsRequest:
-      type: object
-      description: Request to delete multiple email records
-      properties:
-        email_ids:
-          type: array
-          description: List of email IDs to delete
-          example:
-          - '123'
-          - '456'
-          - '789'
-          items:
-            type: string
-      required:
-      - email_ids
-    DeleteEmailsResponse:
-      type: object
-      description: Response from deleting email records
-      properties:
-        results:
-          type: object
-          additionalProperties:
-            type: string
-          description: Map of email ID to deletion result (SUCCESS, NO_PERMISSION, EMAIL_ID_NOT_FOUND)
-    EmailSendRequest:
-      type: object
-      description: Request to send an email to contacts
-      properties:
-        contacts:
-          type: array
-          description: An array of Contact Ids to receive the email
-          example:
-          - '1'
-          - '2'
-          - '3'
-          items:
-            type: string
-        subject:
-          type: string
-          description: The subject line of the email
-          example: Welcome to our newsletter
-        attachments:
-          type: array
-          description: Attachments to be sent with each copy of the email, maximum of 10 with size of
-            1MB each
-          items:
-            $ref: '#/components/schemas/EmailSendRequestAttachment'
-          uniqueItems: true
-        user_id:
-          type: string
-          description: The user ID to send the email on behalf of. Exactly one of user_id or from_address
-            is required.
-          example: 1
-        from_address:
-          type: string
-          description: The authenticated sender email address to send from. Exactly one of user_id or
-            from_address is required.
-          example: sales@example.com
-        html_content:
-          type: string
-          description: The HTML-formatted content of the email, encoded in Base64
-          example: PGgxPldlbGNvbWU8L2gxPg==
-        plain_content:
-          type: string
-          description: The plain-text content of the email, encoded in Base64
-          example: V2VsY29tZSB0byBvdXIgbmV3c2xldHRlcg==
-        address_field:
-          type: string
-          description: Email field of each Contact record to address the email to, such as 'Email', 'EmailAddress2',
-            'EmailAddress3' or '_CustomFieldName', defaulting to the contact's primary email
-          example: EMAIL1
-      required:
-      - contacts
-      - subject
-    EmailSendRequestAttachment:
-      type: object
-      description: An attachment for an email
-      properties:
-        file_name:
-          type: string
-          description: 'The filename of the attached file, including extension. The extension determines
-            whether the attachment is accepted; only the following extensions are supported (case-insensitive):
-
-            - Image: bmp, cdr, fpx, gif, jif, jiff, jp2, jpeg, jpg, jpx, j2k, pcd, pdf, png, psd, pspimage,
-            thm, tif, tiff, yuv
-
-            - Text/Document: doc, docx, err, log, msg, notes, pages, pwd, rtf, text, txt, vcf, wp, wp4,
-            wp5, wp7, wpd, wps, wsd, xdl
-
-            - Audio: mid, mp3, mp4, wav, wma
-
-            - Video: avi, divx, f4p, flv, gvi, hdmov, hdv, m2ts, m4v, mnv, mov, movie, mp4, mp4v, mpeg,
-            mpeg1, mpeg4, mpg, qt, rm, vob, wm, wmv
-
-            - Data: csv, ics, key, pps, ppt, pptx, xlr, xls, xlsx, xml, zip
-
-
-            Requests including an attachment with any other extension return `400 Bad Request` with the
-            message "attachment type is invalid".
-
-            '
-          example: document.pdf
-        file_data:
-          type: string
-          description: The content of the attachment, encoded in Base64
-          example: JVBERi0xLjQKJeLjz9MK...
-      required:
-      - file_data
-      - file_name
-    EmailSendTemplateRequest:
-      type: object
-      description: 'Use a template to send an email to a list of contacts '
-      properties:
-        template_id:
-          type: string
-          description: Template ID
-          example: 123
-        contact_ids:
-          type: array
-          description: List of contact IDs to send the email to
-          example:
-          - '1'
-          - '2'
-          - '3'
-          items:
-            type: string
-        user_id:
-          type: string
-          description: The user ID to send the email on behalf of
-          example: 1
-        address_field:
-          type: string
-          description: Email field of each Contact record to address the email to, such as 'Email', 'EmailAddress2',
-            'EmailAddress3' or '_CustomFieldName', defaulting to the contact's primary email
-          example: EMAIL1
-      required:
-      - contact_ids
-      - template_id
-      - user_id
     EmailSent:
       type: object
       description: A sent email record
@@ -1087,17 +1977,170 @@ components:
           type: string
           description: The synced email account that generated this message
           example: sync@company.com
-    EmailSentCreateError:
+    EmailTemplateSummary:
       type: object
-      description: Error that occurred when creating an email record
+      description: Email template metadata returned by the list endpoint. Does not include body content; use GET /v2/emails/templates/{id} for full detail.
       properties:
-        error_message:
+        id:
+          type: integer
+          format: int64
+          description: The id of the template
+        piece_title:
           type: string
-          description: Description of the error
-          example: Contact not found
-        email:
-          $ref: '#/components/schemas/CreateEmailSentRequest'
-          description: The email request that failed
+          description: The title of the template
+          example: Welcome Email
+        categories:
+          type: array
+          description: The categories associated with the email
+          example:
+          - Marketing
+          - Onboarding
+          items:
+            type: string
+        from_address:
+          type: string
+          description: The from address of the email
+          example: ~Owner.Email~
+        to_address:
+          type: string
+          description: The to address of the email
+          example: ~Contact.Email~
+        cc_address:
+          type: string
+          description: The cc address of the email
+          example: manager@company.com
+        bcc_address:
+          type: string
+          description: The bcc address of the email
+          example: archive@company.com
+        subject:
+          type: string
+          description: The subject of the email
+          example: Welcome ~Contact.FirstName~!
+        content_type:
+          type: string
+          description: The content type of the email
+          enum:
+          - TEXT
+          - HTML
+          - MULTIPART
+          example: HTML
+        merge_context:
+          type: string
+          description: The merge context of the email
+          example: Contact
+    EmailSendRequestAttachment_2:
+      type: object
+      description: An attachment for an email
+      properties:
+        file_name:
+          type: string
+          description: 'The filename of the attached file, including extension. The extension determines whether the attachment is accepted; only the following extensions are supported (case-insensitive):
+
+            - Image: bmp, cdr, fpx, gif, jif, jiff, jp2, jpeg, jpg, jpx, j2k, pcd, pdf, png, psd, pspimage, thm, tif, tiff, yuv
+
+            - Text/Document: doc, docx, err, log, msg, notes, pages, pwd, rtf, text, txt, vcf, wp, wp4, wp5, wp7, wpd, wps, wsd, xdl
+
+            - Audio: mid, mp3, mp4, wav, wma
+
+            - Video: avi, divx, f4p, flv, gvi, hdmov, hdv, m2ts, m4v, mnv, mov, movie, mp4, mp4v, mpeg, mpeg1, mpeg4, mpg, qt, rm, vob, wm, wmv
+
+            - Data: csv, ics, key, pps, ppt, pptx, xlr, xls, xlsx, xml, zip
+
+
+            Requests including an attachment with any other extension return `400 Bad Request` with the message "attachment type is invalid".
+
+            '
+          example: document.pdf
+        file_data:
+          type: string
+          description: The content of the attachment, encoded in Base64
+          example: JVBERi0xLjQKJeLjz9MK...
+      required:
+      - file_data
+      - file_name
+    ErrorDetails:
+      type: object
+      properties:
+        domain:
+          type: string
+        resource:
+          type: string
+    EmailsSentList:
+      type: object
+      description: Response containing created emails and any errors
+      properties:
+        emails:
+          type: array
+          description: Successfully created email records
+          items:
+            $ref: '#/components/schemas/EmailSentWithContent'
+        errors:
+          type: array
+          description: Errors that occurred during creation
+          items:
+            $ref: '#/components/schemas/EmailSentCreateError_2'
+    EmailSendRequest_2:
+      type: object
+      description: Request to send an email to contacts
+      properties:
+        contacts:
+          type: array
+          description: An array of Contact Ids to receive the email
+          example:
+          - '1'
+          - '2'
+          - '3'
+          items:
+            type: string
+        subject:
+          type: string
+          description: The subject line of the email
+          example: Welcome to our newsletter
+        attachments:
+          type: array
+          description: Attachments to be sent with each copy of the email, maximum of 10 with size of 1MB each
+          items:
+            $ref: '#/components/schemas/EmailSendRequestAttachment_2'
+          uniqueItems: true
+        user_id:
+          type: string
+          description: The user ID to send the email on behalf of. Exactly one of user_id or from_address is required.
+          example: 1
+        from_address:
+          type: string
+          description: The authenticated sender email address to send from. Exactly one of user_id or from_address is required.
+          example: sales@example.com
+        html_content:
+          type: string
+          description: The HTML-formatted content of the email, encoded in Base64
+          example: PGgxPldlbGNvbWU8L2gxPg==
+        plain_content:
+          type: string
+          description: The plain-text content of the email, encoded in Base64
+          example: V2VsY29tZSB0byBvdXIgbmV3c2xldHRlcg==
+        address_field:
+          type: string
+          description: Email field of each Contact record to address the email to, such as 'Email', 'EmailAddress2', 'EmailAddress3' or '_CustomFieldName', defaulting to the contact's primary email
+          example: EMAIL1
+      required:
+      - contacts
+      - subject
+    DeleteEmailsRequest:
+      type: object
+      description: Request to delete multiple email records
+      properties:
+        email_ids:
+          type: array
+          description: List of email IDs to delete
+          example:
+          - '123'
+          - '456'
+          - '789'
+          items:
+            type: string
+      required:
+      - email_ids
     EmailSentWithContent:
       type: object
       description: A sent email record with full content
@@ -1190,133 +2233,77 @@ components:
           type: string
           description: Base64 encoded HTML content
           example: PGgxPldlbGNvbWU8L2gxPg==
-    EmailTemplate:
+    CreateEmailsSentRequest:
       type: object
-      description: An email template
-      properties:
-        id:
-          type: integer
-          format: int64
-          description: The id of the template
-        piece_title:
-          type: string
-          description: The title of the template
-          example: Welcome Email
-        categories:
-          type: array
-          description: The categories associated with the email
-          example:
-          - Marketing
-          - Onboarding
-          items:
-            type: string
-        from_address:
-          type: string
-          description: The from address of the email
-          example: ~Owner.Email~
-        to_address:
-          type: string
-          description: The to address of the email
-          example: ~Contact.Email~
-        cc_address:
-          type: string
-          description: The cc address of the email
-          example: manager@company.com
-        bcc_address:
-          type: string
-          description: The bcc address of the email
-          example: archive@company.com
-        subject:
-          type: string
-          description: The subject of the email
-          example: Welcome ~Contact.FirstName~!
-        text_body:
-          type: string
-          description: The text body of the email
-          example: Hello ~Contact.FirstName~, welcome!
-        html_body:
-          type: string
-          description: The HTML body of the email
-          example: <h1>Welcome ~Contact.FirstName~!</h1>
-        content_type:
-          type: string
-          description: The content type of the email
-          enum:
-          - TEXT
-          - HTML
-          - MULTIPART
-          example: HTML
-        merge_context:
-          type: string
-          description: The merge context of the email
-          example: Contact
-    EmailTemplateSummary:
-      type: object
-      description: Email template metadata returned by the list endpoint. Does not include body content;
-        use GET /v2/emails/templates/{id} for full detail.
-      properties:
-        id:
-          type: integer
-          format: int64
-          description: The id of the template
-        piece_title:
-          type: string
-          description: The title of the template
-          example: Welcome Email
-        categories:
-          type: array
-          description: The categories associated with the email
-          example:
-          - Marketing
-          - Onboarding
-          items:
-            type: string
-        from_address:
-          type: string
-          description: The from address of the email
-          example: ~Owner.Email~
-        to_address:
-          type: string
-          description: The to address of the email
-          example: ~Contact.Email~
-        cc_address:
-          type: string
-          description: The cc address of the email
-          example: manager@company.com
-        bcc_address:
-          type: string
-          description: The bcc address of the email
-          example: archive@company.com
-        subject:
-          type: string
-          description: The subject of the email
-          example: Welcome ~Contact.FirstName~!
-        content_type:
-          type: string
-          description: The content type of the email
-          enum:
-          - TEXT
-          - HTML
-          - MULTIPART
-          example: HTML
-        merge_context:
-          type: string
-          description: The merge context of the email
-          example: Contact
-    EmailsSentList:
-      type: object
-      description: Response containing created emails and any errors
+      description: Email records to persist, with content.
       properties:
         emails:
           type: array
-          description: Successfully created email records
+          description: Collection of email records to create, maximum 1000
           items:
-            $ref: '#/components/schemas/EmailSentWithContent'
-        errors:
+            $ref: '#/components/schemas/CreateEmailSentRequest'
+      required:
+      - emails
+    EmailSentCreateError_2:
+      type: object
+      description: Error that occurred when creating an email record
+      properties:
+        error_message:
+          type: string
+          description: Description of the error
+          example: Contact not found
+        email:
+          $ref: '#/components/schemas/CreateEmailSentRequest'
+          description: The email request that failed
+    ListEmailsSentResponse:
+      type: object
+      description: Response containing a list of sent emails
+      properties:
+        emails:
           type: array
-          description: Errors that occurred during creation
+          description: List of sent emails
           items:
-            $ref: '#/components/schemas/EmailSentCreateError'
+            $ref: '#/components/schemas/EmailSent'
+        next_page_token:
+          type: string
+    DeleteEmailsResponse:
+      type: object
+      description: Response from deleting email records
+      properties:
+        results:
+          type: object
+          additionalProperties:
+            type: string
+          description: Map of email ID to deletion result (SUCCESS, NO_PERMISSION, EMAIL_ID_NOT_FOUND)
+    EmailSendTemplateRequest:
+      type: object
+      description: 'Use a template to send an email to a list of contacts '
+      properties:
+        template_id:
+          type: string
+          description: Template ID
+          example: 123
+        contact_ids:
+          type: array
+          description: List of contact IDs to send the email to
+          example:
+          - '1'
+          - '2'
+          - '3'
+          items:
+            type: string
+        user_id:
+          type: string
+          description: The user ID to send the email on behalf of
+          example: 1
+        address_field:
+          type: string
+          description: Email field of each Contact record to address the email to, such as 'Email', 'EmailAddress2', 'EmailAddress3' or '_CustomFieldName', defaulting to the contact's primary email
+          example: EMAIL1
+      required:
+      - contact_ids
+      - template_id
+      - user_id
     Error:
       type: object
       properties:
@@ -1331,33 +2318,6 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/ErrorDetails'
-    ErrorDetails:
-      type: object
-      properties:
-        domain:
-          type: string
-        resource:
-          type: string
-    ListEmailTemplatesResponse:
-      type: object
-      properties:
-        email_templates:
-          type: array
-          items:
-            $ref: '#/components/schemas/EmailTemplateSummary'
-        next_page_token:
-          type: string
-    ListEmailsSentResponse:
-      type: object
-      description: Response containing a list of sent emails
-      properties:
-        emails:
-          type: array
-          description: List of sent emails
-          items:
-            $ref: '#/components/schemas/EmailSent'
-        next_page_token:
-          type: string
   securitySchemes:
     oauth2:
       type: oauth2
@@ -1366,5 +2326,6 @@ components:
           authorizationUrl: https://accounts.infusionsoft.com/app/oauth/authorize
           tokenUrl: https://api.infusionsoft.com/token
           scopes: {}
-security:
-- oauth2: []
+x-refined-from:
+- keap-v1-openapi.json
+- keap-v2-openapi.json

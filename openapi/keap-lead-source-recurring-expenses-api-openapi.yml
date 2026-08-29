@@ -1,4 +1,4 @@
-openapi: 3.1.0
+openapi: 3.2.0
 info:
   title: Keap Lead Source Recurring Expenses API
   description: Keap Public API Documentation
@@ -13,6 +13,8 @@ info:
   version: v2
 servers:
 - url: https://api.infusionsoft.com/crm
+security:
+- oauth2: []
 tags:
 - name: Lead Source Recurring Expenses
 paths:
@@ -21,14 +23,12 @@ paths:
       tags:
       - Lead Source Recurring Expenses
       summary: Retrieves a list of lead source recurring expenses
-      description: Retrieves a list of recurring expenses with lead_source_id and optional 'filter' query
-        param
+      description: Retrieves a list of recurring expenses with lead_source_id and optional 'filter' query param
       operationId: listLeadSourceRecurringExpenses
       parameters:
       - name: lead_source_id
         in: path
-        description: The ID of the lead source this recurring expense belongs to. Use '-' as a wildcard
-          to list recurring expenses across all lead sources.
+        description: The ID of the lead source this recurring expense belongs to. Use '-' as a wildcard to list recurring expenses across all lead sources.
         required: true
         schema:
           type: string
@@ -53,8 +53,7 @@ paths:
           - (String) `update_time`
 
 
-          You will need to apply the `==` operator to check the equality of one of the filters with your
-          searched
+          You will need to apply the `==` operator to check the equality of one of the filters with your searched
 
           word, in the encoded form `%3D%3D`. For the filters listed above, here are some examples:
 
@@ -405,8 +404,7 @@ paths:
           type: string
       - name: update_mask
         in: query
-        description: An optional list of properties to be updated. If set, only the provided properties
-          will be updated and others will be skipped.
+        description: An optional list of properties to be updated. If set, only the provided properties will be updated and others will be skipped.
         required: false
         schema:
           type: array
@@ -516,8 +514,7 @@ paths:
           - (String) `update_time`
 
 
-          You will need to apply the `==` operator to check the equality of one of the filters with your
-          searched
+          You will need to apply the `==` operator to check the equality of one of the filters with your searched
 
           word, in the encoded form `%3D%3D`. For the filters listed above, here are some examples:
 
@@ -627,117 +624,16 @@ paths:
                 $ref: '#/components/schemas/ListLeadSourceExpensesResponse'
 components:
   schemas:
-    CreateLeadSourceRecurringExpenseRequest:
+    ListLeadSourceRecurringExpensesResponse:
       type: object
       properties:
-        title:
-          type: string
-          description: The title of the lead source recurring expense
-          example: Monthly Google Ads subscription
-        notes:
-          type: string
-          description: The notes for the lead source recurring expense
-          example: Automated monthly billing
-        amount:
-          type: integer
-          format: int64
-          description: The monthly cost of the lead source recurring expense. The value should be in the
-            smallest unit of currency for your currency locale. For example, if your currency locale is
-            USD, then the smallest unit of currency is in cents, $225.50 would be provided in the request
-            as 22550.
-          example: 22550
-          minimum: 0
-        start_time:
-          type: string
-          format: date-time
-          description: The time the lead source recurring expense starts
-          example: '2024-01-01T00:00:00Z'
-        end_time:
-          type: string
-          format: date-time
-          description: The time the lead source recurring expense ends
-          example: '2024-12-31T23:59:59Z'
-      required:
-      - amount
-    CurrencyValue:
-      type: object
-      properties:
-        amount:
-          type: integer
-          format: int64
-          description: The price amount in the smallest currency unit
-          example: 10000
-        currency_code:
-          type: string
-          description: Three-letter ISO currency code
-          example: USD
-        formatted_amount:
-          type: string
-          description: The product amount formatted using the tenant's currency locale
-          example: $100.00
-    Error:
-      type: object
-      properties:
-        code:
-          type: integer
-          format: int32
-        message:
-          type: string
-        status:
-          type: string
-        details:
+        lead_source_recurring_expenses:
           type: array
+          description: The lead source recurring expenses in the current page
           items:
-            $ref: '#/components/schemas/ErrorDetails'
-    ErrorDetails:
-      type: object
-      properties:
-        domain:
+            $ref: '#/components/schemas/LeadSourceRecurringExpense'
+        next_page_token:
           type: string
-        resource:
-          type: string
-    LeadSourceExpense:
-      type: object
-      properties:
-        id:
-          type: string
-          description: The unique identifier for the expense.
-          example: 123
-        title:
-          type: string
-          description: The title of the expense
-          example: Google Ads Campaign
-        notes:
-          type: string
-          description: The notes for the expense
-          example: Q1 advertising spend
-        amount:
-          $ref: '#/components/schemas/CurrencyValue'
-          description: The amount of the expense
-        lead_source_id:
-          type: string
-          description: The ID of the lead source this expense belongs to
-          example: 456
-        lead_source_recurring_expense_id:
-          type: string
-          description: If this expense was incurred from a recurring expense, this is the ID of that recurring
-            expense
-          example: 789
-        create_time:
-          type: string
-          format: date-time
-          description: The date the expense was created
-          example: '2024-01-10T08:00:00Z'
-        update_time:
-          type: string
-          format: date-time
-          description: The date the expense was last updated
-          example: '2024-03-15T10:30:00Z'
-        incurred_time:
-          type: string
-          format: date-time
-          description: The date the expense was incurred
-          example: '2024-03-15T00:00:00Z'
     LeadSourceRecurringExpense:
       type: object
       properties:
@@ -785,6 +681,109 @@ components:
           format: date-time
           description: The time this lead source recurring expense was last updated
           example: '2024-03-15T10:30:00Z'
+    ErrorDetails:
+      type: object
+      properties:
+        domain:
+          type: string
+        resource:
+          type: string
+    ListLeadSourceExpensesResponse:
+      type: object
+      properties:
+        lead_source_expenses:
+          type: array
+          description: The lead source expenses in the current page
+          items:
+            $ref: '#/components/schemas/LeadSourceExpense'
+        next_page_token:
+          type: string
+    CurrencyValue:
+      type: object
+      properties:
+        amount:
+          type: integer
+          format: int64
+          description: The price amount in the smallest currency unit
+          example: 10000
+        currency_code:
+          type: string
+          description: Three-letter ISO currency code
+          example: USD
+        formatted_amount:
+          type: string
+          description: The product amount formatted using the tenant's currency locale
+          example: $100.00
+    LeadSourceExpense:
+      type: object
+      properties:
+        id:
+          type: string
+          description: The unique identifier for the expense.
+          example: 123
+        title:
+          type: string
+          description: The title of the expense
+          example: Google Ads Campaign
+        notes:
+          type: string
+          description: The notes for the expense
+          example: Q1 advertising spend
+        amount:
+          $ref: '#/components/schemas/CurrencyValue'
+          description: The amount of the expense
+        lead_source_id:
+          type: string
+          description: The ID of the lead source this expense belongs to
+          example: 456
+        lead_source_recurring_expense_id:
+          type: string
+          description: If this expense was incurred from a recurring expense, this is the ID of that recurring expense
+          example: 789
+        create_time:
+          type: string
+          format: date-time
+          description: The date the expense was created
+          example: '2024-01-10T08:00:00Z'
+        update_time:
+          type: string
+          format: date-time
+          description: The date the expense was last updated
+          example: '2024-03-15T10:30:00Z'
+        incurred_time:
+          type: string
+          format: date-time
+          description: The date the expense was incurred
+          example: '2024-03-15T00:00:00Z'
+    CreateLeadSourceRecurringExpenseRequest:
+      type: object
+      properties:
+        title:
+          type: string
+          description: The title of the lead source recurring expense
+          example: Monthly Google Ads subscription
+        notes:
+          type: string
+          description: The notes for the lead source recurring expense
+          example: Automated monthly billing
+        amount:
+          type: integer
+          format: int64
+          description: The monthly cost of the lead source recurring expense. The value should be in the smallest unit of currency for your currency locale. For example, if your currency locale is USD, then the smallest unit of currency is in cents, $225.50 would be provided in the request as 22550.
+          example: 22550
+          minimum: 0
+        start_time:
+          type: string
+          format: date-time
+          description: The time the lead source recurring expense starts
+          example: '2024-01-01T00:00:00Z'
+        end_time:
+          type: string
+          format: date-time
+          description: The time the lead source recurring expense ends
+          example: '2024-12-31T23:59:59Z'
+      required:
+      - amount
     LeadSourceRecurringExpenseUpdateRequest:
       type: object
       properties:
@@ -799,10 +798,7 @@ components:
         amount:
           type: integer
           format: int64
-          description: "The monthly cost of the lead source recurring expense.\n The value should be in\
-            \ the smallest unit of currency for your currency locale.\n For example, if your currency\
-            \ locale is USD, then the smallest unit of currency is\n in cents, $225.50 would be provided\
-            \ in the request as 22550."
+          description: "The monthly cost of the lead source recurring expense.\n The value should be in the smallest unit of currency for your currency locale.\n For example, if your currency locale is USD, then the smallest unit of currency is\n in cents, $225.50 would be provided in the request as 22550."
           example: 22550
           minimum: 0
         start_time:
@@ -815,26 +811,20 @@ components:
           format: date-time
           description: The time the lead source recurring expense ends
           example: '2024-12-31T23:59:59Z'
-    ListLeadSourceExpensesResponse:
+    Error:
       type: object
       properties:
-        lead_source_expenses:
-          type: array
-          description: The lead source expenses in the current page
-          items:
-            $ref: '#/components/schemas/LeadSourceExpense'
-        next_page_token:
+        code:
+          type: integer
+          format: int32
+        message:
           type: string
-    ListLeadSourceRecurringExpensesResponse:
-      type: object
-      properties:
-        lead_source_recurring_expenses:
-          type: array
-          description: The lead source recurring expenses in the current page
-          items:
-            $ref: '#/components/schemas/LeadSourceRecurringExpense'
-        next_page_token:
+        status:
           type: string
+        details:
+          type: array
+          items:
+            $ref: '#/components/schemas/ErrorDetails'
   securitySchemes:
     oauth2:
       type: oauth2
@@ -843,5 +833,3 @@ components:
           authorizationUrl: https://accounts.infusionsoft.com/app/oauth/authorize
           tokenUrl: https://api.infusionsoft.com/token
           scopes: {}
-security:
-- oauth2: []

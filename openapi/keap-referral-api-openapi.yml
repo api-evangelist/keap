@@ -1,0 +1,363 @@
+openapi: 3.2.0
+info:
+  title: Keap Referral API
+  description: Keap Public API Documentation
+  termsOfService: https://www.thryv.com/terms-of-use
+  contact:
+    name: Keap
+    url: https://developer.keap.com/get-support
+    email: api.keap@thryv.com
+  license:
+    name: Apache 2.0
+    url: https://www.apache.org/licenses/LICENSE-2.0
+  version: v2
+servers:
+- url: https://api.infusionsoft.com/crm
+security:
+- oauth2: []
+tags:
+- name: Referral
+paths:
+  /rest/v2/referrals:
+    get:
+      tags:
+      - Referral
+      summary: List Referrals
+      description: Retrieves a list of all referrals with optional filtering and sorting
+      operationId: listReferrals
+      parameters:
+      - name: filter
+        in: query
+        description: 'Filter to apply, allowed fields are:
+
+          - (String) `referral_partner_id` - Allowable operators: "==", "<=", "<", ">=", ">", "!="
+
+          - (String) `contact_id` - Allowable operators: "==", "<=", "<", ">=", ">", "!="
+
+          - (String) `source` - Wildcard matching allowed
+
+          - (String) `description` - Wildcard matching allowed
+
+          - (String) `type` (Allowed values: `COOKIE`, `PERMANENT`, `MANUAL`)
+
+
+          You will need to apply the `==` operator (or other supported operators) to check the equality
+
+          of one of the filters with your searched word, in the encoded form `%3D%3D`. For the filters listed above,
+
+          here are some examples:
+
+          - `filter=referral_partner_id%3D%3D123`
+
+          - `filter=referral_partner_id%3E10` (referral_partner_id > 10)
+
+          - `filter=contact_id%3D%3D456`
+
+          - `filter=contact_id%3C%3D100` (contact_id <= 100)
+
+          - `filter=source%3D%3DEmail Marketing`
+
+          - `filter=source%3D%3DEmail*` (starts with "Email")
+
+          - `filter=description%3D%3DReferred*` (starts with "Referred")
+
+          - `filter=type%3D%3DCOOKIE`
+
+          - `filter=referral_partner_id%3D%3D123%3Bcontact_id%3D%3D456`
+
+
+          For fields which allow wildcard matching, you may use the * wildcard character (or its encoded form %2A)
+
+          for case-insensitive partial matching on text fields. Example of a valid pattern of wildcard usage:
+
+          - `field==foo*` finds anything in `field` that begins with `foo`
+
+          '
+        required: false
+        schema:
+          type: string
+      - name: page_token
+        in: query
+        description: Page token
+        required: false
+        schema:
+          type: string
+      - name: order_by
+        in: query
+        description: 'Attribute and direction to order items.
+
+          One of the following fields:
+
+          - `id`
+
+          - `referral_time`
+
+
+          One of the following directions:
+
+          - `asc`
+
+          - `desc`'
+        required: false
+        schema:
+          type: string
+      - name: page_size
+        in: query
+        description: Total number of items to return per page
+        required: false
+        schema:
+          type: integer
+          format: int32
+          maximum: 1000
+          minimum: 0
+        example: 0
+      responses:
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '409':
+          description: Conflict
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '501':
+          description: Method Not Implemented
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '405':
+          description: Method Not Allowed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListReferralsResponse'
+    post:
+      tags:
+      - Referral
+      summary: Create a Referral
+      description: Creates a new referral partner referral on the provided contact
+      operationId: createReferral
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateReferralRequest'
+        required: true
+      responses:
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '409':
+          description: Conflict
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '501':
+          description: Method Not Implemented
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '405':
+          description: Method Not Allowed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Referral'
+components:
+  schemas:
+    ListReferralsResponse:
+      type: object
+      properties:
+        referrals:
+          type: array
+          items:
+            $ref: '#/components/schemas/Referral'
+        next_page_token:
+          type: string
+    CreateReferralRequest:
+      type: object
+      properties:
+        description:
+          type: string
+          description: The referral description.
+          example: Referred via email campaign
+        source:
+          type: string
+          description: The source for the referral.
+          example: Email Marketing
+        contact_id:
+          type: string
+          description: The referral's contact ID.
+          example: 123
+        referral_partner_id:
+          type: string
+          description: The referring affiliate ID.
+          example: 456
+        referral_time:
+          type: string
+          format: date-time
+          description: The time of the referral.
+          example: '2024-05-21T14:30:00Z'
+        expiration_time:
+          type: string
+          format: date-time
+          description: When the referral expires.
+          example: '2024-08-21T14:30:00Z'
+        ip_address:
+          type: string
+          description: The IP address of the referral.
+          example: 192.168.1.100
+        referral_type:
+          type: string
+          description: The referral type.
+          enum:
+          - COOKIE
+          - MANUAL
+          - PERMANENT
+          example: COOKIE
+      required:
+      - contact_id
+    ErrorDetails:
+      type: object
+      properties:
+        domain:
+          type: string
+        resource:
+          type: string
+    Referral:
+      type: object
+      properties:
+        id:
+          type: string
+          description: The unique identifier for this referral.
+          example: 555
+        description:
+          type: string
+          description: The referral description.
+          example: Referred via email campaign
+        source:
+          type: string
+          description: The source for the referral.
+          example: Email Marketing
+        contact_id:
+          type: string
+          description: The referral's contact_id.
+          example: 1001
+        referral_partner_id:
+          type: string
+          description: The referring affiliate ID.
+          example: 123
+        referral_time:
+          type: string
+          format: date-time
+          description: The time of the referral.
+          example: '2024-05-21T23:00:00Z'
+        expiration_time:
+          type: string
+          format: date-time
+          description: The time when the referral expires.
+          example: '2024-08-21T23:00:00Z'
+        ip_address:
+          type: string
+          description: The IP address of the referral.
+          example: 192.168.1.100
+        referral_type:
+          type: string
+          description: The referral type.
+          enum:
+          - COOKIE
+          - MANUAL
+          - PERMANENT
+          example: COOKIE
+    Error:
+      type: object
+      properties:
+        code:
+          type: integer
+          format: int32
+        message:
+          type: string
+        status:
+          type: string
+        details:
+          type: array
+          items:
+            $ref: '#/components/schemas/ErrorDetails'
+  securitySchemes:
+    oauth2:
+      type: oauth2
+      flows:
+        authorizationCode:
+          authorizationUrl: https://accounts.infusionsoft.com/app/oauth/authorize
+          tokenUrl: https://api.infusionsoft.com/token
+          scopes: {}

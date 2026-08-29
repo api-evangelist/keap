@@ -1,4 +1,4 @@
-openapi: 3.1.0
+openapi: 3.2.0
 info:
   title: Keap Lead Sources API
   description: Keap Public API Documentation
@@ -13,6 +13,8 @@ info:
   version: v2
 servers:
 - url: https://api.infusionsoft.com/crm
+security:
+- oauth2: []
 tags:
 - name: Lead Sources
 paths:
@@ -29,8 +31,7 @@ paths:
         description: 'Filter to apply, allowed fields are:
 
 
-          - (String) `id` - Must be a positive integer. Allowable operators: "==", "<=", "<", ">=", ">",
-          "!=". Values that are zero, negative, or non-integer return a 400.
+          - (String) `id` - Must be a positive integer. Allowable operators: "==", "<=", "<", ">=", ">", "!=". Values that are zero, negative, or non-integer return a 400.
 
           - (String) `name` - Wildcard matching allowed
 
@@ -51,11 +52,9 @@ paths:
           - (String) `end_time`
 
 
-          You will need to apply the `==` operator (or another supported operator) to check the equality
-          of one of
+          You will need to apply the `==` operator (or another supported operator) to check the equality of one of
 
-          the filters with your searched word, in the encoded form `%3D%3D`. For the filters listed above,
-          here are
+          the filters with your searched word, in the encoded form `%3D%3D`. For the filters listed above, here are
 
           some examples:
 
@@ -71,8 +70,7 @@ paths:
           - `filter=start_time%3D%3D2024-12-22T01:00:00.000Z`
 
 
-          For fields which allow wildcard matching, you may use the `*` wildcard character (or its encoded
-          form
+          For fields which allow wildcard matching, you may use the `*` wildcard character (or its encoded form
 
           `%2A`) for case-insensitive prefix matching on text fields. Example of a valid wildcard pattern:
 
@@ -400,8 +398,7 @@ paths:
           type: string
       - name: update_mask
         in: query
-        description: An optional list of properties to be updated. If set, only the provided properties
-          will be updated and others will be skipped.
+        description: An optional list of properties to be updated. If set, only the provided properties will be updated and others will be skipped.
         required: false
         schema:
           type: array
@@ -481,6 +478,13 @@ paths:
                 $ref: '#/components/schemas/LeadSource'
 components:
   schemas:
+    ErrorDetails:
+      type: object
+      properties:
+        domain:
+          type: string
+        resource:
+          type: string
     CreateLeadSourceRequest:
       type: object
       properties:
@@ -539,13 +543,6 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/ErrorDetails'
-    ErrorDetails:
-      type: object
-      properties:
-        domain:
-          type: string
-        resource:
-          type: string
     LeadSource:
       type: object
       properties:
@@ -622,5 +619,3 @@ components:
           authorizationUrl: https://accounts.infusionsoft.com/app/oauth/authorize
           tokenUrl: https://api.infusionsoft.com/token
           scopes: {}
-security:
-- oauth2: []
