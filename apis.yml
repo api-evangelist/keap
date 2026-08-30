@@ -782,6 +782,8 @@ apis:
   humanURL: https://developer.infusionsoft.com/docs/restv2/
   baseURL: https://api.infusionsoft.com/crm/rest/v2
   tags:
+  - Integration
+  tags_raw:
   - Integrations
   properties:
   - type: OpenAPI
@@ -922,6 +924,8 @@ apis:
   humanURL: https://developer.infusionsoft.com/docs/restv2/
   baseURL: https://api.infusionsoft.com/crm/rest/v2
   tags:
+  - Web Forms
+  tags_raw:
   - Webforms
   properties:
   - type: OpenAPI
