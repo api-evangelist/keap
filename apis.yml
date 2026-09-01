@@ -931,6 +931,9 @@ apis:
   - type: OpenAPI
     url: openapi/keap-webforms-api-openapi.yml
 common:
+- type: License
+  name: MIT
+  url: https://github.com/infusionsoft/keap-sdk/blob/main/LICENSE
 - type: CapabilityMap
   url: capabilities/keap-capability-edges.yml
   name: Keap Business Capability Map
