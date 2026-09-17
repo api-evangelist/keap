@@ -644,29 +644,6 @@ apis:
     url: https://developer.infusionsoft.com/docs/rest/
   - type: Authentication
     url: https://developer.infusionsoft.com/getting-started-oauth-keys/
-- aid: keap:keap-e-commerce-api
-  name: Keap E Commerce API
-  description: The E-Commerce API from Keap — 12 operation(s) for e-commerce.
-  humanURL: https://developer.infusionsoft.com/rest-hook-documentation/
-  baseURL: https://api.infusionsoft.com/crm/rest/v1
-  tags:
-  - E-Commerce
-  properties:
-  - type: OpenAPI
-    url: openapi/keap-e-commerce-api-openapi.yml
-  - type: Documentation
-    url: https://developer.infusionsoft.com/rest-hook-documentation/
-  - type: APIReference
-    url: https://developer.infusionsoft.com/docs/rest/
-  - type: AsyncAPI
-    url: >-
-      https://raw.githubusercontent.com/api-evangelist/keap/refs/heads/main/asyncapi/keap-resthooks-asyncapi.yml
-  - type: Webhooks
-    url: asyncapi/keap-resthooks-asyncapi.yml
-  - type: Documentation
-    url: https://developer.infusionsoft.com/docs/rest/
-  - type: Authentication
-    url: https://developer.infusionsoft.com/getting-started-oauth-keys/
 - aid: keap:keap-file-api
   name: Keap File API
   description: The File API from Keap — 2 operation(s) for file.
@@ -930,6 +907,29 @@ apis:
   properties:
   - type: OpenAPI
     url: openapi/keap-webforms-api-openapi.yml
+- aid: keap:keap-ecommerce-api
+  name: Keap Ecommerce API
+  description: E-Commerce-Endpoint
+  humanURL: https://developer.infusionsoft.com/docs/restv2/
+  baseURL: https://api.infusionsoft.com/crm/rest/v2
+  tags:
+  - Ecommerce
+  properties:
+  - type: OpenAPI
+    url: openapi/keap-ecommerce-api-openapi.yml
+  - type: Documentation
+    url: https://developer.infusionsoft.com/rest-hook-documentation/
+  - type: APIReference
+    url: https://developer.infusionsoft.com/docs/rest/
+  - type: AsyncAPI
+    url: >-
+      https://raw.githubusercontent.com/api-evangelist/keap/refs/heads/main/asyncapi/keap-resthooks-asyncapi.yml
+  - type: Webhooks
+    url: asyncapi/keap-resthooks-asyncapi.yml
+  - type: Documentation
+    url: https://developer.infusionsoft.com/docs/rest/
+  - type: Authentication
+    url: https://developer.infusionsoft.com/getting-started-oauth-keys/
 common:
 - type: License
   name: MIT
