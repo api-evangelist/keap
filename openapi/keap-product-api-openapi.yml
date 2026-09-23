@@ -1,7 +1,8 @@
 openapi: 3.2.0
 info:
   title: Keap Product API
-  version: v1
+  description: Keap Public API Documentation
+  termsOfService: https://www.thryv.com/terms-of-use
   contact:
     name: Keap
     url: https://developer.keap.com/get-support
@@ -9,14 +10,14 @@ info:
   license:
     name: Apache 2.0
     url: https://www.apache.org/licenses/LICENSE-2.0
-  termsOfService: https://www.thryv.com/terms-of-use
-  description: 'Operations tagged Product across 2 of this provider''s published API definitions: keap-product-v1-api-openapi.yml, keap-v1-openapi.json. Each path carries the servers of the definition it was published in.'
+  version: v1
 servers:
 - url: https://api.infusionsoft.com/crm
 security:
 - oauth2: []
 tags:
 - name: Product
+  description: Products-Endpoint
 paths:
   /rest/v1/products/{productId}/subscriptions:
     post:
@@ -105,8 +106,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ProductSubscription'
-    servers:
-    - url: https://api.infusionsoft.com/crm
   /rest/v1/products/{productId}/image:
     post:
       tags:
@@ -270,8 +269,6 @@ paths:
                 $ref: '#/components/schemas/ModelAndView'
         '204':
           description: No Content
-    servers:
-    - url: https://api.infusionsoft.com/crm
   /rest/v1/products:
     get:
       tags:
@@ -432,8 +429,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/RestProductV1'
-    servers:
-    - url: https://api.infusionsoft.com/crm
   /rest/v1/products/{productId}:
     get:
       tags:
@@ -676,8 +671,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/RestProductV1'
-    servers:
-    - url: https://api.infusionsoft.com/crm
   /rest/v1/products/{productId}/subscriptions/{subscriptionId}:
     get:
       tags:
@@ -846,8 +839,6 @@ paths:
                 $ref: '#/components/schemas/ModelAndView'
         '204':
           description: No Content
-    servers:
-    - url: https://api.infusionsoft.com/crm
   /rest/v1/products/sync:
     get:
       tags:
@@ -934,13 +925,170 @@ paths:
               schema:
                 $ref: '#/components/schemas/ProductStatusList'
       deprecated: true
-    servers:
-    - url: https://api.infusionsoft.com/crm
 components:
   schemas:
-    DefaultHttpStatusCode:
-      allOf:
-      - $ref: '#/components/schemas/HttpStatusCode'
+    ModelAndView:
+      type: object
+      properties:
+        view:
+          $ref: '#/components/schemas/View'
+        model:
+          type: object
+          additionalProperties: {}
+        status:
+          oneOf:
+          - $ref: '#/components/schemas/DefaultHttpStatusCode'
+          - $ref: '#/components/schemas/HttpStatus'
+        modelMap:
+          type: object
+          additionalProperties: {}
+          properties:
+            empty:
+              type: boolean
+        reference:
+          type: boolean
+        empty:
+          type: boolean
+        viewName:
+          type: string
+    ProductOption:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        name:
+          type: string
+        label:
+          type: string
+        required:
+          type: boolean
+        type:
+          type: string
+          enum:
+          - FixedList
+          - Variable
+        values:
+          type: array
+          items:
+            $ref: '#/components/schemas/ProductOptionValue'
+        min_chars:
+          type: integer
+          format: int32
+        max_chars:
+          type: integer
+          format: int32
+        allow_spaces:
+          type: boolean
+        can_end_with_character:
+          type: boolean
+        can_end_with_number:
+          type: boolean
+        can_contain_character:
+          type: boolean
+        can_contain_number:
+          type: boolean
+        can_start_with_character:
+          type: boolean
+        can_start_with_number:
+          type: boolean
+        text_message:
+          type: string
+        display_index:
+          type: integer
+          format: int32
+    CreateProduct:
+      type: object
+      properties:
+        sku:
+          type: string
+        active:
+          type: boolean
+        product_name:
+          type: string
+        product_desc:
+          type: string
+        product_price:
+          type: number
+          format: double
+        product_short_desc:
+          type: string
+        subscription_only:
+          type: boolean
+      required:
+      - product_name
+    SubscriptionPlan_:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        cycle:
+          type: integer
+          format: int32
+        frequency:
+          type: integer
+          format: int32
+        url:
+          type: string
+        active:
+          type: boolean
+        subscription_plan_name:
+          type: string
+        number_of_cycles:
+          type: integer
+          format: int32
+        plan_price:
+          type: number
+          format: double
+        subscription_plan_index:
+          type: integer
+          format: int32
+    HttpStatusCode:
+      type: object
+      properties:
+        error:
+          type: boolean
+        is1xxInformational:
+          type: boolean
+        is2xxSuccessful:
+          type: boolean
+        is3xxRedirection:
+          type: boolean
+        is4xxClientError:
+          type: boolean
+        is5xxServerError:
+          type: boolean
+    RestProductV1:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        sku:
+          type: string
+        active:
+          type: boolean
+        url:
+          type: string
+        product_name:
+          type: string
+        product_desc:
+          type: string
+        product_price:
+          type: number
+          format: double
+        product_short_desc:
+          type: string
+        subscription_only:
+          type: boolean
+        subscription_plans:
+          type: array
+          items:
+            $ref: '#/components/schemas/ProductSubscription'
+      required:
+      - id
+      - product_name
     ProductStatusList:
       type: object
       properties:
@@ -957,7 +1105,22 @@ components:
           type: string
         sync_token:
           type: string
-    HttpRange: {}
+    ProductList:
+      type: object
+      properties:
+        products:
+          type: array
+          items:
+            $ref: '#/components/schemas/Product_'
+        count:
+          type: integer
+          format: int32
+        next:
+          type: string
+        previous:
+          type: string
+        sync_token:
+          type: string
     CreateProductSubscription:
       type: object
       properties:
@@ -985,35 +1148,7 @@ components:
       required:
       - cycle_type
       - plan_price
-    SyncCommand:
-      type: object
-      properties:
-        limit:
-          type: integer
-          format: int32
-        offset:
-          type: integer
-          format: int32
-    CreateProduct:
-      type: object
-      properties:
-        sku:
-          type: string
-        active:
-          type: boolean
-        product_name:
-          type: string
-        product_desc:
-          type: string
-        product_price:
-          type: number
-          format: double
-        product_short_desc:
-          type: string
-        subscription_only:
-          type: boolean
-      required:
-      - product_name
+    HttpMethod: {}
     Product_:
       type: object
       properties:
@@ -1046,6 +1181,180 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/SubscriptionPlan_'
+    HttpRange: {}
+    CreateProductImage:
+      type: object
+      properties:
+        file_name:
+          type: string
+          description: 'The name of the file with extension, must match file data.  Acceptable file types:  [.png, .gif, .jpg, .jpeg].'
+        file_data:
+          type: string
+          description: The image data, base64 encoded.
+        checksum:
+          type: string
+          description: SHA256 checksum of image in Hex.
+      required:
+      - file_data
+      - file_name
+    ContentDisposition:
+      type: object
+      properties:
+        type:
+          type: string
+        name:
+          type: string
+        filename:
+          type: string
+        charset:
+          type: string
+        inline:
+          type: boolean
+        formData:
+          type: boolean
+        attachment:
+          type: boolean
+    ProductStatus:
+      type: object
+      properties:
+        status:
+          type: string
+          enum:
+          - CREATED
+          - UPDATED
+          - DELETED
+        product:
+          $ref: '#/components/schemas/Product_'
+    HttpStatus:
+      allOf:
+      - $ref: '#/components/schemas/HttpStatusCode'
+      enum:
+      - 100 CONTINUE
+      - 101 SWITCHING_PROTOCOLS
+      - 102 PROCESSING
+      - 103 EARLY_HINTS
+      - 200 OK
+      - 201 CREATED
+      - 202 ACCEPTED
+      - 203 NON_AUTHORITATIVE_INFORMATION
+      - 204 NO_CONTENT
+      - 205 RESET_CONTENT
+      - 206 PARTIAL_CONTENT
+      - 207 MULTI_STATUS
+      - 208 ALREADY_REPORTED
+      - 226 IM_USED
+      - 300 MULTIPLE_CHOICES
+      - 301 MOVED_PERMANENTLY
+      - 302 FOUND
+      - 303 SEE_OTHER
+      - 304 NOT_MODIFIED
+      - 307 TEMPORARY_REDIRECT
+      - 308 PERMANENT_REDIRECT
+      - 400 BAD_REQUEST
+      - 401 UNAUTHORIZED
+      - 402 PAYMENT_REQUIRED
+      - 403 FORBIDDEN
+      - 404 NOT_FOUND
+      - 405 METHOD_NOT_ALLOWED
+      - 406 NOT_ACCEPTABLE
+      - 407 PROXY_AUTHENTICATION_REQUIRED
+      - 408 REQUEST_TIMEOUT
+      - 409 CONFLICT
+      - 410 GONE
+      - 411 LENGTH_REQUIRED
+      - 412 PRECONDITION_FAILED
+      - 413 CONTENT_TOO_LARGE
+      - 413 PAYLOAD_TOO_LARGE
+      - 414 URI_TOO_LONG
+      - 415 UNSUPPORTED_MEDIA_TYPE
+      - 416 REQUESTED_RANGE_NOT_SATISFIABLE
+      - 417 EXPECTATION_FAILED
+      - 418 I_AM_A_TEAPOT
+      - 421 MISDIRECTED_REQUEST
+      - 422 UNPROCESSABLE_CONTENT
+      - 422 UNPROCESSABLE_ENTITY
+      - 423 LOCKED
+      - 424 FAILED_DEPENDENCY
+      - 425 TOO_EARLY
+      - 426 UPGRADE_REQUIRED
+      - 428 PRECONDITION_REQUIRED
+      - 429 TOO_MANY_REQUESTS
+      - 431 REQUEST_HEADER_FIELDS_TOO_LARGE
+      - 451 UNAVAILABLE_FOR_LEGAL_REASONS
+      - 500 INTERNAL_SERVER_ERROR
+      - 501 NOT_IMPLEMENTED
+      - 502 BAD_GATEWAY
+      - 503 SERVICE_UNAVAILABLE
+      - 504 GATEWAY_TIMEOUT
+      - 505 HTTP_VERSION_NOT_SUPPORTED
+      - 506 VARIANT_ALSO_NEGOTIATES
+      - 507 INSUFFICIENT_STORAGE
+      - 508 LOOP_DETECTED
+      - 509 BANDWIDTH_LIMIT_EXCEEDED
+      - 510 NOT_EXTENDED
+      - 511 NETWORK_AUTHENTICATION_REQUIRED
+    SyncCommand:
+      type: object
+      properties:
+        limit:
+          type: integer
+          format: int32
+        offset:
+          type: integer
+          format: int32
+    MediaType:
+      type: object
+      properties:
+        type:
+          type: string
+        subtype:
+          type: string
+        parameters:
+          type: object
+          additionalProperties:
+            type: string
+        qualityValue:
+          type: number
+          format: double
+        wildcardType:
+          type: boolean
+        wildcardSubtype:
+          type: boolean
+        subtypeSuffix:
+          type: string
+        charset:
+          type: string
+        concrete:
+          type: boolean
+    ProductOptionValue:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        label:
+          type: string
+        sku:
+          type: string
+        index:
+          type: integer
+          format: int64
+        is_default:
+          type: boolean
+        price_adjustment:
+          type: number
+          format: double
+    ProductSearchCommand:
+      type: object
+      properties:
+        limit:
+          type: integer
+          format: int32
+        offset:
+          type: integer
+          format: int32
+        active:
+          type: boolean
     HttpHeaders:
       type: object
       properties:
@@ -1219,193 +1528,14 @@ components:
             type: string
         origin:
           type: string
-    HttpStatus:
+    DefaultHttpStatusCode:
       allOf:
       - $ref: '#/components/schemas/HttpStatusCode'
-      enum:
-      - 100 CONTINUE
-      - 101 SWITCHING_PROTOCOLS
-      - 102 PROCESSING
-      - 103 EARLY_HINTS
-      - 200 OK
-      - 201 CREATED
-      - 202 ACCEPTED
-      - 203 NON_AUTHORITATIVE_INFORMATION
-      - 204 NO_CONTENT
-      - 205 RESET_CONTENT
-      - 206 PARTIAL_CONTENT
-      - 207 MULTI_STATUS
-      - 208 ALREADY_REPORTED
-      - 226 IM_USED
-      - 300 MULTIPLE_CHOICES
-      - 301 MOVED_PERMANENTLY
-      - 302 FOUND
-      - 303 SEE_OTHER
-      - 304 NOT_MODIFIED
-      - 307 TEMPORARY_REDIRECT
-      - 308 PERMANENT_REDIRECT
-      - 400 BAD_REQUEST
-      - 401 UNAUTHORIZED
-      - 402 PAYMENT_REQUIRED
-      - 403 FORBIDDEN
-      - 404 NOT_FOUND
-      - 405 METHOD_NOT_ALLOWED
-      - 406 NOT_ACCEPTABLE
-      - 407 PROXY_AUTHENTICATION_REQUIRED
-      - 408 REQUEST_TIMEOUT
-      - 409 CONFLICT
-      - 410 GONE
-      - 411 LENGTH_REQUIRED
-      - 412 PRECONDITION_FAILED
-      - 413 CONTENT_TOO_LARGE
-      - 413 PAYLOAD_TOO_LARGE
-      - 414 URI_TOO_LONG
-      - 415 UNSUPPORTED_MEDIA_TYPE
-      - 416 REQUESTED_RANGE_NOT_SATISFIABLE
-      - 417 EXPECTATION_FAILED
-      - 418 I_AM_A_TEAPOT
-      - 421 MISDIRECTED_REQUEST
-      - 422 UNPROCESSABLE_CONTENT
-      - 422 UNPROCESSABLE_ENTITY
-      - 423 LOCKED
-      - 424 FAILED_DEPENDENCY
-      - 425 TOO_EARLY
-      - 426 UPGRADE_REQUIRED
-      - 428 PRECONDITION_REQUIRED
-      - 429 TOO_MANY_REQUESTS
-      - 431 REQUEST_HEADER_FIELDS_TOO_LARGE
-      - 451 UNAVAILABLE_FOR_LEGAL_REASONS
-      - 500 INTERNAL_SERVER_ERROR
-      - 501 NOT_IMPLEMENTED
-      - 502 BAD_GATEWAY
-      - 503 SERVICE_UNAVAILABLE
-      - 504 GATEWAY_TIMEOUT
-      - 505 HTTP_VERSION_NOT_SUPPORTED
-      - 506 VARIANT_ALSO_NEGOTIATES
-      - 507 INSUFFICIENT_STORAGE
-      - 508 LOOP_DETECTED
-      - 509 BANDWIDTH_LIMIT_EXCEEDED
-      - 510 NOT_EXTENDED
-      - 511 NETWORK_AUTHENTICATION_REQUIRED
-    ProductStatus:
+    View:
       type: object
       properties:
-        status:
+        contentType:
           type: string
-          enum:
-          - CREATED
-          - UPDATED
-          - DELETED
-        product:
-          $ref: '#/components/schemas/Product_'
-    HttpStatusCode:
-      type: object
-      properties:
-        error:
-          type: boolean
-        is1xxInformational:
-          type: boolean
-        is2xxSuccessful:
-          type: boolean
-        is3xxRedirection:
-          type: boolean
-        is4xxClientError:
-          type: boolean
-        is5xxServerError:
-          type: boolean
-    ProductList:
-      type: object
-      properties:
-        products:
-          type: array
-          items:
-            $ref: '#/components/schemas/Product_'
-        count:
-          type: integer
-          format: int32
-        next:
-          type: string
-        previous:
-          type: string
-        sync_token:
-          type: string
-    HttpMethod: {}
-    RestProductV1:
-      type: object
-      properties:
-        id:
-          type: integer
-          format: int64
-        sku:
-          type: string
-        active:
-          type: boolean
-        url:
-          type: string
-        product_name:
-          type: string
-        product_desc:
-          type: string
-        product_price:
-          type: number
-          format: double
-        product_short_desc:
-          type: string
-        subscription_only:
-          type: boolean
-        subscription_plans:
-          type: array
-          items:
-            $ref: '#/components/schemas/ProductSubscription'
-      required:
-      - id
-      - product_name
-    ProductOption:
-      type: object
-      properties:
-        id:
-          type: integer
-          format: int64
-        name:
-          type: string
-        label:
-          type: string
-        required:
-          type: boolean
-        type:
-          type: string
-          enum:
-          - FixedList
-          - Variable
-        values:
-          type: array
-          items:
-            $ref: '#/components/schemas/ProductOptionValue'
-        min_chars:
-          type: integer
-          format: int32
-        max_chars:
-          type: integer
-          format: int32
-        allow_spaces:
-          type: boolean
-        can_end_with_character:
-          type: boolean
-        can_end_with_number:
-          type: boolean
-        can_contain_character:
-          type: boolean
-        can_contain_number:
-          type: boolean
-        can_start_with_character:
-          type: boolean
-        can_start_with_number:
-          type: boolean
-        text_message:
-          type: string
-        display_index:
-          type: integer
-          format: int32
     ProductSubscription:
       type: object
       properties:
@@ -1441,147 +1571,6 @@ components:
       - cycle_type
       - id
       - plan_price
-    ContentDisposition:
-      type: object
-      properties:
-        type:
-          type: string
-        name:
-          type: string
-        filename:
-          type: string
-        charset:
-          type: string
-        inline:
-          type: boolean
-        formData:
-          type: boolean
-        attachment:
-          type: boolean
-    SubscriptionPlan_:
-      type: object
-      properties:
-        id:
-          type: integer
-          format: int64
-        cycle:
-          type: integer
-          format: int32
-        frequency:
-          type: integer
-          format: int32
-        url:
-          type: string
-        active:
-          type: boolean
-        subscription_plan_name:
-          type: string
-        number_of_cycles:
-          type: integer
-          format: int32
-        plan_price:
-          type: number
-          format: double
-        subscription_plan_index:
-          type: integer
-          format: int32
-    ProductSearchCommand:
-      type: object
-      properties:
-        limit:
-          type: integer
-          format: int32
-        offset:
-          type: integer
-          format: int32
-        active:
-          type: boolean
-    View:
-      type: object
-      properties:
-        contentType:
-          type: string
-    ModelAndView:
-      type: object
-      properties:
-        view:
-          $ref: '#/components/schemas/View'
-        model:
-          type: object
-          additionalProperties: {}
-        status:
-          oneOf:
-          - $ref: '#/components/schemas/DefaultHttpStatusCode'
-          - $ref: '#/components/schemas/HttpStatus'
-        modelMap:
-          type: object
-          additionalProperties: {}
-          properties:
-            empty:
-              type: boolean
-        reference:
-          type: boolean
-        empty:
-          type: boolean
-        viewName:
-          type: string
-    ProductOptionValue:
-      type: object
-      properties:
-        id:
-          type: integer
-          format: int64
-        label:
-          type: string
-        sku:
-          type: string
-        index:
-          type: integer
-          format: int64
-        is_default:
-          type: boolean
-        price_adjustment:
-          type: number
-          format: double
-    MediaType:
-      type: object
-      properties:
-        type:
-          type: string
-        subtype:
-          type: string
-        parameters:
-          type: object
-          additionalProperties:
-            type: string
-        qualityValue:
-          type: number
-          format: double
-        wildcardType:
-          type: boolean
-        wildcardSubtype:
-          type: boolean
-        subtypeSuffix:
-          type: string
-        charset:
-          type: string
-        concrete:
-          type: boolean
-    CreateProductImage:
-      type: object
-      properties:
-        file_name:
-          type: string
-          description: 'The name of the file with extension, must match file data.  Acceptable file types:  [.png, .gif, .jpg, .jpeg].'
-        file_data:
-          type: string
-          description: The image data, base64 encoded.
-        checksum:
-          type: string
-          description: SHA256 checksum of image in Hex.
-      required:
-      - file_data
-      - file_name
   securitySchemes:
     oauth2:
       type: oauth2
@@ -1590,6 +1579,3 @@ components:
           authorizationUrl: https://accounts.infusionsoft.com/app/oauth/authorize
           tokenUrl: https://api.infusionsoft.com/token
           scopes: {}
-x-refined-from:
-- keap-product-v1-api-openapi.yml
-- keap-v1-openapi.json

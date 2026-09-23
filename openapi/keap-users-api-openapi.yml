@@ -632,7 +632,7 @@ paths:
       tags:
       - Users
       summary: Retrieve User Info
-      description: Retrieves information for the current authenticated end-user, as outlined by the [OpenID Connect specification](http://openid.net/specs/openid-connect-core-1_0.html#UserInfo).
+      description: Retrieves information for the current authenticated end-user, as outlined by the OpenID Connect specification.
       operationId: getUserInfo
       responses:
         '401':
@@ -693,87 +693,6 @@ paths:
     - url: https://api.infusionsoft.com/crm
 components:
   schemas:
-    DefaultHttpStatusCode:
-      allOf:
-      - $ref: '#/components/schemas/HttpStatusCode'
-    RestUserQueryCommand:
-      type: object
-      properties:
-        limit:
-          type: integer
-          format: int32
-        offset:
-          type: integer
-          format: int32
-        include_inactive:
-          type: boolean
-        include_partners:
-          type: boolean
-        includeInactive:
-          type: boolean
-        includePartners:
-          type: boolean
-    RestUser:
-      type: object
-      properties:
-        address:
-          $ref: '#/components/schemas/Address'
-        website:
-          type: string
-        partner:
-          type: boolean
-        status:
-          type: string
-          enum:
-          - Active
-          - Invited
-          - Inactive
-        company_name:
-          type: string
-        email_address:
-          type: string
-        phone_numbers:
-          type: array
-          items:
-            $ref: '#/components/schemas/PhoneNumber'
-        fax_numbers:
-          type: array
-          items:
-            $ref: '#/components/schemas/FaxNumber'
-        given_name:
-          type: string
-        family_name:
-          type: string
-        middle_name:
-          type: string
-        preferred_name:
-          type: string
-        time_zone:
-          type: string
-        job_title:
-          type: string
-        infusionsoft_id:
-          type: string
-        date_created:
-          type: string
-          format: date-time
-        created_by:
-          type: integer
-          format: int64
-        last_updated:
-          type: string
-          format: date-time
-        last_updated_by:
-          type: integer
-          format: int64
-        global_user_id:
-          type: integer
-          format: int64
-        id:
-          type: integer
-          format: int64
-      required:
-      - id
     CreateUser:
       type: object
       description: user
@@ -789,49 +708,6 @@ components:
       required:
       - email
       - given_name
-    PhoneNumber:
-      type: object
-      properties:
-        number:
-          type: string
-        extension:
-          type: string
-        field:
-          type: string
-          enum:
-          - PHONE1
-          - PHONE2
-          - PHONE3
-          - PHONE4
-          - PHONE5
-        type:
-          type: string
-        number_e164:
-          type: string
-      required:
-      - field
-    Address:
-      type: object
-      properties:
-        line1:
-          type: string
-        line2:
-          type: string
-        locality:
-          type: string
-        region:
-          type: string
-        zip_code:
-          type: string
-        zip_four:
-          type: string
-        country_code:
-          type: string
-    View:
-      type: object
-      properties:
-        contentType:
-          type: string
     ModelAndView:
       type: object
       properties:
@@ -855,6 +731,91 @@ components:
         empty:
           type: boolean
         viewName:
+          type: string
+    Users:
+      type: object
+      properties:
+        users:
+          type: array
+          items:
+            $ref: '#/components/schemas/RestUser'
+        count:
+          type: integer
+          format: int32
+        next:
+          type: string
+        previous:
+          type: string
+    HttpStatusCode:
+      type: object
+      properties:
+        error:
+          type: boolean
+        is1xxInformational:
+          type: boolean
+        is2xxSuccessful:
+          type: boolean
+        is3xxRedirection:
+          type: boolean
+        is4xxClientError:
+          type: boolean
+        is5xxServerError:
+          type: boolean
+    RestUserQueryCommand:
+      type: object
+      properties:
+        limit:
+          type: integer
+          format: int32
+        offset:
+          type: integer
+          format: int32
+        include_inactive:
+          type: boolean
+        include_partners:
+          type: boolean
+        includeInactive:
+          type: boolean
+        includePartners:
+          type: boolean
+    DefaultHttpStatusCode:
+      allOf:
+      - $ref: '#/components/schemas/HttpStatusCode'
+    Address:
+      type: object
+      properties:
+        line1:
+          type: string
+        line2:
+          type: string
+        locality:
+          type: string
+        region:
+          type: string
+        zip_code:
+          type: string
+        zip_four:
+          type: string
+        country_code:
+          type: string
+    FaxNumber:
+      type: object
+      properties:
+        number:
+          type: string
+        field:
+          type: string
+          enum:
+          - FAX1
+          - FAX2
+        type:
+          type: string
+      required:
+      - field
+    View:
+      type: object
+      properties:
+        contentType:
           type: string
     HttpStatus:
       allOf:
@@ -924,79 +885,152 @@ components:
       - 509 BANDWIDTH_LIMIT_EXCEEDED
       - 510 NOT_EXTENDED
       - 511 NETWORK_AUTHENTICATION_REQUIRED
-    FaxNumber:
+    RestUser:
       type: object
       properties:
-        number:
+        address:
+          $ref: '#/components/schemas/Address'
+        website:
           type: string
-        field:
+        partner:
+          type: boolean
+        status:
           type: string
           enum:
-          - FAX1
-          - FAX2
-        type:
+          - Active
+          - Invited
+          - Inactive
+        company_name:
           type: string
-      required:
-      - field
-    HttpStatusCode:
-      type: object
-      properties:
-        error:
-          type: boolean
-        is1xxInformational:
-          type: boolean
-        is2xxSuccessful:
-          type: boolean
-        is3xxRedirection:
-          type: boolean
-        is4xxClientError:
-          type: boolean
-        is5xxServerError:
-          type: boolean
-    Users:
-      type: object
-      properties:
-        users:
+        email_address:
+          type: string
+        phone_numbers:
           type: array
           items:
-            $ref: '#/components/schemas/RestUser'
-        count:
+            $ref: '#/components/schemas/PhoneNumber'
+        fax_numbers:
+          type: array
+          items:
+            $ref: '#/components/schemas/FaxNumber'
+        given_name:
+          type: string
+        family_name:
+          type: string
+        middle_name:
+          type: string
+        preferred_name:
+          type: string
+        time_zone:
+          type: string
+        job_title:
+          type: string
+        infusionsoft_id:
+          type: string
+        date_created:
+          type: string
+          format: date-time
+        created_by:
           type: integer
-          format: int32
-        next:
+          format: int64
+        last_updated:
           type: string
-        previous:
-          type: string
-    PhoneNumber_2:
+          format: date-time
+        last_updated_by:
+          type: integer
+          format: int64
+        global_user_id:
+          type: integer
+          format: int64
+        id:
+          type: integer
+          format: int64
+      required:
+      - id
+    PhoneNumber:
       type: object
       properties:
-        extension:
-          type: string
-          description: Phone extension
-          example: 101
         number:
           type: string
-          description: Phone number. Maximum length is 40 characters for PHONE1-PHONE3 and 20 characters for PHONE4-PHONE5.
-          example: 5551234567
-        type:
+        extension:
           type: string
-          description: Phone type
-          example: Work
         field:
           type: string
-          description: Phone number slot
           enum:
-          - PHONE_NUMBER_FIELD_UNSPECIFIED
           - PHONE1
           - PHONE2
           - PHONE3
           - PHONE4
           - PHONE5
-          example: PHONE1
+        type:
+          type: string
         number_e164:
           type: string
-          description: Phone number in E.164 format
-          example: '+15551234567'
+      required:
+      - field
+    UpdateUserRequest:
+      type: object
+      description: user
+      properties:
+        address:
+          $ref: '#/components/schemas/Address_2'
+          description: The user's address
+        title:
+          type: string
+          description: The user's job title
+          example: Sales Manager
+        website:
+          type: string
+          description: The user's website URL
+          example: https://example.com
+        company_name:
+          type: string
+          description: The user's company name
+          example: Acme Corp
+        email_address:
+          $ref: '#/components/schemas/EmailAddressRequest'
+          description: The user's email address
+        family_name:
+          type: string
+          description: The user's last name
+          example: Smith
+        fax_numbers:
+          type: array
+          description: List of user's fax numbers
+          items:
+            $ref: '#/components/schemas/FaxNumber_2'
+        given_name:
+          type: string
+          description: The user's first name
+          example: John
+        phone_numbers:
+          type: array
+          description: List of user's phone numbers
+          items:
+            $ref: '#/components/schemas/PhoneNumber_2'
+        time_zone:
+          type: string
+          description: The user's timezone in IANA format
+          example: America/New_York
+    EmailAddressRequest:
+      type: object
+      properties:
+        email:
+          type: string
+          description: Email address. Maximum length is 75 characters for EMAIL1 and 100 characters for EMAIL2 and EMAIL3.
+          example: john.smith@example.com
+        field:
+          type: string
+          description: Email address slot
+          enum:
+          - EMAIL_FIELD_UNSPECIFIED
+          - EMAIL1
+          - EMAIL2
+          - EMAIL3
+          example: EMAIL1
+        opt_in_reason:
+          type: string
+          description: Reason for opting in
+          example: Subscribed via website form
     ErrorDetails:
       type: object
       properties:
@@ -1004,6 +1038,39 @@ components:
           type: string
         resource:
           type: string
+    ListUsersPaginatedResponse:
+      type: object
+      description: Paginated response containing a list of users
+      properties:
+        users:
+          type: array
+          description: List of users
+          items:
+            $ref: '#/components/schemas/User'
+        next_page_token:
+          type: string
+    SocialAccount:
+      type: object
+      properties:
+        name:
+          type: string
+          description: Social account username or handle. Maximum length is 255 characters.
+          example: '@thryv'
+        type:
+          type: string
+          description: Social account type
+          enum:
+          - SOCIAL_ACCOUNT_TYPE_UNSPECIFIED
+          - FACEBOOK
+          - LINKED_IN
+          - TWITTER
+          - INSTAGRAM
+          - SNAPCHAT
+          - YOUTUBE
+          - PINTEREST
+          example: FACEBOOK
+      required:
+      - type
     Address_2:
       type: object
       properties:
@@ -1058,6 +1125,69 @@ components:
           type: string
           description: ZIP+4 extension. Maximum length is 10 characters.
           example: 1234
+    FaxNumber_2:
+      type: object
+      properties:
+        number:
+          type: string
+          description: Fax number
+          example: 5551234568
+        type:
+          type: string
+          description: Fax type
+          example: Work
+        field:
+          type: string
+          description: Fax number slot
+          enum:
+          - FAX_NUMBER_FIELD_UNSPECIFIED
+          - FAX1
+          - FAX2
+          example: FAX1
+    GetUserInfoResponse:
+      type: object
+      description: User information response
+      properties:
+        email:
+          type: string
+          description: The user's email address
+          example: john.smith@example.com
+        sub:
+          type: string
+          description: The subject identifier
+          example: 12345
+        id:
+          type: string
+          description: The global user identifier
+          example: 123456
+        keap_id:
+          type: string
+          description: The keap user identifier
+          example: john.smith@example.com
+        family_name:
+          type: string
+          description: The user's last name
+          example: Smith
+        given_name:
+          type: string
+          description: The user's first name
+          example: John
+        middle_name:
+          type: string
+          description: The user's middle name
+          example: Robert
+        preferred_name:
+          type: string
+          description: The user's preferred name
+          example: Johnny
+        is_admin:
+          type: boolean
+          description: Whether the user is an admin
+          example: true
+        tenant_id:
+          type: string
+          description: The tenant ID the user belongs to
+          example: xyz789
     User:
       type: object
       description: A user in the system
@@ -1170,158 +1300,36 @@ components:
           format: date-time
           description: When the user was last updated, in ISO-8601 format
           example: '2024-05-21T15:00:00Z'
-    Error:
+    PhoneNumber_2:
       type: object
       properties:
-        code:
-          type: integer
-          format: int32
-        message:
+        extension:
           type: string
-        status:
-          type: string
-        details:
-          type: array
-          items:
-            $ref: '#/components/schemas/ErrorDetails'
-    ListUsersPaginatedResponse:
-      type: object
-      description: Paginated response containing a list of users
-      properties:
-        users:
-          type: array
-          description: List of users
-          items:
-            $ref: '#/components/schemas/User'
-        next_page_token:
-          type: string
-    UpdateUserRequest:
-      type: object
-      description: user
-      properties:
-        address:
-          $ref: '#/components/schemas/Address_2'
-          description: The user's address
-        title:
-          type: string
-          description: The user's job title
-          example: Sales Manager
-        website:
-          type: string
-          description: The user's website URL
-          example: https://example.com
-        company_name:
-          type: string
-          description: The user's company name
-          example: Acme Corp
-        email_address:
-          $ref: '#/components/schemas/EmailAddressRequest'
-          description: The user's email address
-        family_name:
-          type: string
-          description: The user's last name
-          example: Smith
-        fax_numbers:
-          type: array
-          description: List of user's fax numbers
-          items:
-            $ref: '#/components/schemas/FaxNumber_2'
-        given_name:
-          type: string
-          description: The user's first name
-          example: John
-        phone_numbers:
-          type: array
-          description: List of user's phone numbers
-          items:
-            $ref: '#/components/schemas/PhoneNumber_2'
-        time_zone:
-          type: string
-          description: The user's timezone in IANA format
-          example: America/New_York
-    EmailAddressRequest:
-      type: object
-      properties:
-        email:
-          type: string
-          description: Email address. Maximum length is 75 characters for EMAIL1 and 100 characters for EMAIL2 and EMAIL3.
-          example: john.smith@example.com
-        field:
-          type: string
-          description: Email address slot
-          enum:
-          - EMAIL_FIELD_UNSPECIFIED
-          - EMAIL1
-          - EMAIL2
-          - EMAIL3
-          example: EMAIL1
-        opt_in_reason:
-          type: string
-          description: Reason for opting in
-          example: Subscribed via website form
-    GetUserInfoResponse:
-      type: object
-      description: User information response
-      properties:
-        email:
-          type: string
-          description: The user's email address
-          example: john.smith@example.com
-        sub:
-          type: string
-          description: The subject identifier
-          example: 12345
-        id:
-          type: string
-          description: The global user identifier
-          example: 123456
-        keap_id:
-          type: string
-          description: The keap user identifier
-          example: john.smith@example.com
-        family_name:
-          type: string
-          description: The user's last name
-          example: Smith
-        given_name:
-          type: string
-          description: The user's first name
-          example: John
-        middle_name:
-          type: string
-          description: The user's middle name
-          example: Robert
-        preferred_name:
-          type: string
-          description: The user's preferred name
-          example: Johnny
-        is_admin:
-          type: boolean
-          description: Whether the user is an admin
-          example: true
-        tenant_id:
-          type: string
-          description: The tenant ID the user belongs to
-          example: xyz789
-    FaxNumber_2:
-      type: object
-      properties:
+          description: Phone extension
+          example: 101
         number:
           type: string
-          description: Fax number
-          example: 5551234568
+          description: Phone number. Maximum length is 40 characters for PHONE1-PHONE3 and 20 characters for PHONE4-PHONE5.
+          example: 5551234567
         type:
           type: string
-          description: Fax type
+          description: Phone type
           example: Work
         field:
           type: string
-          description: Fax number slot
+          description: Phone number slot
           enum:
-          - FAX_NUMBER_FIELD_UNSPECIFIED
-          - FAX1
-          - FAX2
-          example: FAX1
+          - PHONE_NUMBER_FIELD_UNSPECIFIED
+          - PHONE1
+          - PHONE2
+          - PHONE3
+          - PHONE4
+          - PHONE5
+          example: PHONE1
+        number_e164:
+          type: string
+          description: Phone number in E.164 format
+          example: '+15551234567'
     EmailAddress:
       type: object
       properties:
@@ -1364,28 +1372,20 @@ components:
           - SPAM
           - INVALID
           - DEACTIVATED
-    SocialAccount:
+    Error:
       type: object
       properties:
-        name:
+        code:
+          type: integer
+          format: int32
+        message:
           type: string
-          description: Social account username or handle. Maximum length is 255 characters.
-          example: '@thryv'
-        type:
+        status:
           type: string
-          description: Social account type
-          enum:
-          - SOCIAL_ACCOUNT_TYPE_UNSPECIFIED
-          - FACEBOOK
-          - LINKED_IN
-          - TWITTER
-          - INSTAGRAM
-          - SNAPCHAT
-          - YOUTUBE
-          - PINTEREST
-          example: FACEBOOK
-      required:
-      - type
+        details:
+          type: array
+          items:
+            $ref: '#/components/schemas/ErrorDetails'
   securitySchemes:
     oauth2:
       type: oauth2

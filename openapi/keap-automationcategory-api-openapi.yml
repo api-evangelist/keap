@@ -289,6 +289,30 @@ paths:
                 $ref: '#/components/schemas/AutomationCategory'
 components:
   schemas:
+    AutomationCategory:
+      type: object
+      description: An automation category
+      properties:
+        id:
+          type: string
+          description: The unique identifier of the category
+          example: 1
+        name:
+          type: string
+          description: The name of the category
+          example: Marketing Campaigns
+        automation_count:
+          type: integer
+          format: int64
+          description: Number of automations in this category
+          example: 15
+    ErrorDetails:
+      type: object
+      properties:
+        domain:
+          type: string
+        resource:
+          type: string
     ListAutomationCategoryResponse:
       type: object
       description: Response containing a list of automation categories
@@ -299,13 +323,6 @@ components:
           items:
             $ref: '#/components/schemas/AutomationCategory'
         next_page_token:
-          type: string
-    ErrorDetails:
-      type: object
-      properties:
-        domain:
-          type: string
-        resource:
           type: string
     PatchAutomationCategoryRequest:
       type: object
@@ -326,23 +343,6 @@ components:
           example: Marketing Campaigns
       required:
       - name
-    AutomationCategory:
-      type: object
-      description: An automation category
-      properties:
-        id:
-          type: string
-          description: The unique identifier of the category
-          example: 1
-        name:
-          type: string
-          description: The name of the category
-          example: Marketing Campaigns
-        automation_count:
-          type: integer
-          format: int64
-          description: Number of automations in this category
-          example: 15
     Error:
       type: object
       properties:

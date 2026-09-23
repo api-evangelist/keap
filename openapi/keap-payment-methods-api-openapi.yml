@@ -413,13 +413,6 @@ paths:
           description: No Content
 components:
   schemas:
-    ErrorDetails:
-      type: object
-      properties:
-        domain:
-          type: string
-        resource:
-          type: string
     CardInfo:
       type: object
       properties:
@@ -499,6 +492,13 @@ components:
           items:
             $ref: '#/components/schemas/PaymentMethod'
         next_page_token:
+          type: string
+    ErrorDetails:
+      type: object
+      properties:
+        domain:
+          type: string
+        resource:
           type: string
     ListPaymentMethodsResponse:
       type: object

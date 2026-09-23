@@ -169,89 +169,6 @@ paths:
                 $ref: '#/components/schemas/GetBusinessProfileResponse'
 components:
   schemas:
-    UpdateBusinessProfileRequest:
-      type: object
-      description: businessProfile
-      properties:
-        name:
-          type: string
-        email:
-          type: string
-        website:
-          type: string
-        phone:
-          type: string
-        address:
-          $ref: '#/components/schemas/BusinessProfileAddressRequest'
-        currency_code:
-          type: string
-          description: ISO 4217 Currency Code
-          example: USD
-        business_goals:
-          type: array
-          description: The goals of this business, ie. Grow Business, Convert more leads
-          items:
-            type: string
-        business_primary_color:
-          type: string
-        business_secondary_color:
-          type: string
-    ErrorDetails:
-      type: object
-      properties:
-        domain:
-          type: string
-        resource:
-          type: string
-    BusinessProfileAddressResponse:
-      type: object
-      properties:
-        line1:
-          type: string
-        line2:
-          type: string
-        locality:
-          type: string
-          description: The municipality to which the address belongs
-          example: Phoenix
-        region:
-          type: string
-          description: The long-name descriptive version of the Region Code
-          example: Arizona
-        country_code:
-          type: string
-          description: An ISO 3166-1 Country Code (https://en.wikipedia.org/wiki/ISO_3166-1_alpha-3)
-          example: USA
-        postal_code:
-          type: string
-    BusinessProfileAddressRequest:
-      type: object
-      properties:
-        line1:
-          type: string
-        line2:
-          type: string
-        locality:
-          type: string
-          description: The municipality to which the address belongs
-          example: Phoenix
-        region:
-          type: string
-          description: The long-name descriptive version of the Region Code
-          example: Arizona
-        country_code:
-          type: string
-          description: An ISO 3166-1 Country Code (https://en.wikipedia.org/wiki/ISO_3166-1_alpha-3)
-          example: USA
-        postal_code:
-          type: string
-      required:
-      - country_code
-      - line1
-      - line2
-      - locality
-      - postal_code
-      - region
     GetBusinessProfileResponse:
       type: object
       description: Profile information about the business that owns/uses this account
@@ -287,6 +204,89 @@ components:
         business_primary_color:
           type: string
         business_secondary_color:
+          type: string
+    UpdateBusinessProfileRequest:
+      type: object
+      description: businessProfile
+      properties:
+        name:
+          type: string
+        email:
+          type: string
+        website:
+          type: string
+        phone:
+          type: string
+        address:
+          $ref: '#/components/schemas/BusinessProfileAddressRequest'
+        currency_code:
+          type: string
+          description: ISO 4217 Currency Code
+          example: USD
+        business_goals:
+          type: array
+          description: The goals of this business, ie. Grow Business, Convert more leads
+          items:
+            type: string
+        business_primary_color:
+          type: string
+        business_secondary_color:
+          type: string
+    BusinessProfileAddressRequest:
+      type: object
+      properties:
+        line1:
+          type: string
+        line2:
+          type: string
+        locality:
+          type: string
+          description: The municipality to which the address belongs
+          example: Phoenix
+        region:
+          type: string
+          description: The long-name descriptive version of the Region Code
+          example: Arizona
+        country_code:
+          type: string
+          description: An ISO 3166-1 Country Code (https://en.wikipedia.org/wiki/ISO_3166-1_alpha-3)
+          example: USA
+        postal_code:
+          type: string
+      required:
+      - country_code
+      - line1
+      - line2
+      - locality
+      - postal_code
+      - region
+    BusinessProfileAddressResponse:
+      type: object
+      properties:
+        line1:
+          type: string
+        line2:
+          type: string
+        locality:
+          type: string
+          description: The municipality to which the address belongs
+          example: Phoenix
+        region:
+          type: string
+          description: The long-name descriptive version of the Region Code
+          example: Arizona
+        country_code:
+          type: string
+          description: An ISO 3166-1 Country Code (https://en.wikipedia.org/wiki/ISO_3166-1_alpha-3)
+          example: USA
+        postal_code:
+          type: string
+    ErrorDetails:
+      type: object
+      properties:
+        domain:
+          type: string
+        resource:
           type: string
     Error:
       type: object

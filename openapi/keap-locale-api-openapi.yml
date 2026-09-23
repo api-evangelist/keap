@@ -534,14 +534,6 @@ paths:
     - url: https://api.infusionsoft.com/crm
 components:
   schemas:
-    DefaultHttpStatusCode:
-      allOf:
-      - $ref: '#/components/schemas/HttpStatusCode'
-    View:
-      type: object
-      properties:
-        contentType:
-          type: string
     ModelAndView:
       type: object
       properties:
@@ -565,6 +557,39 @@ components:
         empty:
           type: boolean
         viewName:
+          type: string
+    ProvincesByCode:
+      type: object
+      properties:
+        provinces:
+          type: object
+          additionalProperties:
+            type: string
+          description: A key-value pair of province code and province name.
+      required:
+      - provinces
+    HttpStatusCode:
+      type: object
+      properties:
+        error:
+          type: boolean
+        is1xxInformational:
+          type: boolean
+        is2xxSuccessful:
+          type: boolean
+        is3xxRedirection:
+          type: boolean
+        is4xxClientError:
+          type: boolean
+        is5xxServerError:
+          type: boolean
+    DefaultHttpStatusCode:
+      allOf:
+      - $ref: '#/components/schemas/HttpStatusCode'
+    View:
+      type: object
+      properties:
+        contentType:
           type: string
     HttpStatus:
       allOf:
@@ -634,6 +659,16 @@ components:
       - 509 BANDWIDTH_LIMIT_EXCEEDED
       - 510 NOT_EXTENDED
       - 511 NETWORK_AUTHENTICATION_REQUIRED
+    CountriesByCode:
+      type: object
+      properties:
+        countries:
+          type: object
+          additionalProperties:
+            type: string
+          description: A key-value pair of country code and country name.
+      required:
+      - countries
     RestDefaultOptionsResponse:
       type: object
       properties:
@@ -657,53 +692,13 @@ components:
           type: array
           items:
             type: string
-    CountriesByCode:
+    CountryCodes:
       type: object
       properties:
-        countries:
-          type: object
-          additionalProperties:
-            type: string
-          description: A key-value pair of country code and country name.
-      required:
-      - countries
-    HttpStatusCode:
-      type: object
-      properties:
-        error:
-          type: boolean
-        is1xxInformational:
-          type: boolean
-        is2xxSuccessful:
-          type: boolean
-        is3xxRedirection:
-          type: boolean
-        is4xxClientError:
-          type: boolean
-        is5xxServerError:
-          type: boolean
-    ProvincesByCode:
-      type: object
-      properties:
-        provinces:
-          type: object
-          additionalProperties:
-            type: string
-          description: A key-value pair of province code and province name.
-      required:
-      - provinces
-    ListCountriesResponse:
-      type: object
-      properties:
-        countries:
-          type: array
-          description: A key-value pair of country code and country name.
-          items:
-            $ref: '#/components/schemas/Country'
-        next_page_token:
+        alpha2:
           type: string
-      required:
-      - countries
+        alpha3:
+          type: string
     Province:
       type: object
       properties:
@@ -712,6 +707,13 @@ components:
         name:
           type: string
         country:
+          type: string
+    ErrorDetails:
+      type: object
+      properties:
+        domain:
+          type: string
+        resource:
           type: string
     Country:
       type: object
@@ -732,20 +734,18 @@ components:
           type: string
       required:
       - provinces
-    ErrorDetails:
+    ListCountriesResponse:
       type: object
       properties:
-        domain:
+        countries:
+          type: array
+          description: A key-value pair of country code and country name.
+          items:
+            $ref: '#/components/schemas/Country'
+        next_page_token:
           type: string
-        resource:
-          type: string
-    CountryCodes:
-      type: object
-      properties:
-        alpha2:
-          type: string
-        alpha3:
-          type: string
+      required:
+      - countries
     Error:
       type: object
       properties:

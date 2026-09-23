@@ -1,7 +1,8 @@
 openapi: 3.2.0
 info:
   title: Keap Appointment API
-  version: v1
+  description: Keap Public API Documentation
+  termsOfService: https://www.thryv.com/terms-of-use
   contact:
     name: Keap
     url: https://developer.keap.com/get-support
@@ -9,14 +10,14 @@ info:
   license:
     name: Apache 2.0
     url: https://www.apache.org/licenses/LICENSE-2.0
-  termsOfService: https://www.thryv.com/terms-of-use
-  description: 'Operations tagged Appointment across 2 of this provider''s published API definitions: keap-appointment-v1-api-openapi.yml, keap-v1-openapi.json. Each path carries the servers of the definition it was published in.'
+  version: v1
 servers:
 - url: https://api.infusionsoft.com/crm
 security:
 - oauth2: []
 tags:
 - name: Appointment
+  description: Access Appointment objects stored in Keap Max Classic. Appointment objects stored in Keap Pro or Keap Max are not available via these methods.
 paths:
   /rest/v1/appointments/{appointmentId}:
     get:
@@ -347,8 +348,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Appointment'
-    servers:
-    - url: https://api.infusionsoft.com/crm
   /rest/v1/appointments/model/customFields:
     post:
       tags:
@@ -429,8 +428,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/CustomFieldMetaData'
-    servers:
-    - url: https://api.infusionsoft.com/crm
   /rest/v1/appointments:
     get:
       tags:
@@ -590,8 +587,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Appointment'
-    servers:
-    - url: https://api.infusionsoft.com/crm
   /rest/v1/appointments/model:
     get:
       tags:
@@ -666,17 +661,94 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ObjectModel'
-    servers:
-    - url: https://api.infusionsoft.com/crm
 components:
   schemas:
-    DefaultHttpStatusCode:
-      allOf:
-      - $ref: '#/components/schemas/HttpStatusCode'
-    CreateRestCustomFieldOption:
+    AppointmentList:
+      type: object
+      properties:
+        appointments:
+          type: array
+          items:
+            $ref: '#/components/schemas/Appointment'
+        count:
+          type: integer
+          format: int32
+        next:
+          type: string
+        previous:
+          type: string
+        sync_token:
+          type: string
+    CreateRestCustomField:
       type: object
       properties:
         label:
+          type: string
+        options:
+          type: array
+          items:
+            $ref: '#/components/schemas/CreateRestCustomFieldOption'
+        field_type:
+          type: string
+          enum:
+          - Currency
+          - Date
+          - DateTime
+          - DayOfWeek
+          - Drilldown
+          - Email
+          - Month
+          - ListBox
+          - Name
+          - WholeNumber
+          - DecimalNumber
+          - Percent
+          - PhoneNumber
+          - Radio
+          - Dropdown
+          - SocialSecurityNumber
+          - State
+          - Text
+          - TextArea
+          - User
+          - UserListBox
+          - Website
+          - Year
+          - YesNo
+        group_id:
+          type: integer
+          format: int64
+          description: An optional tab group to place the field under in the interface.  If not specified, will default to the 'Custom Fields' tab.
+        user_group_id:
+          type: integer
+          format: int64
+          description: An optional user group to choose from when selecting values for User or UserListBox fields.
+      required:
+      - field_type
+      - label
+    ModelAndView:
+      type: object
+      properties:
+        view:
+          $ref: '#/components/schemas/View'
+        model:
+          type: object
+          additionalProperties: {}
+        status:
+          oneOf:
+          - $ref: '#/components/schemas/DefaultHttpStatusCode'
+          - $ref: '#/components/schemas/HttpStatus'
+        modelMap:
+          type: object
+          additionalProperties: {}
+          properties:
+            empty:
+              type: boolean
+        reference:
+          type: boolean
+        empty:
+          type: boolean
+        viewName:
           type: string
     ObjectModel:
       type: object
@@ -690,6 +762,66 @@ components:
           items:
             type: string
           uniqueItems: true
+    Appointment:
+      type: object
+      properties:
+        title:
+          type: string
+        description:
+          type: string
+        user:
+          type: integer
+          format: int64
+          description: Required only for pop-up reminders
+        location:
+          type: string
+        contact_id:
+          type: integer
+          format: int64
+          description: Required for pop-up reminders
+        start_date:
+          type: string
+          format: date-time
+          example: '2024-01-15T09:00:00.000Z'
+        end_date:
+          type: string
+          format: date-time
+          example: '2024-01-15T10:00:00.000Z'
+        remind_time:
+          type: integer
+          format: int32
+          description: Value in minutes before start_date to show pop-up reminder.
+          enum:
+          - '5'
+          - '10'
+          - '15'
+          - '30'
+          - '60'
+          - '120'
+          - '240'
+          - '480'
+          - '1440'
+          - '2880'
+          example: 30
+      required:
+      - end_date
+      - start_date
+      - title
+    HttpStatusCode:
+      type: object
+      properties:
+        error:
+          type: boolean
+        is1xxInformational:
+          type: boolean
+        is2xxSuccessful:
+          type: boolean
+        is3xxRedirection:
+          type: boolean
+        is4xxClientError:
+          type: boolean
+        is5xxServerError:
+          type: boolean
     AppointmentSearchCommand:
       type: object
       properties:
@@ -712,6 +844,9 @@ components:
         untilAsDate:
           type: string
           format: date-time
+    DefaultHttpStatusCode:
+      allOf:
+      - $ref: '#/components/schemas/HttpStatusCode'
     CustomFieldMetaData:
       type: object
       properties:
@@ -769,93 +904,6 @@ components:
       type: object
       properties:
         contentType:
-          type: string
-    ModelAndView:
-      type: object
-      properties:
-        view:
-          $ref: '#/components/schemas/View'
-        model:
-          type: object
-          additionalProperties: {}
-        status:
-          oneOf:
-          - $ref: '#/components/schemas/DefaultHttpStatusCode'
-          - $ref: '#/components/schemas/HttpStatus'
-        modelMap:
-          type: object
-          additionalProperties: {}
-          properties:
-            empty:
-              type: boolean
-        reference:
-          type: boolean
-        empty:
-          type: boolean
-        viewName:
-          type: string
-    CreateRestCustomField:
-      type: object
-      properties:
-        label:
-          type: string
-        options:
-          type: array
-          items:
-            $ref: '#/components/schemas/CreateRestCustomFieldOption'
-        field_type:
-          type: string
-          enum:
-          - Currency
-          - Date
-          - DateTime
-          - DayOfWeek
-          - Drilldown
-          - Email
-          - Month
-          - ListBox
-          - Name
-          - WholeNumber
-          - DecimalNumber
-          - Percent
-          - PhoneNumber
-          - Radio
-          - Dropdown
-          - SocialSecurityNumber
-          - State
-          - Text
-          - TextArea
-          - User
-          - UserListBox
-          - Website
-          - Year
-          - YesNo
-        group_id:
-          type: integer
-          format: int64
-          description: An optional tab group to place the field under in the interface.  If not specified, will default to the 'Custom Fields' tab.
-        user_group_id:
-          type: integer
-          format: int64
-          description: An optional user group to choose from when selecting values for User or UserListBox fields.
-      required:
-      - field_type
-      - label
-    AppointmentList:
-      type: object
-      properties:
-        appointments:
-          type: array
-          items:
-            $ref: '#/components/schemas/Appointment'
-        count:
-          type: integer
-          format: int32
-        next:
-          type: string
-        previous:
-          type: string
-        sync_token:
           type: string
     HttpStatus:
       allOf:
@@ -925,21 +973,11 @@ components:
       - 509 BANDWIDTH_LIMIT_EXCEEDED
       - 510 NOT_EXTENDED
       - 511 NETWORK_AUTHENTICATION_REQUIRED
-    HttpStatusCode:
+    CreateRestCustomFieldOption:
       type: object
       properties:
-        error:
-          type: boolean
-        is1xxInformational:
-          type: boolean
-        is2xxSuccessful:
-          type: boolean
-        is3xxRedirection:
-          type: boolean
-        is4xxClientError:
-          type: boolean
-        is5xxServerError:
-          type: boolean
+        label:
+          type: string
     CustomFieldOption:
       type: object
       properties:
@@ -947,51 +985,6 @@ components:
           type: string
         label:
           type: string
-    Appointment:
-      type: object
-      properties:
-        title:
-          type: string
-        description:
-          type: string
-        user:
-          type: integer
-          format: int64
-          description: Required only for pop-up reminders
-        location:
-          type: string
-        contact_id:
-          type: integer
-          format: int64
-          description: Required for pop-up reminders
-        start_date:
-          type: string
-          format: date-time
-          example: '2024-01-15T09:00:00.000Z'
-        end_date:
-          type: string
-          format: date-time
-          example: '2024-01-15T10:00:00.000Z'
-        remind_time:
-          type: integer
-          format: int32
-          description: Value in minutes before start_date to show pop-up reminder.
-          enum:
-          - '5'
-          - '10'
-          - '15'
-          - '30'
-          - '60'
-          - '120'
-          - '240'
-          - '480'
-          - '1440'
-          - '2880'
-          example: 30
-      required:
-      - end_date
-      - start_date
-      - title
   securitySchemes:
     oauth2:
       type: oauth2
@@ -1000,6 +993,3 @@ components:
           authorizationUrl: https://accounts.infusionsoft.com/app/oauth/authorize
           tokenUrl: https://api.infusionsoft.com/token
           scopes: {}
-x-refined-from:
-- keap-appointment-v1-api-openapi.yml
-- keap-v1-openapi.json

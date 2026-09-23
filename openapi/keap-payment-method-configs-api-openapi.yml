@@ -95,17 +95,17 @@ components:
           type: string
         resource:
           type: string
+    CreatePaymentMethodConfigRequest:
+      type: object
+      properties:
+        contact_id:
+          type: string
     PaymentMethodConfig:
       type: object
       properties:
         session_key:
           type: string
           description: A temporary session key required for rendering Keap's payment component.
-    CreatePaymentMethodConfigRequest:
-      type: object
-      properties:
-        contact_id:
-          type: string
     Error:
       type: object
       properties:

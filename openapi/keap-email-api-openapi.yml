@@ -980,7 +980,6 @@ paths:
       tags:
       - Email
       summary: Send an email based on a template
-      description: Send an email based on a template
       operationId: sendEmailTemplate
       requestBody:
         content:
@@ -1282,7 +1281,6 @@ paths:
       tags:
       - Email
       summary: Retrieve an email template
-      description: Retrieve an email template
       operationId: getEmailTemplate
       parameters:
       - name: email_template_id
@@ -1349,9 +1347,148 @@ paths:
     - url: https://api.infusionsoft.com/crm
 components:
   schemas:
+    EmailSentCreateListRequest:
+      type: object
+      description: Email records to persist, with content.
+      properties:
+        emails:
+          type: array
+          items:
+            $ref: '#/components/schemas/EmailSentCreate'
+    ModelAndView:
+      type: object
+      properties:
+        view:
+          $ref: '#/components/schemas/View'
+        model:
+          type: object
+          additionalProperties: {}
+        status:
+          oneOf:
+          - $ref: '#/components/schemas/DefaultHttpStatusCode'
+          - $ref: '#/components/schemas/HttpStatus'
+        modelMap:
+          type: object
+          additionalProperties: {}
+          properties:
+            empty:
+              type: boolean
+        reference:
+          type: boolean
+        empty:
+          type: boolean
+        viewName:
+          type: string
+    HttpStatusCode:
+      type: object
+      properties:
+        error:
+          type: boolean
+        is1xxInformational:
+          type: boolean
+        is2xxSuccessful:
+          type: boolean
+        is3xxRedirection:
+          type: boolean
+        is4xxClientError:
+          type: boolean
+        is5xxServerError:
+          type: boolean
+    EmailSentQueryResultList:
+      type: object
+      properties:
+        emails:
+          type: array
+          items:
+            $ref: '#/components/schemas/EmailSentQueryResult'
+        count:
+          type: integer
+          format: int32
+        next:
+          type: string
+        previous:
+          type: string
+    EmailSentQueryResult:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        subject:
+          type: string
+        headers:
+          type: string
+        contact_id:
+          type: integer
+          format: int64
+        sent_to_address:
+          type: string
+        sent_to_cc_addresses:
+          type: string
+        sent_to_bcc_addresses:
+          type: string
+        sent_from_address:
+          type: string
+        sent_from_reply_address:
+          type: string
+        sent_date:
+          type: string
+          format: date-time
+        received_date:
+          type: string
+          format: date-time
+        opened_date:
+          type: string
+          format: date-time
+        clicked_date:
+          type: string
+          format: date-time
+        original_provider:
+          type: string
+          enum:
+          - UNKNOWN
+          - INFUSIONSOFT
+          - MICROSOFT
+          - GOOGLE
+        original_provider_id:
+          type: string
     DefaultHttpStatusCode:
       allOf:
       - $ref: '#/components/schemas/HttpStatusCode'
+    EmailSentQueryCommand:
+      type: object
+      properties:
+        limit:
+          type: integer
+          format: int32
+        offset:
+          type: integer
+          format: int32
+        email:
+          type: string
+        ordered:
+          type: boolean
+        contact_id:
+          type: integer
+          format: int64
+        since_sent_date:
+          type: string
+        until_sent_date:
+          type: string
+    SetOfIds:
+      type: object
+      properties:
+        ids:
+          type: array
+          items:
+            type: integer
+            format: int64
+          properties:
+            empty:
+              type: boolean
+          uniqueItems: true
+      required:
+      - ids
     EmailSentQueryResultWithContent:
       type: object
       properties:
@@ -1402,200 +1539,22 @@ components:
         html_content:
           type: string
           description: Base64 encoded HTML
-    SetOfIds:
-      type: object
-      properties:
-        ids:
-          type: array
-          items:
-            type: integer
-            format: int64
-          properties:
-            empty:
-              type: boolean
-          uniqueItems: true
-      required:
-      - ids
-    EmailSentCreateListRequest:
-      type: object
-      description: Email records to persist, with content.
-      properties:
-        emails:
-          type: array
-          items:
-            $ref: '#/components/schemas/EmailSentCreate'
-    EmailSendRequestAttachment:
-      type: object
-      properties:
-        file_name:
-          type: string
-          description: The filename of the attached file, including extension
-        file_data:
-          type: string
-          description: The content of the attachment, encoded in Base64
-    EmailSendRequest:
-      type: object
-      properties:
-        contacts:
-          type: array
-          description: An array of Contact Ids to receive the email
-          items:
-            type: integer
-            format: int64
-        subject:
-          type: string
-          description: The subject line of the email
-        attachments:
-          type: array
-          description: Attachments to be sent with each copy of the email, maximum of 10 with size of 1MB each
-          items:
-            $ref: '#/components/schemas/EmailSendRequestAttachment'
-          uniqueItems: true
-        user_id:
-          type: integer
-          format: int64
-          description: The infusionsoft user to send the email on behalf of
-        html_content:
-          type: string
-          description: The HTML-formatted content of the email, encoded in Base64
-        plain_content:
-          type: string
-          description: The plain-text content of the email, encoded in Base64
-        address_field:
-          type: string
-          description: Email field of each Contact record to address the email to, such as 'Email', 'EmailAddress2', 'EmailAddress3' or '_CustomFieldName', defaulting to the contact's primary email
-      required:
-      - contacts
-      - subject
-      - user_id
-    EmailSentCreate:
-      type: object
-      description: Email records to persist, with content.
-      properties:
-        id:
-          type: integer
-          format: int64
-        subject:
-          type: string
-        headers:
-          type: string
-        contact_id:
-          type: integer
-          format: int64
-        sent_to_address:
-          type: string
-        sent_to_cc_addresses:
-          type: string
-        sent_to_bcc_addresses:
-          type: string
-        sent_from_address:
-          type: string
-        sent_from_reply_address:
-          type: string
-        sent_date:
-          type: string
-          format: date-time
-        received_date:
-          type: string
-          format: date-time
-        opened_date:
-          type: string
-          format: date-time
-        clicked_date:
-          type: string
-          format: date-time
-        plain_content:
-          type: string
-          description: Base64 encoded text
-        html_content:
-          type: string
-          description: Base64 encoded HTML
-        original_provider:
-          type: string
-          description: Provider that sent the email case insensitive, must be in list [GOOGLE, INFUSIONSOFT].  If omitted gets mapped to UNKNOWN.
-          enum:
-          - UNKNOWN
-          - INFUSIONSOFT
-          - MICROSOFT
-          - GOOGLE
-        original_provider_id:
-          type: string
-          description: Provider id that sent the email, must be unique when combined with provider.  If omitted a UUID without dashes is autogenerated for the record.
-        provider_source_id:
-          type: string
-          description: The email address of the synced email account that generated this message.
-      required:
-      - sent_to_address
     View:
       type: object
       properties:
         contentType:
           type: string
-    ModelAndView:
-      type: object
-      properties:
-        view:
-          $ref: '#/components/schemas/View'
-        model:
-          type: object
-          additionalProperties: {}
-        status:
-          oneOf:
-          - $ref: '#/components/schemas/DefaultHttpStatusCode'
-          - $ref: '#/components/schemas/HttpStatus'
-        modelMap:
-          type: object
-          additionalProperties: {}
-          properties:
-            empty:
-              type: boolean
-        reference:
-          type: boolean
-        empty:
-          type: boolean
-        viewName:
-          type: string
-    EmailSentQueryCommand:
-      type: object
-      properties:
-        limit:
-          type: integer
-          format: int32
-        offset:
-          type: integer
-          format: int32
-        email:
-          type: string
-        ordered:
-          type: boolean
-        contact_id:
-          type: integer
-          format: int64
-        since_sent_date:
-          type: string
-        until_sent_date:
-          type: string
-    EmailSentQueryResultList:
+    EmailSentCreateListResponse:
       type: object
       properties:
         emails:
           type: array
           items:
-            $ref: '#/components/schemas/EmailSentQueryResult'
-        count:
-          type: integer
-          format: int32
-        next:
-          type: string
-        previous:
-          type: string
-    EmailSentCreateError:
-      type: object
-      properties:
-        error_message:
-          type: string
-        email:
-          $ref: '#/components/schemas/EmailSentCreate'
+            $ref: '#/components/schemas/EmailSentCreate'
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/EmailSentCreateError'
     HttpStatus:
       allOf:
       - $ref: '#/components/schemas/HttpStatusCode'
@@ -1664,8 +1623,16 @@ components:
       - 509 BANDWIDTH_LIMIT_EXCEEDED
       - 510 NOT_EXTENDED
       - 511 NETWORK_AUTHENTICATION_REQUIRED
-    EmailSentQueryResult:
+    EmailSentCreateError:
       type: object
+      properties:
+        error_message:
+          type: string
+        email:
+          $ref: '#/components/schemas/EmailSentCreate'
+    EmailSentCreate:
+      type: object
+      description: Email records to persist, with content.
       properties:
         id:
           type: integer
@@ -1699,8 +1666,15 @@ components:
         clicked_date:
           type: string
           format: date-time
+        plain_content:
+          type: string
+          description: Base64 encoded text
+        html_content:
+          type: string
+          description: Base64 encoded HTML
         original_provider:
           type: string
+          description: Provider that sent the email case insensitive, must be in list [GOOGLE, INFUSIONSOFT].  If omitted gets mapped to UNKNOWN.
           enum:
           - UNKNOWN
           - INFUSIONSOFT
@@ -1708,32 +1682,134 @@ components:
           - GOOGLE
         original_provider_id:
           type: string
-    HttpStatusCode:
+          description: Provider id that sent the email, must be unique when combined with provider.  If omitted a UUID without dashes is autogenerated for the record.
+        provider_source_id:
+          type: string
+          description: The email address of the synced email account that generated this message.
+      required:
+      - sent_to_address
+    EmailSendRequest:
       type: object
       properties:
-        error:
-          type: boolean
-        is1xxInformational:
-          type: boolean
-        is2xxSuccessful:
-          type: boolean
-        is3xxRedirection:
-          type: boolean
-        is4xxClientError:
-          type: boolean
-        is5xxServerError:
-          type: boolean
-    EmailSentCreateListResponse:
+        contacts:
+          type: array
+          description: An array of Contact Ids to receive the email
+          items:
+            type: integer
+            format: int64
+        subject:
+          type: string
+          description: The subject line of the email
+        attachments:
+          type: array
+          description: Attachments to be sent with each copy of the email, maximum of 10 with size of 1MB each
+          items:
+            $ref: '#/components/schemas/EmailSendRequestAttachment'
+          uniqueItems: true
+        user_id:
+          type: integer
+          format: int64
+          description: The infusionsoft user to send the email on behalf of
+        html_content:
+          type: string
+          description: The HTML-formatted content of the email, encoded in Base64
+        plain_content:
+          type: string
+          description: The plain-text content of the email, encoded in Base64
+        address_field:
+          type: string
+          description: Email field of each Contact record to address the email to, such as 'Email', 'EmailAddress2', 'EmailAddress3' or '_CustomFieldName', defaulting to the contact's primary email
+      required:
+      - contacts
+      - subject
+      - user_id
+    EmailSendRequestAttachment:
       type: object
+      properties:
+        file_name:
+          type: string
+          description: The filename of the attached file, including extension
+        file_data:
+          type: string
+          description: The content of the attachment, encoded in Base64
+    Error:
+      type: object
+      properties:
+        code:
+          type: integer
+          format: int32
+        message:
+          type: string
+        status:
+          type: string
+        details:
+          type: array
+          items:
+            $ref: '#/components/schemas/ErrorDetails'
+    EmailSendTemplateRequest:
+      type: object
+      description: 'Use a template to send an email to a list of contacts '
+      properties:
+        template_id:
+          type: string
+          description: Template ID
+          example: 123
+        contact_ids:
+          type: array
+          description: List of contact IDs to send the email to
+          example:
+          - '1'
+          - '2'
+          - '3'
+          items:
+            type: string
+        user_id:
+          type: string
+          description: The user ID to send the email on behalf of
+          example: 1
+        address_field:
+          type: string
+          description: Email field of each Contact record to address the email to, such as 'Email', 'EmailAddress2', 'EmailAddress3' or '_CustomFieldName', defaulting to the contact's primary email
+          example: EMAIL1
+      required:
+      - contact_ids
+      - template_id
+      - user_id
+    CreateEmailsSentRequest:
+      type: object
+      description: Email records to persist, with content.
       properties:
         emails:
           type: array
+          description: Collection of email records to create, maximum 1000
           items:
-            $ref: '#/components/schemas/EmailSentCreate'
-        errors:
+            $ref: '#/components/schemas/CreateEmailSentRequest'
+      required:
+      - emails
+    DeleteEmailsResponse:
+      type: object
+      description: Response from deleting email records
+      properties:
+        results:
+          type: object
+          additionalProperties:
+            type: string
+          description: Map of email ID to deletion result (SUCCESS, NO_PERMISSION, EMAIL_ID_NOT_FOUND)
+    DeleteEmailsRequest:
+      type: object
+      description: Request to delete multiple email records
+      properties:
+        email_ids:
           type: array
+          description: List of email IDs to delete
+          example:
+          - '123'
+          - '456'
+          - '789'
           items:
-            $ref: '#/components/schemas/EmailSentCreateError'
+            type: string
+      required:
+      - email_ids
     ListEmailTemplatesResponse:
       type: object
       properties:
@@ -1743,70 +1819,46 @@ components:
             $ref: '#/components/schemas/EmailTemplateSummary'
         next_page_token:
           type: string
-    EmailTemplate:
+    ListEmailsSentResponse:
       type: object
-      description: An email template
+      description: Response containing a list of sent emails
+      properties:
+        emails:
+          type: array
+          description: List of sent emails
+          items:
+            $ref: '#/components/schemas/EmailSent'
+        next_page_token:
+          type: string
+    ErrorDetails:
+      type: object
+      properties:
+        domain:
+          type: string
+        resource:
+          type: string
+    EmailsSentList:
+      type: object
+      description: Response containing created emails and any errors
+      properties:
+        emails:
+          type: array
+          description: Successfully created email records
+          items:
+            $ref: '#/components/schemas/EmailSentWithContent'
+        errors:
+          type: array
+          description: Errors that occurred during creation
+          items:
+            $ref: '#/components/schemas/EmailSentCreateError_2'
+    EmailSentWithContent:
+      type: object
+      description: A sent email record with full content
       properties:
         id:
-          type: integer
-          format: int64
-          description: The id of the template
-        piece_title:
           type: string
-          description: The title of the template
-          example: Welcome Email
-        categories:
-          type: array
-          description: The categories associated with the email
-          example:
-          - Marketing
-          - Onboarding
-          items:
-            type: string
-        from_address:
-          type: string
-          description: The from address of the email
-          example: ~Owner.Email~
-        to_address:
-          type: string
-          description: The to address of the email
-          example: ~Contact.Email~
-        cc_address:
-          type: string
-          description: The cc address of the email
-          example: manager@company.com
-        bcc_address:
-          type: string
-          description: The bcc address of the email
-          example: archive@company.com
-        subject:
-          type: string
-          description: The subject of the email
-          example: Welcome ~Contact.FirstName~!
-        text_body:
-          type: string
-          description: The text body of the email
-          example: Hello ~Contact.FirstName~, welcome!
-        html_body:
-          type: string
-          description: The HTML body of the email
-          example: <h1>Welcome ~Contact.FirstName~!</h1>
-        content_type:
-          type: string
-          description: The content type of the email
-          enum:
-          - TEXT
-          - HTML
-          - MULTIPART
-          example: HTML
-        merge_context:
-          type: string
-          description: The merge context of the email
-          example: Contact
-    CreateEmailSentRequest:
-      type: object
-      description: Request to create an email record
-      properties:
+          description: The unique identifier of the email
+          example: 123
         subject:
           type: string
           description: The subject of the email
@@ -1849,7 +1901,7 @@ components:
         sent_time:
           type: string
           format: date-time
-          description: When the email was sent, in ISO-8601 format. If omitted, the stored sent_time will be null.
+          description: When the email was sent, in ISO-8601 format
           example: '2024-05-21T14:30:00Z'
         received_time:
           type: string
@@ -1866,33 +1918,31 @@ components:
           format: date-time
           description: When a link in the email was clicked, in ISO-8601 format
           example: '2024-05-21T15:05:00Z'
-        plain_content:
+        original_provider_id:
           type: string
-          description: Base64 encoded text
-          example: V2VsY29tZSB0byBvdXIgc2VydmljZQ==
-        html_content:
-          type: string
-          description: Base64 encoded HTML
-          example: PGgxPldlbGNvbWU8L2gxPg==
+          description: The original provider's message ID
+          example: msg_abc123
         original_provider:
           type: string
-          description: Provider that sent the email, defaults to UNKNOWN
+          description: The email provider that sent the email
           enum:
           - UNKNOWN
           - INFUSIONSOFT
           - MICROSOFT
           - GOOGLE
           example: INFUSIONSOFT
-        original_provider_id:
-          type: string
-          description: Provider id that sent the email, must be unique when combined with provider. If omitted a UUID without dashes is autogenerated for the record.
-          example: msg_abc123
         provider_source_id:
           type: string
-          description: The email address of the synced email account that generated this message.
+          description: The synced email account that generated this message
           example: sync@company.com
-      required:
-      - sent_to_address
+        plain_content:
+          type: string
+          description: Base64 encoded plain text content
+          example: V2VsY29tZSB0byBvdXIgc2VydmljZQ==
+        html_content:
+          type: string
+          description: Base64 encoded HTML content
+          example: PGgxPldlbGNvbWU8L2gxPg==
     EmailSent:
       type: object
       description: A sent email record
@@ -2029,6 +2079,17 @@ components:
           type: string
           description: The merge context of the email
           example: Contact
+    EmailSentCreateError_2:
+      type: object
+      description: Error that occurred when creating an email record
+      properties:
+        error_message:
+          type: string
+          description: Description of the error
+          example: Contact not found
+        email:
+          $ref: '#/components/schemas/CreateEmailSentRequest'
+          description: The email request that failed
     EmailSendRequestAttachment_2:
       type: object
       description: An attachment for an email
@@ -2059,27 +2120,6 @@ components:
       required:
       - file_data
       - file_name
-    ErrorDetails:
-      type: object
-      properties:
-        domain:
-          type: string
-        resource:
-          type: string
-    EmailsSentList:
-      type: object
-      description: Response containing created emails and any errors
-      properties:
-        emails:
-          type: array
-          description: Successfully created email records
-          items:
-            $ref: '#/components/schemas/EmailSentWithContent'
-        errors:
-          type: array
-          description: Errors that occurred during creation
-          items:
-            $ref: '#/components/schemas/EmailSentCreateError_2'
     EmailSendRequest_2:
       type: object
       description: Request to send an email to contacts
@@ -2126,29 +2166,10 @@ components:
       required:
       - contacts
       - subject
-    DeleteEmailsRequest:
+    CreateEmailSentRequest:
       type: object
-      description: Request to delete multiple email records
+      description: Request to create an email record
       properties:
-        email_ids:
-          type: array
-          description: List of email IDs to delete
-          example:
-          - '123'
-          - '456'
-          - '789'
-          items:
-            type: string
-      required:
-      - email_ids
-    EmailSentWithContent:
-      type: object
-      description: A sent email record with full content
-      properties:
-        id:
-          type: string
-          description: The unique identifier of the email
-          example: 123
         subject:
           type: string
           description: The subject of the email
@@ -2191,7 +2212,7 @@ components:
         sent_time:
           type: string
           format: date-time
-          description: When the email was sent, in ISO-8601 format
+          description: When the email was sent, in ISO-8601 format. If omitted, the stored sent_time will be null.
           example: '2024-05-21T14:30:00Z'
         received_time:
           type: string
@@ -2208,116 +2229,93 @@ components:
           format: date-time
           description: When a link in the email was clicked, in ISO-8601 format
           example: '2024-05-21T15:05:00Z'
-        original_provider_id:
+        plain_content:
           type: string
-          description: The original provider's message ID
-          example: msg_abc123
+          description: Base64 encoded text
+          example: V2VsY29tZSB0byBvdXIgc2VydmljZQ==
+        html_content:
+          type: string
+          description: Base64 encoded HTML
+          example: PGgxPldlbGNvbWU8L2gxPg==
         original_provider:
           type: string
-          description: The email provider that sent the email
+          description: Provider that sent the email, defaults to UNKNOWN
           enum:
           - UNKNOWN
           - INFUSIONSOFT
           - MICROSOFT
           - GOOGLE
           example: INFUSIONSOFT
+        original_provider_id:
+          type: string
+          description: Provider id that sent the email, must be unique when combined with provider. If omitted a UUID without dashes is autogenerated for the record.
+          example: msg_abc123
         provider_source_id:
           type: string
-          description: The synced email account that generated this message
+          description: The email address of the synced email account that generated this message.
           example: sync@company.com
-        plain_content:
-          type: string
-          description: Base64 encoded plain text content
-          example: V2VsY29tZSB0byBvdXIgc2VydmljZQ==
-        html_content:
-          type: string
-          description: Base64 encoded HTML content
-          example: PGgxPldlbGNvbWU8L2gxPg==
-    CreateEmailsSentRequest:
-      type: object
-      description: Email records to persist, with content.
-      properties:
-        emails:
-          type: array
-          description: Collection of email records to create, maximum 1000
-          items:
-            $ref: '#/components/schemas/CreateEmailSentRequest'
       required:
-      - emails
-    EmailSentCreateError_2:
+      - sent_to_address
+    EmailTemplate:
       type: object
-      description: Error that occurred when creating an email record
+      description: An email template
       properties:
-        error_message:
-          type: string
-          description: Description of the error
-          example: Contact not found
-        email:
-          $ref: '#/components/schemas/CreateEmailSentRequest'
-          description: The email request that failed
-    ListEmailsSentResponse:
-      type: object
-      description: Response containing a list of sent emails
-      properties:
-        emails:
-          type: array
-          description: List of sent emails
-          items:
-            $ref: '#/components/schemas/EmailSent'
-        next_page_token:
-          type: string
-    DeleteEmailsResponse:
-      type: object
-      description: Response from deleting email records
-      properties:
-        results:
-          type: object
-          additionalProperties:
-            type: string
-          description: Map of email ID to deletion result (SUCCESS, NO_PERMISSION, EMAIL_ID_NOT_FOUND)
-    EmailSendTemplateRequest:
-      type: object
-      description: 'Use a template to send an email to a list of contacts '
-      properties:
-        template_id:
-          type: string
-          description: Template ID
-          example: 123
-        contact_ids:
-          type: array
-          description: List of contact IDs to send the email to
-          example:
-          - '1'
-          - '2'
-          - '3'
-          items:
-            type: string
-        user_id:
-          type: string
-          description: The user ID to send the email on behalf of
-          example: 1
-        address_field:
-          type: string
-          description: Email field of each Contact record to address the email to, such as 'Email', 'EmailAddress2', 'EmailAddress3' or '_CustomFieldName', defaulting to the contact's primary email
-          example: EMAIL1
-      required:
-      - contact_ids
-      - template_id
-      - user_id
-    Error:
-      type: object
-      properties:
-        code:
+        id:
           type: integer
-          format: int32
-        message:
+          format: int64
+          description: The id of the template
+        piece_title:
           type: string
-        status:
-          type: string
-        details:
+          description: The title of the template
+          example: Welcome Email
+        categories:
           type: array
+          description: The categories associated with the email
+          example:
+          - Marketing
+          - Onboarding
           items:
-            $ref: '#/components/schemas/ErrorDetails'
+            type: string
+        from_address:
+          type: string
+          description: The from address of the email
+          example: ~Owner.Email~
+        to_address:
+          type: string
+          description: The to address of the email
+          example: ~Contact.Email~
+        cc_address:
+          type: string
+          description: The cc address of the email
+          example: manager@company.com
+        bcc_address:
+          type: string
+          description: The bcc address of the email
+          example: archive@company.com
+        subject:
+          type: string
+          description: The subject of the email
+          example: Welcome ~Contact.FirstName~!
+        text_body:
+          type: string
+          description: The text body of the email
+          example: Hello ~Contact.FirstName~, welcome!
+        html_body:
+          type: string
+          description: The HTML body of the email
+          example: <h1>Welcome ~Contact.FirstName~!</h1>
+        content_type:
+          type: string
+          description: The content type of the email
+          enum:
+          - TEXT
+          - HTML
+          - MULTIPART
+          example: HTML
+        merge_context:
+          type: string
+          description: The merge context of the email
+          example: Contact
   securitySchemes:
     oauth2:
       type: oauth2

@@ -244,49 +244,6 @@ components:
             $ref: '#/components/schemas/Referral'
         next_page_token:
           type: string
-    CreateReferralRequest:
-      type: object
-      properties:
-        description:
-          type: string
-          description: The referral description.
-          example: Referred via email campaign
-        source:
-          type: string
-          description: The source for the referral.
-          example: Email Marketing
-        contact_id:
-          type: string
-          description: The referral's contact ID.
-          example: 123
-        referral_partner_id:
-          type: string
-          description: The referring affiliate ID.
-          example: 456
-        referral_time:
-          type: string
-          format: date-time
-          description: The time of the referral.
-          example: '2024-05-21T14:30:00Z'
-        expiration_time:
-          type: string
-          format: date-time
-          description: When the referral expires.
-          example: '2024-08-21T14:30:00Z'
-        ip_address:
-          type: string
-          description: The IP address of the referral.
-          example: 192.168.1.100
-        referral_type:
-          type: string
-          description: The referral type.
-          enum:
-          - COOKIE
-          - MANUAL
-          - PERMANENT
-          example: COOKIE
-      required:
-      - contact_id
     ErrorDetails:
       type: object
       properties:
@@ -339,6 +296,49 @@ components:
           - MANUAL
           - PERMANENT
           example: COOKIE
+    CreateReferralRequest:
+      type: object
+      properties:
+        description:
+          type: string
+          description: The referral description.
+          example: Referred via email campaign
+        source:
+          type: string
+          description: The source for the referral.
+          example: Email Marketing
+        contact_id:
+          type: string
+          description: The referral's contact ID.
+          example: 123
+        referral_partner_id:
+          type: string
+          description: The referring affiliate ID.
+          example: 456
+        referral_time:
+          type: string
+          format: date-time
+          description: The time of the referral.
+          example: '2024-05-21T14:30:00Z'
+        expiration_time:
+          type: string
+          format: date-time
+          description: When the referral expires.
+          example: '2024-08-21T14:30:00Z'
+        ip_address:
+          type: string
+          description: The IP address of the referral.
+          example: 192.168.1.100
+        referral_type:
+          type: string
+          description: The referral type.
+          enum:
+          - COOKIE
+          - MANUAL
+          - PERMANENT
+          example: COOKIE
+      required:
+      - contact_id
     Error:
       type: object
       properties:

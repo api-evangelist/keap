@@ -157,6 +157,17 @@ components:
           type: string
         resource:
           type: string
+    ListUserGroupsResponse:
+      type: object
+      description: Response containing a list of user groups
+      properties:
+        user_groups:
+          type: array
+          description: List of user groups
+          items:
+            $ref: '#/components/schemas/UserGroup'
+        next_page_token:
+          type: string
     UserGroup:
       type: object
       description: A user group in the application
@@ -169,17 +180,6 @@ components:
           type: string
           description: The name of this user group.
           example: Accounting
-    ListUserGroupsResponse:
-      type: object
-      description: Response containing a list of user groups
-      properties:
-        user_groups:
-          type: array
-          description: List of user groups
-          items:
-            $ref: '#/components/schemas/UserGroup'
-        next_page_token:
-          type: string
     Error:
       type: object
       properties:

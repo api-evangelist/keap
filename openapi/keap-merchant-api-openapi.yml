@@ -95,14 +95,6 @@ paths:
                 $ref: '#/components/schemas/RestMerchantAccountResponse'
 components:
   schemas:
-    DefaultHttpStatusCode:
-      allOf:
-      - $ref: '#/components/schemas/HttpStatusCode'
-    View:
-      type: object
-      properties:
-        contentType:
-          type: string
     ModelAndView:
       type: object
       properties:
@@ -139,16 +131,29 @@ components:
           type: string
         is_test:
           type: boolean
-    RestMerchantAccountResponse:
+    HttpStatusCode:
       type: object
       properties:
-        default_merchant_account:
-          type: integer
-          format: int64
-        merchant_accounts:
-          type: array
-          items:
-            $ref: '#/components/schemas/Merchant'
+        error:
+          type: boolean
+        is1xxInformational:
+          type: boolean
+        is2xxSuccessful:
+          type: boolean
+        is3xxRedirection:
+          type: boolean
+        is4xxClientError:
+          type: boolean
+        is5xxServerError:
+          type: boolean
+    DefaultHttpStatusCode:
+      allOf:
+      - $ref: '#/components/schemas/HttpStatusCode'
+    View:
+      type: object
+      properties:
+        contentType:
+          type: string
     HttpStatus:
       allOf:
       - $ref: '#/components/schemas/HttpStatusCode'
@@ -217,21 +222,16 @@ components:
       - 509 BANDWIDTH_LIMIT_EXCEEDED
       - 510 NOT_EXTENDED
       - 511 NETWORK_AUTHENTICATION_REQUIRED
-    HttpStatusCode:
+    RestMerchantAccountResponse:
       type: object
       properties:
-        error:
-          type: boolean
-        is1xxInformational:
-          type: boolean
-        is2xxSuccessful:
-          type: boolean
-        is3xxRedirection:
-          type: boolean
-        is4xxClientError:
-          type: boolean
-        is5xxServerError:
-          type: boolean
+        default_merchant_account:
+          type: integer
+          format: int64
+        merchant_accounts:
+          type: array
+          items:
+            $ref: '#/components/schemas/Merchant'
   securitySchemes:
     oauth2:
       type: oauth2

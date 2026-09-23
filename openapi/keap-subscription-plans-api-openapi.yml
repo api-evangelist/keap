@@ -465,6 +465,22 @@ paths:
                 $ref: '#/components/schemas/SubscriptionPlan'
 components:
   schemas:
+    CurrencyValue:
+      type: object
+      properties:
+        amount:
+          type: integer
+          format: int64
+          description: The price amount in the smallest currency unit
+          example: 10000
+        currency_code:
+          type: string
+          description: Three-letter ISO currency code
+          example: USD
+        formatted_amount:
+          type: string
+          description: The product amount formatted using the tenant's currency locale
+          example: $100.00
     UpdateSubscriptionPlanRequest:
       type: object
       properties:
@@ -524,64 +540,6 @@ components:
             $ref: '#/components/schemas/SubscriptionPlan'
         next_page_token:
           type: string
-    SubscriptionPlan:
-      type: object
-      properties:
-        id:
-          type: string
-          description: Subscription plan ID
-          example: 123
-        frequency:
-          type: integer
-          format: int32
-          description: Interval at which a customer receives a product or service as part of a subscription plan.
-          example: 1
-        active:
-          type: boolean
-          description: If the subscription plan is active or not.
-          example: true
-        subscription_plan_name:
-          type: string
-          description: Plan name
-          example: Premium Monthly
-        cycle_type:
-          type: string
-          description: The cycle type of the subscription plan.
-          enum:
-          - YEARLY
-          - MONTHLY
-          - WEEKLY
-          - DAILY
-          example: MONTHLY
-        total_cycles:
-          type: integer
-          format: int32
-          description: Total number of cycles the plan will run before ending. Value of 0 indicates plan will never end.
-          example: 12
-        plan_price:
-          $ref: '#/components/schemas/CurrencyValue'
-          description: Price of the plan
-        display_order_index:
-          type: integer
-          format: int32
-          description: The order index where this plan will be displayed on a page against other plans. Smaller number indicates plan will be displayed higher in the list.
-          example: 1
-    CurrencyValue:
-      type: object
-      properties:
-        amount:
-          type: integer
-          format: int64
-          description: The price amount in the smallest currency unit
-          example: 10000
-        currency_code:
-          type: string
-          description: Three-letter ISO currency code
-          example: USD
-        formatted_amount:
-          type: string
-          description: The product amount formatted using the tenant's currency locale
-          example: $100.00
     CreateSubscriptionPlanRequest:
       type: object
       properties:
@@ -628,6 +586,48 @@ components:
       required:
       - cycle_type
       - plan_price
+    SubscriptionPlan:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Subscription plan ID
+          example: 123
+        frequency:
+          type: integer
+          format: int32
+          description: Interval at which a customer receives a product or service as part of a subscription plan.
+          example: 1
+        active:
+          type: boolean
+          description: If the subscription plan is active or not.
+          example: true
+        subscription_plan_name:
+          type: string
+          description: Plan name
+          example: Premium Monthly
+        cycle_type:
+          type: string
+          description: The cycle type of the subscription plan.
+          enum:
+          - YEARLY
+          - MONTHLY
+          - WEEKLY
+          - DAILY
+          example: MONTHLY
+        total_cycles:
+          type: integer
+          format: int32
+          description: Total number of cycles the plan will run before ending. Value of 0 indicates plan will never end.
+          example: 12
+        plan_price:
+          $ref: '#/components/schemas/CurrencyValue'
+          description: Price of the plan
+        display_order_index:
+          type: integer
+          format: int32
+          description: The order index where this plan will be displayed on a page against other plans. Smaller number indicates plan will be displayed higher in the list.
+          example: 1
     Error:
       type: object
       properties:

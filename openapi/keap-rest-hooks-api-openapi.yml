@@ -1,7 +1,8 @@
 openapi: 3.2.0
 info:
   title: Keap REST Hooks API
-  version: v1
+  description: Keap Public API Documentation
+  termsOfService: https://www.thryv.com/terms-of-use
   contact:
     name: Keap
     url: https://developer.keap.com/get-support
@@ -9,14 +10,17 @@ info:
   license:
     name: Apache 2.0
     url: https://www.apache.org/licenses/LICENSE-2.0
-  termsOfService: https://www.thryv.com/terms-of-use
-  description: 'Operations tagged REST Hooks across 2 of this provider''s published API definitions: keap-rest-hooks-v1-api-openapi.yml, keap-v1-openapi.json. Each path carries the servers of the definition it was published in.'
+  version: v1
 servers:
 - url: https://api.infusionsoft.com/crm
 security:
 - oauth2: []
 tags:
 - name: REST Hooks
+  description: '### _What are REST Hooks?_
+
+
+    _REST Hooks itself is not a specification, it is a collection of patterns that treat webhooks like subscriptions.'
 paths:
   /rest/v1/hooks/{key}:
     get:
@@ -26,7 +30,7 @@ paths:
       description: 'Retrieves an existing hook subscription and its status.
 
 
-        If your hook subscription becomes inactive, you may request an activation attempt via [Verify a Hook Subscription](#!/REST_Hooks/verify_a_hook_subscription).'
+        If your hook subscription becomes inactive, you may request an activation attempt via Verify a Hook Subscription.'
       operationId: retrieve_a_hook_subscription
       parameters:
       - name: key
@@ -261,23 +265,21 @@ paths:
                 $ref: '#/components/schemas/ModelAndView'
         '204':
           description: No Content
-    servers:
-    - url: https://api.infusionsoft.com/crm
   /rest/v1/hooks/{key}/verify:
     post:
       tags:
       - REST Hooks
       summary: Verify a Hook Subscription
-      description: 'This operation is used to verify or reactivate a hook subscription using RESTHooks.org''s [Immediate Confirmation](http://resthooks.org/docs/security/) pattern.
+      description: 'This operation is used to verify or reactivate a hook subscription using RESTHooks.org''s Immediate Confirmation pattern.
 
 
-        To verify or reactivate a hook subscription, Infusionsoft will make a `POST` request with a temporary secret to the `hookUrl` you provided during creation. The secret is passed as the value of a header named `X-Hook-Secret`. Your response to that `POST` *must* have a status code of `200` and return the same `X-Hook-Secret` header and value pair. Once you''ve done that, you''ll begin receiving hooks. Don''t worry if verification fails; you can always [request another verification attempt](#!/REST_Hooks/verify_a_hook_subscription).
+        To verify or reactivate a hook subscription, Infusionsoft will make a `POST` request with a temporary secret to the `hookUrl` you provided during creation. The secret is passed as the value of a header named `X-Hook-Secret`. Your response to that `POST` *must* have a status code of `200` and return the same `X-Hook-Secret` header and value pair. Once you''ve done that, you''ll begin receiving hooks. Don''t worry if verification fails; you can always request another verification attempt.
 
 
         NB: You will not receive events until the subscription is verified.
 
 
-        If the verification process seems confusing, head over to [RESTHooks.org](http://resthooks.org/docs/security/) for more on the concept.'
+        If the verification process seems confusing, head over to RESTHooks.org for more on the concept.'
       operationId: verify_a_hook_subscription
       parameters:
       - name: key
@@ -352,29 +354,27 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/RestHook'
-    servers:
-    - url: https://api.infusionsoft.com/crm
   /rest/v1/hooks/{key}/delayedVerify:
     post:
       tags:
       - REST Hooks
       summary: Verify a Hook Subscription, Delayed
-      description: 'This operation is used to verify or reactivate a hook subscription out-of-band using RESTHooks.org''s [Delayed Confirmation](http://resthooks.org/docs/security/) pattern.
+      description: 'This operation is used to verify or reactivate a hook subscription out-of-band using RESTHooks.org''s Delayed Confirmation pattern.
 
 
-        Use this verification method if you''re not able to use the Immediate Confirmation provided through [Create a Hook Subscription](#!/REST_Hooks/create_a_hook_subscription) or [Verify a Hook Subscription](#!/REST_Hooks/verify_a_hook_subscription). This operation allows you to confirm a subscription by manually sending us the `X-Hook-Secret` you received.
+        Use this verification method if you''re not able to use the Immediate Confirmation provided through Create a Hook Subscription or Verify a Hook Subscription. This operation allows you to confirm a subscription by manually sending us the `X-Hook-Secret` you received.
 
 
         NB: **The `X-Hook-Secret` _must_ be passed as a _header_.**
 
 
-        Don''t worry if verification fails; you can always [request another verification attempt](#!/REST_Hooks/verify_a_hook_subscription).
+        Don''t worry if verification fails; you can always request another verification attempt.
 
 
         NB: You will not receive events until the subscription is verified.
 
 
-        If the verification process seems confusing, head over to [RESTHooks.org](http://resthooks.org/docs/security/) for more on the concept.'
+        If the verification process seems confusing, head over to RESTHooks.org for more on the concept.'
       operationId: verify_a_hook_subscription_delayed
       parameters:
       - name: key
@@ -454,8 +454,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/RestHook'
-    servers:
-    - url: https://api.infusionsoft.com/crm
   /rest/v1/hooks:
     get:
       tags:
@@ -542,13 +540,13 @@ paths:
         This operation is used to create hook subscriptions. During this process, Infusionsoft will attempt to verify your subscription. Continue reading to learn how that works.
 
 
-        To verify or reactivate a hook subscription, Infusionsoft will make a `POST` request with a temporary secret to the `hookUrl` you provided during creation. The secret is passed as the value of a header named `X-Hook-Secret`. Your response to that `POST` *must* have a status code of `200` and return the same `X-Hook-Secret` header and value pair. Once you''ve done that, you''ll begin receiving hooks. Don''t worry if verification fails; you can always [request another verification attempt](#!/REST_Hooks/verify_a_hook_subscription).
+        To verify or reactivate a hook subscription, Infusionsoft will make a `POST` request with a temporary secret to the `hookUrl` you provided during creation. The secret is passed as the value of a header named `X-Hook-Secret`. Your response to that `POST` *must* have a status code of `200` and return the same `X-Hook-Secret` header and value pair. Once you''ve done that, you''ll begin receiving hooks. Don''t worry if verification fails; you can always request another verification attempt.
 
 
         NB: You will not receive events until the subscription is verified.
 
 
-        If the verification process seems confusing, head over to [RESTHooks.org](http://resthooks.org/docs/security/) for more on the concept.'
+        If the verification process seems confusing, head over to RESTHooks.org for more on the concept.'
       operationId: create_a_hook_subscription
       requestBody:
         content:
@@ -623,8 +621,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/RestHook'
-    servers:
-    - url: https://api.infusionsoft.com/crm
   /rest/v1/hooks/event_keys:
     get:
       tags:
@@ -701,25 +697,8 @@ paths:
                 type: array
                 items:
                   type: string
-    servers:
-    - url: https://api.infusionsoft.com/crm
 components:
   schemas:
-    DefaultHttpStatusCode:
-      allOf:
-      - $ref: '#/components/schemas/HttpStatusCode'
-    RestHookRequest:
-      type: object
-      properties:
-        eventKey:
-          type: string
-        hookUrl:
-          type: string
-    View:
-      type: object
-      properties:
-        contentType:
-          type: string
     ModelAndView:
       type: object
       properties:
@@ -744,6 +723,31 @@ components:
           type: boolean
         viewName:
           type: string
+    RestHookRequest:
+      type: object
+      properties:
+        eventKey:
+          type: string
+        hookUrl:
+          type: string
+    HttpStatusCode:
+      type: object
+      properties:
+        error:
+          type: boolean
+        is1xxInformational:
+          type: boolean
+        is2xxSuccessful:
+          type: boolean
+        is3xxRedirection:
+          type: boolean
+        is4xxClientError:
+          type: boolean
+        is5xxServerError:
+          type: boolean
+    DefaultHttpStatusCode:
+      allOf:
+      - $ref: '#/components/schemas/HttpStatusCode'
     RestHook:
       type: object
       properties:
@@ -759,6 +763,11 @@ components:
           - Unverified
           - Verified
           - Inactive
+    View:
+      type: object
+      properties:
+        contentType:
+          type: string
     HttpStatus:
       allOf:
       - $ref: '#/components/schemas/HttpStatusCode'
@@ -827,21 +836,6 @@ components:
       - 509 BANDWIDTH_LIMIT_EXCEEDED
       - 510 NOT_EXTENDED
       - 511 NETWORK_AUTHENTICATION_REQUIRED
-    HttpStatusCode:
-      type: object
-      properties:
-        error:
-          type: boolean
-        is1xxInformational:
-          type: boolean
-        is2xxSuccessful:
-          type: boolean
-        is3xxRedirection:
-          type: boolean
-        is4xxClientError:
-          type: boolean
-        is5xxServerError:
-          type: boolean
   securitySchemes:
     oauth2:
       type: oauth2
@@ -850,6 +844,3 @@ components:
           authorizationUrl: https://accounts.infusionsoft.com/app/oauth/authorize
           tokenUrl: https://api.infusionsoft.com/token
           scopes: {}
-x-refined-from:
-- keap-rest-hooks-v1-api-openapi.yml
-- keap-v1-openapi.json

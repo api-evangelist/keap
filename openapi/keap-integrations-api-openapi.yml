@@ -287,17 +287,6 @@ paths:
           description: No Content
 components:
   schemas:
-    CreateIntegrationsWordPressOptInOption:
-      type: object
-      properties:
-        key:
-          type: string
-          description: The unique identifier of the opt-in option, which must be an alphanumeric string
-          example: NewsletterOptIn
-        name:
-          type: string
-          description: The display name of the opt-in option
-          example: Newsletter Opt-In
     ErrorDetails:
       type: object
       properties:
@@ -321,6 +310,22 @@ components:
           type: string
         name:
           type: string
+    CreateIntegrationsWordPressOptInOption:
+      type: object
+      properties:
+        key:
+          type: string
+          description: The unique identifier of the opt-in option, which must be an alphanumeric string
+          example: NewsletterOptIn
+        name:
+          type: string
+          description: The display name of the opt-in option
+          example: Newsletter Opt-In
+    AchieveWordPressOptInGoalResult:
+      type: object
+      properties:
+        successful:
+          type: boolean
     AchieveIntegrationsWordPressOptInOptionGoalRequest:
       type: object
       properties:
@@ -328,11 +333,6 @@ components:
           type: string
           description: The Contact Id to Opt-In
           example: d05dc112-3c92-4aaf-b2fa-00cc6cb452ec
-    AchieveWordPressOptInGoalResult:
-      type: object
-      properties:
-        successful:
-          type: boolean
     Error:
       type: object
       properties:

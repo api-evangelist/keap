@@ -143,17 +143,6 @@ paths:
                 $ref: '#/components/schemas/ListMerchantsResponse'
 components:
   schemas:
-    ListMerchantsResponse:
-      type: object
-      properties:
-        default_merchant_account_id:
-          type: string
-        merchant_accounts:
-          type: array
-          items:
-            $ref: '#/components/schemas/ListMerchantAccountResponse'
-        next_page_token:
-          type: string
     ErrorDetails:
       type: object
       properties:
@@ -180,6 +169,17 @@ components:
           - KEAP_PAY
         is_test:
           type: boolean
+    ListMerchantsResponse:
+      type: object
+      properties:
+        default_merchant_account_id:
+          type: string
+        merchant_accounts:
+          type: array
+          items:
+            $ref: '#/components/schemas/ListMerchantAccountResponse'
+        next_page_token:
+          type: string
     Error:
       type: object
       properties:

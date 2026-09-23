@@ -88,6 +88,13 @@ paths:
                 $ref: '#/components/schemas/LeadScore'
 components:
   schemas:
+    ErrorDetails:
+      type: object
+      properties:
+        domain:
+          type: string
+        resource:
+          type: string
     LeadScore:
       type: object
       properties:
@@ -99,13 +106,6 @@ components:
           type: string
           description: Last updated timestamp (ISO-8601)
           example: '2024-03-15T10:30:00Z'
-    ErrorDetails:
-      type: object
-      properties:
-        domain:
-          type: string
-        resource:
-          type: string
     Error:
       type: object
       properties:

@@ -23,7 +23,9 @@ paths:
       tags:
       - Reporting
       summary: Run a Report
-      description: Runs a report as defined in the application (identified as Saved Search)<br/><span style='color:red'>Deprecated as of v2</span>
+      description: 'Runs a report as defined in the application (identified as Saved Search)
+
+        Deprecated as of v2'
       operationId: runReport
       parameters:
       - name: report_id
@@ -98,7 +100,9 @@ paths:
       tags:
       - Reporting
       summary: List Reports
-      description: Retrieves a list of Reports as defined in the application (identified as Saved Search)<br/><span style='color:red'>Deprecated as of v2</span>
+      description: 'Retrieves a list of Reports as defined in the application (identified as Saved Search)
+
+        Deprecated as of v2'
       operationId: listReports
       parameters:
       - name: filter
@@ -204,7 +208,9 @@ paths:
       tags:
       - Reporting
       summary: Retrieve Report
-      description: Retrieves information about a Report as defined in the application (identified as Saved Search)<br/><span style='color:red'>Deprecated as of v2</span>
+      description: 'Retrieves information about a Report as defined in the application (identified as Saved Search)
+
+        Deprecated as of v2'
       operationId: retrieveReport
       parameters:
       - name: report_id
@@ -341,6 +347,46 @@ paths:
                 $ref: '#/components/schemas/ReportModel'
 components:
   schemas:
+    Error:
+      type: object
+      properties:
+        code:
+          type: integer
+          format: int32
+        message:
+          type: string
+        status:
+          type: string
+        details:
+          type: array
+          items:
+            $ref: '#/components/schemas/ErrorDetails'
+    ReportModel:
+      type: object
+      properties:
+        fields:
+          type: array
+          description: The list of fields available for this Report (Saved Search)
+          items:
+            $ref: '#/components/schemas/ReportField'
+    ReportField:
+      type: object
+      properties:
+        name:
+          type: string
+          description: The field name as accepted by the report execution `fields` parameter
+          example: Id
+        label:
+          type: string
+          description: The human-readable label for the field
+          example: ID
+    ErrorDetails:
+      type: object
+      properties:
+        domain:
+          type: string
+        resource:
+          type: string
     Report:
       type: object
       properties:
@@ -369,47 +415,6 @@ components:
           - ALL_USERS
           items:
             type: string
-    ReportEntryValue:
-      type: object
-      properties:
-        field_name:
-          type: string
-          description: The name of the field/column
-          example: contact_email
-        value:
-          type: string
-          description: The value of the field
-          example: john.smith@example.com
-    ErrorDetails:
-      type: object
-      properties:
-        domain:
-          type: string
-        resource:
-          type: string
-    ReportField:
-      type: object
-      properties:
-        name:
-          type: string
-          description: The field name as accepted by the report execution `fields` parameter
-          example: Id
-        label:
-          type: string
-          description: The human-readable label for the field
-          example: ID
-    RunReportRequest:
-      type: object
-      properties:
-        page_token:
-          type: string
-        order_by:
-          type: string
-        page_size:
-          type: integer
-          format: int32
-        fields:
-          type: string
     ListReportsResponse:
       type: object
       properties:
@@ -431,14 +436,6 @@ components:
           type: string
           description: Token for retrieving the next page of results
           example: eyJsYXN0Um93IjoxMDB9
-    ReportModel:
-      type: object
-      properties:
-        fields:
-          type: array
-          description: The list of fields available for this Report (Saved Search)
-          items:
-            $ref: '#/components/schemas/ReportField'
     ReportEntryRecord:
       type: object
       properties:
@@ -448,20 +445,29 @@ components:
           items:
             $ref: '#/components/schemas/ReportEntryValue'
           uniqueItems: true
-    Error:
+    ReportEntryValue:
       type: object
       properties:
-        code:
+        field_name:
+          type: string
+          description: The name of the field/column
+          example: contact_email
+        value:
+          type: string
+          description: The value of the field
+          example: john.smith@example.com
+    RunReportRequest:
+      type: object
+      properties:
+        page_token:
+          type: string
+        order_by:
+          type: string
+        page_size:
           type: integer
           format: int32
-        message:
+        fields:
           type: string
-        status:
-          type: string
-        details:
-          type: array
-          items:
-            $ref: '#/components/schemas/ErrorDetails'
   securitySchemes:
     oauth2:
       type: oauth2

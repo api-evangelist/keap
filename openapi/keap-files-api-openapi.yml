@@ -546,6 +546,15 @@ paths:
                 format: byte
 components:
   schemas:
+    ListFilesResponse:
+      type: object
+      properties:
+        files:
+          type: array
+          items:
+            $ref: '#/components/schemas/FileMetadata'
+        next_page_token:
+          type: string
     FileMetadata:
       type: object
       properties:
@@ -628,15 +637,6 @@ components:
         domain:
           type: string
         resource:
-          type: string
-    ListFilesResponse:
-      type: object
-      properties:
-        files:
-          type: array
-          items:
-            $ref: '#/components/schemas/FileMetadata'
-        next_page_token:
           type: string
     Error:
       type: object

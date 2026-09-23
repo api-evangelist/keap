@@ -442,24 +442,6 @@ paths:
     - url: https://api.infusionsoft.com/crm
 components:
   schemas:
-    DefaultHttpStatusCode:
-      allOf:
-      - $ref: '#/components/schemas/HttpStatusCode'
-    UpdateEmailAddress:
-      type: object
-      properties:
-        reason:
-          type: string
-        opted_in:
-          type: boolean
-      required:
-      - opted_in
-      - reason
-    View:
-      type: object
-      properties:
-        contentType:
-          type: string
     ModelAndView:
       type: object
       properties:
@@ -515,6 +497,39 @@ components:
       - email
       - opted_in
       - status
+    HttpStatusCode:
+      type: object
+      properties:
+        error:
+          type: boolean
+        is1xxInformational:
+          type: boolean
+        is2xxSuccessful:
+          type: boolean
+        is3xxRedirection:
+          type: boolean
+        is4xxClientError:
+          type: boolean
+        is5xxServerError:
+          type: boolean
+    DefaultHttpStatusCode:
+      allOf:
+      - $ref: '#/components/schemas/HttpStatusCode'
+    UpdateEmailAddress:
+      type: object
+      properties:
+        reason:
+          type: string
+        opted_in:
+          type: boolean
+      required:
+      - opted_in
+      - reason
+    View:
+      type: object
+      properties:
+        contentType:
+          type: string
     HttpStatus:
       allOf:
       - $ref: '#/components/schemas/HttpStatusCode'
@@ -583,43 +598,6 @@ components:
       - 509 BANDWIDTH_LIMIT_EXCEEDED
       - 510 NOT_EXTENDED
       - 511 NETWORK_AUTHENTICATION_REQUIRED
-    HttpStatusCode:
-      type: object
-      properties:
-        error:
-          type: boolean
-        is1xxInformational:
-          type: boolean
-        is2xxSuccessful:
-          type: boolean
-        is3xxRedirection:
-          type: boolean
-        is4xxClientError:
-          type: boolean
-        is5xxServerError:
-          type: boolean
-    UpdateEmailAddress_2:
-      type: object
-      description: Request to update email address opt-in status
-      properties:
-        reason:
-          type: string
-          description: Reason for the opt-in status change
-          example: Customer requested to receive marketing emails
-        opted_in:
-          type: boolean
-          description: Whether to opt-in the email address
-          example: true
-      required:
-      - opted_in
-      - reason
-    ErrorDetails:
-      type: object
-      properties:
-        domain:
-          type: string
-        resource:
-          type: string
     RestEmailAddressStatus:
       type: object
       description: Email address opt-in status information
@@ -679,6 +657,13 @@ components:
       - email
       - opted_in
       - status
+    ErrorDetails:
+      type: object
+      properties:
+        domain:
+          type: string
+        resource:
+          type: string
     ListEmailAddressStatusResponse:
       type: object
       properties:
@@ -688,6 +673,21 @@ components:
             $ref: '#/components/schemas/RestEmailAddressStatus'
         next_page_token:
           type: string
+    UpdateEmailAddress_2:
+      type: object
+      description: Request to update email address opt-in status
+      properties:
+        reason:
+          type: string
+          description: Reason for the opt-in status change
+          example: Customer requested to receive marketing emails
+        opted_in:
+          type: boolean
+          description: Whether to opt-in the email address
+          example: true
+      required:
+      - opted_in
+      - reason
     Error:
       type: object
       properties:

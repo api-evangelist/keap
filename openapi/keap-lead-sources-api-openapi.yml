@@ -478,71 +478,6 @@ paths:
                 $ref: '#/components/schemas/LeadSource'
 components:
   schemas:
-    ErrorDetails:
-      type: object
-      properties:
-        domain:
-          type: string
-        resource:
-          type: string
-    CreateLeadSourceRequest:
-      type: object
-      properties:
-        name:
-          type: string
-          description: The name of the lead source
-          example: Google Ads
-        description:
-          type: string
-          description: A description of the lead source
-          example: Paid search advertising
-        vendor:
-          type: string
-          description: The vendor of the lead source
-          example: Google
-        medium:
-          type: string
-          description: The medium of the lead source
-          example: cpc
-        message:
-          type: string
-          description: A message on the lead source
-          example: Spring promotion
-        status:
-          type: string
-          description: The status of the lead source
-          enum:
-          - ACTIVE
-          - INACTIVE
-          example: ACTIVE
-        lead_source_category_id:
-          type: string
-          description: The lead source category that the lead source belongs to
-          example: 456
-        start_time:
-          type: string
-          format: date-time
-          description: When the lead source starts
-          example: '2024-01-01T00:00:00Z'
-        end_time:
-          type: string
-          format: date-time
-          description: When the lead source ends
-          example: '2024-12-31T23:59:59Z'
-    Error:
-      type: object
-      properties:
-        code:
-          type: integer
-          format: int32
-        message:
-          type: string
-        status:
-          type: string
-        details:
-          type: array
-          items:
-            $ref: '#/components/schemas/ErrorDetails'
     LeadSource:
       type: object
       properties:
@@ -601,6 +536,57 @@ components:
           format: date-time
           description: The time that this lead source was last updated
           example: '2024-03-15T10:30:00Z'
+    CreateLeadSourceRequest:
+      type: object
+      properties:
+        name:
+          type: string
+          description: The name of the lead source
+          example: Google Ads
+        description:
+          type: string
+          description: A description of the lead source
+          example: Paid search advertising
+        vendor:
+          type: string
+          description: The vendor of the lead source
+          example: Google
+        medium:
+          type: string
+          description: The medium of the lead source
+          example: cpc
+        message:
+          type: string
+          description: A message on the lead source
+          example: Spring promotion
+        status:
+          type: string
+          description: The status of the lead source
+          enum:
+          - ACTIVE
+          - INACTIVE
+          example: ACTIVE
+        lead_source_category_id:
+          type: string
+          description: The lead source category that the lead source belongs to
+          example: 456
+        start_time:
+          type: string
+          format: date-time
+          description: When the lead source starts
+          example: '2024-01-01T00:00:00Z'
+        end_time:
+          type: string
+          format: date-time
+          description: When the lead source ends
+          example: '2024-12-31T23:59:59Z'
+    ErrorDetails:
+      type: object
+      properties:
+        domain:
+          type: string
+        resource:
+          type: string
     ListLeadSourcesResponse:
       type: object
       properties:
@@ -611,6 +597,20 @@ components:
             $ref: '#/components/schemas/LeadSource'
         next_page_token:
           type: string
+    Error:
+      type: object
+      properties:
+        code:
+          type: integer
+          format: int32
+        message:
+          type: string
+        status:
+          type: string
+        details:
+          type: array
+          items:
+            $ref: '#/components/schemas/ErrorDetails'
   securitySchemes:
     oauth2:
       type: oauth2

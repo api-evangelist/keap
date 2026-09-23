@@ -1,7 +1,8 @@
 openapi: 3.2.0
 info:
   title: Keap File API
-  version: v1
+  description: Keap Public API Documentation
+  termsOfService: https://www.thryv.com/terms-of-use
   contact:
     name: Keap
     url: https://developer.keap.com/get-support
@@ -9,14 +10,14 @@ info:
   license:
     name: Apache 2.0
     url: https://www.apache.org/licenses/LICENSE-2.0
-  termsOfService: https://www.thryv.com/terms-of-use
-  description: 'Operations tagged File across 2 of this provider''s published API definitions: keap-file-v1-api-openapi.yml, keap-v1-openapi.json. Each path carries the servers of the definition it was published in.'
+  version: v1
 servers:
 - url: https://api.infusionsoft.com/crm
 security:
 - oauth2: []
 tags:
 - name: File
+  description: File-Endpoint
 paths:
   /rest/v1/files/{fileId}:
     get:
@@ -26,7 +27,7 @@ paths:
       description: 'Retrieves metadata about a specific file. Optionally returns the base64 encoded file data.
 
 
-        **Note:** Files larger than 8MB may cause errors when retrieved via the v1 API due to Base64 encoding overhead. For files approaching or exceeding this size, use the [v2 Files endpoint](https://developer.infusionsoft.com/docs/restv2/#tag/Files/operation/getFileDataUsingGET), which returns file data as byte arrays without encoding limitations.'
+        **Note:** Files larger than 8MB may cause errors when retrieved via the v1 API due to Base64 encoding overhead. For files approaching or exceeding this size, use the v2 Files endpoint, which returns file data as byte arrays without encoding limitations.'
       operationId: getFile
       parameters:
       - name: fileId
@@ -269,8 +270,6 @@ paths:
                 $ref: '#/components/schemas/ModelAndView'
         '204':
           description: No Content
-    servers:
-    - url: https://api.infusionsoft.com/crm
   /rest/v1/files:
     get:
       tags:
@@ -430,59 +429,8 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/FileInformation'
-    servers:
-    - url: https://api.infusionsoft.com/crm
 components:
   schemas:
-    FileQueryCommand:
-      type: object
-      properties:
-        limit:
-          type: integer
-          format: int32
-        offset:
-          type: integer
-          format: int32
-        viewable:
-          type: string
-          enum:
-          - PUBLIC
-          - PRIVATE
-          - BOTH
-        permission:
-          type: string
-          enum:
-          - USER
-          - COMPANY
-          - BOTH
-        type:
-          type: string
-          enum:
-          - Application
-          - Image
-          - Fax
-          - Attachment
-          - Ticket
-          - Contact
-          - DigitalProduct
-          - Import
-          - Hidden
-          - WebForm
-          - StyledCart
-          - ReSampledImage
-          - TemplateThumbnail
-          - Funnel
-          - LogoThumbnail
-          - Unlayer
-          - BrandingCenterLogo
-        name:
-          type: string
-        contact_id:
-          type: integer
-          format: int64
-        contactId:
-          type: integer
-          format: int64
     FileDescriptor:
       type: object
       properties:
@@ -541,28 +489,6 @@ components:
           - BrandingCenterLogo
         download_url:
           type: string
-    DefaultHttpStatusCode:
-      allOf:
-      - $ref: '#/components/schemas/HttpStatusCode'
-    FileList:
-      type: object
-      properties:
-        files:
-          type: array
-          items:
-            $ref: '#/components/schemas/FileDescriptor'
-        count:
-          type: integer
-          format: int32
-        next:
-          type: string
-        previous:
-          type: string
-    View:
-      type: object
-      properties:
-        contentType:
-          type: string
     ModelAndView:
       type: object
       properties:
@@ -587,12 +513,54 @@ components:
           type: boolean
         viewName:
           type: string
-    FileInformation:
+    HttpStatusCode:
       type: object
       properties:
-        file_descriptor:
-          $ref: '#/components/schemas/FileDescriptor'
+        error:
+          type: boolean
+        is1xxInformational:
+          type: boolean
+        is2xxSuccessful:
+          type: boolean
+        is3xxRedirection:
+          type: boolean
+        is4xxClientError:
+          type: boolean
+        is5xxServerError:
+          type: boolean
+    DefaultHttpStatusCode:
+      allOf:
+      - $ref: '#/components/schemas/HttpStatusCode'
+    FileUpload:
+      type: object
+      description: fileUpload
+      properties:
+        file_name:
+          type: string
+          writeOnly: true
         file_data:
+          type: string
+          writeOnly: true
+        contact_id:
+          type: integer
+          format: int64
+          writeOnly: true
+        is_public:
+          type: boolean
+          writeOnly: true
+        file_association:
+          type: string
+          enum:
+          - CONTACT
+          - USER
+          - COMPANY
+          writeOnly: true
+        public:
+          type: boolean
+    View:
+      type: object
+      properties:
+        contentType:
           type: string
     HttpStatus:
       allOf:
@@ -662,47 +630,76 @@ components:
       - 509 BANDWIDTH_LIMIT_EXCEEDED
       - 510 NOT_EXTENDED
       - 511 NETWORK_AUTHENTICATION_REQUIRED
-    FileUpload:
+    FileQueryCommand:
       type: object
-      description: fileUpload
       properties:
-        file_name:
+        limit:
+          type: integer
+          format: int32
+        offset:
+          type: integer
+          format: int32
+        viewable:
           type: string
-          writeOnly: true
-        file_data:
+          enum:
+          - PUBLIC
+          - PRIVATE
+          - BOTH
+        permission:
           type: string
-          writeOnly: true
+          enum:
+          - USER
+          - COMPANY
+          - BOTH
+        type:
+          type: string
+          enum:
+          - Application
+          - Image
+          - Fax
+          - Attachment
+          - Ticket
+          - Contact
+          - DigitalProduct
+          - Import
+          - Hidden
+          - WebForm
+          - StyledCart
+          - ReSampledImage
+          - TemplateThumbnail
+          - Funnel
+          - LogoThumbnail
+          - Unlayer
+          - BrandingCenterLogo
+        name:
+          type: string
         contact_id:
           type: integer
           format: int64
-          writeOnly: true
-        is_public:
-          type: boolean
-          writeOnly: true
-        file_association:
-          type: string
-          enum:
-          - CONTACT
-          - USER
-          - COMPANY
-          writeOnly: true
-        public:
-          type: boolean
-    HttpStatusCode:
+        contactId:
+          type: integer
+          format: int64
+    FileList:
       type: object
       properties:
-        error:
-          type: boolean
-        is1xxInformational:
-          type: boolean
-        is2xxSuccessful:
-          type: boolean
-        is3xxRedirection:
-          type: boolean
-        is4xxClientError:
-          type: boolean
-        is5xxServerError:
-          type: boolean
+        files:
+          type: array
+          items:
+            $ref: '#/components/schemas/FileDescriptor'
+        count:
+          type: integer
+          format: int32
+        next:
+          type: string
+        previous:
+          type: string
+    FileInformation:
+      type: object
+      properties:
+        file_descriptor:
+          $ref: '#/components/schemas/FileDescriptor'
+        file_data:
+          type: string
   securitySchemes:
     oauth2:
       type: oauth2
@@ -711,6 +708,3 @@ components:
           authorizationUrl: https://accounts.infusionsoft.com/app/oauth/authorize
           tokenUrl: https://api.infusionsoft.com/token
           scopes: {}
-x-refined-from:
-- keap-file-v1-api-openapi.yml
-- keap-v1-openapi.json
