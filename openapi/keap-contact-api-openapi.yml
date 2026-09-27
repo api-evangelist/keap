@@ -1555,7 +1555,7 @@ paths:
       - Contact
       summary: List Contacts
       description: Retrieves a list of Contacts
-      operationId: listContacts
+      operationId: getRestV2Contacts
       parameters:
       - name: filter
         in: query
@@ -1672,6 +1672,8 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ListContactsResponse'
+      x-operation-id-source: normalized
+      x-operation-id-original: listContacts
     post:
       tags:
       - Contact
@@ -1681,7 +1683,7 @@ paths:
         *Note:* Contact must contain at least one item in `email_addresses`, `phone_numbers`, or `addresses` and `country_code` is required if `region` is specified.
 
         Optionally accepts a `duplicate_option` query parameter which performs duplicate checking by one of the following options: `Email`, `EmailAndName`, `EmailAndNameAndCompany`. If a match is found using the option provided, the existing contact will be updated. If an existing contact was not found using the `duplicate_option` provided, a new contact record will be created. When `duplicate_option` is not specified, a new contact is always created.'
-      operationId: createContact
+      operationId: postRestV2Contacts
       parameters:
       - name: duplicate_option
         in: query
@@ -1775,6 +1777,8 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Contact'
+      x-operation-id-source: normalized
+      x-operation-id-original: createContact
     servers:
     - url: https://api.infusionsoft.com/crm
   /rest/v2/contacts:unlink:
@@ -2532,7 +2536,7 @@ paths:
       - Contact
       summary: Retrieve a Contact
       description: Retrieves a single Contact
-      operationId: getContact
+      operationId: getRestV2ContactsByContactId
       parameters:
       - name: contact_id
         in: path
@@ -2609,12 +2613,14 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Contact'
+      x-operation-id-source: normalized
+      x-operation-id-original: getContact
     delete:
       tags:
       - Contact
       summary: Delete a Contact
       description: Deletes the specified Contact
-      operationId: deleteContact
+      operationId: deleteRestV2ContactsByContactId
       parameters:
       - name: contact_id
         in: path
@@ -2672,6 +2678,8 @@ paths:
                 $ref: '#/components/schemas/Error'
         '204':
           description: No Content
+      x-operation-id-source: normalized
+      x-operation-id-original: deleteContact
     patch:
       tags:
       - Contact
@@ -3629,7 +3637,7 @@ paths:
       - Contact
       summary: Retrieve Contact Model
       description: Get the custom fields and optional properties for the Contact object
-      operationId: retrieveContactModel
+      operationId: getRestV2ContactsModel
       responses:
         '401':
           description: Unauthorized
@@ -3685,6 +3693,8 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ObjectModel_2'
+      x-operation-id-source: normalized
+      x-operation-id-original: retrieveContactModel
     servers:
     - url: https://api.infusionsoft.com/crm
   /rest/v2/contacts/model/customFields/{custom_field_id}:
@@ -3755,6 +3765,56 @@ paths:
     - url: https://api.infusionsoft.com/crm
 components:
   schemas:
+    CreateRestCustomField:
+      type: object
+      properties:
+        label:
+          type: string
+        options:
+          type: array
+          items:
+            $ref: '#/components/schemas/CreateRestCustomFieldOption'
+        field_type:
+          type: string
+          enum:
+          - Currency
+          - Date
+          - DateTime
+          - DayOfWeek
+          - Drilldown
+          - Email
+          - Month
+          - ListBox
+          - Name
+          - WholeNumber
+          - DecimalNumber
+          - Percent
+          - PhoneNumber
+          - Radio
+          - Dropdown
+          - SocialSecurityNumber
+          - State
+          - Text
+          - TextArea
+          - User
+          - UserListBox
+          - Website
+          - Year
+          - YesNo
+        group_id:
+          type: integer
+          format: int64
+          description: An optional tab group to place the field under in the interface.  If not specified, will default to the 'Custom Fields' tab.
+        user_group_id:
+          type: integer
+          format: int64
+          description: An optional user group to choose from when selecting values for User or UserListBox fields.
+      required:
+      - field_type
+      - label
+    UpsertContact:
+      allOf:
+      - $ref: '#/components/schemas/CreateOrPatchContact'
     CreditCard:
       type: object
       properties:
@@ -3787,39 +3847,6 @@ components:
           - IMPLICIT_CONSENT
           - EXPLICIT_CONSENT
           - NO_CONSENT
-    UpsertContact:
-      allOf:
-      - $ref: '#/components/schemas/CreateOrPatchContact'
-    CreateUtmContact:
-      type: object
-      description: UTM parameters to insert
-      properties:
-        keapSourceId:
-          type: string
-          description: The formId
-          example: 6088383224687662
-        utmSource:
-          type: string
-          description: UTM source information
-          example: google
-        utmMedium:
-          type: string
-          description: UTM medium information
-          example: cpc
-        utmTerm:
-          type: string
-          description: UTM term information
-          example: financial_consulting
-        utmCampaign:
-          type: string
-          description: UTM campaign information
-          example: spring_sale
-        utmContent:
-          type: string
-          description: UTM content information
-          example: textlink
-      required:
-      - keapSourceId
     ModelAndView:
       type: object
       properties:
@@ -3844,88 +3871,145 @@ components:
           type: boolean
         viewName:
           type: string
-    ContactAddress:
-      type: object
-      properties:
-        line1:
-          type: string
-        line2:
-          type: string
-        locality:
-          type: string
-        region:
-          type: string
-        field:
-          type: string
-          enum:
-          - BILLING
-          - SHIPPING
-          - OTHER
-        postal_code:
-          type: string
-          description: Field used to store postal codes containing a combination of letters and numbers ex. 'EC1A', 'S1 2HE', '75000'
-        zip_code:
-          type: string
-          description: 'Mainly used in the United States, this is typically numeric. ex. ''85001'', ''90002'' Note: this is to be used instead of ''postal_code'', not in addition to.'
-        zip_four:
-          type: string
-          description: Last four of a full zip code ex. '8244', '4320'. This field is supplemental to the zip_code field, otherwise will be ignored.
-        country_code:
-          type: string
-      required:
-      - field
-    CustomFieldMetaData:
+    ContactCreditCard:
       type: object
       properties:
         id:
           type: integer
           format: int64
+        card_type:
+          type: string
+        card_number:
+          type: string
+        validation_status:
+          type: string
+        payment_method_id:
+          type: string
+    CustomFieldOption:
+      type: object
+      properties:
+        id:
+          type: string
         label:
           type: string
-        options:
+    CreateRestCustomFieldOption:
+      type: object
+      properties:
+        label:
+          type: string
+    ContactTag:
+      type: object
+      properties:
+        tag:
+          $ref: '#/components/schemas/SimpleTag'
+        date_applied:
+          type: string
+          format: date-time
+    TagId:
+      type: object
+      properties:
+        tagIds:
           type: array
           items:
-            $ref: '#/components/schemas/CustomFieldOption'
-        record_type:
+            type: integer
+            format: int64
+          uniqueItems: true
+    FaxNumber:
+      type: object
+      properties:
+        number:
+          type: string
+        field:
           type: string
           enum:
-          - CONTACT
-          - REFERRAL_PARTNER
-          - OPPORTUNITY
-          - TASK_NOTE_APPOINTMENT
-          - COMPANY
-          - ORDER
-          - SUBSCRIPTION
-        field_type:
+          - FAX1
+          - FAX2
+        type:
+          type: string
+      required:
+      - field
+    ContactTagList:
+      type: object
+      properties:
+        tags:
+          type: array
+          items:
+            $ref: '#/components/schemas/ContactTag'
+        count:
+          type: integer
+          format: int32
+        next:
+          type: string
+        previous:
+          type: string
+    PhoneNumber:
+      type: object
+      properties:
+        number:
+          type: string
+        extension:
+          type: string
+        field:
           type: string
           enum:
-          - Currency
-          - Date
-          - DateTime
-          - DayOfWeek
-          - Drilldown
-          - Email
-          - Month
-          - ListBox
-          - Name
-          - WholeNumber
-          - DecimalNumber
-          - Percent
-          - PhoneNumber
-          - Radio
-          - Dropdown
-          - SocialSecurityNumber
-          - State
-          - Text
-          - TextArea
-          - User
-          - UserListBox
-          - Website
-          - Year
-          - YesNo
-        field_name:
+          - PHONE1
+          - PHONE2
+          - PHONE3
+          - PHONE4
+          - PHONE5
+        type:
           type: string
-        default_value:
+        number_e164:
+          type: string
+      required:
+      - field
+    RestQueryCommand:
+      type: object
+      properties:
+        limit:
+          type: integer
+          format: int32
+        offset:
+          type: integer
+          format: int32
+    DefaultHttpStatusCode:
+      allOf:
+      - $ref: '#/components/schemas/HttpStatusCode'
+    HttpStatusCode:
+      type: object
+      properties:
+        error:
+          type: boolean
+        is1xxInformational:
+          type: boolean
+        is2xxSuccessful:
+          type: boolean
+        is3xxRedirection:
+          type: boolean
+        is4xxClientError:
+          type: boolean
+        is5xxServerError:
+          type: boolean
+    ContactQueryEmailCommand:
+      type: object
+      properties:
+        limit:
+          type: integer
+          format: int32
+        offset:
+          type: integer
+          format: int32
+        email:
+          type: string
+    SimpleTag:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        name:
+          type: string
+        category:
           type: string
     CreateOrPatchContact:
       allOf:
@@ -3939,13 +4023,25 @@ components:
           opt_in_reason:
             type: string
       description: contact
-    EmailSentQueryResultList:
+    ObjectModel:
       type: object
       properties:
-        emails:
+        custom_fields:
           type: array
           items:
-            $ref: '#/components/schemas/EmailSentQueryResult'
+            $ref: '#/components/schemas/CustomFieldMetaData'
+        optional_properties:
+          type: array
+          items:
+            type: string
+          uniqueItems: true
+    ContactList:
+      type: object
+      properties:
+        contacts:
+          type: array
+          items:
+            $ref: '#/components/schemas/RestPartialContact'
         count:
           type: integer
           format: int32
@@ -3953,21 +4049,6 @@ components:
           type: string
         previous:
           type: string
-    CustomFieldValue:
-      type: object
-      properties:
-        id:
-          type: integer
-          format: int64
-        content: {}
-    ContactTag:
-      type: object
-      properties:
-        tag:
-          $ref: '#/components/schemas/SimpleTag'
-        date_applied:
-          type: string
-          format: date-time
     RestPartialContact:
       allOf:
       - $ref: '#/components/schemas/RestContact'
@@ -4085,136 +4166,57 @@ components:
             type: string
           company_name:
             type: string
-    CreateRestCustomField:
+    EmailAddress:
       type: object
       properties:
-        label:
-          type: string
-        options:
-          type: array
-          items:
-            $ref: '#/components/schemas/CreateRestCustomFieldOption'
-        field_type:
-          type: string
-          enum:
-          - Currency
-          - Date
-          - DateTime
-          - DayOfWeek
-          - Drilldown
-          - Email
-          - Month
-          - ListBox
-          - Name
-          - WholeNumber
-          - DecimalNumber
-          - Percent
-          - PhoneNumber
-          - Radio
-          - Dropdown
-          - SocialSecurityNumber
-          - State
-          - Text
-          - TextArea
-          - User
-          - UserListBox
-          - Website
-          - Year
-          - YesNo
-        group_id:
-          type: integer
-          format: int64
-          description: An optional tab group to place the field under in the interface.  If not specified, will default to the 'Custom Fields' tab.
-        user_group_id:
-          type: integer
-          format: int64
-          description: An optional user group to choose from when selecting values for User or UserListBox fields.
-      required:
-      - field_type
-      - label
-    RequestCompanyReference:
-      type: object
-      properties:
-        id:
-          type: integer
-          format: int64
-    ContactCreditCard:
-      type: object
-      properties:
-        id:
-          type: integer
-          format: int64
-        card_type:
-          type: string
-        card_number:
-          type: string
-        validation_status:
-          type: string
-        payment_method_id:
-          type: string
-    ObjectModel:
-      type: object
-      properties:
-        custom_fields:
-          type: array
-          items:
-            $ref: '#/components/schemas/CustomFieldMetaData'
-        optional_properties:
-          type: array
-          items:
-            type: string
-          uniqueItems: true
-    SimpleTag:
-      type: object
-      properties:
-        id:
-          type: integer
-          format: int64
-        name:
-          type: string
-        category:
-          type: string
-    ContactQueryEmailCommand:
-      type: object
-      properties:
-        limit:
-          type: integer
-          format: int32
-        offset:
-          type: integer
-          format: int32
         email:
           type: string
-    HttpStatusCode:
-      type: object
-      properties:
-        error:
-          type: boolean
-        is1xxInformational:
-          type: boolean
-        is2xxSuccessful:
-          type: boolean
-        is3xxRedirection:
-          type: boolean
-        is4xxClientError:
-          type: boolean
-        is5xxServerError:
-          type: boolean
-    SocialAccount:
-      type: object
-      properties:
-        name:
-          type: string
-        type:
+        field:
           type: string
           enum:
-          - Facebook
-          - Twitter
-          - LinkedIn
-          - Instagram
-          - Snapchat
-          - YouTube
-          - Pinterest
+          - EMAIL1
+          - EMAIL2
+          - EMAIL3
+      required:
+      - field
+    RestContact:
+      allOf:
+      - $ref: '#/components/schemas/RestContactBase'
+    ContactAddress:
+      type: object
+      properties:
+        line1:
+          type: string
+        line2:
+          type: string
+        locality:
+          type: string
+        region:
+          type: string
+        field:
+          type: string
+          enum:
+          - BILLING
+          - SHIPPING
+          - OTHER
+        postal_code:
+          type: string
+          description: Field used to store postal codes containing a combination of letters and numbers ex. 'EC1A', 'S1 2HE', '75000'
+        zip_code:
+          type: string
+          description: 'Mainly used in the United States, this is typically numeric. ex. ''85001'', ''90002'' Note: this is to be used instead of ''postal_code'', not in addition to.'
+        zip_four:
+          type: string
+          description: Last four of a full zip code ex. '8244', '4320'. This field is supplemental to the zip_code field, otherwise will be ignored.
+        country_code:
+          type: string
+      required:
+      - field
+    View:
+      type: object
+      properties:
+        contentType:
+          type: string
     CompanyReference:
       type: object
       properties:
@@ -4223,6 +4225,77 @@ components:
           format: int64
         company_name:
           type: string
+    RequestCompanyReference:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+    FullUtm:
+      type: object
+      properties:
+        contactUtmId:
+          type: integer
+          format: int64
+          description: The contactUtmId identifier
+          example: 12
+        keapSourceId:
+          type: string
+          description: The formId
+          example: 6088383224687662
+        utmSource:
+          type: string
+          description: UTM source information
+          example: google
+        utmMedium:
+          type: string
+          description: UTM medium information
+          example: cpc
+        utmTerm:
+          type: string
+          description: UTM term information
+          example: financial_consulting
+        utmCampaign:
+          type: string
+          description: UTM campaign information
+          example: spring_sale
+        utmContent:
+          type: string
+          description: UTM content information
+          example: textlink
+      required:
+      - contactUtmId
+      - keapSourceId
+    CreateUtmContact:
+      type: object
+      description: UTM parameters to insert
+      properties:
+        keapSourceId:
+          type: string
+          description: The formId
+          example: 6088383224687662
+        utmSource:
+          type: string
+          description: UTM source information
+          example: google
+        utmMedium:
+          type: string
+          description: UTM medium information
+          example: cpc
+        utmTerm:
+          type: string
+          description: UTM term information
+          example: financial_consulting
+        utmCampaign:
+          type: string
+          description: UTM campaign information
+          example: spring_sale
+        utmContent:
+          type: string
+          description: UTM content information
+          example: textlink
+      required:
+      - keapSourceId
     CreditCardAdded:
       type: object
       properties:
@@ -4254,21 +4327,7 @@ components:
           type: string
         validation_status:
           type: string
-    ContactList:
-      type: object
-      properties:
-        contacts:
-          type: array
-          items:
-            $ref: '#/components/schemas/RestPartialContact'
-        count:
-          type: integer
-          format: int32
-        next:
-          type: string
-        previous:
-          type: string
-    RestQueryCommand:
+    ContactQueryCommand:
       type: object
       properties:
         limit:
@@ -4277,6 +4336,61 @@ components:
         offset:
           type: integer
           format: int32
+        email:
+          type: string
+        given_name:
+          type: string
+        family_name:
+          type: string
+        order:
+          type: string
+          enum:
+          - id
+          - date_created
+          - last_updated
+          - name
+          - firstName
+          - email
+        order_direction:
+          type: string
+          enum:
+          - ASCENDING
+          - DESCENDING
+        since:
+          type: string
+        until:
+          type: string
+        sinceAsDate:
+          type: string
+          format: date-time
+        untilAsDate:
+          type: string
+          format: date-time
+    ContactOrigin:
+      type: object
+      properties:
+        date:
+          type: string
+          format: date-time
+        ip_address:
+          type: string
+      required:
+      - date
+      - ip_address
+    CreateContactOrigin:
+      type: object
+      properties:
+        ip_address:
+          type: string
+      required:
+      - ip_address
+    CustomFieldValue:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        content: {}
     EmailSentQueryResult:
       type: object
       properties:
@@ -4321,215 +4435,13 @@ components:
           - GOOGLE
         original_provider_id:
           type: string
-    FullContact:
-      allOf:
-      - $ref: '#/components/schemas/RestContact'
-      - type: object
-        properties:
-          origin:
-            $ref: '#/components/schemas/ContactOrigin'
-          relationships:
-            type: array
-            items:
-              $ref: '#/components/schemas/Relationship'
-          company_name:
-            type: string
-          opt_in_reason:
-            type: string
-          tag_ids:
-            type: array
-            items:
-              type: integer
-              format: int64
-    FaxNumber:
+    EmailSentQueryResultList:
       type: object
       properties:
-        number:
-          type: string
-        field:
-          type: string
-          enum:
-          - FAX1
-          - FAX2
-        type:
-          type: string
-      required:
-      - field
-    RestContact:
-      allOf:
-      - $ref: '#/components/schemas/RestContactBase'
-    HttpStatus:
-      allOf:
-      - $ref: '#/components/schemas/HttpStatusCode'
-      enum:
-      - 100 CONTINUE
-      - 101 SWITCHING_PROTOCOLS
-      - 102 PROCESSING
-      - 103 EARLY_HINTS
-      - 200 OK
-      - 201 CREATED
-      - 202 ACCEPTED
-      - 203 NON_AUTHORITATIVE_INFORMATION
-      - 204 NO_CONTENT
-      - 205 RESET_CONTENT
-      - 206 PARTIAL_CONTENT
-      - 207 MULTI_STATUS
-      - 208 ALREADY_REPORTED
-      - 226 IM_USED
-      - 300 MULTIPLE_CHOICES
-      - 301 MOVED_PERMANENTLY
-      - 302 FOUND
-      - 303 SEE_OTHER
-      - 304 NOT_MODIFIED
-      - 307 TEMPORARY_REDIRECT
-      - 308 PERMANENT_REDIRECT
-      - 400 BAD_REQUEST
-      - 401 UNAUTHORIZED
-      - 402 PAYMENT_REQUIRED
-      - 403 FORBIDDEN
-      - 404 NOT_FOUND
-      - 405 METHOD_NOT_ALLOWED
-      - 406 NOT_ACCEPTABLE
-      - 407 PROXY_AUTHENTICATION_REQUIRED
-      - 408 REQUEST_TIMEOUT
-      - 409 CONFLICT
-      - 410 GONE
-      - 411 LENGTH_REQUIRED
-      - 412 PRECONDITION_FAILED
-      - 413 CONTENT_TOO_LARGE
-      - 413 PAYLOAD_TOO_LARGE
-      - 414 URI_TOO_LONG
-      - 415 UNSUPPORTED_MEDIA_TYPE
-      - 416 REQUESTED_RANGE_NOT_SATISFIABLE
-      - 417 EXPECTATION_FAILED
-      - 418 I_AM_A_TEAPOT
-      - 421 MISDIRECTED_REQUEST
-      - 422 UNPROCESSABLE_CONTENT
-      - 422 UNPROCESSABLE_ENTITY
-      - 423 LOCKED
-      - 424 FAILED_DEPENDENCY
-      - 425 TOO_EARLY
-      - 426 UPGRADE_REQUIRED
-      - 428 PRECONDITION_REQUIRED
-      - 429 TOO_MANY_REQUESTS
-      - 431 REQUEST_HEADER_FIELDS_TOO_LARGE
-      - 451 UNAVAILABLE_FOR_LEGAL_REASONS
-      - 500 INTERNAL_SERVER_ERROR
-      - 501 NOT_IMPLEMENTED
-      - 502 BAD_GATEWAY
-      - 503 SERVICE_UNAVAILABLE
-      - 504 GATEWAY_TIMEOUT
-      - 505 HTTP_VERSION_NOT_SUPPORTED
-      - 506 VARIANT_ALSO_NEGOTIATES
-      - 507 INSUFFICIENT_STORAGE
-      - 508 LOOP_DETECTED
-      - 509 BANDWIDTH_LIMIT_EXCEEDED
-      - 510 NOT_EXTENDED
-      - 511 NETWORK_AUTHENTICATION_REQUIRED
-    ContactQueryCommand:
-      type: object
-      properties:
-        limit:
-          type: integer
-          format: int32
-        offset:
-          type: integer
-          format: int32
-        email:
-          type: string
-        given_name:
-          type: string
-        family_name:
-          type: string
-        order:
-          type: string
-          enum:
-          - id
-          - date_created
-          - last_updated
-          - name
-          - firstName
-          - email
-        order_direction:
-          type: string
-          enum:
-          - ASCENDING
-          - DESCENDING
-        since:
-          type: string
-        until:
-          type: string
-        sinceAsDate:
-          type: string
-          format: date-time
-        untilAsDate:
-          type: string
-          format: date-time
-    EmailSentCreate:
-      type: object
-      description: Email records to persist, with content.
-      properties:
-        id:
-          type: integer
-          format: int64
-        subject:
-          type: string
-        headers:
-          type: string
-        contact_id:
-          type: integer
-          format: int64
-        sent_to_address:
-          type: string
-        sent_to_cc_addresses:
-          type: string
-        sent_to_bcc_addresses:
-          type: string
-        sent_from_address:
-          type: string
-        sent_from_reply_address:
-          type: string
-        sent_date:
-          type: string
-          format: date-time
-        received_date:
-          type: string
-          format: date-time
-        opened_date:
-          type: string
-          format: date-time
-        clicked_date:
-          type: string
-          format: date-time
-        plain_content:
-          type: string
-          description: Base64 encoded text
-        html_content:
-          type: string
-          description: Base64 encoded HTML
-        original_provider:
-          type: string
-          description: Provider that sent the email case insensitive, must be in list [GOOGLE, INFUSIONSOFT].  If omitted gets mapped to UNKNOWN.
-          enum:
-          - UNKNOWN
-          - INFUSIONSOFT
-          - MICROSOFT
-          - GOOGLE
-        original_provider_id:
-          type: string
-          description: Provider id that sent the email, must be unique when combined with provider.  If omitted a UUID without dashes is autogenerated for the record.
-        provider_source_id:
-          type: string
-          description: The email address of the synced email account that generated this message.
-      required:
-      - sent_to_address
-    ContactTagList:
-      type: object
-      properties:
-        tags:
+        emails:
           type: array
           items:
-            $ref: '#/components/schemas/ContactTag'
+            $ref: '#/components/schemas/EmailSentQueryResult'
         count:
           type: integer
           format: int32
@@ -4537,46 +4449,6 @@ components:
           type: string
         previous:
           type: string
-    CreateRestCustomFieldOption:
-      type: object
-      properties:
-        label:
-          type: string
-    FullUtm:
-      type: object
-      properties:
-        contactUtmId:
-          type: integer
-          format: int64
-          description: The contactUtmId identifier
-          example: 12
-        keapSourceId:
-          type: string
-          description: The formId
-          example: 6088383224687662
-        utmSource:
-          type: string
-          description: UTM source information
-          example: google
-        utmMedium:
-          type: string
-          description: UTM medium information
-          example: cpc
-        utmTerm:
-          type: string
-          description: UTM term information
-          example: financial_consulting
-        utmCampaign:
-          type: string
-          description: UTM campaign information
-          example: spring_sale
-        utmContent:
-          type: string
-          description: UTM content information
-          example: textlink
-      required:
-      - contactUtmId
-      - keapSourceId
     RestContactBase:
       type: object
       properties:
@@ -4655,75 +4527,26 @@ components:
             $ref: '#/components/schemas/CustomFieldValue'
         spouse_name:
           type: string
-    CreateContactOrigin:
-      type: object
-      properties:
-        ip_address:
-          type: string
-      required:
-      - ip_address
-    TagId:
-      type: object
-      properties:
-        tagIds:
-          type: array
-          items:
-            type: integer
-            format: int64
-          uniqueItems: true
-    ContactOrigin:
-      type: object
-      properties:
-        date:
-          type: string
-          format: date-time
-        ip_address:
-          type: string
-      required:
-      - date
-      - ip_address
-    DefaultHttpStatusCode:
+    FullContact:
       allOf:
-      - $ref: '#/components/schemas/HttpStatusCode'
-    View:
-      type: object
-      properties:
-        contentType:
-          type: string
-    EmailAddress:
-      type: object
-      properties:
-        email:
-          type: string
-        field:
-          type: string
-          enum:
-          - EMAIL1
-          - EMAIL2
-          - EMAIL3
-      required:
-      - field
-    PhoneNumber:
-      type: object
-      properties:
-        number:
-          type: string
-        extension:
-          type: string
-        field:
-          type: string
-          enum:
-          - PHONE1
-          - PHONE2
-          - PHONE3
-          - PHONE4
-          - PHONE5
-        type:
-          type: string
-        number_e164:
-          type: string
-      required:
-      - field
+      - $ref: '#/components/schemas/RestContact'
+      - type: object
+        properties:
+          origin:
+            $ref: '#/components/schemas/ContactOrigin'
+          relationships:
+            type: array
+            items:
+              $ref: '#/components/schemas/Relationship'
+          company_name:
+            type: string
+          opt_in_reason:
+            type: string
+          tag_ids:
+            type: array
+            items:
+              type: integer
+              format: int64
     Relationship:
       type: object
       properties:
@@ -4736,68 +4559,20 @@ components:
         relationship_type_id:
           type: integer
           format: int64
-    CustomFieldOption:
+    CustomFieldMetaData:
       type: object
       properties:
         id:
-          type: string
-        label:
-          type: string
-    EmailAddressRequest:
-      type: object
-      properties:
-        email:
-          type: string
-          description: Email address. Maximum length is 75 characters for EMAIL1 and 100 characters for EMAIL2 and EMAIL3.
-          example: john.smith@example.com
-        field:
-          type: string
-          description: Email address slot
-          enum:
-          - EMAIL_FIELD_UNSPECIFIED
-          - EMAIL1
-          - EMAIL2
-          - EMAIL3
-          example: EMAIL1
-        opt_in_reason:
-          type: string
-          description: Reason for opting in
-          example: Subscribed via website form
-    UpdateCustomFieldTabRequest:
-      type: object
-      properties:
-        name:
-          type: string
-        order:
           type: integer
-          format: int32
-    ErrorDetails:
-      type: object
-      properties:
-        domain:
-          type: string
-        resource:
-          type: string
-    CustomFieldMetaData_2:
-      type: object
-      description: Metadata describing a custom field, including its type and options
-      properties:
-        id:
-          type: string
-          description: The unique identifier of the custom field
-          example: 123
+          format: int64
         label:
           type: string
-          description: The display label of the custom field
-          example: Favorite Color
         options:
           type: array
-          description: The list of available options for select/radio/multiselect/drilldown field types
           items:
             $ref: '#/components/schemas/CustomFieldOption'
         record_type:
           type: string
-          description: The entity type this custom field belongs to (e.g. CONTACT, COMPANY)
           enum:
           - CONTACT
           - REFERRAL_PARTNER
@@ -4808,87 +4583,208 @@ components:
           - SUBSCRIPTION
         field_type:
           type: string
-          description: The data type of the custom field (e.g. Text, Number, Date, Select)
           enum:
-          - CURRENCY
-          - DATE
-          - DATE_TIME
-          - DAY_OF_WEEK
-          - DECIMAL_NUMBER
-          - DRILLDOWN
-          - DROPDOWN
-          - EMAIL
-          - LIST_BOX
-          - MONTH
-          - NAME
-          - PERCENT
-          - PHONE_NUMBER
-          - RADIO
-          - SOCIAL_SECURITY_NUMBER
-          - STATE
-          - TEXT
-          - TEXT_AREA
-          - USER
-          - USER_LIST_BOX
-          - WEBSITE
-          - WHOLE_NUMBER
-          - YEAR
-          - YES_NO
-        default_value:
-          type: string
-          description: The default value for this custom field, if any
-        group_id:
-          type: string
-          description: The ID of the group this custom field belongs to
-          example: 45
-        group_name:
-          type: string
-          description: The name of the group this custom field belongs to
-          example: Personal Info
+          - Currency
+          - Date
+          - DateTime
+          - DayOfWeek
+          - Drilldown
+          - Email
+          - Month
+          - ListBox
+          - Name
+          - WholeNumber
+          - DecimalNumber
+          - Percent
+          - PhoneNumber
+          - Radio
+          - Dropdown
+          - SocialSecurityNumber
+          - State
+          - Text
+          - TextArea
+          - User
+          - UserListBox
+          - Website
+          - Year
+          - YesNo
         field_name:
           type: string
-          description: The database column name for this custom field. Use this value when filtering contacts (e.g. for field_name 'firstName1', filter with 'firstName1==John').
-          example: firstName1
-    CreateCustomFieldTabRequest:
+        default_value:
+          type: string
+    SocialAccount:
       type: object
       properties:
         name:
           type: string
-    ListContactLinkTypesResponse:
-      type: object
-      properties:
-        contact_link_types:
-          type: array
-          items:
-            $ref: '#/components/schemas/ContactLinkType'
-        next_page_token:
+        type:
           type: string
-    CustomFieldValue_2:
+          enum:
+          - Facebook
+          - Twitter
+          - LinkedIn
+          - Instagram
+          - Snapchat
+          - YouTube
+          - Pinterest
+    HttpStatus:
+      allOf:
+      - $ref: '#/components/schemas/HttpStatusCode'
+      enum:
+      - 100 CONTINUE
+      - 101 SWITCHING_PROTOCOLS
+      - 102 PROCESSING
+      - 103 EARLY_HINTS
+      - 200 OK
+      - 201 CREATED
+      - 202 ACCEPTED
+      - 203 NON_AUTHORITATIVE_INFORMATION
+      - 204 NO_CONTENT
+      - 205 RESET_CONTENT
+      - 206 PARTIAL_CONTENT
+      - 207 MULTI_STATUS
+      - 208 ALREADY_REPORTED
+      - 226 IM_USED
+      - 300 MULTIPLE_CHOICES
+      - 301 MOVED_PERMANENTLY
+      - 302 FOUND
+      - 303 SEE_OTHER
+      - 304 NOT_MODIFIED
+      - 307 TEMPORARY_REDIRECT
+      - 308 PERMANENT_REDIRECT
+      - 400 BAD_REQUEST
+      - 401 UNAUTHORIZED
+      - 402 PAYMENT_REQUIRED
+      - 403 FORBIDDEN
+      - 404 NOT_FOUND
+      - 405 METHOD_NOT_ALLOWED
+      - 406 NOT_ACCEPTABLE
+      - 407 PROXY_AUTHENTICATION_REQUIRED
+      - 408 REQUEST_TIMEOUT
+      - 409 CONFLICT
+      - 410 GONE
+      - 411 LENGTH_REQUIRED
+      - 412 PRECONDITION_FAILED
+      - 413 CONTENT_TOO_LARGE
+      - 413 PAYLOAD_TOO_LARGE
+      - 414 URI_TOO_LONG
+      - 415 UNSUPPORTED_MEDIA_TYPE
+      - 416 REQUESTED_RANGE_NOT_SATISFIABLE
+      - 417 EXPECTATION_FAILED
+      - 418 I_AM_A_TEAPOT
+      - 421 MISDIRECTED_REQUEST
+      - 422 UNPROCESSABLE_CONTENT
+      - 422 UNPROCESSABLE_ENTITY
+      - 423 LOCKED
+      - 424 FAILED_DEPENDENCY
+      - 425 TOO_EARLY
+      - 426 UPGRADE_REQUIRED
+      - 428 PRECONDITION_REQUIRED
+      - 429 TOO_MANY_REQUESTS
+      - 431 REQUEST_HEADER_FIELDS_TOO_LARGE
+      - 451 UNAVAILABLE_FOR_LEGAL_REASONS
+      - 500 INTERNAL_SERVER_ERROR
+      - 501 NOT_IMPLEMENTED
+      - 502 BAD_GATEWAY
+      - 503 SERVICE_UNAVAILABLE
+      - 504 GATEWAY_TIMEOUT
+      - 505 HTTP_VERSION_NOT_SUPPORTED
+      - 506 VARIANT_ALSO_NEGOTIATES
+      - 507 INSUFFICIENT_STORAGE
+      - 508 LOOP_DETECTED
+      - 509 BANDWIDTH_LIMIT_EXCEEDED
+      - 510 NOT_EXTENDED
+      - 511 NETWORK_AUTHENTICATION_REQUIRED
+    EmailSentCreate:
+      type: object
+      description: Email records to persist, with content.
+      properties:
+        id:
+          type: integer
+          format: int64
+        subject:
+          type: string
+        headers:
+          type: string
+        contact_id:
+          type: integer
+          format: int64
+        sent_to_address:
+          type: string
+        sent_to_cc_addresses:
+          type: string
+        sent_to_bcc_addresses:
+          type: string
+        sent_from_address:
+          type: string
+        sent_from_reply_address:
+          type: string
+        sent_date:
+          type: string
+          format: date-time
+        received_date:
+          type: string
+          format: date-time
+        opened_date:
+          type: string
+          format: date-time
+        clicked_date:
+          type: string
+          format: date-time
+        plain_content:
+          type: string
+          description: Base64 encoded text
+        html_content:
+          type: string
+          description: Base64 encoded HTML
+        original_provider:
+          type: string
+          description: Provider that sent the email case insensitive, must be in list [GOOGLE, INFUSIONSOFT].  If omitted gets mapped to UNKNOWN.
+          enum:
+          - UNKNOWN
+          - INFUSIONSOFT
+          - MICROSOFT
+          - GOOGLE
+        original_provider_id:
+          type: string
+          description: Provider id that sent the email, must be unique when combined with provider.  If omitted a UUID without dashes is autogenerated for the record.
+        provider_source_id:
+          type: string
+          description: The email address of the synced email account that generated this message.
+      required:
+      - sent_to_address
+    ContactUtmResponse:
       type: object
       properties:
         id:
+          type: integer
+          format: int64
+        keapSourceId:
           type: string
-        content:
-          description: The value of the custom field. Text custom field values have a maximum length of 65535 characters.
-    ContactLink:
+        utmSource:
+          type: string
+        utmMedium:
+          type: string
+        utmTerm:
+          type: string
+        utmCampaign:
+          type: string
+        utmContent:
+          type: string
+        firstTouch:
+          type: boolean
+        lastTouch:
+          type: boolean
+        dateCreated:
+          type: string
+          format: date-time
+    CreateCustomFieldGroupRequest:
       type: object
       properties:
-        contact1_id:
+        name:
           type: string
-          description: First contact ID in the link
-          example: 1001
-        contact2_id:
+        tab_id:
           type: string
-          description: Second contact ID in the link
-          example: 1002
-        link_type_id:
-          type: string
-          description: Link type ID
-          example: 1
-        link_type_name:
-          type: string
-          description: Link type name
-          example: Spouse
     CreateContactUtmPropertiesRequest:
       type: object
       properties:
@@ -4918,69 +4814,36 @@ components:
           example: textlink
       required:
       - keap_source_id
-    ListContactLinksResponse:
-      type: object
-      properties:
-        links:
-          type: array
-          items:
-            $ref: '#/components/schemas/ContactLink'
-        next_page_token:
-          type: string
-    Origin:
-      type: object
-      properties:
-        date:
-          type: string
-        ip_address:
-          type: string
-    ObjectModel_2:
-      type: object
-      properties:
-        custom_fields:
-          type: array
-          items:
-            $ref: '#/components/schemas/CustomFieldMetaData_2'
-        optional_properties:
-          type: array
-          description: These fields are not transmitted by default on this model, but can be requested by specifying them in a comma-separated list in the optional_properties query parameter.
-          items:
-            type: string
-          uniqueItems: true
-    UpdateContactLinkTypeRequest:
+    UpdateCustomFieldGroupRequest:
       type: object
       properties:
         name:
           type: string
-          description: Link type name
-          example: Spouse
-        max_links:
+        order:
           type: integer
-          format: int64
-          description: Maximum number of links allowed (must be > 0)
-          example: 1
-    SocialAccount_2:
+          format: int32
+        tab_id:
+          type: string
+    EmailAddressRequest:
       type: object
       properties:
-        name:
+        email:
           type: string
-          description: Social account username or handle. Maximum length is 255 characters.
-          example: '@thryv'
-        type:
+          description: Email address. Maximum length is 75 characters for EMAIL1 and 100 characters for EMAIL2 and EMAIL3.
+          example: john.smith@example.com
+        field:
           type: string
-          description: Social account type
+          description: Email address slot
           enum:
-          - SOCIAL_ACCOUNT_TYPE_UNSPECIFIED
-          - FACEBOOK
-          - LINKED_IN
-          - TWITTER
-          - INSTAGRAM
-          - SNAPCHAT
-          - YOUTUBE
-          - PINTEREST
-          example: FACEBOOK
-      required:
-      - type
+          - EMAIL_FIELD_UNSPECIFIED
+          - EMAIL1
+          - EMAIL2
+          - EMAIL3
+          example: EMAIL1
+        opt_in_reason:
+          type: string
+          description: Reason for opting in
+          example: Subscribed via website form
     CustomFieldTab:
       type: object
       properties:
@@ -5009,17 +4872,96 @@ components:
           - ORDER
           - SUBSCRIPTION
           example: CONTACT
-    ListContactTagsResponse:
+    CategoryReference:
       type: object
-      description: List of tags applied to a contact
       properties:
-        tags:
+        id:
+          type: string
+          description: The unique identifier for the tag category
+          example: 123
+      required:
+      - id
+    FaxNumber_2:
+      type: object
+      properties:
+        number:
+          type: string
+          description: Fax number
+          example: 5551234568
+        type:
+          type: string
+          description: Fax type
+          example: Work
+        field:
+          type: string
+          description: Fax number slot
+          enum:
+          - FAX_NUMBER_FIELD_UNSPECIFIED
+          - FAX1
+          - FAX2
+          example: FAX1
+    SocialAccount_2:
+      type: object
+      properties:
+        name:
+          type: string
+          description: Social account username or handle. Maximum length is 255 characters.
+          example: '@thryv'
+        type:
+          type: string
+          description: Social account type
+          enum:
+          - SOCIAL_ACCOUNT_TYPE_UNSPECIFIED
+          - FACEBOOK
+          - LINKED_IN
+          - TWITTER
+          - INSTAGRAM
+          - SNAPCHAT
+          - YOUTUBE
+          - PINTEREST
+          example: FACEBOOK
+      required:
+      - type
+    PhoneNumber_2:
+      type: object
+      properties:
+        extension:
+          type: string
+          description: Phone extension
+          example: 101
+        number:
+          type: string
+          description: Phone number. Maximum length is 40 characters for PHONE1-PHONE3 and 20 characters for PHONE4-PHONE5.
+          example: 5551234567
+        type:
+          type: string
+          description: Phone type
+          example: Work
+        field:
+          type: string
+          description: Phone number slot
+          enum:
+          - PHONE_NUMBER_FIELD_UNSPECIFIED
+          - PHONE1
+          - PHONE2
+          - PHONE3
+          - PHONE4
+          - PHONE5
+          example: PHONE1
+        number_e164:
+          type: string
+          description: Phone number in E.164 format
+          example: '+15551234567'
+    ListContactsResponse:
+      type: object
+      properties:
+        contacts:
           type: array
           items:
-            $ref: '#/components/schemas/AppliedTag'
+            $ref: '#/components/schemas/Contact'
         next_page_token:
           type: string
-    CreateContactLinkTypeRequest:
+    UpdateContactLinkTypeRequest:
       type: object
       properties:
         name:
@@ -5031,225 +4973,6 @@ components:
           format: int64
           description: Maximum number of links allowed (must be > 0)
           example: 1
-    MergeContactRequest:
-      type: object
-      properties:
-        contact_id:
-          type: string
-          description: Primary contact ID to merge into
-          example: 1001
-        duplicate_contact_id:
-          type: string
-          description: Duplicate contact ID to merge from
-          example: 1002
-      required:
-      - contact_id
-      - duplicate_contact_id
-    OriginRequest:
-      type: object
-      properties:
-        ip_address:
-          type: string
-    ContactUtmResponse:
-      type: object
-      properties:
-        id:
-          type: integer
-          format: int64
-        keapSourceId:
-          type: string
-        utmSource:
-          type: string
-        utmMedium:
-          type: string
-        utmTerm:
-          type: string
-        utmCampaign:
-          type: string
-        utmContent:
-          type: string
-        firstTouch:
-          type: boolean
-        lastTouch:
-          type: boolean
-        dateCreated:
-          type: string
-          format: date-time
-    CreateUpdateContactRequest:
-      type: object
-      description: contact
-      properties:
-        addresses:
-          type: array
-          description: Any item not listed here will be removed if it already exists. If an empty array is specified, all existing values will be removed.
-          items:
-            $ref: '#/components/schemas/Address'
-        company:
-          $ref: '#/components/schemas/BasicCompany'
-        origin:
-          $ref: '#/components/schemas/OriginRequest'
-        prefix:
-          type: string
-          description: Name prefix
-          example: Dr.
-        suffix:
-          type: string
-          description: Name suffix
-          example: Jr
-        website:
-          type: string
-          description: Personal website URL
-          example: https://thryv.com
-          maxLength: 100
-        anniversary_date:
-          type: string
-          description: The anniversary date
-          example: '2015-06-20'
-        birth_date:
-          type: string
-          description: The birth date
-          example: '1985-03-15'
-        contact_type:
-          type: string
-          description: Type of contact
-          example: Prospect
-        custom_fields:
-          type: array
-          description: Any item not listed here will be removed if it already exists. If an empty array is specified, all existing values will be removed.
-          items:
-            $ref: '#/components/schemas/CustomFieldValue_2'
-        email_addresses:
-          type: array
-          description: Any item not listed here will be removed if it already exists. If an empty array is specified, all existing values will be removed.
-          items:
-            $ref: '#/components/schemas/EmailAddressRequest'
-        family_name:
-          type: string
-          description: Last name / surname
-          example: Smith
-          maxLength: 40
-        fax_numbers:
-          type: array
-          description: Any item not listed here will be removed if it already exists. If an empty array is specified, all existing values will be removed.
-          items:
-            $ref: '#/components/schemas/FaxNumber_2'
-        given_name:
-          type: string
-          description: First name
-          example: John
-          maxLength: 40
-        job_title:
-          type: string
-          description: Job title
-          example: Senior Software Engineer
-          maxLength: 255
-        leadsource_id:
-          type: string
-          description: Lead source identifier
-          example: 12
-        middle_name:
-          type: string
-          description: Middle name
-          example: Robert
-          maxLength: 100
-        owner_id:
-          type: string
-          description: ID of the user who owns this contact
-          example: 45
-        phone_numbers:
-          type: array
-          description: Any item not listed here will be removed if it already exists. If an empty array is specified, all existing values will be removed.
-          items:
-            $ref: '#/components/schemas/PhoneNumber_2'
-        preferred_locale:
-          type: string
-          description: Preferred locale
-          example: en_US
-        preferred_name:
-          type: string
-          description: Preferred name or nickname
-          example: Johnny
-          maxLength: 100
-        referral_code:
-          type: string
-          description: Referral code
-          example: REF2024ABC
-        social_accounts:
-          type: array
-          description: Any item not listed here will be removed if it already exists. If an empty array is specified, all existing values will be removed.
-          items:
-            $ref: '#/components/schemas/SocialAccount_2'
-        source_type:
-          type: string
-          enum:
-          - SOURCE_TYPE_UNSPECIFIED
-          - API
-          - APPOINTMENT
-          - FORM_API_HOSTED
-          - FORM_API_INTERNAL
-          - IMPORT
-          - INTERNAL_FORM
-          - LANDING_PAGE
-          - MANUAL
-          - OTHER
-          - UNKNOWN
-          - WEBFORM
-        spouse_name:
-          type: string
-          description: Spouse's name
-          example: Jane Smith
-          maxLength: 100
-        time_zone:
-          type: string
-          description: Contact's timezone
-          example: America/New_York
-        utm_parameters:
-          $ref: '#/components/schemas/CreateContactUtmPropertiesRequest'
-        assistant_name:
-          type: string
-          description: Assistant's name
-          example: Pat Doe
-          maxLength: 20
-        assistant_phone:
-          type: string
-          description: Assistant's phone number
-          example: 5551234567
-          maxLength: 15
-        billing_information:
-          type: string
-          description: Billing information
-          maxLength: 100
-    ContactLinkType:
-      type: object
-      properties:
-        id:
-          type: string
-          description: Link type ID
-          example: 1
-        name:
-          type: string
-          description: Link type name
-          example: Spouse
-        max_links:
-          type: integer
-          format: int64
-          description: Maximum number of links allowed
-          example: 1
-        create_time:
-          type: string
-          description: Creation timestamp (ISO-8601)
-          example: '2024-01-15T10:30:00Z'
-    BasicCompany:
-      type: object
-      properties:
-        id:
-          type: string
-          description: Company ID
-          example: 100
-        company_name:
-          type: string
-          description: Company name
-          example: Thryv
     Tag:
       type: object
       properties:
@@ -5278,153 +5001,6 @@ components:
           format: date-time
           description: The time this tag was last updated, in ISO 8601 format
           example: '2024-03-15T10:30:00Z'
-    UpdateCustomFieldGroupRequest:
-      type: object
-      properties:
-        name:
-          type: string
-        order:
-          type: integer
-          format: int32
-        tab_id:
-          type: string
-    FaxNumber_2:
-      type: object
-      properties:
-        number:
-          type: string
-          description: Fax number
-          example: 5551234568
-        type:
-          type: string
-          description: Fax type
-          example: Work
-        field:
-          type: string
-          description: Fax number slot
-          enum:
-          - FAX_NUMBER_FIELD_UNSPECIFIED
-          - FAX1
-          - FAX2
-          example: FAX1
-    CreateCustomFieldOptionRequest:
-      type: object
-      properties:
-        label:
-          type: string
-    ListCustomFieldTabsResponse:
-      type: object
-      properties:
-        tabs:
-          type: array
-          items:
-            $ref: '#/components/schemas/CustomFieldTab'
-    CreateCustomFieldRequest:
-      type: object
-      properties:
-        label:
-          type: string
-        options:
-          type: array
-          items:
-            $ref: '#/components/schemas/CreateCustomFieldOptionRequest'
-        field_type:
-          type: string
-          enum:
-          - CURRENCY
-          - DATE
-          - DATE_TIME
-          - DAY_OF_WEEK
-          - DECIMAL_NUMBER
-          - DRILLDOWN
-          - DROPDOWN
-          - EMAIL
-          - LIST_BOX
-          - MONTH
-          - NAME
-          - PERCENT
-          - PHONE_NUMBER
-          - RADIO
-          - SOCIAL_SECURITY_NUMBER
-          - STATE
-          - TEXT
-          - TEXT_AREA
-          - USER
-          - USER_LIST_BOX
-          - WEBSITE
-          - WHOLE_NUMBER
-          - YEAR
-          - YES_NO
-        group_id:
-          type: string
-          description: An optional tab group to place the field under in the interface.  If not specified, will default to the 'Custom Fields' tab.
-        user_group_id:
-          type: string
-          description: An optional user group to choose from when selecting values for User or UserListBox fields.
-      required:
-      - field_type
-      - label
-    ListContactsResponse:
-      type: object
-      properties:
-        contacts:
-          type: array
-          items:
-            $ref: '#/components/schemas/Contact'
-        next_page_token:
-          type: string
-    AppliedTag:
-      type: object
-      description: Tag with application timestamp
-      properties:
-        tag:
-          $ref: '#/components/schemas/Tag'
-          description: The tag applied
-        applied_time:
-          type: string
-          description: The time the tag was applied to the contact, in ISO 8601 format
-    CategoryReference:
-      type: object
-      properties:
-        id:
-          type: string
-          description: The unique identifier for the tag category
-          example: 123
-      required:
-      - id
-    Error:
-      type: object
-      properties:
-        code:
-          type: integer
-          format: int32
-        message:
-          type: string
-        status:
-          type: string
-        details:
-          type: array
-          items:
-            $ref: '#/components/schemas/ErrorDetails'
-    Link:
-      type: object
-      properties:
-        id:
-          type: string
-          description: Link ID
-          example: 1
-        linked_contact_id:
-          type: string
-          description: ID of the linked contact
-          example: 2001
-        link_type_id:
-          type: string
-          description: Link type ID
-          example: 1
-        link_type_name:
-          type: string
-          description: Link type name
-          example: Spouse
     LinkContactsRequest:
       type: object
       properties:
@@ -5440,13 +5016,6 @@ components:
           type: string
           description: Second contact ID to link
           example: 1002
-    ListCustomFieldGroupsResponse:
-      type: object
-      properties:
-        groups:
-          type: array
-          items:
-            $ref: '#/components/schemas/CustomFieldGroup'
     Address:
       type: object
       properties:
@@ -5523,6 +5092,40 @@ components:
           - COMPANY
           - ORDER
           - SUBSCRIPTION
+    Origin:
+      type: object
+      properties:
+        date:
+          type: string
+        ip_address:
+          type: string
+    ListContactLinksResponse:
+      type: object
+      properties:
+        links:
+          type: array
+          items:
+            $ref: '#/components/schemas/ContactLink'
+        next_page_token:
+          type: string
+    ObjectModel_2:
+      type: object
+      properties:
+        custom_fields:
+          type: array
+          items:
+            $ref: '#/components/schemas/CustomFieldMetaData_2'
+        optional_properties:
+          type: array
+          description: These fields are not transmitted by default on this model, but can be requested by specifying them in a comma-separated list in the optional_properties query parameter.
+          items:
+            type: string
+          uniqueItems: true
+    CreateCustomFieldTabRequest:
+      type: object
+      properties:
+        name:
+          type: string
     EmailAddress_2:
       type: object
       properties:
@@ -5565,43 +5168,42 @@ components:
           - SPAM
           - INVALID
           - DEACTIVATED
-    PhoneNumber_2:
+    ListContactTagsResponse:
+      type: object
+      description: List of tags applied to a contact
+      properties:
+        tags:
+          type: array
+          items:
+            $ref: '#/components/schemas/AppliedTag'
+        next_page_token:
+          type: string
+    OriginRequest:
       type: object
       properties:
-        extension:
+        ip_address:
           type: string
-          description: Phone extension
-          example: 101
-        number:
-          type: string
-          description: Phone number. Maximum length is 40 characters for PHONE1-PHONE3 and 20 characters for PHONE4-PHONE5.
-          example: 5551234567
-        type:
-          type: string
-          description: Phone type
-          example: Work
-        field:
-          type: string
-          description: Phone number slot
-          enum:
-          - PHONE_NUMBER_FIELD_UNSPECIFIED
-          - PHONE1
-          - PHONE2
-          - PHONE3
-          - PHONE4
-          - PHONE5
-          example: PHONE1
-        number_e164:
-          type: string
-          description: Phone number in E.164 format
-          example: '+15551234567'
-    CreateCustomFieldGroupRequest:
+    ListCustomFieldTabsResponse:
       type: object
       properties:
-        name:
+        tabs:
+          type: array
+          items:
+            $ref: '#/components/schemas/CustomFieldTab'
+    Error:
+      type: object
+      properties:
+        code:
+          type: integer
+          format: int32
+        message:
           type: string
-        tab_id:
+        status:
           type: string
+        details:
+          type: array
+          items:
+            $ref: '#/components/schemas/ErrorDetails'
     Contact:
       type: object
       properties:
@@ -5759,6 +5361,414 @@ components:
           type: string
         last_updated_by:
           type: string
+    AppliedTag:
+      type: object
+      description: Tag with application timestamp
+      properties:
+        tag:
+          $ref: '#/components/schemas/Tag'
+          description: The tag applied
+        applied_time:
+          type: string
+          description: The time the tag was applied to the contact, in ISO 8601 format
+    ListCustomFieldGroupsResponse:
+      type: object
+      properties:
+        groups:
+          type: array
+          items:
+            $ref: '#/components/schemas/CustomFieldGroup'
+    CustomFieldValue_2:
+      type: object
+      properties:
+        id:
+          type: string
+        content:
+          description: The value of the custom field. Text custom field values have a maximum length of 65535 characters.
+    CreateCustomFieldRequest:
+      type: object
+      properties:
+        label:
+          type: string
+        options:
+          type: array
+          items:
+            $ref: '#/components/schemas/CreateCustomFieldOptionRequest'
+        field_type:
+          type: string
+          enum:
+          - CURRENCY
+          - DATE
+          - DATE_TIME
+          - DAY_OF_WEEK
+          - DECIMAL_NUMBER
+          - DRILLDOWN
+          - DROPDOWN
+          - EMAIL
+          - LIST_BOX
+          - MONTH
+          - NAME
+          - PERCENT
+          - PHONE_NUMBER
+          - RADIO
+          - SOCIAL_SECURITY_NUMBER
+          - STATE
+          - TEXT
+          - TEXT_AREA
+          - USER
+          - USER_LIST_BOX
+          - WEBSITE
+          - WHOLE_NUMBER
+          - YEAR
+          - YES_NO
+        group_id:
+          type: string
+          description: An optional tab group to place the field under in the interface.  If not specified, will default to the 'Custom Fields' tab.
+        user_group_id:
+          type: string
+          description: An optional user group to choose from when selecting values for User or UserListBox fields.
+      required:
+      - field_type
+      - label
+    Link:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Link ID
+          example: 1
+        linked_contact_id:
+          type: string
+          description: ID of the linked contact
+          example: 2001
+        link_type_id:
+          type: string
+          description: Link type ID
+          example: 1
+        link_type_name:
+          type: string
+          description: Link type name
+          example: Spouse
+    BasicCompany:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Company ID
+          example: 100
+        company_name:
+          type: string
+          description: Company name
+          example: Thryv
+    ListContactLinkTypesResponse:
+      type: object
+      properties:
+        contact_link_types:
+          type: array
+          items:
+            $ref: '#/components/schemas/ContactLinkType'
+        next_page_token:
+          type: string
+    ContactLinkType:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Link type ID
+          example: 1
+        name:
+          type: string
+          description: Link type name
+          example: Spouse
+        max_links:
+          type: integer
+          format: int64
+          description: Maximum number of links allowed
+          example: 1
+        create_time:
+          type: string
+          description: Creation timestamp (ISO-8601)
+          example: '2024-01-15T10:30:00Z'
+    CreateCustomFieldOptionRequest:
+      type: object
+      properties:
+        label:
+          type: string
+    ErrorDetails:
+      type: object
+      properties:
+        domain:
+          type: string
+        resource:
+          type: string
+    MergeContactRequest:
+      type: object
+      properties:
+        contact_id:
+          type: string
+          description: Primary contact ID to merge into
+          example: 1001
+        duplicate_contact_id:
+          type: string
+          description: Duplicate contact ID to merge from
+          example: 1002
+      required:
+      - contact_id
+      - duplicate_contact_id
+    ContactLink:
+      type: object
+      properties:
+        contact1_id:
+          type: string
+          description: First contact ID in the link
+          example: 1001
+        contact2_id:
+          type: string
+          description: Second contact ID in the link
+          example: 1002
+        link_type_id:
+          type: string
+          description: Link type ID
+          example: 1
+        link_type_name:
+          type: string
+          description: Link type name
+          example: Spouse
+    UpdateCustomFieldTabRequest:
+      type: object
+      properties:
+        name:
+          type: string
+        order:
+          type: integer
+          format: int32
+    CreateUpdateContactRequest:
+      type: object
+      description: contact
+      properties:
+        addresses:
+          type: array
+          description: Any item not listed here will be removed if it already exists. If an empty array is specified, all existing values will be removed.
+          items:
+            $ref: '#/components/schemas/Address'
+        company:
+          $ref: '#/components/schemas/BasicCompany'
+        origin:
+          $ref: '#/components/schemas/OriginRequest'
+        prefix:
+          type: string
+          description: Name prefix
+          example: Dr.
+        suffix:
+          type: string
+          description: Name suffix
+          example: Jr
+        website:
+          type: string
+          description: Personal website URL
+          example: https://thryv.com
+          maxLength: 100
+        anniversary_date:
+          type: string
+          description: The anniversary date
+          example: '2015-06-20'
+        birth_date:
+          type: string
+          description: The birth date
+          example: '1985-03-15'
+        contact_type:
+          type: string
+          description: Type of contact
+          example: Prospect
+        custom_fields:
+          type: array
+          description: Any item not listed here will be removed if it already exists. If an empty array is specified, all existing values will be removed.
+          items:
+            $ref: '#/components/schemas/CustomFieldValue_2'
+        email_addresses:
+          type: array
+          description: Any item not listed here will be removed if it already exists. If an empty array is specified, all existing values will be removed.
+          items:
+            $ref: '#/components/schemas/EmailAddressRequest'
+        family_name:
+          type: string
+          description: Last name / surname
+          example: Smith
+          maxLength: 40
+        fax_numbers:
+          type: array
+          description: Any item not listed here will be removed if it already exists. If an empty array is specified, all existing values will be removed.
+          items:
+            $ref: '#/components/schemas/FaxNumber_2'
+        given_name:
+          type: string
+          description: First name
+          example: John
+          maxLength: 40
+        job_title:
+          type: string
+          description: Job title
+          example: Senior Software Engineer
+          maxLength: 255
+        leadsource_id:
+          type: string
+          description: Lead source identifier
+          example: 12
+        middle_name:
+          type: string
+          description: Middle name
+          example: Robert
+          maxLength: 100
+        owner_id:
+          type: string
+          description: ID of the user who owns this contact
+          example: 45
+        phone_numbers:
+          type: array
+          description: Any item not listed here will be removed if it already exists. If an empty array is specified, all existing values will be removed.
+          items:
+            $ref: '#/components/schemas/PhoneNumber_2'
+        preferred_locale:
+          type: string
+          description: Preferred locale
+          example: en_US
+        preferred_name:
+          type: string
+          description: Preferred name or nickname
+          example: Johnny
+          maxLength: 100
+        referral_code:
+          type: string
+          description: Referral code
+          example: REF2024ABC
+        social_accounts:
+          type: array
+          description: Any item not listed here will be removed if it already exists. If an empty array is specified, all existing values will be removed.
+          items:
+            $ref: '#/components/schemas/SocialAccount_2'
+        source_type:
+          type: string
+          enum:
+          - SOURCE_TYPE_UNSPECIFIED
+          - API
+          - APPOINTMENT
+          - FORM_API_HOSTED
+          - FORM_API_INTERNAL
+          - IMPORT
+          - INTERNAL_FORM
+          - LANDING_PAGE
+          - MANUAL
+          - OTHER
+          - UNKNOWN
+          - WEBFORM
+        spouse_name:
+          type: string
+          description: Spouse's name
+          example: Jane Smith
+          maxLength: 100
+        time_zone:
+          type: string
+          description: Contact's timezone
+          example: America/New_York
+        utm_parameters:
+          $ref: '#/components/schemas/CreateContactUtmPropertiesRequest'
+        assistant_name:
+          type: string
+          description: Assistant's name
+          example: Pat Doe
+          maxLength: 20
+        assistant_phone:
+          type: string
+          description: Assistant's phone number
+          example: 5551234567
+          maxLength: 15
+        billing_information:
+          type: string
+          description: Billing information
+          maxLength: 100
+    CustomFieldMetaData_2:
+      type: object
+      description: Metadata describing a custom field, including its type and options
+      properties:
+        id:
+          type: string
+          description: The unique identifier of the custom field
+          example: 123
+        label:
+          type: string
+          description: The display label of the custom field
+          example: Favorite Color
+        options:
+          type: array
+          description: The list of available options for select/radio/multiselect/drilldown field types
+          items:
+            $ref: '#/components/schemas/CustomFieldOption'
+        record_type:
+          type: string
+          description: The entity type this custom field belongs to (e.g. CONTACT, COMPANY)
+          enum:
+          - CONTACT
+          - REFERRAL_PARTNER
+          - OPPORTUNITY
+          - TASK_NOTE_APPOINTMENT
+          - COMPANY
+          - ORDER
+          - SUBSCRIPTION
+        field_type:
+          type: string
+          description: The data type of the custom field (e.g. Text, Number, Date, Select)
+          enum:
+          - CURRENCY
+          - DATE
+          - DATE_TIME
+          - DAY_OF_WEEK
+          - DECIMAL_NUMBER
+          - DRILLDOWN
+          - DROPDOWN
+          - EMAIL
+          - LIST_BOX
+          - MONTH
+          - NAME
+          - PERCENT
+          - PHONE_NUMBER
+          - RADIO
+          - SOCIAL_SECURITY_NUMBER
+          - STATE
+          - TEXT
+          - TEXT_AREA
+          - USER
+          - USER_LIST_BOX
+          - WEBSITE
+          - WHOLE_NUMBER
+          - YEAR
+          - YES_NO
+        default_value:
+          type: string
+          description: The default value for this custom field, if any
+        group_id:
+          type: string
+          description: The ID of the group this custom field belongs to
+          example: 45
+        group_name:
+          type: string
+          description: The name of the group this custom field belongs to
+          example: Personal Info
+        field_name:
+          type: string
+          description: The database column name for this custom field. Use this value when filtering contacts (e.g. for field_name 'firstName1', filter with 'firstName1==John').
+          example: firstName1
+    CreateContactLinkTypeRequest:
+      type: object
+      properties:
+        name:
+          type: string
+          description: Link type name
+          example: Spouse
+        max_links:
+          type: integer
+          format: int64
+          description: Maximum number of links allowed (must be > 0)
+          example: 1
   securitySchemes:
     oauth2:
       type: oauth2

@@ -588,64 +588,6 @@ paths:
           description: No Content
 components:
   schemas:
-    UpdateProductDiscountCriteria:
-      type: object
-      properties:
-        code:
-          type: string
-          description: Promotional code for PROMO_CODE criteria
-          example: SUMMER2024
-        criteria_id:
-          type: string
-          description: Unique identifier for this criteria
-          example: 501
-        range_start_time:
-          type: string
-          format: date-time
-          description: Start date/time for DATE_RANGE criteria (ISO-8601 format)
-          example: '2024-01-01T00:00:00Z'
-        range_end_time:
-          type: string
-          format: date-time
-          description: End date/time for DATE_RANGE criteria (ISO-8601 format)
-          example: '2024-12-31T23:59:59Z'
-        product_id:
-          type: string
-          description: Product ID for PRODUCT criteria
-          example: 456
-        product_quantity_min:
-          type: integer
-          format: int32
-          description: Minimum product quantity for PRODUCT criteria
-          example: 1
-        product_quantity_max:
-          type: integer
-          format: int32
-          description: Maximum product quantity for PRODUCT criteria
-          example: 10
-        plan_id:
-          type: string
-          description: Subscription plan ID for SUBSCRIPTION_PLAN criteria
-          example: 789
-        subscription_quantity:
-          type: integer
-          format: int32
-          description: Subscription quantity for SUBSCRIPTION_PLAN criteria
-          example: 1
-        total_amount:
-          type: number
-          format: double
-          description: Total amount threshold for ORDER_TOTAL criteria
-          example: 100.0
-        operator:
-          type: string
-          description: 'Comparison operator for ORDER_TOTAL criteria: LESS_THAN or GREATER_THAN'
-          enum:
-          - LESS_THAN
-          - GREATER_THAN
-          example: GREATER_THAN
-      required:
-      - criteria_id
     DiscountCriteria:
       type: object
       properties:
@@ -712,9 +654,34 @@ components:
           - LESS_THAN
           - GREATER_THAN
           example: GREATER_THAN
-    UpdateProductDiscountRequest:
+    ErrorDetails:
       type: object
       properties:
+        domain:
+          type: string
+        resource:
+          type: string
+    Error:
+      type: object
+      properties:
+        code:
+          type: integer
+          format: int32
+        message:
+          type: string
+        status:
+          type: string
+        details:
+          type: array
+          items:
+            $ref: '#/components/schemas/ErrorDetails'
+    ProductDiscount:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Unique identifier for this product discount
+          example: 101
         name:
           type: string
           description: Name of the discount
@@ -727,7 +694,7 @@ components:
           type: array
           description: List of criteria that must be met for this discount to apply
           items:
-            $ref: '#/components/schemas/UpdateProductDiscountCriteria'
+            $ref: '#/components/schemas/DiscountCriteria'
         apply_to_commissions:
           type: boolean
           description: Whether to apply this discount to commission calculations
@@ -748,13 +715,47 @@ components:
           format: double
           description: Value of the discount (amount or percentage depending on discount_type)
           example: 20.0
-    ErrorDetails:
+    CreateProductDiscountRequest:
       type: object
       properties:
-        domain:
+        name:
           type: string
-        resource:
+          description: Name of the discount
+          example: Summer Sale 20% Off
+        description:
           type: string
+          description: Description of the discount
+          example: 20% off on all summer products
+        criteria:
+          type: array
+          description: List of criteria that must be met for this discount to apply
+          items:
+            $ref: '#/components/schemas/CreateProductDiscountCriteria'
+        apply_to_commissions:
+          type: boolean
+          description: Whether to apply this discount to commission calculations
+          example: true
+        product_id:
+          type: string
+          description: ID of the product this discount applies to
+          example: 456
+        discount_type:
+          type: string
+          description: 'Type of discount: AMOUNT (fixed amount) or PERCENT (percentage)'
+          enum:
+          - AMOUNT
+          - PERCENT
+          example: PERCENT
+        discount_value:
+          type: number
+          format: double
+          description: Value of the discount (amount or percentage depending on discount_type)
+          example: 20.0
+      required:
+      - discount_type
+      - discount_value
+      - name
+      - product_id
     CreateProductDiscountCriteria:
       type: object
       properties:
@@ -817,46 +818,6 @@ components:
           - LESS_THAN
           - GREATER_THAN
           example: GREATER_THAN
-    ProductDiscount:
-      type: object
-      properties:
-        id:
-          type: string
-          description: Unique identifier for this product discount
-          example: 101
-        name:
-          type: string
-          description: Name of the discount
-          example: Summer Sale 20% Off
-        description:
-          type: string
-          description: Description of the discount
-          example: 20% off on all summer products
-        criteria:
-          type: array
-          description: List of criteria that must be met for this discount to apply
-          items:
-            $ref: '#/components/schemas/DiscountCriteria'
-        apply_to_commissions:
-          type: boolean
-          description: Whether to apply this discount to commission calculations
-          example: true
-        product_id:
-          type: string
-          description: ID of the product this discount applies to
-          example: 456
-        discount_type:
-          type: string
-          description: 'Type of discount: AMOUNT (fixed amount) or PERCENT (percentage)'
-          enum:
-          - AMOUNT
-          - PERCENT
-          example: PERCENT
-        discount_value:
-          type: number
-          format: double
-          description: Value of the discount (amount or percentage depending on discount_type)
-          example: 20.0
     ListProductDiscountsResponse:
       type: object
       properties:
@@ -866,7 +827,7 @@ components:
             $ref: '#/components/schemas/ProductDiscount'
         next_page_token:
           type: string
-    CreateProductDiscountRequest:
+    UpdateProductDiscountRequest:
       type: object
       properties:
         name:
@@ -881,7 +842,7 @@ components:
           type: array
           description: List of criteria that must be met for this discount to apply
           items:
-            $ref: '#/components/schemas/CreateProductDiscountCriteria'
+            $ref: '#/components/schemas/UpdateProductDiscountCriteria'
         apply_to_commissions:
           type: boolean
           description: Whether to apply this discount to commission calculations
@@ -902,25 +863,64 @@ components:
           format: double
           description: Value of the discount (amount or percentage depending on discount_type)
           example: 20.0
-      required:
-      - discount_type
-      - discount_value
-      - name
-      - product_id
-    Error:
+    UpdateProductDiscountCriteria:
       type: object
       properties:
         code:
+          type: string
+          description: Promotional code for PROMO_CODE criteria
+          example: SUMMER2024
+        criteria_id:
+          type: string
+          description: Unique identifier for this criteria
+          example: 501
+        range_start_time:
+          type: string
+          format: date-time
+          description: Start date/time for DATE_RANGE criteria (ISO-8601 format)
+          example: '2024-01-01T00:00:00Z'
+        range_end_time:
+          type: string
+          format: date-time
+          description: End date/time for DATE_RANGE criteria (ISO-8601 format)
+          example: '2024-12-31T23:59:59Z'
+        product_id:
+          type: string
+          description: Product ID for PRODUCT criteria
+          example: 456
+        product_quantity_min:
           type: integer
           format: int32
-        message:
+          description: Minimum product quantity for PRODUCT criteria
+          example: 1
+        product_quantity_max:
+          type: integer
+          format: int32
+          description: Maximum product quantity for PRODUCT criteria
+          example: 10
+        plan_id:
           type: string
-        status:
+          description: Subscription plan ID for SUBSCRIPTION_PLAN criteria
+          example: 789
+        subscription_quantity:
+          type: integer
+          format: int32
+          description: Subscription quantity for SUBSCRIPTION_PLAN criteria
+          example: 1
+        total_amount:
+          type: number
+          format: double
+          description: Total amount threshold for ORDER_TOTAL criteria
+          example: 100.0
+        operator:
           type: string
-        details:
-          type: array
-          items:
-            $ref: '#/components/schemas/ErrorDetails'
+          description: 'Comparison operator for ORDER_TOTAL criteria: LESS_THAN or GREATER_THAN'
+          enum:
+          - LESS_THAN
+          - GREATER_THAN
+          example: GREATER_THAN
+      required:
+      - criteria_id
   securitySchemes:
     oauth2:
       type: oauth2

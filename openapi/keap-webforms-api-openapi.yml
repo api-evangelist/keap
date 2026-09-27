@@ -218,23 +218,20 @@ paths:
                 description: Raw HTML content of the webform
 components:
   schemas:
-    ListWebformsResponse:
+    Error:
       type: object
       properties:
-        webforms:
+        code:
+          type: integer
+          format: int32
+        message:
+          type: string
+        status:
+          type: string
+        details:
           type: array
-          description: The webforms in the current page
           items:
-            $ref: '#/components/schemas/Webform'
-        next_page_token:
-          type: string
-    ErrorDetails:
-      type: object
-      properties:
-        domain:
-          type: string
-        resource:
-          type: string
+            $ref: '#/components/schemas/ErrorDetails'
     Webform:
       type: object
       properties:
@@ -324,20 +321,23 @@ components:
           format: date-time
           description: When the webform was last updated
           example: '2024-06-20T14:45:00Z'
-    Error:
+    ListWebformsResponse:
       type: object
       properties:
-        code:
-          type: integer
-          format: int32
-        message:
-          type: string
-        status:
-          type: string
-        details:
+        webforms:
           type: array
+          description: The webforms in the current page
           items:
-            $ref: '#/components/schemas/ErrorDetails'
+            $ref: '#/components/schemas/Webform'
+        next_page_token:
+          type: string
+    ErrorDetails:
+      type: object
+      properties:
+        domain:
+          type: string
+        resource:
+          type: string
   securitySchemes:
     oauth2:
       type: oauth2

@@ -439,16 +439,6 @@ paths:
                 $ref: '#/components/schemas/LeadSourceCategory'
 components:
   schemas:
-    ListLeadSourceCategoriesResponse:
-      type: object
-      properties:
-        lead_source_categories:
-          type: array
-          description: The lead source categories in the current page
-          items:
-            $ref: '#/components/schemas/LeadSourceCategory'
-        next_page_token:
-          type: string
     ErrorDetails:
       type: object
       properties:
@@ -456,17 +446,6 @@ components:
           type: string
         resource:
           type: string
-    CreateUpdateLeadSourceCategoryRequest:
-      type: object
-      properties:
-        name:
-          type: string
-          description: The name of the category, must be unique
-          example: Paid Advertising
-        description:
-          type: string
-          description: The description of the category
-          example: All paid marketing channels
     LeadSourceCategory:
       type: object
       properties:
@@ -492,6 +471,16 @@ components:
           format: date-time
           description: The date the category was last updated
           example: '2024-03-15T10:30:00Z'
+    ListLeadSourceCategoriesResponse:
+      type: object
+      properties:
+        lead_source_categories:
+          type: array
+          description: The lead source categories in the current page
+          items:
+            $ref: '#/components/schemas/LeadSourceCategory'
+        next_page_token:
+          type: string
     Error:
       type: object
       properties:
@@ -506,6 +495,17 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/ErrorDetails'
+    CreateUpdateLeadSourceCategoryRequest:
+      type: object
+      properties:
+        name:
+          type: string
+          description: The name of the category, must be unique
+          example: Paid Advertising
+        description:
+          type: string
+          description: The description of the category
+          example: All paid marketing channels
   securitySchemes:
     oauth2:
       type: oauth2

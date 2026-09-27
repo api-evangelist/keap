@@ -699,6 +699,36 @@ paths:
                   type: string
 components:
   schemas:
+    RestHook:
+      type: object
+      properties:
+        key:
+          type: string
+        eventKey:
+          type: string
+        hookUrl:
+          type: string
+        status:
+          type: string
+          enum:
+          - Unverified
+          - Verified
+          - Inactive
+    RestHookRequest:
+      type: object
+      properties:
+        eventKey:
+          type: string
+        hookUrl:
+          type: string
+    DefaultHttpStatusCode:
+      allOf:
+      - $ref: '#/components/schemas/HttpStatusCode'
+    View:
+      type: object
+      properties:
+        contentType:
+          type: string
     ModelAndView:
       type: object
       properties:
@@ -723,13 +753,6 @@ components:
           type: boolean
         viewName:
           type: string
-    RestHookRequest:
-      type: object
-      properties:
-        eventKey:
-          type: string
-        hookUrl:
-          type: string
     HttpStatusCode:
       type: object
       properties:
@@ -745,29 +768,6 @@ components:
           type: boolean
         is5xxServerError:
           type: boolean
-    DefaultHttpStatusCode:
-      allOf:
-      - $ref: '#/components/schemas/HttpStatusCode'
-    RestHook:
-      type: object
-      properties:
-        key:
-          type: string
-        eventKey:
-          type: string
-        hookUrl:
-          type: string
-        status:
-          type: string
-          enum:
-          - Unverified
-          - Verified
-          - Inactive
-    View:
-      type: object
-      properties:
-        contentType:
-          type: string
     HttpStatus:
       allOf:
       - $ref: '#/components/schemas/HttpStatusCode'

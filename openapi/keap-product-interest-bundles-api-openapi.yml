@@ -645,6 +645,31 @@ paths:
                 $ref: '#/components/schemas/ProductInterest'
 components:
   schemas:
+    ProductInterestBundle:
+      type: object
+      properties:
+        id:
+          type: string
+          description: The product interest bundle ID
+          example: 123
+        name:
+          type: string
+          description: Product interest bundle name
+          example: Premium Bundle
+        description:
+          type: string
+          description: Product interest bundle description
+          example: Bundle of premium products
+        product_interests:
+          type: array
+          description: Product interests
+          items:
+            $ref: '#/components/schemas/ProductInterest'
+        subscription_plan_interests:
+          type: array
+          description: Subscription plan interests
+          items:
+            $ref: '#/components/schemas/ProductInterest'
     CurrencyValue:
       type: object
       properties:
@@ -661,37 +686,27 @@ components:
           type: string
           description: The product amount formatted using the tenant's currency locale
           example: $100.00
-    ProductInterest:
+    ErrorDetails:
       type: object
       properties:
-        id:
+        domain:
           type: string
-          description: The product interest ID
-          example: 456
-        type:
+        resource:
           type: string
-          description: The product interest type
-          enum:
-          - PRODUCT
-          - SUBSCRIPTION_PLAN
-          example: PRODUCT
-        quantity:
-          type: integer
-          format: int32
-          description: The quantity of product.
-          example: 1
-        price:
-          $ref: '#/components/schemas/CurrencyValue'
-          description: The price per unit of the product.
-        interest_id:
+    CreateProductInterestBundleRequest:
+      type: object
+      properties:
+        name:
           type: string
-          description: The interest ID
-          example: 789
-        discount_percent:
-          type: integer
-          format: int32
-          description: The percent to discount the product. Percent represented in a whole number, for example 10 is 10%
-          example: 10
+          description: Product interest bundle name
+          example: Premium Bundle
+        description:
+          type: string
+          description: Product interest bundle description
+          example: Bundle of premium products
+      required:
+      - description
+      - name
     AddProductInterestRequest:
       type: object
       properties:
@@ -725,72 +740,20 @@ components:
       - entity_id
       - price
       - type
-    ErrorDetails:
+    Error:
       type: object
       properties:
-        domain:
+        code:
+          type: integer
+          format: int32
+        message:
           type: string
-        resource:
+        status:
           type: string
-    CreateProductInterestBundleRequest:
-      type: object
-      properties:
-        name:
-          type: string
-          description: Product interest bundle name
-          example: Premium Bundle
-        description:
-          type: string
-          description: Product interest bundle description
-          example: Bundle of premium products
-      required:
-      - description
-      - name
-    ListProductInterestBundleResponse:
-      type: object
-      properties:
-        product_interest_bundles:
+        details:
           type: array
           items:
-            $ref: '#/components/schemas/ProductInterestBundle'
-        next_page_token:
-          type: string
-    ProductInterestBundle:
-      type: object
-      properties:
-        id:
-          type: string
-          description: The product interest bundle ID
-          example: 123
-        name:
-          type: string
-          description: Product interest bundle name
-          example: Premium Bundle
-        description:
-          type: string
-          description: Product interest bundle description
-          example: Bundle of premium products
-        product_interests:
-          type: array
-          description: Product interests
-          items:
-            $ref: '#/components/schemas/ProductInterest'
-        subscription_plan_interests:
-          type: array
-          description: Subscription plan interests
-          items:
-            $ref: '#/components/schemas/ProductInterest'
-    UpdateProductInterestBundleRequest:
-      type: object
-      properties:
-        name:
-          type: string
-          description: Product interest bundle name
-          example: Premium Bundle
-        description:
-          type: string
-          description: Product interest bundle description
-          example: Bundle of premium products
+            $ref: '#/components/schemas/ErrorDetails'
     UpdateProductInterestRequest:
       type: object
       properties:
@@ -809,20 +772,57 @@ components:
           format: int32
           description: The percent to discount the product.
           example: 10
-    Error:
+    UpdateProductInterestBundleRequest:
       type: object
       properties:
-        code:
+        name:
+          type: string
+          description: Product interest bundle name
+          example: Premium Bundle
+        description:
+          type: string
+          description: Product interest bundle description
+          example: Bundle of premium products
+    ProductInterest:
+      type: object
+      properties:
+        id:
+          type: string
+          description: The product interest ID
+          example: 456
+        type:
+          type: string
+          description: The product interest type
+          enum:
+          - PRODUCT
+          - SUBSCRIPTION_PLAN
+          example: PRODUCT
+        quantity:
           type: integer
           format: int32
-        message:
+          description: The quantity of product.
+          example: 1
+        price:
+          $ref: '#/components/schemas/CurrencyValue'
+          description: The price per unit of the product.
+        interest_id:
           type: string
-        status:
-          type: string
-        details:
+          description: The interest ID
+          example: 789
+        discount_percent:
+          type: integer
+          format: int32
+          description: The percent to discount the product. Percent represented in a whole number, for example 10 is 10%
+          example: 10
+    ListProductInterestBundleResponse:
+      type: object
+      properties:
+        product_interest_bundles:
           type: array
           items:
-            $ref: '#/components/schemas/ErrorDetails'
+            $ref: '#/components/schemas/ProductInterestBundle'
+        next_page_token:
+          type: string
   securitySchemes:
     oauth2:
       type: oauth2

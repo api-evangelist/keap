@@ -1,10 +1,18 @@
 {
   "provider": "keap",
   "sources": [
+    "_original/keap-pipelines-openapi-original.yml",
     "_original/keap-v1-openapi.json",
-    "_original/keap-v2-openapi.json"
+    "_original/keap-v2-openapi.json",
+    "keap-user-info-api-openapi.yml"
   ],
   "outputs": [
+    "keap-custom-fields-api-openapi.yml",
+    "keap-dateexpression-api-openapi.yml",
+    "keap-deals-api-openapi.yml",
+    "keap-display-forms-api-openapi.yml",
+    "keap-pipelines-api-openapi.yml",
+    "keap-stages-api-openapi.yml",
     "keap-account-info-api-openapi.yml",
     "keap-affiliate-api-openapi.yml",
     "keap-appointment-api-openapi.yml",
@@ -55,16 +63,26 @@
     "keap-subscription-plans-api-openapi.yml",
     "keap-subscriptions-api-openapi.yml",
     "keap-user-groups-api-openapi.yml",
-    "keap-webforms-api-openapi.yml"
+    "keap-webforms-api-openapi.yml",
+    "keap-user-info-api-openapi.yml"
   ],
   "archived": [
     "deleted 1 superseded output(s) from the previous generation"
   ],
   "errors": [],
-  "warnings": [],
+  "warnings": [
+    "keap-user-info-api-openapi.yml: previously refined output kept for 1 operation(s) no archived document covers (e.g. /v1/oauth/connect/userinfo get); its other 0 operation(s) came from the archive and were dropped from it. The archive is incomplete for this provider \u2014 re-harvest to restore _original/ as the full source of truth."
+  ],
   "notes": [
     "5 archived document(s) dropped as subsets of other archived documents",
-    "sourced from openapi/_original/ (2 archived document(s)); previously refined output at the top level was skipped rather than re-split",
+    "sourced from openapi/_original/ (3 archived document(s)); previously refined output at the top level was skipped rather than re-split",
+    "keap-pipelines-openapi-original.yml: upgraded openapi 3.0.1 -> OpenAPI 3.2.0",
+    "keap-pipelines-openapi-original.yml: declared missing tag: Custom Fields",
+    "keap-pipelines-openapi-original.yml: declared missing tag: DateExpression",
+    "keap-pipelines-openapi-original.yml: declared missing tag: Deals",
+    "keap-pipelines-openapi-original.yml: declared missing tag: Display Forms",
+    "keap-pipelines-openapi-original.yml: declared missing tag: Pipelines",
+    "keap-pipelines-openapi-original.yml: declared missing tag: Stages",
     "keap-v1-openapi.json: upgraded openapi 3.1.0 -> OpenAPI 3.2.0",
     "keap-v2-openapi.json: upgraded openapi 3.1.0 -> OpenAPI 3.2.0",
     "keap-v2-openapi.json: declared missing tag: Affiliate",
@@ -123,7 +141,7 @@
     "tag 'Task' spans 2 source specs (keap-v1-openapi.json, keap-v2-openapi.json): per-path servers applied",
     "tag 'Users' spans 2 source specs (keap-v1-openapi.json, keap-v2-openapi.json): per-path servers applied",
     "superseded outputs removed: keap-ecommerce-api-openapi.yml",
-    "apis.yml register: written (+1 apis, 51 total)"
+    "apis.yml register: written (+1 apis, 59 total)"
   ],
   "skipped": [
     "_original/keap-rest-hooks-v1-api-openapi.yml: archived document superseded by a larger archived document",
@@ -141,6 +159,10 @@
     "keap-category-discounts-api-openapi.yml: previously refined output, superseded by openapi/_original/",
     "keap-company-api-openapi.yml: previously refined output, superseded by openapi/_original/",
     "keap-contact-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "keap-custom-fields-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "keap-dateexpression-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "keap-deals-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "keap-display-forms-api-openapi.yml: previously refined output, superseded by openapi/_original/",
     "keap-ecommerce-api-openapi.yml: previously refined output, superseded by openapi/_original/",
     "keap-email-address-api-openapi.yml: previously refined output, superseded by openapi/_original/",
     "keap-email-api-openapi.yml: previously refined output, superseded by openapi/_original/",
@@ -162,6 +184,7 @@
     "keap-orders-api-openapi.yml: previously refined output, superseded by openapi/_original/",
     "keap-payment-method-configs-api-openapi.yml: previously refined output, superseded by openapi/_original/",
     "keap-payment-methods-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "keap-pipelines-api-openapi.yml: previously refined output, superseded by openapi/_original/",
     "keap-product-api-openapi.yml: previously refined output, superseded by openapi/_original/",
     "keap-product-categories-api-openapi.yml: previously refined output, superseded by openapi/_original/",
     "keap-product-discounts-api-openapi.yml: previously refined output, superseded by openapi/_original/",
@@ -175,6 +198,7 @@
     "keap-settings-api-openapi.yml: previously refined output, superseded by openapi/_original/",
     "keap-shipping-api-openapi.yml: previously refined output, superseded by openapi/_original/",
     "keap-shipping-discounts-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "keap-stages-api-openapi.yml: previously refined output, superseded by openapi/_original/",
     "keap-subscription-plans-api-openapi.yml: previously refined output, superseded by openapi/_original/",
     "keap-subscriptions-api-openapi.yml: previously refined output, superseded by openapi/_original/",
     "keap-tags-api-openapi.yml: previously refined output, superseded by openapi/_original/",

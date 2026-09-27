@@ -442,29 +442,13 @@ paths:
     - url: https://api.infusionsoft.com/crm
 components:
   schemas:
-    ModelAndView:
+    DefaultHttpStatusCode:
+      allOf:
+      - $ref: '#/components/schemas/HttpStatusCode'
+    View:
       type: object
       properties:
-        view:
-          $ref: '#/components/schemas/View'
-        model:
-          type: object
-          additionalProperties: {}
-        status:
-          oneOf:
-          - $ref: '#/components/schemas/DefaultHttpStatusCode'
-          - $ref: '#/components/schemas/HttpStatus'
-        modelMap:
-          type: object
-          additionalProperties: {}
-          properties:
-            empty:
-              type: boolean
-        reference:
-          type: boolean
-        empty:
-          type: boolean
-        viewName:
+        contentType:
           type: string
     RestEmailAddress:
       type: object
@@ -497,6 +481,30 @@ components:
       - email
       - opted_in
       - status
+    ModelAndView:
+      type: object
+      properties:
+        view:
+          $ref: '#/components/schemas/View'
+        model:
+          type: object
+          additionalProperties: {}
+        status:
+          oneOf:
+          - $ref: '#/components/schemas/DefaultHttpStatusCode'
+          - $ref: '#/components/schemas/HttpStatus'
+        modelMap:
+          type: object
+          additionalProperties: {}
+          properties:
+            empty:
+              type: boolean
+        reference:
+          type: boolean
+        empty:
+          type: boolean
+        viewName:
+          type: string
     HttpStatusCode:
       type: object
       properties:
@@ -512,24 +520,6 @@ components:
           type: boolean
         is5xxServerError:
           type: boolean
-    DefaultHttpStatusCode:
-      allOf:
-      - $ref: '#/components/schemas/HttpStatusCode'
-    UpdateEmailAddress:
-      type: object
-      properties:
-        reason:
-          type: string
-        opted_in:
-          type: boolean
-      required:
-      - opted_in
-      - reason
-    View:
-      type: object
-      properties:
-        contentType:
-          type: string
     HttpStatus:
       allOf:
       - $ref: '#/components/schemas/HttpStatusCode'
@@ -598,6 +588,25 @@ components:
       - 509 BANDWIDTH_LIMIT_EXCEEDED
       - 510 NOT_EXTENDED
       - 511 NETWORK_AUTHENTICATION_REQUIRED
+    UpdateEmailAddress:
+      type: object
+      properties:
+        reason:
+          type: string
+        opted_in:
+          type: boolean
+      required:
+      - opted_in
+      - reason
+    ListEmailAddressStatusResponse:
+      type: object
+      properties:
+        email_addresses:
+          type: array
+          items:
+            $ref: '#/components/schemas/RestEmailAddressStatus'
+        next_page_token:
+          type: string
     RestEmailAddressStatus:
       type: object
       description: Email address opt-in status information
@@ -664,15 +673,20 @@ components:
           type: string
         resource:
           type: string
-    ListEmailAddressStatusResponse:
+    Error:
       type: object
       properties:
-        email_addresses:
+        code:
+          type: integer
+          format: int32
+        message:
+          type: string
+        status:
+          type: string
+        details:
           type: array
           items:
-            $ref: '#/components/schemas/RestEmailAddressStatus'
-        next_page_token:
-          type: string
+            $ref: '#/components/schemas/ErrorDetails'
     UpdateEmailAddress_2:
       type: object
       description: Request to update email address opt-in status
@@ -688,20 +702,6 @@ components:
       required:
       - opted_in
       - reason
-    Error:
-      type: object
-      properties:
-        code:
-          type: integer
-          format: int32
-        message:
-          type: string
-        status:
-          type: string
-        details:
-          type: array
-          items:
-            $ref: '#/components/schemas/ErrorDetails'
   securitySchemes:
     oauth2:
       type: oauth2

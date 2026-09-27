@@ -431,6 +431,135 @@ paths:
                 $ref: '#/components/schemas/FileInformation'
 components:
   schemas:
+    DefaultHttpStatusCode:
+      allOf:
+      - $ref: '#/components/schemas/HttpStatusCode'
+    View:
+      type: object
+      properties:
+        contentType:
+          type: string
+    FileInformation:
+      type: object
+      properties:
+        file_descriptor:
+          $ref: '#/components/schemas/FileDescriptor'
+        file_data:
+          type: string
+    FileQueryCommand:
+      type: object
+      properties:
+        limit:
+          type: integer
+          format: int32
+        offset:
+          type: integer
+          format: int32
+        viewable:
+          type: string
+          enum:
+          - PUBLIC
+          - PRIVATE
+          - BOTH
+        permission:
+          type: string
+          enum:
+          - USER
+          - COMPANY
+          - BOTH
+        type:
+          type: string
+          enum:
+          - Application
+          - Image
+          - Fax
+          - Attachment
+          - Ticket
+          - Contact
+          - DigitalProduct
+          - Import
+          - Hidden
+          - WebForm
+          - StyledCart
+          - ReSampledImage
+          - TemplateThumbnail
+          - Funnel
+          - LogoThumbnail
+          - Unlayer
+          - BrandingCenterLogo
+        name:
+          type: string
+        contact_id:
+          type: integer
+          format: int64
+        contactId:
+          type: integer
+          format: int64
+    ModelAndView:
+      type: object
+      properties:
+        view:
+          $ref: '#/components/schemas/View'
+        model:
+          type: object
+          additionalProperties: {}
+        status:
+          oneOf:
+          - $ref: '#/components/schemas/DefaultHttpStatusCode'
+          - $ref: '#/components/schemas/HttpStatus'
+        modelMap:
+          type: object
+          additionalProperties: {}
+          properties:
+            empty:
+              type: boolean
+        reference:
+          type: boolean
+        empty:
+          type: boolean
+        viewName:
+          type: string
+    HttpStatusCode:
+      type: object
+      properties:
+        error:
+          type: boolean
+        is1xxInformational:
+          type: boolean
+        is2xxSuccessful:
+          type: boolean
+        is3xxRedirection:
+          type: boolean
+        is4xxClientError:
+          type: boolean
+        is5xxServerError:
+          type: boolean
+    FileUpload:
+      type: object
+      description: fileUpload
+      properties:
+        file_name:
+          type: string
+          writeOnly: true
+        file_data:
+          type: string
+          writeOnly: true
+        contact_id:
+          type: integer
+          format: int64
+          writeOnly: true
+        is_public:
+          type: boolean
+          writeOnly: true
+        file_association:
+          type: string
+          enum:
+          - CONTACT
+          - USER
+          - COMPANY
+          writeOnly: true
+        public:
+          type: boolean
     FileDescriptor:
       type: object
       properties:
@@ -489,78 +618,19 @@ components:
           - BrandingCenterLogo
         download_url:
           type: string
-    ModelAndView:
+    FileList:
       type: object
       properties:
-        view:
-          $ref: '#/components/schemas/View'
-        model:
-          type: object
-          additionalProperties: {}
-        status:
-          oneOf:
-          - $ref: '#/components/schemas/DefaultHttpStatusCode'
-          - $ref: '#/components/schemas/HttpStatus'
-        modelMap:
-          type: object
-          additionalProperties: {}
-          properties:
-            empty:
-              type: boolean
-        reference:
-          type: boolean
-        empty:
-          type: boolean
-        viewName:
-          type: string
-    HttpStatusCode:
-      type: object
-      properties:
-        error:
-          type: boolean
-        is1xxInformational:
-          type: boolean
-        is2xxSuccessful:
-          type: boolean
-        is3xxRedirection:
-          type: boolean
-        is4xxClientError:
-          type: boolean
-        is5xxServerError:
-          type: boolean
-    DefaultHttpStatusCode:
-      allOf:
-      - $ref: '#/components/schemas/HttpStatusCode'
-    FileUpload:
-      type: object
-      description: fileUpload
-      properties:
-        file_name:
-          type: string
-          writeOnly: true
-        file_data:
-          type: string
-          writeOnly: true
-        contact_id:
+        files:
+          type: array
+          items:
+            $ref: '#/components/schemas/FileDescriptor'
+        count:
           type: integer
-          format: int64
-          writeOnly: true
-        is_public:
-          type: boolean
-          writeOnly: true
-        file_association:
+          format: int32
+        next:
           type: string
-          enum:
-          - CONTACT
-          - USER
-          - COMPANY
-          writeOnly: true
-        public:
-          type: boolean
-    View:
-      type: object
-      properties:
-        contentType:
+        previous:
           type: string
     HttpStatus:
       allOf:
@@ -630,76 +700,6 @@ components:
       - 509 BANDWIDTH_LIMIT_EXCEEDED
       - 510 NOT_EXTENDED
       - 511 NETWORK_AUTHENTICATION_REQUIRED
-    FileQueryCommand:
-      type: object
-      properties:
-        limit:
-          type: integer
-          format: int32
-        offset:
-          type: integer
-          format: int32
-        viewable:
-          type: string
-          enum:
-          - PUBLIC
-          - PRIVATE
-          - BOTH
-        permission:
-          type: string
-          enum:
-          - USER
-          - COMPANY
-          - BOTH
-        type:
-          type: string
-          enum:
-          - Application
-          - Image
-          - Fax
-          - Attachment
-          - Ticket
-          - Contact
-          - DigitalProduct
-          - Import
-          - Hidden
-          - WebForm
-          - StyledCart
-          - ReSampledImage
-          - TemplateThumbnail
-          - Funnel
-          - LogoThumbnail
-          - Unlayer
-          - BrandingCenterLogo
-        name:
-          type: string
-        contact_id:
-          type: integer
-          format: int64
-        contactId:
-          type: integer
-          format: int64
-    FileList:
-      type: object
-      properties:
-        files:
-          type: array
-          items:
-            $ref: '#/components/schemas/FileDescriptor'
-        count:
-          type: integer
-          format: int32
-        next:
-          type: string
-        previous:
-          type: string
-    FileInformation:
-      type: object
-      properties:
-        file_descriptor:
-          $ref: '#/components/schemas/FileDescriptor'
-        file_data:
-          type: string
   securitySchemes:
     oauth2:
       type: oauth2

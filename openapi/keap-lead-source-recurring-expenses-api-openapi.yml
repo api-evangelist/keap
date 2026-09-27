@@ -623,76 +623,6 @@ paths:
                 $ref: '#/components/schemas/ListLeadSourceExpensesResponse'
 components:
   schemas:
-    CurrencyValue:
-      type: object
-      properties:
-        amount:
-          type: integer
-          format: int64
-          description: The price amount in the smallest currency unit
-          example: 10000
-        currency_code:
-          type: string
-          description: Three-letter ISO currency code
-          example: USD
-        formatted_amount:
-          type: string
-          description: The product amount formatted using the tenant's currency locale
-          example: $100.00
-    ListLeadSourceExpensesResponse:
-      type: object
-      properties:
-        lead_source_expenses:
-          type: array
-          description: The lead source expenses in the current page
-          items:
-            $ref: '#/components/schemas/LeadSourceExpense'
-        next_page_token:
-          type: string
-    ListLeadSourceRecurringExpensesResponse:
-      type: object
-      properties:
-        lead_source_recurring_expenses:
-          type: array
-          description: The lead source recurring expenses in the current page
-          items:
-            $ref: '#/components/schemas/LeadSourceRecurringExpense'
-        next_page_token:
-          type: string
-    ErrorDetails:
-      type: object
-      properties:
-        domain:
-          type: string
-        resource:
-          type: string
-    LeadSourceRecurringExpenseUpdateRequest:
-      type: object
-      properties:
-        title:
-          type: string
-          description: The title of the lead source recurring expense
-          example: Monthly Google Ads subscription
-        notes:
-          type: string
-          description: The notes for the lead source recurring expense
-          example: Automated monthly billing
-        amount:
-          type: integer
-          format: int64
-          description: "The monthly cost of the lead source recurring expense.\n The value should be in the smallest unit of currency for your currency locale.\n For example, if your currency locale is USD, then the smallest unit of currency is\n in cents, $225.50 would be provided in the request as 22550."
-          example: 22550
-          minimum: 0
-        start_time:
-          type: string
-          format: date-time
-          description: The time the lead source recurring expense starts
-          example: '2024-01-01T00:00:00Z'
-        end_time:
-          type: string
-          format: date-time
-          description: The time the lead source recurring expense ends
-          example: '2024-12-31T23:59:59Z'
     LeadSourceExpense:
       type: object
       properties:
@@ -734,6 +664,80 @@ components:
           format: date-time
           description: The date the expense was incurred
           example: '2024-03-15T00:00:00Z'
+    LeadSourceRecurringExpenseUpdateRequest:
+      type: object
+      properties:
+        title:
+          type: string
+          description: The title of the lead source recurring expense
+          example: Monthly Google Ads subscription
+        notes:
+          type: string
+          description: The notes for the lead source recurring expense
+          example: Automated monthly billing
+        amount:
+          type: integer
+          format: int64
+          description: "The monthly cost of the lead source recurring expense.\n The value should be in the smallest unit of currency for your currency locale.\n For example, if your currency locale is USD, then the smallest unit of currency is\n in cents, $225.50 would be provided in the request as 22550."
+          example: 22550
+          minimum: 0
+        start_time:
+          type: string
+          format: date-time
+          description: The time the lead source recurring expense starts
+          example: '2024-01-01T00:00:00Z'
+        end_time:
+          type: string
+          format: date-time
+          description: The time the lead source recurring expense ends
+          example: '2024-12-31T23:59:59Z'
+    CurrencyValue:
+      type: object
+      properties:
+        amount:
+          type: integer
+          format: int64
+          description: The price amount in the smallest currency unit
+          example: 10000
+        currency_code:
+          type: string
+          description: Three-letter ISO currency code
+          example: USD
+        formatted_amount:
+          type: string
+          description: The product amount formatted using the tenant's currency locale
+          example: $100.00
+    ErrorDetails:
+      type: object
+      properties:
+        domain:
+          type: string
+        resource:
+          type: string
+    ListLeadSourceExpensesResponse:
+      type: object
+      properties:
+        lead_source_expenses:
+          type: array
+          description: The lead source expenses in the current page
+          items:
+            $ref: '#/components/schemas/LeadSourceExpense'
+        next_page_token:
+          type: string
+    Error:
+      type: object
+      properties:
+        code:
+          type: integer
+          format: int32
+        message:
+          type: string
+        status:
+          type: string
+        details:
+          type: array
+          items:
+            $ref: '#/components/schemas/ErrorDetails'
     LeadSourceRecurringExpense:
       type: object
       properties:
@@ -781,6 +785,16 @@ components:
           format: date-time
           description: The time this lead source recurring expense was last updated
           example: '2024-03-15T10:30:00Z'
+    ListLeadSourceRecurringExpensesResponse:
+      type: object
+      properties:
+        lead_source_recurring_expenses:
+          type: array
+          description: The lead source recurring expenses in the current page
+          items:
+            $ref: '#/components/schemas/LeadSourceRecurringExpense'
+        next_page_token:
+          type: string
     CreateLeadSourceRecurringExpenseRequest:
       type: object
       properties:
@@ -810,20 +824,6 @@ components:
           example: '2024-12-31T23:59:59Z'
       required:
       - amount
-    Error:
-      type: object
-      properties:
-        code:
-          type: integer
-          format: int32
-        message:
-          type: string
-        status:
-          type: string
-        details:
-          type: array
-          items:
-            $ref: '#/components/schemas/ErrorDetails'
   securitySchemes:
     oauth2:
       type: oauth2

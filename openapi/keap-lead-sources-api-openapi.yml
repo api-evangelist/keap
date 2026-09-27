@@ -478,6 +478,13 @@ paths:
                 $ref: '#/components/schemas/LeadSource'
 components:
   schemas:
+    ErrorDetails:
+      type: object
+      properties:
+        domain:
+          type: string
+        resource:
+          type: string
     LeadSource:
       type: object
       properties:
@@ -536,6 +543,30 @@ components:
           format: date-time
           description: The time that this lead source was last updated
           example: '2024-03-15T10:30:00Z'
+    Error:
+      type: object
+      properties:
+        code:
+          type: integer
+          format: int32
+        message:
+          type: string
+        status:
+          type: string
+        details:
+          type: array
+          items:
+            $ref: '#/components/schemas/ErrorDetails'
+    ListLeadSourcesResponse:
+      type: object
+      properties:
+        lead_sources:
+          type: array
+          description: The lead sources in the current page
+          items:
+            $ref: '#/components/schemas/LeadSource'
+        next_page_token:
+          type: string
     CreateLeadSourceRequest:
       type: object
       properties:
@@ -580,37 +611,6 @@ components:
           format: date-time
           description: When the lead source ends
           example: '2024-12-31T23:59:59Z'
-    ErrorDetails:
-      type: object
-      properties:
-        domain:
-          type: string
-        resource:
-          type: string
-    ListLeadSourcesResponse:
-      type: object
-      properties:
-        lead_sources:
-          type: array
-          description: The lead sources in the current page
-          items:
-            $ref: '#/components/schemas/LeadSource'
-        next_page_token:
-          type: string
-    Error:
-      type: object
-      properties:
-        code:
-          type: integer
-          format: int32
-        message:
-          type: string
-        status:
-          type: string
-        details:
-          type: array
-          items:
-            $ref: '#/components/schemas/ErrorDetails'
   securitySchemes:
     oauth2:
       type: oauth2

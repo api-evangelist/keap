@@ -347,6 +347,33 @@ paths:
                 $ref: '#/components/schemas/ReportModel'
 components:
   schemas:
+    ErrorDetails:
+      type: object
+      properties:
+        domain:
+          type: string
+        resource:
+          type: string
+    ReportModel:
+      type: object
+      properties:
+        fields:
+          type: array
+          description: The list of fields available for this Report (Saved Search)
+          items:
+            $ref: '#/components/schemas/ReportField'
+    RunReportRequest:
+      type: object
+      properties:
+        page_token:
+          type: string
+        order_by:
+          type: string
+        page_size:
+          type: integer
+          format: int32
+        fields:
+          type: string
     Error:
       type: object
       properties:
@@ -361,60 +388,6 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/ErrorDetails'
-    ReportModel:
-      type: object
-      properties:
-        fields:
-          type: array
-          description: The list of fields available for this Report (Saved Search)
-          items:
-            $ref: '#/components/schemas/ReportField'
-    ReportField:
-      type: object
-      properties:
-        name:
-          type: string
-          description: The field name as accepted by the report execution `fields` parameter
-          example: Id
-        label:
-          type: string
-          description: The human-readable label for the field
-          example: ID
-    ErrorDetails:
-      type: object
-      properties:
-        domain:
-          type: string
-        resource:
-          type: string
-    Report:
-      type: object
-      properties:
-        id:
-          type: string
-          description: The unique identifier of the report (Saved Search)
-          example: 123
-        name:
-          type: string
-          description: The name of the report
-          example: Monthly Sales Report
-        updated_time:
-          type: string
-          description: The last update timestamp
-          example: '2024-01-15T10:30:00Z'
-        created_time:
-          type: string
-          description: The creation timestamp
-          example: '2024-01-01T08:00:00Z'
-        user_ids:
-          type: array
-          description: A list of Users who have access to this Saved Search, or ALL_USERS if visible to all
-          example:
-          - '1'
-          - '2'
-          - ALL_USERS
-          items:
-            type: string
     ListReportsResponse:
       type: object
       properties:
@@ -456,18 +429,45 @@ components:
           type: string
           description: The value of the field
           example: john.smith@example.com
-    RunReportRequest:
+    ReportField:
       type: object
       properties:
-        page_token:
+        name:
           type: string
-        order_by:
+          description: The field name as accepted by the report execution `fields` parameter
+          example: Id
+        label:
           type: string
-        page_size:
-          type: integer
-          format: int32
-        fields:
+          description: The human-readable label for the field
+          example: ID
+    Report:
+      type: object
+      properties:
+        id:
           type: string
+          description: The unique identifier of the report (Saved Search)
+          example: 123
+        name:
+          type: string
+          description: The name of the report
+          example: Monthly Sales Report
+        updated_time:
+          type: string
+          description: The last update timestamp
+          example: '2024-01-15T10:30:00Z'
+        created_time:
+          type: string
+          description: The creation timestamp
+          example: '2024-01-01T08:00:00Z'
+        user_ids:
+          type: array
+          description: A list of Users who have access to this Saved Search, or ALL_USERS if visible to all
+          example:
+          - '1'
+          - '2'
+          - ALL_USERS
+          items:
+            type: string
   securitySchemes:
     oauth2:
       type: oauth2

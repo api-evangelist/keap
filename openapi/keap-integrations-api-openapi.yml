@@ -287,22 +287,6 @@ paths:
           description: No Content
 components:
   schemas:
-    ErrorDetails:
-      type: object
-      properties:
-        domain:
-          type: string
-        resource:
-          type: string
-    ListWordPressOptInOptionsResponse:
-      type: object
-      properties:
-        wordpress_opt_in_options:
-          type: array
-          items:
-            $ref: '#/components/schemas/WordPressOptInOption'
-        next_page_token:
-          type: string
     WordPressOptInOption:
       type: object
       properties:
@@ -310,6 +294,34 @@ components:
           type: string
         name:
           type: string
+    ErrorDetails:
+      type: object
+      properties:
+        domain:
+          type: string
+        resource:
+          type: string
+    Error:
+      type: object
+      properties:
+        code:
+          type: integer
+          format: int32
+        message:
+          type: string
+        status:
+          type: string
+        details:
+          type: array
+          items:
+            $ref: '#/components/schemas/ErrorDetails'
+    AchieveIntegrationsWordPressOptInOptionGoalRequest:
+      type: object
+      properties:
+        contact_id:
+          type: string
+          description: The Contact Id to Opt-In
+          example: d05dc112-3c92-4aaf-b2fa-00cc6cb452ec
     CreateIntegrationsWordPressOptInOption:
       type: object
       properties:
@@ -326,27 +338,15 @@ components:
       properties:
         successful:
           type: boolean
-    AchieveIntegrationsWordPressOptInOptionGoalRequest:
+    ListWordPressOptInOptionsResponse:
       type: object
       properties:
-        contact_id:
-          type: string
-          description: The Contact Id to Opt-In
-          example: d05dc112-3c92-4aaf-b2fa-00cc6cb452ec
-    Error:
-      type: object
-      properties:
-        code:
-          type: integer
-          format: int32
-        message:
-          type: string
-        status:
-          type: string
-        details:
+        wordpress_opt_in_options:
           type: array
           items:
-            $ref: '#/components/schemas/ErrorDetails'
+            $ref: '#/components/schemas/WordPressOptInOption'
+        next_page_token:
+          type: string
   securitySchemes:
     oauth2:
       type: oauth2

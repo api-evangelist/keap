@@ -256,7 +256,7 @@ paths:
       - Locale
       summary: List Countries
       description: Retrieves a list of countries
-      operationId: listCountries
+      operationId: getRestV2LocalesCountries
       responses:
         '401':
           description: Unauthorized
@@ -312,6 +312,8 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ListCountriesResponse'
+      x-operation-id-source: normalized
+      x-operation-id-original: listCountries
     servers:
     - url: https://api.infusionsoft.com/crm
   /rest/v2/locales/countries/{country_code}:
@@ -534,6 +536,47 @@ paths:
     - url: https://api.infusionsoft.com/crm
 components:
   schemas:
+    DefaultHttpStatusCode:
+      allOf:
+      - $ref: '#/components/schemas/HttpStatusCode'
+    View:
+      type: object
+      properties:
+        contentType:
+          type: string
+    RestDefaultOptionsResponse:
+      type: object
+      properties:
+        contact_types:
+          type: array
+          items:
+            type: string
+        title_types:
+          type: array
+          items:
+            type: string
+        suffix_types:
+          type: array
+          items:
+            type: string
+        phone_types:
+          type: array
+          items:
+            type: string
+        fax_types:
+          type: array
+          items:
+            type: string
+    ProvincesByCode:
+      type: object
+      properties:
+        provinces:
+          type: object
+          additionalProperties:
+            type: string
+          description: A key-value pair of province code and province name.
+      required:
+      - provinces
     ModelAndView:
       type: object
       properties:
@@ -558,16 +601,6 @@ components:
           type: boolean
         viewName:
           type: string
-    ProvincesByCode:
-      type: object
-      properties:
-        provinces:
-          type: object
-          additionalProperties:
-            type: string
-          description: A key-value pair of province code and province name.
-      required:
-      - provinces
     HttpStatusCode:
       type: object
       properties:
@@ -583,14 +616,16 @@ components:
           type: boolean
         is5xxServerError:
           type: boolean
-    DefaultHttpStatusCode:
-      allOf:
-      - $ref: '#/components/schemas/HttpStatusCode'
-    View:
+    CountriesByCode:
       type: object
       properties:
-        contentType:
-          type: string
+        countries:
+          type: object
+          additionalProperties:
+            type: string
+          description: A key-value pair of country code and country name.
+      required:
+      - countries
     HttpStatus:
       allOf:
       - $ref: '#/components/schemas/HttpStatusCode'
@@ -659,39 +694,51 @@ components:
       - 509 BANDWIDTH_LIMIT_EXCEEDED
       - 510 NOT_EXTENDED
       - 511 NETWORK_AUTHENTICATION_REQUIRED
-    CountriesByCode:
+    ListCountriesResponse:
       type: object
       properties:
         countries:
-          type: object
-          additionalProperties:
-            type: string
+          type: array
           description: A key-value pair of country code and country name.
+          items:
+            $ref: '#/components/schemas/Country'
+        next_page_token:
+          type: string
       required:
       - countries
-    RestDefaultOptionsResponse:
+    ErrorDetails:
       type: object
       properties:
-        contact_types:
+        domain:
+          type: string
+        resource:
+          type: string
+    ListProvincesResponse:
+      type: object
+      properties:
+        provinces:
+          type: array
+          description: A key-value pair of province code and province name.
+          items:
+            $ref: '#/components/schemas/Province'
+        next_page_token:
+          type: string
+      required:
+      - provinces
+    Error:
+      type: object
+      properties:
+        code:
+          type: integer
+          format: int32
+        message:
+          type: string
+        status:
+          type: string
+        details:
           type: array
           items:
-            type: string
-        title_types:
-          type: array
-          items:
-            type: string
-        suffix_types:
-          type: array
-          items:
-            type: string
-        phone_types:
-          type: array
-          items:
-            type: string
-        fax_types:
-          type: array
-          items:
-            type: string
+            $ref: '#/components/schemas/ErrorDetails'
     CountryCodes:
       type: object
       properties:
@@ -708,13 +755,6 @@ components:
           type: string
         country:
           type: string
-    ErrorDetails:
-      type: object
-      properties:
-        domain:
-          type: string
-        resource:
-          type: string
     Country:
       type: object
       properties:
@@ -722,44 +762,6 @@ components:
           $ref: '#/components/schemas/CountryCodes'
         name:
           type: string
-    ListProvincesResponse:
-      type: object
-      properties:
-        provinces:
-          type: array
-          description: A key-value pair of province code and province name.
-          items:
-            $ref: '#/components/schemas/Province'
-        next_page_token:
-          type: string
-      required:
-      - provinces
-    ListCountriesResponse:
-      type: object
-      properties:
-        countries:
-          type: array
-          description: A key-value pair of country code and country name.
-          items:
-            $ref: '#/components/schemas/Country'
-        next_page_token:
-          type: string
-      required:
-      - countries
-    Error:
-      type: object
-      properties:
-        code:
-          type: integer
-          format: int32
-        message:
-          type: string
-        status:
-          type: string
-        details:
-          type: array
-          items:
-            $ref: '#/components/schemas/ErrorDetails'
   securitySchemes:
     oauth2:
       type: oauth2

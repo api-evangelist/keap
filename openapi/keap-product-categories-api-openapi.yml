@@ -760,6 +760,16 @@ paths:
                 $ref: '#/components/schemas/ListAssignedProductsResponse'
 components:
   schemas:
+    AssignProductsRequest:
+      type: object
+      properties:
+        product_ids:
+          type: array
+          items:
+            type: string
+          uniqueItems: true
+      required:
+      - product_ids
     ProductCategory:
       type: object
       properties:
@@ -780,6 +790,27 @@ components:
           type: string
           description: Parent category ID for subcategories
           example: 2
+    ErrorDetails:
+      type: object
+      properties:
+        domain:
+          type: string
+        resource:
+          type: string
+    Error:
+      type: object
+      properties:
+        code:
+          type: integer
+          format: int32
+        message:
+          type: string
+        status:
+          type: string
+        details:
+          type: array
+          items:
+            $ref: '#/components/schemas/ErrorDetails'
     AssignedProducts:
       type: object
       properties:
@@ -801,39 +832,15 @@ components:
             $ref: '#/components/schemas/ProductCategory'
         next_page_token:
           type: string
-    ErrorDetails:
+    ListAssignedProductsResponse:
       type: object
       properties:
-        domain:
-          type: string
-        resource:
-          type: string
-    UpdateProductCategoryRequest:
-      type: object
-      properties:
-        name:
-          type: string
-          description: The category name
-          example: Electronics
-        display_order_index:
-          type: integer
-          format: int32
-          description: Display order of the category
-          example: 0
-        parent_category_id:
-          type: string
-          description: Parent category ID for subcategories
-          example: 2
-    AssignProductsRequest:
-      type: object
-      properties:
-        product_ids:
+        assigned_product_categories:
           type: array
           items:
-            type: string
-          uniqueItems: true
-      required:
-      - product_ids
+            $ref: '#/components/schemas/AssignedProducts'
+        next_page_token:
+          type: string
     CreateProductCategoryRequest:
       type: object
       description: productCategory
@@ -853,29 +860,22 @@ components:
           example: 2
       required:
       - name
-    ListAssignedProductsResponse:
+    UpdateProductCategoryRequest:
       type: object
       properties:
-        assigned_product_categories:
-          type: array
-          items:
-            $ref: '#/components/schemas/AssignedProducts'
-        next_page_token:
+        name:
           type: string
-    Error:
-      type: object
-      properties:
-        code:
+          description: The category name
+          example: Electronics
+        display_order_index:
           type: integer
           format: int32
-        message:
+          description: Display order of the category
+          example: 0
+        parent_category_id:
           type: string
-        status:
-          type: string
-        details:
-          type: array
-          items:
-            $ref: '#/components/schemas/ErrorDetails'
+          description: Parent category ID for subcategories
+          example: 2
   securitySchemes:
     oauth2:
       type: oauth2

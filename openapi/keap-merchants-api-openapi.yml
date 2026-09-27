@@ -143,6 +143,31 @@ paths:
                 $ref: '#/components/schemas/ListMerchantsResponse'
 components:
   schemas:
+    Error:
+      type: object
+      properties:
+        code:
+          type: integer
+          format: int32
+        message:
+          type: string
+        status:
+          type: string
+        details:
+          type: array
+          items:
+            $ref: '#/components/schemas/ErrorDetails'
+    ListMerchantsResponse:
+      type: object
+      properties:
+        default_merchant_account_id:
+          type: string
+        merchant_accounts:
+          type: array
+          items:
+            $ref: '#/components/schemas/ListMerchantAccountResponse'
+        next_page_token:
+          type: string
     ErrorDetails:
       type: object
       properties:
@@ -169,31 +194,6 @@ components:
           - KEAP_PAY
         is_test:
           type: boolean
-    ListMerchantsResponse:
-      type: object
-      properties:
-        default_merchant_account_id:
-          type: string
-        merchant_accounts:
-          type: array
-          items:
-            $ref: '#/components/schemas/ListMerchantAccountResponse'
-        next_page_token:
-          type: string
-    Error:
-      type: object
-      properties:
-        code:
-          type: integer
-          format: int32
-        message:
-          type: string
-        status:
-          type: string
-        details:
-          type: array
-          items:
-            $ref: '#/components/schemas/ErrorDetails'
   securitySchemes:
     oauth2:
       type: oauth2

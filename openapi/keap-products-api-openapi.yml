@@ -1419,84 +1419,6 @@ paths:
                 format: byte
 components:
   schemas:
-    ProductOptions_Detail:
-      type: object
-      properties:
-        name:
-          type: string
-          description: The option name
-          example: Color
-        type:
-          type: string
-          description: The option type. If FIXED, then fixed_options will be returned. If VARIABLE, then variable_setting will be returned.
-          enum:
-          - FIXED
-          - VARIABLE
-          example: FIXED
-        required:
-          type: boolean
-          description: If the user is required to select/fill in an option for the product
-          example: true
-        fixed_options:
-          type: array
-          description: List of option values for the fixed option
-          items:
-            $ref: '#/components/schemas/ProductFixedOption_Detail'
-        variable_setting:
-          $ref: '#/components/schemas/ProductVariableSetting_Detail'
-          description: The option is a user-defined free-form field. The settings define the restrictions on what can be entered.
-    TextOption:
-      type: object
-      properties:
-        minimum_characters:
-          type: integer
-          format: int32
-          description: Minimum allowable characters. Minimum is 0.
-        maximum_characters:
-          type: integer
-          format: int32
-          description: Maximum allowable characters. Minimum is 0.
-        allow_spaces:
-          type: boolean
-          description: Whether or not to allow whitespace in the text.
-        only_starts_with:
-          type: string
-          description: Restricts the text to start with certain character types. Valid values are NONE, LETTER, DIGIT, BOTH.
-          enum:
-          - NONE
-          - LETTER
-          - DIGIT
-          - BOTH
-        only_ends_with:
-          type: string
-          description: Restricts the text to end with certain character types. Valid values are NONE, LETTER, DIGIT, BOTH.
-          enum:
-          - NONE
-          - LETTER
-          - DIGIT
-          - BOTH
-        only_contains:
-          type: string
-          description: Restricts the text to contain certain character types. Valid values are NONE, LETTER, DIGIT, BOTH.
-          enum:
-          - NONE
-          - LETTER
-          - DIGIT
-          - BOTH
-        error_message:
-          type: string
-          description: An error message to display if any rules are broken.
-    UpdateProductInventoryRequest_Detail:
-      type: object
-      properties:
-        type:
-          type: string
-          enum:
-          - INCREASE
-          - DECREASE
-        quantity:
-          type: integer
-          format: int32
     RestV2Product_List:
       type: object
       properties:
@@ -1594,47 +1516,87 @@ components:
           type: string
         update_time:
           type: string
-    ProductOption:
+    ProductFixedOption_Detail:
       type: object
       properties:
-        id:
+        value:
           type: string
-          description: The unique id of the product option
-        required:
-          type: boolean
-          description: Whether this option is required for product purchase.
-        option_label:
+          description: The displayable label given to the option
+          example: Red
+        code:
           type: string
-          description: The displayable name of the option. E.g. Size
-        product_id:
+          description: An internal code to reference the option value
+          example: RED
+        price_adjustment:
+          type: number
+          format: double
+          description: Positive value indicates additional amount added to the original price. Negative value indicates subtraction from the original price.
+          example: 500
+    CurrencyValue_Detail:
+      type: object
+      properties:
+        amount:
+          type: integer
+          format: int64
+          description: The price amount in the smallest currency unit
+          example: 10000
+        currency_code:
           type: string
-          description: The product id that this option belongs to.
-        option_type:
+          description: Three-letter ISO currency code
+          example: USD
+        formatted_amount:
           type: string
-          description: The type of option. Possible valid values are LIST and TEXT.
-          enum:
-          - LIST
-          - TEXT
-        display_order:
+          description: The product amount formatted using the tenant's currency locale
+          example: $100.00
+    ListProductOptionsResponse:
+      type: object
+      properties:
+        product_options:
+          type: array
+          items:
+            $ref: '#/components/schemas/ProductOption'
+    ListOption:
+      type: object
+      properties:
+        item_id:
+          type: string
+          description: The unique id of this option’s item value.
+        item_label:
+          type: string
+          description: The displayable name of the option item.
+        item_code:
+          type: string
+          description: An internal code (e.g. sku) to associate the item option.
+        item_display_order:
+          type: integer
+          format: int64
+          description: The order in which this item will be displayed among other items. Minimum is 0. Lower values indicate higher priority in order.
+        price_adjustment:
+          type: number
+          format: double
+          description: An amount to adjust to the product price is selected. Negative value indicates subtraction from price.
+    ProductInventory_Detail:
+      type: object
+      properties:
+        inventory_limit:
           type: integer
           format: int32
-          description: The order in which this option will be displayed among other options. Minimum is 0. Lower values indicate higher priority in order.
-        list_items:
-          type: array
-          description: Appears only for option_type of LIST. A fixed list of available selectable items for this product option. e.g (Medium)
-          items:
-            $ref: '#/components/schemas/ListOption'
-        text_rules:
-          $ref: '#/components/schemas/TextOption'
-          description: The option is a user-defined free-form field. The settings define the restrictions on what can be entered.
-    ErrorDetails:
-      type: object
-      properties:
-        domain:
+          description: The inventory limit for this product. Must be greater than or equal to 0.
+          example: 100
+        inventory_count:
+          type: integer
+          format: int32
+          description: The current inventory count for this product. Must be greater than or equal to 0. This field is omitted in List responses.
+          example: 75
+        out_of_stock_enabled:
+          type: boolean
+          description: The flag to enable out of stock inventory
+          example: false
+        email_for_inventory_notifications:
           type: string
-        resource:
-          type: string
-    CreateProductOptionListOption:
+          description: The email address for notifications about inventory
+          example: notify@example.com
+    UpdateProductOptionListOption:
       type: object
       properties:
         item_label:
@@ -1651,22 +1613,6 @@ components:
           type: number
           format: double
           description: An amount to adjust to the product price is selected. Negative value indicates subtraction from price.
-    CurrencyValue_List:
-      type: object
-      properties:
-        amount:
-          type: integer
-          format: int64
-          description: The price amount in the smallest currency unit
-          example: 10000
-        currency_code:
-          type: string
-          description: Three-letter ISO currency code
-          example: USD
-        formatted_amount:
-          type: string
-          description: The product amount formatted using the tenant's currency locale
-          example: $100.00
     UpdateProductRequest_Detail:
       type: object
       properties:
@@ -1751,192 +1697,6 @@ components:
           type: boolean
         delivery_description:
           type: string
-    ProductVariableSetting_List:
-      type: object
-      properties:
-        contains:
-          type: string
-          description: Requires the value (excluding start and end) to contain given type.
-          enum:
-          - LETTER
-          - NUMBER
-          - BOTH
-          example: BOTH
-        min_chars:
-          type: integer
-          format: int32
-          description: Minimum allowable characters
-          example: 1
-        max_chars:
-          type: integer
-          format: int32
-          description: Max allowable chars. Its value must be greater than min_chars
-          example: 50
-        contain_spaces:
-          type: boolean
-          description: If spaces are allowed for the option
-          example: true
-        start_with:
-          type: string
-          description: Requires the value to start with the given type.
-          enum:
-          - LETTER
-          - NUMBER
-          - BOTH
-          example: LETTER
-        end_with:
-          type: string
-          description: Requires the value to end with the given type.
-          enum:
-          - LETTER
-          - NUMBER
-          - BOTH
-          example: LETTER
-        validation_msg:
-          type: string
-          description: Customized validation message to display when option criteria aren't met
-          example: Invalid input format
-    UpdateProductOptionRequest:
-      type: object
-      properties:
-        required:
-          type: boolean
-          description: Whether this option is required for product purchase.
-        option_label:
-          type: string
-          description: The displayable name of the option (e.g. Size). Cannot be whitespace only.
-        display_order:
-          type: integer
-          format: int32
-          description: The order in which this option will be displayed among other options. Minimum is 0. Lower values indicate higher priority in order.
-        minimum_characters:
-          type: integer
-          format: int32
-          description: Used only for option_type of `TEXT`. Minimum allowable characters. Minimum is 0.
-        maximum_characters:
-          type: integer
-          format: int32
-          description: Used only for option_type of `TEXT`. Maximum allowable characters. Minimum is 0.
-        allow_spaces:
-          type: boolean
-          description: Used only for option_type of `TEXT`. Whether or not to allow whitespace in the text.
-        only_starts_with:
-          type: string
-          description: Used only for option_type of `TEXT`.  Restricts the text to start with certain character types. Valid values are NONE, LETTER, DIGIT, BOTH.
-          enum:
-          - NONE
-          - LETTER
-          - DIGIT
-          - BOTH
-        only_ends_with:
-          type: string
-          description: Used only for option_type of `TEXT`. Restricts the text to end with certain character types. Valid values are NONE, LETTER, DIGIT, BOTH.
-          enum:
-          - NONE
-          - LETTER
-          - DIGIT
-          - BOTH
-        only_contains:
-          type: string
-          description: Used only for option_type of `TEXT`. Restricts the text to contain certain character types. Valid values are NONE, LETTER, DIGIT, BOTH.
-          enum:
-          - NONE
-          - LETTER
-          - DIGIT
-          - BOTH
-        error_message:
-          type: string
-          description: Used only for option_type of `TEXT`. An error message to display if any rules are broken. Cannot be whitespace only.
-    SubscriptionPlan_Detail:
-      type: object
-      properties:
-        id:
-          type: string
-          description: The subscription plan id
-          example: 1
-        active:
-          type: boolean
-          description: If the subscription plan should be active/available for purchase
-          example: true
-        prorate:
-          type: boolean
-          description: If the subscription plan should allow prorating
-          example: false
-        billing_cycle:
-          type: string
-          description: How frequent to bill.
-          enum:
-          - DAILY
-          - WEEKLY
-          - MONTHLY
-          - YEARLY
-          example: MONTHLY
-        billing_frequency:
-          type: integer
-          format: int32
-          description: How many times per billing cycle to bill
-          example: 1
-        number_of_cycles:
-          type: integer
-          format: int32
-          description: How many billing cycles to bill. Optional field i.e. can be no value or 0.
-          example: 12
-        plan_price:
-          $ref: '#/components/schemas/CurrencyValue_Detail'
-          description: The price of the subscription plan
-        order_index:
-          type: integer
-          format: int32
-          description: Determines the order in which the plan will be displayed
-          example: 0
-    ListOption:
-      type: object
-      properties:
-        item_id:
-          type: string
-          description: The unique id of this option’s item value.
-        item_label:
-          type: string
-          description: The displayable name of the option item.
-        item_code:
-          type: string
-          description: An internal code (e.g. sku) to associate the item option.
-        item_display_order:
-          type: integer
-          format: int64
-          description: The order in which this item will be displayed among other items. Minimum is 0. Lower values indicate higher priority in order.
-        price_adjustment:
-          type: number
-          format: double
-          description: An amount to adjust to the product price is selected. Negative value indicates subtraction from price.
-    ListProductOptionsResponse:
-      type: object
-      properties:
-        product_options:
-          type: array
-          items:
-            $ref: '#/components/schemas/ProductOption'
-    ProductInventory_Detail:
-      type: object
-      properties:
-        inventory_limit:
-          type: integer
-          format: int32
-          description: The inventory limit for this product. Must be greater than or equal to 0.
-          example: 100
-        inventory_count:
-          type: integer
-          format: int32
-          description: The current inventory count for this product. Must be greater than or equal to 0. This field is omitted in List responses.
-          example: 75
-        out_of_stock_enabled:
-          type: boolean
-          description: The flag to enable out of stock inventory
-          example: false
-        email_for_inventory_notifications:
-          type: string
-          description: The email address for notifications about inventory
-          example: notify@example.com
     ProductInventory_List:
       type: object
       properties:
@@ -1953,22 +1713,6 @@ components:
           type: string
           description: The email address for notifications about inventory
           example: notify@example.com
-    ProductFixedOption_Detail:
-      type: object
-      properties:
-        value:
-          type: string
-          description: The displayable label given to the option
-          example: Red
-        code:
-          type: string
-          description: An internal code to reference the option value
-          example: RED
-        price_adjustment:
-          type: number
-          format: double
-          description: Positive value indicates additional amount added to the original price. Negative value indicates subtraction from the original price.
-          example: 500
     RestV2Product_Detail:
       type: object
       properties:
@@ -2066,66 +1810,7 @@ components:
           type: string
         update_time:
           type: string
-    UpdateProductOptionListOption:
-      type: object
-      properties:
-        item_label:
-          type: string
-          description: The displayable name of the option item. Cannot be whitespace only.
-        item_code:
-          type: string
-          description: An internal code (e.g. sku) to associate the item option.
-        item_display_order:
-          type: integer
-          format: int64
-          description: The order in which this item will be displayed among other items. Minimum is 0. Lower values indicate higher priority in order.
-        price_adjustment:
-          type: number
-          format: double
-          description: An amount to adjust to the product price is selected. Negative value indicates subtraction from price.
-    SubscriptionPlan_List:
-      type: object
-      properties:
-        id:
-          type: string
-          description: The subscription plan id
-          example: 1
-        active:
-          type: boolean
-          description: If the subscription plan should be active/available for purchase
-          example: true
-        prorate:
-          type: boolean
-          description: If the subscription plan should allow prorating
-          example: false
-        billing_cycle:
-          type: string
-          description: How frequent to bill.
-          enum:
-          - DAILY
-          - WEEKLY
-          - MONTHLY
-          - YEARLY
-          example: MONTHLY
-        billing_frequency:
-          type: integer
-          format: int32
-          description: How many times per billing cycle to bill
-          example: 1
-        number_of_cycles:
-          type: integer
-          format: int32
-          description: How many billing cycles to bill. Optional field i.e. can be no value or 0.
-          example: 12
-        plan_price:
-          $ref: '#/components/schemas/CurrencyValue_List'
-          description: The price of the subscription plan
-        order_index:
-          type: integer
-          format: int32
-          description: Determines the order in which the plan will be displayed
-          example: 0
-    ProductVariableSetting_Detail:
+    ProductVariableSetting_List:
       type: object
       properties:
         contains:
@@ -2170,36 +1855,59 @@ components:
           type: string
           description: Customized validation message to display when option criteria aren't met
           example: Invalid input format
-    CreateProductOptionRequest:
+    UpdateProductInventoryRequest_Detail:
       type: object
       properties:
-        required:
-          type: boolean
-          default: false
-          description: Whether this option is required for product purchase.
-        option_type:
+        type:
           type: string
-          description: The type of option. Possible valid values are LIST and TEXT.
           enum:
-          - LIST
-          - TEXT
-        option_label:
-          type: string
-          description: The displayable name of the option (e.g. Size). Cannot be whitespace only.
-        display_order:
+          - INCREASE
+          - DECREASE
+        quantity:
           type: integer
           format: int32
-          description: The order in which this option will be displayed among other options. Minimum is 0. Lower values indicate higher priority in order.
-        list_items:
-          type: array
-          description: Appears only for option_type of LIST. A fixed list of available selectable items for this product option.
-          items:
-            $ref: '#/components/schemas/CreateProductOptionListOption'
-        text_rules:
-          $ref: '#/components/schemas/CreateProductOptionTextOption'
-          description: The option is a user-defined free-form field. The settings define the restrictions on what can be entered.
-      required:
-      - option_type
+    SubscriptionPlan_Detail:
+      type: object
+      properties:
+        id:
+          type: string
+          description: The subscription plan id
+          example: 1
+        active:
+          type: boolean
+          description: If the subscription plan should be active/available for purchase
+          example: true
+        prorate:
+          type: boolean
+          description: If the subscription plan should allow prorating
+          example: false
+        billing_cycle:
+          type: string
+          description: How frequent to bill.
+          enum:
+          - DAILY
+          - WEEKLY
+          - MONTHLY
+          - YEARLY
+          example: MONTHLY
+        billing_frequency:
+          type: integer
+          format: int32
+          description: How many times per billing cycle to bill
+          example: 1
+        number_of_cycles:
+          type: integer
+          format: int32
+          description: How many billing cycles to bill. Optional field i.e. can be no value or 0.
+          example: 12
+        plan_price:
+          $ref: '#/components/schemas/CurrencyValue_Detail'
+          description: The price of the subscription plan
+        order_index:
+          type: integer
+          format: int32
+          description: Determines the order in which the plan will be displayed
+          example: 0
     Error:
       type: object
       properties:
@@ -2214,31 +1922,6 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/ErrorDetails'
-    ListProductsResponse_List:
-      type: object
-      properties:
-        products:
-          type: array
-          items:
-            $ref: '#/components/schemas/RestV2Product_List'
-        next_page_token:
-          type: string
-    CurrencyValue_Detail:
-      type: object
-      properties:
-        amount:
-          type: integer
-          format: int64
-          description: The price amount in the smallest currency unit
-          example: 10000
-        currency_code:
-          type: string
-          description: Three-letter ISO currency code
-          example: USD
-        formatted_amount:
-          type: string
-          description: The product amount formatted using the tenant's currency locale
-          example: $100.00
     ProductOptions_List:
       type: object
       properties:
@@ -2265,63 +1948,39 @@ components:
         variable_setting:
           $ref: '#/components/schemas/ProductVariableSetting_List'
           description: The option is a user-defined free-form field. The settings define the restrictions on what can be entered.
-    ProductFixedOption_List:
+    ProductOption:
       type: object
       properties:
-        value:
+        id:
           type: string
-          description: The displayable label given to the option
-          example: Red
-        code:
-          type: string
-          description: An internal code to reference the option value
-          example: RED
-        price_adjustment:
-          type: number
-          format: double
-          description: Positive value indicates additional amount added to the original price. Negative value indicates subtraction from the original price.
-          example: 500
-    CreateProductOptionTextOption:
-      type: object
-      properties:
-        minimum_characters:
-          type: integer
-          format: int32
-          description: Minimum allowable characters. Minimum is 0.
-        maximum_characters:
-          type: integer
-          format: int32
-          description: Maximum allowable characters. Minimum is 0.
-        allow_spaces:
+          description: The unique id of the product option
+        required:
           type: boolean
-          description: Whether or not to allow whitespace in the text.
-        only_starts_with:
+          description: Whether this option is required for product purchase.
+        option_label:
           type: string
-          description: Restricts the text to start with certain character types. Valid values are NONE, LETTER, DIGIT, BOTH.
+          description: The displayable name of the option. E.g. Size
+        product_id:
+          type: string
+          description: The product id that this option belongs to.
+        option_type:
+          type: string
+          description: The type of option. Possible valid values are LIST and TEXT.
           enum:
-          - NONE
-          - LETTER
-          - DIGIT
-          - BOTH
-        only_ends_with:
-          type: string
-          description: Restricts the text to end with certain character types. Valid values are NONE, LETTER, DIGIT, BOTH.
-          enum:
-          - NONE
-          - LETTER
-          - DIGIT
-          - BOTH
-        only_contains:
-          type: string
-          description: Restricts the text to contain certain character types. Valid values are NONE, LETTER, DIGIT, BOTH.
-          enum:
-          - NONE
-          - LETTER
-          - DIGIT
-          - BOTH
-        error_message:
-          type: string
-          description: An error message to display if any rules are broken. Cannot be whitespace only.
+          - LIST
+          - TEXT
+        display_order:
+          type: integer
+          format: int32
+          description: The order in which this option will be displayed among other options. Minimum is 0. Lower values indicate higher priority in order.
+        list_items:
+          type: array
+          description: Appears only for option_type of LIST. A fixed list of available selectable items for this product option. e.g (Medium)
+          items:
+            $ref: '#/components/schemas/ListOption'
+        text_rules:
+          $ref: '#/components/schemas/TextOption'
+          description: The option is a user-defined free-form field. The settings define the restrictions on what can be entered.
     CreateProductRequest_Detail:
       type: object
       properties:
@@ -2400,6 +2059,347 @@ components:
       - name
       - price
       - short_description
+    ProductVariableSetting_Detail:
+      type: object
+      properties:
+        contains:
+          type: string
+          description: Requires the value (excluding start and end) to contain given type.
+          enum:
+          - LETTER
+          - NUMBER
+          - BOTH
+          example: BOTH
+        min_chars:
+          type: integer
+          format: int32
+          description: Minimum allowable characters
+          example: 1
+        max_chars:
+          type: integer
+          format: int32
+          description: Max allowable chars. Its value must be greater than min_chars
+          example: 50
+        contain_spaces:
+          type: boolean
+          description: If spaces are allowed for the option
+          example: true
+        start_with:
+          type: string
+          description: Requires the value to start with the given type.
+          enum:
+          - LETTER
+          - NUMBER
+          - BOTH
+          example: LETTER
+        end_with:
+          type: string
+          description: Requires the value to end with the given type.
+          enum:
+          - LETTER
+          - NUMBER
+          - BOTH
+          example: LETTER
+        validation_msg:
+          type: string
+          description: Customized validation message to display when option criteria aren't met
+          example: Invalid input format
+    ErrorDetails:
+      type: object
+      properties:
+        domain:
+          type: string
+        resource:
+          type: string
+    ListProductsResponse_List:
+      type: object
+      properties:
+        products:
+          type: array
+          items:
+            $ref: '#/components/schemas/RestV2Product_List'
+        next_page_token:
+          type: string
+    ProductOptions_Detail:
+      type: object
+      properties:
+        name:
+          type: string
+          description: The option name
+          example: Color
+        type:
+          type: string
+          description: The option type. If FIXED, then fixed_options will be returned. If VARIABLE, then variable_setting will be returned.
+          enum:
+          - FIXED
+          - VARIABLE
+          example: FIXED
+        required:
+          type: boolean
+          description: If the user is required to select/fill in an option for the product
+          example: true
+        fixed_options:
+          type: array
+          description: List of option values for the fixed option
+          items:
+            $ref: '#/components/schemas/ProductFixedOption_Detail'
+        variable_setting:
+          $ref: '#/components/schemas/ProductVariableSetting_Detail'
+          description: The option is a user-defined free-form field. The settings define the restrictions on what can be entered.
+    CreateProductOptionTextOption:
+      type: object
+      properties:
+        minimum_characters:
+          type: integer
+          format: int32
+          description: Minimum allowable characters. Minimum is 0.
+        maximum_characters:
+          type: integer
+          format: int32
+          description: Maximum allowable characters. Minimum is 0.
+        allow_spaces:
+          type: boolean
+          description: Whether or not to allow whitespace in the text.
+        only_starts_with:
+          type: string
+          description: Restricts the text to start with certain character types. Valid values are NONE, LETTER, DIGIT, BOTH.
+          enum:
+          - NONE
+          - LETTER
+          - DIGIT
+          - BOTH
+        only_ends_with:
+          type: string
+          description: Restricts the text to end with certain character types. Valid values are NONE, LETTER, DIGIT, BOTH.
+          enum:
+          - NONE
+          - LETTER
+          - DIGIT
+          - BOTH
+        only_contains:
+          type: string
+          description: Restricts the text to contain certain character types. Valid values are NONE, LETTER, DIGIT, BOTH.
+          enum:
+          - NONE
+          - LETTER
+          - DIGIT
+          - BOTH
+        error_message:
+          type: string
+          description: An error message to display if any rules are broken. Cannot be whitespace only.
+    TextOption:
+      type: object
+      properties:
+        minimum_characters:
+          type: integer
+          format: int32
+          description: Minimum allowable characters. Minimum is 0.
+        maximum_characters:
+          type: integer
+          format: int32
+          description: Maximum allowable characters. Minimum is 0.
+        allow_spaces:
+          type: boolean
+          description: Whether or not to allow whitespace in the text.
+        only_starts_with:
+          type: string
+          description: Restricts the text to start with certain character types. Valid values are NONE, LETTER, DIGIT, BOTH.
+          enum:
+          - NONE
+          - LETTER
+          - DIGIT
+          - BOTH
+        only_ends_with:
+          type: string
+          description: Restricts the text to end with certain character types. Valid values are NONE, LETTER, DIGIT, BOTH.
+          enum:
+          - NONE
+          - LETTER
+          - DIGIT
+          - BOTH
+        only_contains:
+          type: string
+          description: Restricts the text to contain certain character types. Valid values are NONE, LETTER, DIGIT, BOTH.
+          enum:
+          - NONE
+          - LETTER
+          - DIGIT
+          - BOTH
+        error_message:
+          type: string
+          description: An error message to display if any rules are broken.
+    CreateProductOptionRequest:
+      type: object
+      properties:
+        required:
+          type: boolean
+          default: false
+          description: Whether this option is required for product purchase.
+        option_type:
+          type: string
+          description: The type of option. Possible valid values are LIST and TEXT.
+          enum:
+          - LIST
+          - TEXT
+        option_label:
+          type: string
+          description: The displayable name of the option (e.g. Size). Cannot be whitespace only.
+        display_order:
+          type: integer
+          format: int32
+          description: The order in which this option will be displayed among other options. Minimum is 0. Lower values indicate higher priority in order.
+        list_items:
+          type: array
+          description: Appears only for option_type of LIST. A fixed list of available selectable items for this product option.
+          items:
+            $ref: '#/components/schemas/CreateProductOptionListOption'
+        text_rules:
+          $ref: '#/components/schemas/CreateProductOptionTextOption'
+          description: The option is a user-defined free-form field. The settings define the restrictions on what can be entered.
+      required:
+      - option_type
+    CurrencyValue_List:
+      type: object
+      properties:
+        amount:
+          type: integer
+          format: int64
+          description: The price amount in the smallest currency unit
+          example: 10000
+        currency_code:
+          type: string
+          description: Three-letter ISO currency code
+          example: USD
+        formatted_amount:
+          type: string
+          description: The product amount formatted using the tenant's currency locale
+          example: $100.00
+    UpdateProductOptionRequest:
+      type: object
+      properties:
+        required:
+          type: boolean
+          description: Whether this option is required for product purchase.
+        option_label:
+          type: string
+          description: The displayable name of the option (e.g. Size). Cannot be whitespace only.
+        display_order:
+          type: integer
+          format: int32
+          description: The order in which this option will be displayed among other options. Minimum is 0. Lower values indicate higher priority in order.
+        minimum_characters:
+          type: integer
+          format: int32
+          description: Used only for option_type of `TEXT`. Minimum allowable characters. Minimum is 0.
+        maximum_characters:
+          type: integer
+          format: int32
+          description: Used only for option_type of `TEXT`. Maximum allowable characters. Minimum is 0.
+        allow_spaces:
+          type: boolean
+          description: Used only for option_type of `TEXT`. Whether or not to allow whitespace in the text.
+        only_starts_with:
+          type: string
+          description: Used only for option_type of `TEXT`.  Restricts the text to start with certain character types. Valid values are NONE, LETTER, DIGIT, BOTH.
+          enum:
+          - NONE
+          - LETTER
+          - DIGIT
+          - BOTH
+        only_ends_with:
+          type: string
+          description: Used only for option_type of `TEXT`. Restricts the text to end with certain character types. Valid values are NONE, LETTER, DIGIT, BOTH.
+          enum:
+          - NONE
+          - LETTER
+          - DIGIT
+          - BOTH
+        only_contains:
+          type: string
+          description: Used only for option_type of `TEXT`. Restricts the text to contain certain character types. Valid values are NONE, LETTER, DIGIT, BOTH.
+          enum:
+          - NONE
+          - LETTER
+          - DIGIT
+          - BOTH
+        error_message:
+          type: string
+          description: Used only for option_type of `TEXT`. An error message to display if any rules are broken. Cannot be whitespace only.
+    CreateProductOptionListOption:
+      type: object
+      properties:
+        item_label:
+          type: string
+          description: The displayable name of the option item. Cannot be whitespace only.
+        item_code:
+          type: string
+          description: An internal code (e.g. sku) to associate the item option.
+        item_display_order:
+          type: integer
+          format: int64
+          description: The order in which this item will be displayed among other items. Minimum is 0. Lower values indicate higher priority in order.
+        price_adjustment:
+          type: number
+          format: double
+          description: An amount to adjust to the product price is selected. Negative value indicates subtraction from price.
+    SubscriptionPlan_List:
+      type: object
+      properties:
+        id:
+          type: string
+          description: The subscription plan id
+          example: 1
+        active:
+          type: boolean
+          description: If the subscription plan should be active/available for purchase
+          example: true
+        prorate:
+          type: boolean
+          description: If the subscription plan should allow prorating
+          example: false
+        billing_cycle:
+          type: string
+          description: How frequent to bill.
+          enum:
+          - DAILY
+          - WEEKLY
+          - MONTHLY
+          - YEARLY
+          example: MONTHLY
+        billing_frequency:
+          type: integer
+          format: int32
+          description: How many times per billing cycle to bill
+          example: 1
+        number_of_cycles:
+          type: integer
+          format: int32
+          description: How many billing cycles to bill. Optional field i.e. can be no value or 0.
+          example: 12
+        plan_price:
+          $ref: '#/components/schemas/CurrencyValue_List'
+          description: The price of the subscription plan
+        order_index:
+          type: integer
+          format: int32
+          description: Determines the order in which the plan will be displayed
+          example: 0
+    ProductFixedOption_List:
+      type: object
+      properties:
+        value:
+          type: string
+          description: The displayable label given to the option
+          example: Red
+        code:
+          type: string
+          description: An internal code to reference the option value
+          example: RED
+        price_adjustment:
+          type: number
+          format: double
+          description: Positive value indicates additional amount added to the original price. Negative value indicates subtraction from the original price.
+          example: 500
   securitySchemes:
     oauth2:
       type: oauth2

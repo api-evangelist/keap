@@ -289,23 +289,6 @@ paths:
                 $ref: '#/components/schemas/AutomationCategory'
 components:
   schemas:
-    AutomationCategory:
-      type: object
-      description: An automation category
-      properties:
-        id:
-          type: string
-          description: The unique identifier of the category
-          example: 1
-        name:
-          type: string
-          description: The name of the category
-          example: Marketing Campaigns
-        automation_count:
-          type: integer
-          format: int64
-          description: Number of automations in this category
-          example: 15
     ErrorDetails:
       type: object
       properties:
@@ -313,26 +296,6 @@ components:
           type: string
         resource:
           type: string
-    ListAutomationCategoryResponse:
-      type: object
-      description: Response containing a list of automation categories
-      properties:
-        automation_categories:
-          type: array
-          description: List of automation categories
-          items:
-            $ref: '#/components/schemas/AutomationCategory'
-        next_page_token:
-          type: string
-    PatchAutomationCategoryRequest:
-      type: object
-      properties:
-        name:
-          type: string
-          description: New name for the category
-          example: Marketing Campaigns
-          maxLength: 100
-          minLength: 1
     CreateAutomationCategoryRequest:
       type: object
       description: Request to create an automation category
@@ -357,6 +320,43 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/ErrorDetails'
+    AutomationCategory:
+      type: object
+      description: An automation category
+      properties:
+        id:
+          type: string
+          description: The unique identifier of the category
+          example: 1
+        name:
+          type: string
+          description: The name of the category
+          example: Marketing Campaigns
+        automation_count:
+          type: integer
+          format: int64
+          description: Number of automations in this category
+          example: 15
+    PatchAutomationCategoryRequest:
+      type: object
+      properties:
+        name:
+          type: string
+          description: New name for the category
+          example: Marketing Campaigns
+          maxLength: 100
+          minLength: 1
+    ListAutomationCategoryResponse:
+      type: object
+      description: Response containing a list of automation categories
+      properties:
+        automation_categories:
+          type: array
+          description: List of automation categories
+          items:
+            $ref: '#/components/schemas/AutomationCategory'
+        next_page_token:
+          type: string
   securitySchemes:
     oauth2:
       type: oauth2

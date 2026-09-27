@@ -663,22 +663,6 @@ paths:
                 $ref: '#/components/schemas/ObjectModel'
 components:
   schemas:
-    AppointmentList:
-      type: object
-      properties:
-        appointments:
-          type: array
-          items:
-            $ref: '#/components/schemas/Appointment'
-        count:
-          type: integer
-          format: int32
-        next:
-          type: string
-        previous:
-          type: string
-        sync_token:
-          type: string
     CreateRestCustomField:
       type: object
       properties:
@@ -726,6 +710,36 @@ components:
       required:
       - field_type
       - label
+    DefaultHttpStatusCode:
+      allOf:
+      - $ref: '#/components/schemas/HttpStatusCode'
+    View:
+      type: object
+      properties:
+        contentType:
+          type: string
+    AppointmentSearchCommand:
+      type: object
+      properties:
+        since:
+          type: string
+        until:
+          type: string
+        limit:
+          type: integer
+          format: int32
+        offset:
+          type: integer
+          format: int32
+        contact_id:
+          type: integer
+          format: int64
+        sinceAsDate:
+          type: string
+          format: date-time
+        untilAsDate:
+          type: string
+          format: date-time
     ModelAndView:
       type: object
       properties:
@@ -750,18 +764,21 @@ components:
           type: boolean
         viewName:
           type: string
-    ObjectModel:
+    HttpStatusCode:
       type: object
       properties:
-        custom_fields:
-          type: array
-          items:
-            $ref: '#/components/schemas/CustomFieldMetaData'
-        optional_properties:
-          type: array
-          items:
-            type: string
-          uniqueItems: true
+        error:
+          type: boolean
+        is1xxInformational:
+          type: boolean
+        is2xxSuccessful:
+          type: boolean
+        is3xxRedirection:
+          type: boolean
+        is4xxClientError:
+          type: boolean
+        is5xxServerError:
+          type: boolean
     Appointment:
       type: object
       properties:
@@ -807,46 +824,18 @@ components:
       - end_date
       - start_date
       - title
-    HttpStatusCode:
+    CustomFieldOption:
       type: object
       properties:
-        error:
-          type: boolean
-        is1xxInformational:
-          type: boolean
-        is2xxSuccessful:
-          type: boolean
-        is3xxRedirection:
-          type: boolean
-        is4xxClientError:
-          type: boolean
-        is5xxServerError:
-          type: boolean
-    AppointmentSearchCommand:
+        id:
+          type: string
+        label:
+          type: string
+    CreateRestCustomFieldOption:
       type: object
       properties:
-        since:
+        label:
           type: string
-        until:
-          type: string
-        limit:
-          type: integer
-          format: int32
-        offset:
-          type: integer
-          format: int32
-        contact_id:
-          type: integer
-          format: int64
-        sinceAsDate:
-          type: string
-          format: date-time
-        untilAsDate:
-          type: string
-          format: date-time
-    DefaultHttpStatusCode:
-      allOf:
-      - $ref: '#/components/schemas/HttpStatusCode'
     CustomFieldMetaData:
       type: object
       properties:
@@ -900,11 +889,34 @@ components:
           type: string
         default_value:
           type: string
-    View:
+    AppointmentList:
       type: object
       properties:
-        contentType:
+        appointments:
+          type: array
+          items:
+            $ref: '#/components/schemas/Appointment'
+        count:
+          type: integer
+          format: int32
+        next:
           type: string
+        previous:
+          type: string
+        sync_token:
+          type: string
+    ObjectModel:
+      type: object
+      properties:
+        custom_fields:
+          type: array
+          items:
+            $ref: '#/components/schemas/CustomFieldMetaData'
+        optional_properties:
+          type: array
+          items:
+            type: string
+          uniqueItems: true
     HttpStatus:
       allOf:
       - $ref: '#/components/schemas/HttpStatusCode'
@@ -973,18 +985,6 @@ components:
       - 509 BANDWIDTH_LIMIT_EXCEEDED
       - 510 NOT_EXTENDED
       - 511 NETWORK_AUTHENTICATION_REQUIRED
-    CreateRestCustomFieldOption:
-      type: object
-      properties:
-        label:
-          type: string
-    CustomFieldOption:
-      type: object
-      properties:
-        id:
-          type: string
-        label:
-          type: string
   securitySchemes:
     oauth2:
       type: oauth2

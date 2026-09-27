@@ -235,22 +235,6 @@ paths:
                 $ref: '#/components/schemas/Referral'
 components:
   schemas:
-    ListReferralsResponse:
-      type: object
-      properties:
-        referrals:
-          type: array
-          items:
-            $ref: '#/components/schemas/Referral'
-        next_page_token:
-          type: string
-    ErrorDetails:
-      type: object
-      properties:
-        domain:
-          type: string
-        resource:
-          type: string
     Referral:
       type: object
       properties:
@@ -296,6 +280,27 @@ components:
           - MANUAL
           - PERMANENT
           example: COOKIE
+    ErrorDetails:
+      type: object
+      properties:
+        domain:
+          type: string
+        resource:
+          type: string
+    Error:
+      type: object
+      properties:
+        code:
+          type: integer
+          format: int32
+        message:
+          type: string
+        status:
+          type: string
+        details:
+          type: array
+          items:
+            $ref: '#/components/schemas/ErrorDetails'
     CreateReferralRequest:
       type: object
       properties:
@@ -339,20 +344,15 @@ components:
           example: COOKIE
       required:
       - contact_id
-    Error:
+    ListReferralsResponse:
       type: object
       properties:
-        code:
-          type: integer
-          format: int32
-        message:
-          type: string
-        status:
-          type: string
-        details:
+        referrals:
           type: array
           items:
-            $ref: '#/components/schemas/ErrorDetails'
+            $ref: '#/components/schemas/Referral'
+        next_page_token:
+          type: string
   securitySchemes:
     oauth2:
       type: oauth2

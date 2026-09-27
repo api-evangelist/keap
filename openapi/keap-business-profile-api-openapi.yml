@@ -169,6 +169,76 @@ paths:
                 $ref: '#/components/schemas/GetBusinessProfileResponse'
 components:
   schemas:
+    BusinessProfileAddressRequest:
+      type: object
+      properties:
+        line1:
+          type: string
+        line2:
+          type: string
+        locality:
+          type: string
+          description: The municipality to which the address belongs
+          example: Phoenix
+        region:
+          type: string
+          description: The long-name descriptive version of the Region Code
+          example: Arizona
+        country_code:
+          type: string
+          description: An ISO 3166-1 Country Code (https://en.wikipedia.org/wiki/ISO_3166-1_alpha-3)
+          example: USA
+        postal_code:
+          type: string
+      required:
+      - country_code
+      - line1
+      - line2
+      - locality
+      - postal_code
+      - region
+    ErrorDetails:
+      type: object
+      properties:
+        domain:
+          type: string
+        resource:
+          type: string
+    Error:
+      type: object
+      properties:
+        code:
+          type: integer
+          format: int32
+        message:
+          type: string
+        status:
+          type: string
+        details:
+          type: array
+          items:
+            $ref: '#/components/schemas/ErrorDetails'
+    BusinessProfileAddressResponse:
+      type: object
+      properties:
+        line1:
+          type: string
+        line2:
+          type: string
+        locality:
+          type: string
+          description: The municipality to which the address belongs
+          example: Phoenix
+        region:
+          type: string
+          description: The long-name descriptive version of the Region Code
+          example: Arizona
+        country_code:
+          type: string
+          description: An ISO 3166-1 Country Code (https://en.wikipedia.org/wiki/ISO_3166-1_alpha-3)
+          example: USA
+        postal_code:
+          type: string
     GetBusinessProfileResponse:
       type: object
       description: Profile information about the business that owns/uses this account
@@ -232,76 +302,6 @@ components:
           type: string
         business_secondary_color:
           type: string
-    BusinessProfileAddressRequest:
-      type: object
-      properties:
-        line1:
-          type: string
-        line2:
-          type: string
-        locality:
-          type: string
-          description: The municipality to which the address belongs
-          example: Phoenix
-        region:
-          type: string
-          description: The long-name descriptive version of the Region Code
-          example: Arizona
-        country_code:
-          type: string
-          description: An ISO 3166-1 Country Code (https://en.wikipedia.org/wiki/ISO_3166-1_alpha-3)
-          example: USA
-        postal_code:
-          type: string
-      required:
-      - country_code
-      - line1
-      - line2
-      - locality
-      - postal_code
-      - region
-    BusinessProfileAddressResponse:
-      type: object
-      properties:
-        line1:
-          type: string
-        line2:
-          type: string
-        locality:
-          type: string
-          description: The municipality to which the address belongs
-          example: Phoenix
-        region:
-          type: string
-          description: The long-name descriptive version of the Region Code
-          example: Arizona
-        country_code:
-          type: string
-          description: An ISO 3166-1 Country Code (https://en.wikipedia.org/wiki/ISO_3166-1_alpha-3)
-          example: USA
-        postal_code:
-          type: string
-    ErrorDetails:
-      type: object
-      properties:
-        domain:
-          type: string
-        resource:
-          type: string
-    Error:
-      type: object
-      properties:
-        code:
-          type: integer
-          format: int32
-        message:
-          type: string
-        status:
-          type: string
-        details:
-          type: array
-          items:
-            $ref: '#/components/schemas/ErrorDetails'
   securitySchemes:
     oauth2:
       type: oauth2
