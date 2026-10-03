@@ -663,232 +663,6 @@ paths:
                 $ref: '#/components/schemas/ObjectModel'
 components:
   schemas:
-    CreateRestCustomField:
-      type: object
-      properties:
-        label:
-          type: string
-        options:
-          type: array
-          items:
-            $ref: '#/components/schemas/CreateRestCustomFieldOption'
-        field_type:
-          type: string
-          enum:
-          - Currency
-          - Date
-          - DateTime
-          - DayOfWeek
-          - Drilldown
-          - Email
-          - Month
-          - ListBox
-          - Name
-          - WholeNumber
-          - DecimalNumber
-          - Percent
-          - PhoneNumber
-          - Radio
-          - Dropdown
-          - SocialSecurityNumber
-          - State
-          - Text
-          - TextArea
-          - User
-          - UserListBox
-          - Website
-          - Year
-          - YesNo
-        group_id:
-          type: integer
-          format: int64
-          description: An optional tab group to place the field under in the interface.  If not specified, will default to the 'Custom Fields' tab.
-        user_group_id:
-          type: integer
-          format: int64
-          description: An optional user group to choose from when selecting values for User or UserListBox fields.
-      required:
-      - field_type
-      - label
-    DefaultHttpStatusCode:
-      allOf:
-      - $ref: '#/components/schemas/HttpStatusCode'
-    View:
-      type: object
-      properties:
-        contentType:
-          type: string
-    AppointmentSearchCommand:
-      type: object
-      properties:
-        since:
-          type: string
-        until:
-          type: string
-        limit:
-          type: integer
-          format: int32
-        offset:
-          type: integer
-          format: int32
-        contact_id:
-          type: integer
-          format: int64
-        sinceAsDate:
-          type: string
-          format: date-time
-        untilAsDate:
-          type: string
-          format: date-time
-    ModelAndView:
-      type: object
-      properties:
-        view:
-          $ref: '#/components/schemas/View'
-        model:
-          type: object
-          additionalProperties: {}
-        status:
-          oneOf:
-          - $ref: '#/components/schemas/DefaultHttpStatusCode'
-          - $ref: '#/components/schemas/HttpStatus'
-        modelMap:
-          type: object
-          additionalProperties: {}
-          properties:
-            empty:
-              type: boolean
-        reference:
-          type: boolean
-        empty:
-          type: boolean
-        viewName:
-          type: string
-    HttpStatusCode:
-      type: object
-      properties:
-        error:
-          type: boolean
-        is1xxInformational:
-          type: boolean
-        is2xxSuccessful:
-          type: boolean
-        is3xxRedirection:
-          type: boolean
-        is4xxClientError:
-          type: boolean
-        is5xxServerError:
-          type: boolean
-    Appointment:
-      type: object
-      properties:
-        title:
-          type: string
-        description:
-          type: string
-        user:
-          type: integer
-          format: int64
-          description: Required only for pop-up reminders
-        location:
-          type: string
-        contact_id:
-          type: integer
-          format: int64
-          description: Required for pop-up reminders
-        start_date:
-          type: string
-          format: date-time
-          example: '2024-01-15T09:00:00.000Z'
-        end_date:
-          type: string
-          format: date-time
-          example: '2024-01-15T10:00:00.000Z'
-        remind_time:
-          type: integer
-          format: int32
-          description: Value in minutes before start_date to show pop-up reminder.
-          enum:
-          - '5'
-          - '10'
-          - '15'
-          - '30'
-          - '60'
-          - '120'
-          - '240'
-          - '480'
-          - '1440'
-          - '2880'
-          example: 30
-      required:
-      - end_date
-      - start_date
-      - title
-    CustomFieldOption:
-      type: object
-      properties:
-        id:
-          type: string
-        label:
-          type: string
-    CreateRestCustomFieldOption:
-      type: object
-      properties:
-        label:
-          type: string
-    CustomFieldMetaData:
-      type: object
-      properties:
-        id:
-          type: integer
-          format: int64
-        label:
-          type: string
-        options:
-          type: array
-          items:
-            $ref: '#/components/schemas/CustomFieldOption'
-        record_type:
-          type: string
-          enum:
-          - CONTACT
-          - REFERRAL_PARTNER
-          - OPPORTUNITY
-          - TASK_NOTE_APPOINTMENT
-          - COMPANY
-          - ORDER
-          - SUBSCRIPTION
-        field_type:
-          type: string
-          enum:
-          - Currency
-          - Date
-          - DateTime
-          - DayOfWeek
-          - Drilldown
-          - Email
-          - Month
-          - ListBox
-          - Name
-          - WholeNumber
-          - DecimalNumber
-          - Percent
-          - PhoneNumber
-          - Radio
-          - Dropdown
-          - SocialSecurityNumber
-          - State
-          - Text
-          - TextArea
-          - User
-          - UserListBox
-          - Website
-          - Year
-          - YesNo
-        field_name:
-          type: string
-        default_value:
-          type: string
     AppointmentList:
       type: object
       properties:
@@ -905,18 +679,31 @@ components:
           type: string
         sync_token:
           type: string
-    ObjectModel:
+    CreateRestCustomFieldOption:
       type: object
       properties:
-        custom_fields:
-          type: array
-          items:
-            $ref: '#/components/schemas/CustomFieldMetaData'
-        optional_properties:
-          type: array
-          items:
-            type: string
-          uniqueItems: true
+        label:
+          type: string
+    View:
+      type: object
+      properties:
+        contentType:
+          type: string
+    HttpStatusCode:
+      type: object
+      properties:
+        error:
+          type: boolean
+        is1xxInformational:
+          type: boolean
+        is2xxSuccessful:
+          type: boolean
+        is3xxRedirection:
+          type: boolean
+        is4xxClientError:
+          type: boolean
+        is5xxServerError:
+          type: boolean
     HttpStatus:
       allOf:
       - $ref: '#/components/schemas/HttpStatusCode'
@@ -985,6 +772,219 @@ components:
       - 509 BANDWIDTH_LIMIT_EXCEEDED
       - 510 NOT_EXTENDED
       - 511 NETWORK_AUTHENTICATION_REQUIRED
+    Appointment:
+      type: object
+      properties:
+        title:
+          type: string
+        description:
+          type: string
+        user:
+          type: integer
+          format: int64
+          description: Required only for pop-up reminders
+        location:
+          type: string
+        contact_id:
+          type: integer
+          format: int64
+          description: Required for pop-up reminders
+        start_date:
+          type: string
+          format: date-time
+          example: '2024-01-15T09:00:00.000Z'
+        end_date:
+          type: string
+          format: date-time
+          example: '2024-01-15T10:00:00.000Z'
+        remind_time:
+          type: integer
+          format: int32
+          description: Value in minutes before start_date to show pop-up reminder.
+          enum:
+          - '5'
+          - '10'
+          - '15'
+          - '30'
+          - '60'
+          - '120'
+          - '240'
+          - '480'
+          - '1440'
+          - '2880'
+          example: 30
+      required:
+      - end_date
+      - start_date
+      - title
+    CustomFieldOption:
+      type: object
+      properties:
+        id:
+          type: string
+        label:
+          type: string
+    DefaultHttpStatusCode:
+      allOf:
+      - $ref: '#/components/schemas/HttpStatusCode'
+    ObjectModel:
+      type: object
+      properties:
+        custom_fields:
+          type: array
+          items:
+            $ref: '#/components/schemas/CustomFieldMetaData'
+        optional_properties:
+          type: array
+          items:
+            type: string
+          uniqueItems: true
+    CreateRestCustomField:
+      type: object
+      properties:
+        label:
+          type: string
+        options:
+          type: array
+          items:
+            $ref: '#/components/schemas/CreateRestCustomFieldOption'
+        field_type:
+          type: string
+          enum:
+          - Currency
+          - Date
+          - DateTime
+          - DayOfWeek
+          - Drilldown
+          - Email
+          - Month
+          - ListBox
+          - Name
+          - WholeNumber
+          - DecimalNumber
+          - Percent
+          - PhoneNumber
+          - Radio
+          - Dropdown
+          - SocialSecurityNumber
+          - State
+          - Text
+          - TextArea
+          - User
+          - UserListBox
+          - Website
+          - Year
+          - YesNo
+        group_id:
+          type: integer
+          format: int64
+          description: An optional tab group to place the field under in the interface.  If not specified, will default to the 'Custom Fields' tab.
+        user_group_id:
+          type: integer
+          format: int64
+          description: An optional user group to choose from when selecting values for User or UserListBox fields.
+      required:
+      - field_type
+      - label
+    AppointmentSearchCommand:
+      type: object
+      properties:
+        since:
+          type: string
+        until:
+          type: string
+        limit:
+          type: integer
+          format: int32
+        offset:
+          type: integer
+          format: int32
+        contact_id:
+          type: integer
+          format: int64
+        sinceAsDate:
+          type: string
+          format: date-time
+        untilAsDate:
+          type: string
+          format: date-time
+    CustomFieldMetaData:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        label:
+          type: string
+        options:
+          type: array
+          items:
+            $ref: '#/components/schemas/CustomFieldOption'
+        record_type:
+          type: string
+          enum:
+          - CONTACT
+          - REFERRAL_PARTNER
+          - OPPORTUNITY
+          - TASK_NOTE_APPOINTMENT
+          - COMPANY
+          - ORDER
+          - SUBSCRIPTION
+        field_type:
+          type: string
+          enum:
+          - Currency
+          - Date
+          - DateTime
+          - DayOfWeek
+          - Drilldown
+          - Email
+          - Month
+          - ListBox
+          - Name
+          - WholeNumber
+          - DecimalNumber
+          - Percent
+          - PhoneNumber
+          - Radio
+          - Dropdown
+          - SocialSecurityNumber
+          - State
+          - Text
+          - TextArea
+          - User
+          - UserListBox
+          - Website
+          - Year
+          - YesNo
+        field_name:
+          type: string
+        default_value:
+          type: string
+    ModelAndView:
+      type: object
+      properties:
+        view:
+          $ref: '#/components/schemas/View'
+        model:
+          type: object
+          additionalProperties: {}
+        status:
+          oneOf:
+          - $ref: '#/components/schemas/DefaultHttpStatusCode'
+          - $ref: '#/components/schemas/HttpStatus'
+        modelMap:
+          type: object
+          additionalProperties: {}
+          properties:
+            empty:
+              type: boolean
+        reference:
+          type: boolean
+        empty:
+          type: boolean
+        viewName:
+          type: string
   securitySchemes:
     oauth2:
       type: oauth2

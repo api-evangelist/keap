@@ -360,6 +360,153 @@ paths:
                 $ref: '#/components/schemas/ListPayments'
 components:
   schemas:
+    Payment:
+      type: object
+      properties:
+        id:
+          type: string
+          description: The unique identifier of the payment.
+          example: 123
+        type:
+          type: string
+          description: A label describing the type of payment made.
+          example: Credit Card
+        amount:
+          type: number
+          format: double
+          description: The payment amount.
+          example: 123.34
+        note:
+          type: string
+          description: A note about the payment.
+        status:
+          type: string
+          description: Provides the current status of the payment, if available.
+          enum:
+          - PENDING
+          - APPROVED
+          - COMPLETED
+          - NONE
+          example: COMPLETED
+        commissioned:
+          type: boolean
+          description: Whether this payment had a commission.
+        synced:
+          type: boolean
+          description: Whether or not the data is synced externally.
+        payment_time:
+          type: string
+          format: date-time
+          description: When this payment was made. In ISO-8601 format.
+          example: '2024-05-21T14:30:00Z'
+        refund_payment_id:
+          type: string
+          description: If this payment had a refund, this refers to the id of the refund payment.
+          example: 123
+        contact_id:
+          type: string
+          description: The id of the contact the payment is associated with.
+          example: 123
+        order_ids:
+          type: array
+          description: List of order ids the payment was made was against.
+          example:
+          - '123'
+          - '456'
+          items:
+            type: string
+        update_time:
+          type: string
+          format: date-time
+          description: When this payment was updated. In ISO-8601 format.
+          example: '2024-05-21T14:30:00Z'
+        external_transaction_id:
+          type: string
+          description: An external id - typically from a payment processor - that references this transaction.
+          example: txn_123
+        merchant_account_id:
+          type: string
+          description: The merchant account id through which the transaction was made.
+        merchant_account_type:
+          type: string
+          description: The merchant account type through which the transaction was made.
+          enum:
+          - PAYPAL
+          - UNSUPPORTED
+          - AUTHORIZE
+          - EWAY
+          - WEPAY
+          - STRIPE
+          - KEAP_PAY
+          example: PAYPAL
+        payment_method:
+          $ref: '#/components/schemas/PaymentMethod'
+          description: Details of the payment method used for this transaction.
+    Error:
+      type: object
+      properties:
+        code:
+          type: integer
+          format: int32
+        message:
+          type: string
+        status:
+          type: string
+        details:
+          type: array
+          items:
+            $ref: '#/components/schemas/ErrorDetails'
+    BasicContact:
+      type: object
+      properties:
+        id:
+          type: string
+        email:
+          type: string
+        given_name:
+          type: string
+        family_name:
+          type: string
+    CardInfo:
+      type: object
+      properties:
+        brand:
+          type: string
+        fingerprint:
+          type: string
+          description: A token that uniquely identifies the card info
+        card_type:
+          type: string
+          description: 'The card type. Valid values are: CREDIT, DEBIT, PREPAID.'
+          enum:
+          - CREDIT
+          - DEBIT
+          - PREPAID
+          - ACH
+        last_four:
+          type: string
+        expiration_year:
+          type: string
+          description: Four-digit expiration year
+        expiration_month:
+          type: string
+          description: Two-digit expiration month
+    ErrorDetails:
+      type: object
+      properties:
+        domain:
+          type: string
+        resource:
+          type: string
+    ListTransactions:
+      type: object
+      properties:
+        transactions:
+          type: array
+          items:
+            $ref: '#/components/schemas/TransactionV2'
+        next_page_token:
+          type: string
     TransactionV2:
       type: object
       properties:
@@ -445,153 +592,6 @@ components:
         payment_method:
           $ref: '#/components/schemas/PaymentMethod'
           description: Details of the payment method used for this transaction.
-    Payment:
-      type: object
-      properties:
-        id:
-          type: string
-          description: The unique identifier of the payment.
-          example: 123
-        type:
-          type: string
-          description: A label describing the type of payment made.
-          example: Credit Card
-        amount:
-          type: number
-          format: double
-          description: The payment amount.
-          example: 123.34
-        note:
-          type: string
-          description: A note about the payment.
-        status:
-          type: string
-          description: Provides the current status of the payment, if available.
-          enum:
-          - PENDING
-          - APPROVED
-          - COMPLETED
-          - NONE
-          example: COMPLETED
-        commissioned:
-          type: boolean
-          description: Whether this payment had a commission.
-        synced:
-          type: boolean
-          description: Whether or not the data is synced externally.
-        payment_time:
-          type: string
-          format: date-time
-          description: When this payment was made. In ISO-8601 format.
-          example: '2024-05-21T14:30:00Z'
-        refund_payment_id:
-          type: string
-          description: If this payment had a refund, this refers to the id of the refund payment.
-          example: 123
-        contact_id:
-          type: string
-          description: The id of the contact the payment is associated with.
-          example: 123
-        order_ids:
-          type: array
-          description: List of order ids the payment was made was against.
-          example:
-          - '123'
-          - '456'
-          items:
-            type: string
-        update_time:
-          type: string
-          format: date-time
-          description: When this payment was updated. In ISO-8601 format.
-          example: '2024-05-21T14:30:00Z'
-        external_transaction_id:
-          type: string
-          description: An external id - typically from a payment processor - that references this transaction.
-          example: txn_123
-        merchant_account_id:
-          type: string
-          description: The merchant account id through which the transaction was made.
-        merchant_account_type:
-          type: string
-          description: The merchant account type through which the transaction was made.
-          enum:
-          - PAYPAL
-          - UNSUPPORTED
-          - AUTHORIZE
-          - EWAY
-          - WEPAY
-          - STRIPE
-          - KEAP_PAY
-          example: PAYPAL
-        payment_method:
-          $ref: '#/components/schemas/PaymentMethod'
-          description: Details of the payment method used for this transaction.
-    ErrorDetails:
-      type: object
-      properties:
-        domain:
-          type: string
-        resource:
-          type: string
-    Error:
-      type: object
-      properties:
-        code:
-          type: integer
-          format: int32
-        message:
-          type: string
-        status:
-          type: string
-        details:
-          type: array
-          items:
-            $ref: '#/components/schemas/ErrorDetails'
-    CardInfo:
-      type: object
-      properties:
-        brand:
-          type: string
-        fingerprint:
-          type: string
-          description: A token that uniquely identifies the card info
-        card_type:
-          type: string
-          description: 'The card type. Valid values are: CREDIT, DEBIT, PREPAID.'
-          enum:
-          - CREDIT
-          - DEBIT
-          - PREPAID
-          - ACH
-        last_four:
-          type: string
-        expiration_year:
-          type: string
-          description: Four-digit expiration year
-        expiration_month:
-          type: string
-          description: Two-digit expiration month
-    ListPayments:
-      type: object
-      properties:
-        payments:
-          type: array
-          items:
-            $ref: '#/components/schemas/Payment'
-        next_page_token:
-          type: string
-    BasicContact:
-      type: object
-      properties:
-        id:
-          type: string
-        email:
-          type: string
-        given_name:
-          type: string
-        family_name:
-          type: string
     PaymentMethod:
       type: object
       properties:
@@ -639,13 +639,13 @@ components:
           description: Status of the payment method. Fow now, only EXPIRED is supported.
           enum:
           - EXPIRED
-    ListTransactions:
+    ListPayments:
       type: object
       properties:
-        transactions:
+        payments:
           type: array
           items:
-            $ref: '#/components/schemas/TransactionV2'
+            $ref: '#/components/schemas/Payment'
         next_page_token:
           type: string
   securitySchemes:

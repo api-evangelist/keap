@@ -169,6 +169,41 @@ paths:
                 $ref: '#/components/schemas/GetBusinessProfileResponse'
 components:
   schemas:
+    BusinessProfileAddressResponse:
+      type: object
+      properties:
+        line1:
+          type: string
+        line2:
+          type: string
+        locality:
+          type: string
+          description: The municipality to which the address belongs
+          example: Phoenix
+        region:
+          type: string
+          description: The long-name descriptive version of the Region Code
+          example: Arizona
+        country_code:
+          type: string
+          description: An ISO 3166-1 Country Code (https://en.wikipedia.org/wiki/ISO_3166-1_alpha-3)
+          example: USA
+        postal_code:
+          type: string
+    Error:
+      type: object
+      properties:
+        code:
+          type: integer
+          format: int32
+        message:
+          type: string
+        status:
+          type: string
+        details:
+          type: array
+          items:
+            $ref: '#/components/schemas/ErrorDetails'
     BusinessProfileAddressRequest:
       type: object
       properties:
@@ -203,41 +238,6 @@ components:
         domain:
           type: string
         resource:
-          type: string
-    Error:
-      type: object
-      properties:
-        code:
-          type: integer
-          format: int32
-        message:
-          type: string
-        status:
-          type: string
-        details:
-          type: array
-          items:
-            $ref: '#/components/schemas/ErrorDetails'
-    BusinessProfileAddressResponse:
-      type: object
-      properties:
-        line1:
-          type: string
-        line2:
-          type: string
-        locality:
-          type: string
-          description: The municipality to which the address belongs
-          example: Phoenix
-        region:
-          type: string
-          description: The long-name descriptive version of the Region Code
-          example: Arizona
-        country_code:
-          type: string
-          description: An ISO 3166-1 Country Code (https://en.wikipedia.org/wiki/ISO_3166-1_alpha-3)
-          example: USA
-        postal_code:
           type: string
     GetBusinessProfileResponse:
       type: object

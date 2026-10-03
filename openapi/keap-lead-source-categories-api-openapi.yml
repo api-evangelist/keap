@@ -439,48 +439,6 @@ paths:
                 $ref: '#/components/schemas/LeadSourceCategory'
 components:
   schemas:
-    ErrorDetails:
-      type: object
-      properties:
-        domain:
-          type: string
-        resource:
-          type: string
-    LeadSourceCategory:
-      type: object
-      properties:
-        id:
-          type: string
-          description: The unique identifier for the category
-          example: 123
-        name:
-          type: string
-          description: The name of the category
-          example: Paid Advertising
-        description:
-          type: string
-          description: The description of the category
-          example: All paid marketing channels
-        create_time:
-          type: string
-          format: date-time
-          description: The date the category was created
-          example: '2024-01-10T08:00:00Z'
-        update_time:
-          type: string
-          format: date-time
-          description: The date the category was last updated
-          example: '2024-03-15T10:30:00Z'
-    ListLeadSourceCategoriesResponse:
-      type: object
-      properties:
-        lead_source_categories:
-          type: array
-          description: The lead source categories in the current page
-          items:
-            $ref: '#/components/schemas/LeadSourceCategory'
-        next_page_token:
-          type: string
     Error:
       type: object
       properties:
@@ -506,6 +464,48 @@ components:
           type: string
           description: The description of the category
           example: All paid marketing channels
+    LeadSourceCategory:
+      type: object
+      properties:
+        id:
+          type: string
+          description: The unique identifier for the category
+          example: 123
+        name:
+          type: string
+          description: The name of the category
+          example: Paid Advertising
+        description:
+          type: string
+          description: The description of the category
+          example: All paid marketing channels
+        create_time:
+          type: string
+          format: date-time
+          description: The date the category was created
+          example: '2024-01-10T08:00:00Z'
+        update_time:
+          type: string
+          format: date-time
+          description: The date the category was last updated
+          example: '2024-03-15T10:30:00Z'
+    ErrorDetails:
+      type: object
+      properties:
+        domain:
+          type: string
+        resource:
+          type: string
+    ListLeadSourceCategoriesResponse:
+      type: object
+      properties:
+        lead_source_categories:
+          type: array
+          description: The lead source categories in the current page
+          items:
+            $ref: '#/components/schemas/LeadSourceCategory'
+        next_page_token:
+          type: string
   securitySchemes:
     oauth2:
       type: oauth2

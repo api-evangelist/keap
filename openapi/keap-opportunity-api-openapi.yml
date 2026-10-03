@@ -2699,107 +2699,6 @@ paths:
     - url: https://api.infusionsoft.com/crm
 components:
   schemas:
-    OpportunitySearchCommand:
-      type: object
-      properties:
-        limit:
-          type: integer
-          format: int32
-        offset:
-          type: integer
-          format: int32
-        user_id:
-          type: integer
-          format: int64
-        stage_id:
-          type: integer
-          format: int64
-        search_term:
-          type: string
-        order:
-          type: string
-          enum:
-          - next_action
-          - opportunity_name
-          - contact_name
-          - date_created
-    ModelAndView:
-      type: object
-      properties:
-        view:
-          $ref: '#/components/schemas/View'
-        model:
-          type: object
-          additionalProperties: {}
-        status:
-          oneOf:
-          - $ref: '#/components/schemas/DefaultHttpStatusCode'
-          - $ref: '#/components/schemas/HttpStatus'
-        modelMap:
-          type: object
-          additionalProperties: {}
-          properties:
-            empty:
-              type: boolean
-        reference:
-          type: boolean
-        empty:
-          type: boolean
-        viewName:
-          type: string
-    SimpleUser:
-      type: object
-      properties:
-        id:
-          type: integer
-          format: int64
-        first_name:
-          type: string
-        last_name:
-          type: string
-    CustomFieldOption:
-      type: object
-      properties:
-        id:
-          type: string
-        label:
-          type: string
-    SimpleOpportunityStage:
-      type: object
-      properties:
-        id:
-          type: integer
-          format: int64
-          example: 0
-        name:
-          type: string
-        details:
-          $ref: '#/components/schemas/StageDetails'
-        reasons:
-          type: array
-          items:
-            type: string
-      required:
-      - id
-    StageDetails:
-      type: object
-      properties:
-        probability:
-          type: integer
-          format: int32
-        stage_order:
-          type: integer
-          format: int32
-        target_num_days:
-          type: integer
-          format: int32
-        check_list_items:
-          type: array
-          items:
-            $ref: '#/components/schemas/CheckListItemDetails'
-    DefaultHttpStatusCode:
-      allOf:
-      - $ref: '#/components/schemas/HttpStatusCode'
     HttpStatusCode:
       type: object
       properties:
@@ -2865,6 +2764,66 @@ components:
       - contact
       - opportunity_title
       - stage
+    SimpleUser:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        first_name:
+          type: string
+        last_name:
+          type: string
+    ModelAndView:
+      type: object
+      properties:
+        view:
+          $ref: '#/components/schemas/View'
+        model:
+          type: object
+          additionalProperties: {}
+        status:
+          oneOf:
+          - $ref: '#/components/schemas/DefaultHttpStatusCode'
+          - $ref: '#/components/schemas/HttpStatus'
+        modelMap:
+          type: object
+          additionalProperties: {}
+          properties:
+            empty:
+              type: boolean
+        reference:
+          type: boolean
+        empty:
+          type: boolean
+        viewName:
+          type: string
+    SalesPipeline:
+      type: object
+      properties:
+        stage_id:
+          type: integer
+          format: int64
+        stage_name:
+          type: string
+        stage_count:
+          type: integer
+          format: int32
+        stage_order:
+          type: integer
+          format: int32
+        end_stage:
+          type: boolean
+        is_default:
+          type: boolean
+    View:
+      type: object
+      properties:
+        contentType:
+          type: string
+    DefaultHttpStatusCode:
+      allOf:
+      - $ref: '#/components/schemas/HttpStatusCode'
     ObjectModel:
       type: object
       properties:
@@ -2877,6 +2836,31 @@ components:
           items:
             type: string
           uniqueItems: true
+    OpportunityContact:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 0
+        email:
+          type: string
+        city:
+          type: string
+        state:
+          type: string
+        first_name:
+          type: string
+        last_name:
+          type: string
+        company_name:
+          type: string
+        job_title:
+          type: string
+        phone_number:
+          type: string
+      required:
+      - id
     UpdateOpportunityRequest:
       type: object
       description: opportunity
@@ -2926,147 +2910,30 @@ components:
       - contact
       - opportunity_title
       - stage
-    View:
+    OpportunitySearchCommand:
       type: object
       properties:
-        contentType:
-          type: string
-    CheckListItemDetails:
-      type: object
-      properties:
-        id:
-          type: integer
-          format: int64
-        description:
-          type: string
-        required:
-          type: boolean
-        instance_id:
-          type: integer
-          format: int64
-        item_order:
+        limit:
           type: integer
           format: int32
-        done_date:
-          type: string
-          format: date-time
-    CustomFieldValue:
-      type: object
-      properties:
-        id:
-          type: integer
-          format: int64
-        content: {}
-    OpportunityList:
-      type: object
-      properties:
-        opportunities:
-          type: array
-          items:
-            $ref: '#/components/schemas/Opportunity'
-        count:
+        offset:
           type: integer
           format: int32
-        next:
-          type: string
-        previous:
-          type: string
-    SalesPipeline:
-      type: object
-      properties:
+        user_id:
+          type: integer
+          format: int64
         stage_id:
           type: integer
           format: int64
-        stage_name:
+        search_term:
           type: string
-        stage_count:
-          type: integer
-          format: int32
-        stage_order:
-          type: integer
-          format: int32
-        end_stage:
-          type: boolean
-        is_default:
-          type: boolean
-    CustomFieldMetaData:
-      type: object
-      properties:
-        id:
-          type: integer
-          format: int64
-        label:
-          type: string
-        options:
-          type: array
-          items:
-            $ref: '#/components/schemas/CustomFieldOption'
-        record_type:
+        order:
           type: string
           enum:
-          - CONTACT
-          - REFERRAL_PARTNER
-          - OPPORTUNITY
-          - TASK_NOTE_APPOINTMENT
-          - COMPANY
-          - ORDER
-          - SUBSCRIPTION
-        field_type:
-          type: string
-          enum:
-          - Currency
-          - Date
-          - DateTime
-          - DayOfWeek
-          - Drilldown
-          - Email
-          - Month
-          - ListBox
-          - Name
-          - WholeNumber
-          - DecimalNumber
-          - Percent
-          - PhoneNumber
-          - Radio
-          - Dropdown
-          - SocialSecurityNumber
-          - State
-          - Text
-          - TextArea
-          - User
-          - UserListBox
-          - Website
-          - Year
-          - YesNo
-        field_name:
-          type: string
-        default_value:
-          type: string
-    OpportunityContact:
-      type: object
-      properties:
-        id:
-          type: integer
-          format: int64
-          example: 0
-        email:
-          type: string
-        city:
-          type: string
-        state:
-          type: string
-        first_name:
-          type: string
-        last_name:
-          type: string
-        company_name:
-          type: string
-        job_title:
-          type: string
-        phone_number:
-          type: string
-      required:
-      - id
+          - next_action
+          - opportunity_name
+          - contact_name
+          - date_created
     HttpStatus:
       allOf:
       - $ref: '#/components/schemas/HttpStatusCode'
@@ -3135,6 +3002,233 @@ components:
       - 509 BANDWIDTH_LIMIT_EXCEEDED
       - 510 NOT_EXTENDED
       - 511 NETWORK_AUTHENTICATION_REQUIRED
+    CustomFieldOption:
+      type: object
+      properties:
+        id:
+          type: string
+        label:
+          type: string
+    StageDetails:
+      type: object
+      properties:
+        probability:
+          type: integer
+          format: int32
+        stage_order:
+          type: integer
+          format: int32
+        target_num_days:
+          type: integer
+          format: int32
+        check_list_items:
+          type: array
+          items:
+            $ref: '#/components/schemas/CheckListItemDetails'
+    OpportunityList:
+      type: object
+      properties:
+        opportunities:
+          type: array
+          items:
+            $ref: '#/components/schemas/Opportunity'
+        count:
+          type: integer
+          format: int32
+        next:
+          type: string
+        previous:
+          type: string
+    CustomFieldValue:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        content: {}
+    SimpleOpportunityStage:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 0
+        name:
+          type: string
+        details:
+          $ref: '#/components/schemas/StageDetails'
+        reasons:
+          type: array
+          items:
+            type: string
+      required:
+      - id
+    CheckListItemDetails:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        description:
+          type: string
+        required:
+          type: boolean
+        instance_id:
+          type: integer
+          format: int64
+        item_order:
+          type: integer
+          format: int32
+        done_date:
+          type: string
+          format: date-time
+    CustomFieldMetaData:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        label:
+          type: string
+        options:
+          type: array
+          items:
+            $ref: '#/components/schemas/CustomFieldOption'
+        record_type:
+          type: string
+          enum:
+          - CONTACT
+          - REFERRAL_PARTNER
+          - OPPORTUNITY
+          - TASK_NOTE_APPOINTMENT
+          - COMPANY
+          - ORDER
+          - SUBSCRIPTION
+        field_type:
+          type: string
+          enum:
+          - Currency
+          - Date
+          - DateTime
+          - DayOfWeek
+          - Drilldown
+          - Email
+          - Month
+          - ListBox
+          - Name
+          - WholeNumber
+          - DecimalNumber
+          - Percent
+          - PhoneNumber
+          - Radio
+          - Dropdown
+          - SocialSecurityNumber
+          - State
+          - Text
+          - TextArea
+          - User
+          - UserListBox
+          - Website
+          - Year
+          - YesNo
+        field_name:
+          type: string
+        default_value:
+          type: string
+    CreateCustomFieldRequest:
+      type: object
+      properties:
+        label:
+          type: string
+        options:
+          type: array
+          items:
+            $ref: '#/components/schemas/CreateCustomFieldOptionRequest'
+        field_type:
+          type: string
+          enum:
+          - CURRENCY
+          - DATE
+          - DATE_TIME
+          - DAY_OF_WEEK
+          - DECIMAL_NUMBER
+          - DRILLDOWN
+          - DROPDOWN
+          - EMAIL
+          - LIST_BOX
+          - MONTH
+          - NAME
+          - PERCENT
+          - PHONE_NUMBER
+          - RADIO
+          - SOCIAL_SECURITY_NUMBER
+          - STATE
+          - TEXT
+          - TEXT_AREA
+          - USER
+          - USER_LIST_BOX
+          - WEBSITE
+          - WHOLE_NUMBER
+          - YEAR
+          - YES_NO
+        group_id:
+          type: string
+          description: An optional tab group to place the field under in the interface.  If not specified, will default to the 'Custom Fields' tab.
+        user_group_id:
+          type: string
+          description: An optional user group to choose from when selecting values for User or UserListBox fields.
+      required:
+      - field_type
+      - label
+    RestV2User:
+      type: object
+      properties:
+        id:
+          type: string
+          description: User ID
+          example: 456
+        first_name:
+          type: string
+          description: First name
+          example: Jane
+        last_name:
+          type: string
+          description: Last name
+          example: Doe
+    Error:
+      type: object
+      properties:
+        code:
+          type: integer
+          format: int32
+        message:
+          type: string
+        status:
+          type: string
+        details:
+          type: array
+          items:
+            $ref: '#/components/schemas/ErrorDetails'
+    CreateCustomFieldTabRequest:
+      type: object
+      properties:
+        name:
+          type: string
+    CustomField:
+      type: object
+      properties:
+        content: {}
+        id:
+          type: string
+    ListOpportunityStagesResponse:
+      type: object
+      properties:
+        stages:
+          type: array
+          items:
+            $ref: '#/components/schemas/RestOpportunityStage'
+        next_page_token:
+          type: string
     ChecklistItem:
       type: object
       properties:
@@ -3155,163 +3249,28 @@ components:
           format: int32
           description: Display order
           example: 1
-    RestV2User:
-      type: object
-      properties:
-        id:
-          type: string
-          description: User ID
-          example: 456
-        first_name:
-          type: string
-          description: First name
-          example: Jane
-        last_name:
-          type: string
-          description: Last name
-          example: Doe
-    ListOpportunityStageMoveResponse:
-      type: object
-      properties:
-        stage_moves:
-          type: array
-          items:
-            $ref: '#/components/schemas/OpportunityStageMove'
-        next_page_token:
-          type: string
-    UpdateCustomFieldMetaDataRequest:
-      type: object
-      properties:
-        label:
-          type: string
-        options:
-          type: array
-          items:
-            $ref: '#/components/schemas/CustomFieldOption'
-        group_id:
-          type: string
-      required:
-      - group_id
-    CreateCustomFieldGroupRequest:
+    UpdateOpportunityStageRequest:
       type: object
       properties:
         name:
           type: string
-        tab_id:
-          type: string
-    UpdateCustomFieldGroupRequest:
-      type: object
-      properties:
-        name:
-          type: string
+          example: Qualified
         order:
           type: integer
           format: int32
-        tab_id:
-          type: string
-    CustomFieldTab:
-      type: object
-      properties:
-        id:
-          type: string
-          description: The unique identifier of the custom field tab
-          example: 123
-        name:
-          type: string
-          description: The name of the custom field tab
-          example: Personal Info
-        order:
-          type: integer
-          format: int32
-          description: The display order of the tab
-          example: 1
-        record_type:
-          type: string
-          description: The record type this tab belongs to (e.g., CONTACT, COMPANY, OPPORTUNITY, REFERRAL_PARTNER, ORDER, SUBSCRIPTION, TASK_NOTE_APPOINTMENT)
-          enum:
-          - CONTACT
-          - REFERRAL_PARTNER
-          - OPPORTUNITY
-          - TASK_NOTE_APPOINTMENT
-          - COMPANY
-          - ORDER
-          - SUBSCRIPTION
-          example: CONTACT
-    ListOpportunitiesResponse:
-      type: object
-      properties:
-        opportunities:
-          type: array
-          items:
-            $ref: '#/components/schemas/RestV2Opportunity'
-        next_page_token:
-          type: string
-    StageDetails_2:
-      type: object
-      properties:
         probability:
           type: integer
           format: int32
-          description: Win probability (0-100)
-          example: 50
-        stage_order:
-          type: integer
-          format: int32
-          description: Stage order in pipeline
+          description: must be an integer between 0 and 100.
           example: 2
-        target_num_days:
+        target_number_days:
           type: integer
           format: int32
-          description: Target days in stage
-          example: 14
+          description: Value should be >=0.
         checklist_items:
           type: array
-          description: Stage checklist items
           items:
-            $ref: '#/components/schemas/CheckListItemDetails'
-    UpdateOpportunityStageChecklistItem:
-      type: object
-      properties:
-        id:
-          type: string
-          description: Checklist item ID
-          example: 101
-        description:
-          type: string
-          description: Item description
-          example: Review contract terms
-        required:
-          type: boolean
-          description: Whether item is required
-          example: true
-        order:
-          type: integer
-          format: int32
-          description: Display order position
-          example: 1
-      required:
-      - description
-      - order
-      - required
-    CreateOpportunityStageChecklistItem:
-      type: object
-      properties:
-        description:
-          type: string
-        required:
-          type: boolean
-          example: true
-        order:
-          type: integer
-          format: int32
-          description: Must be Numeric could be negative values as well for ordering
-          examples:
-          - '-2'
-          - '1'
-      required:
-      - description
-      - order
-      - required
+            $ref: '#/components/schemas/UpdateOpportunityStageChecklistItem'
     UpdateOpportunityRequestV2:
       type: object
       properties:
@@ -3369,129 +3328,6 @@ components:
           type: string
           description: Affiliate ID
           example: 789
-    UpdateOpportunityStageRequest:
-      type: object
-      properties:
-        name:
-          type: string
-          example: Qualified
-        order:
-          type: integer
-          format: int32
-        probability:
-          type: integer
-          format: int32
-          description: must be an integer between 0 and 100.
-          example: 2
-        target_number_days:
-          type: integer
-          format: int32
-          description: Value should be >=0.
-        checklist_items:
-          type: array
-          items:
-            $ref: '#/components/schemas/UpdateOpportunityStageChecklistItem'
-    CustomFieldGroup:
-      type: object
-      properties:
-        id:
-          type: string
-        name:
-          type: string
-        order:
-          type: integer
-          format: int32
-        tab_id:
-          type: string
-        record_type:
-          type: string
-          enum:
-          - CONTACT
-          - REFERRAL_PARTNER
-          - OPPORTUNITY
-          - TASK_NOTE_APPOINTMENT
-          - COMPANY
-          - ORDER
-          - SUBSCRIPTION
-    CreateCustomFieldTabRequest:
-      type: object
-      properties:
-        name:
-          type: string
-    ObjectModel_2:
-      type: object
-      properties:
-        custom_fields:
-          type: array
-          items:
-            $ref: '#/components/schemas/CustomFieldMetaData_2'
-        optional_properties:
-          type: array
-          description: These fields are not transmitted by default on this model, but can be requested by specifying them in a comma-separated list in the optional_properties query parameter.
-          items:
-            type: string
-          uniqueItems: true
-    OpportunityStage:
-      type: object
-      properties:
-        id:
-          type: string
-          description: Stage ID
-          example: 1
-        name:
-          type: string
-          description: Stage name
-          example: Qualified
-        details:
-          $ref: '#/components/schemas/StageDetails_2'
-          description: Stage details
-        reasons:
-          type: array
-          description: Stage change reasons
-          items:
-            type: string
-      required:
-      - id
-    OpportunityStageMove:
-      type: object
-      description: Historical record of an opportunity moving from one pipeline stage to another
-      properties:
-        id:
-          type: string
-          description: Unique ID of this stage-move record
-          example: 42
-        opportunity_id:
-          type: string
-          description: ID of the opportunity that was moved
-          example: 7
-        move_time:
-          type: string
-          description: Date-time when the move occurred (ISO-8601 UTC)
-          example: 2024-03-15T10:30:00.000+0000
-        move_from_stage_id:
-          type: string
-          description: ID of the stage moved FROM. 0 = no previous stage (first move)
-          example: 3
-        move_to_stage_id:
-          type: string
-          description: ID of the stage moved TO
-          example: 5
-        prev_stage_move_time:
-          type: string
-          description: Date-time of the previous stage-move (ISO-8601 UTC). Null if first move.
-          example: 2024-02-10T08:00:00.000+0000
-        user_id:
-          type: string
-          description: ID of the user associated with this move
-          example: 1
-        created_by:
-          type: string
-          description: ID of the user who created this record
-          example: 1
-        create_time:
-          type: string
-          description: Date-time this record was created (ISO-8601 UTC)
-          example: 2024-03-15T10:30:00.000+0000
     ListCustomFieldTabsResponse:
       type: object
       properties:
@@ -3499,20 +3335,6 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/CustomFieldTab'
-    Error:
-      type: object
-      properties:
-        code:
-          type: integer
-          format: int32
-        message:
-          type: string
-        status:
-          type: string
-        details:
-          type: array
-          items:
-            $ref: '#/components/schemas/ErrorDetails'
     ListCustomFieldGroupsResponse:
       type: object
       properties:
@@ -3520,279 +3342,25 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/CustomFieldGroup'
-    OpportunityContact_2:
+    CustomFieldTab:
       type: object
       properties:
         id:
           type: string
-          description: Contact ID
-          example: 1001
-        email:
-          type: string
-          description: Email address
-          example: john.smith@example.com
-        city:
-          type: string
-          description: City
-          example: Chandler
-        state:
-          type: string
-          description: State
-          example: AZ
-        first_name:
-          type: string
-          description: First name
-          example: John
-        last_name:
-          type: string
-          description: Last name
-          example: Smith
-        company_name:
-          type: string
-          description: Company name
-          example: Acme Corp
-        job_title:
-          type: string
-          description: Job title
-          example: Sales Manager
-        phone_number:
-          type: string
-          description: Phone number
-          example: 5551234567
-      required:
-      - id
-    CreateCustomFieldRequest:
-      type: object
-      properties:
-        label:
-          type: string
-        options:
-          type: array
-          items:
-            $ref: '#/components/schemas/CreateCustomFieldOptionRequest'
-        field_type:
-          type: string
-          enum:
-          - CURRENCY
-          - DATE
-          - DATE_TIME
-          - DAY_OF_WEEK
-          - DECIMAL_NUMBER
-          - DRILLDOWN
-          - DROPDOWN
-          - EMAIL
-          - LIST_BOX
-          - MONTH
-          - NAME
-          - PERCENT
-          - PHONE_NUMBER
-          - RADIO
-          - SOCIAL_SECURITY_NUMBER
-          - STATE
-          - TEXT
-          - TEXT_AREA
-          - USER
-          - USER_LIST_BOX
-          - WEBSITE
-          - WHOLE_NUMBER
-          - YEAR
-          - YES_NO
-        group_id:
-          type: string
-          description: An optional tab group to place the field under in the interface.  If not specified, will default to the 'Custom Fields' tab.
-        user_group_id:
-          type: string
-          description: An optional user group to choose from when selecting values for User or UserListBox fields.
-      required:
-      - field_type
-      - label
-    ListOpportunityStagesResponse:
-      type: object
-      properties:
-        stages:
-          type: array
-          items:
-            $ref: '#/components/schemas/RestOpportunityStage'
-        next_page_token:
-          type: string
-    CreateCustomFieldOptionRequest:
-      type: object
-      properties:
-        label:
-          type: string
-    CustomField:
-      type: object
-      properties:
-        content: {}
-        id:
-          type: string
-    ErrorDetails:
-      type: object
-      properties:
-        domain:
-          type: string
-        resource:
-          type: string
-    CreateOpportunityStageRequest:
-      type: object
-      description: opportunity
-      properties:
-        name:
-          type: string
-          example: Won
-        order:
-          type: integer
-          format: int32
-          example: 5
-        target_number_days:
-          type: integer
-          format: int32
-          example: 10
-          minimum: 0
-        probability:
-          type: integer
-          format: int32
-          example: 42
-          maximum: 100
-          minimum: 0
-        checklist_items:
-          type: array
-          items:
-            $ref: '#/components/schemas/CreateOpportunityStageChecklistItem'
-      required:
-      - name
-      - order
-      - probability
-      - target_number_days
-    CreateOpportunityRequest:
-      type: object
-      description: opportunity
-      properties:
-        opportunity_title:
-          type: string
-          description: Opportunity title
-          example: New Business Deal
-        next_action_time:
-          type: string
-          description: Next action timestamp (ISO-8601)
-          example: '2024-03-20T10:00:00Z'
-        next_action_notes:
-          type: string
-          description: Notes for next action
-          example: Schedule demo call
-        opportunity_notes:
-          type: string
-          description: General notes
-          example: Prospect from website inquiry
-        estimated_close_time:
-          type: string
-          description: Estimated close timestamp (ISO-8601)
-          example: '2024-04-15T00:00:00Z'
-        include_in_forecast:
-          type: boolean
-          description: Include in sales forecast
-          example: true
-        projected_revenue_low:
-          type: number
-          format: double
-          description: Low revenue estimate
-          example: 5000.0
-        projected_revenue_high:
-          type: number
-          format: double
-          description: High revenue estimate
-          example: 10000.0
-        contact_id:
-          type: string
-          description: Associated contact ID
-          example: 1001
-        stage_id:
-          type: string
-          description: Pipeline stage ID
-          example: 2
-        user_id:
-          type: string
-          description: Assigned user ID
-          example: 456
-        custom_fields:
-          type: array
-          items:
-            $ref: '#/components/schemas/CustomField'
-        affiliate_id:
-          type: string
-          description: Affiliate ID
-          example: 789
-      required:
-      - contact_id
-      - opportunity_title
-      - stage_id
-    RestOpportunityStage:
-      type: object
-      properties:
-        id:
-          type: string
-          description: Stage ID
-          example: 1
-        name:
-          type: string
-          description: Stage name
-          example: Qualified
-        order:
-          type: integer
-          format: int32
-          description: Stage order in pipeline
-          example: 2
-        target_number_days:
-          type: integer
-          format: int32
-          description: Target days in stage
-          example: 14
-        probability:
-          type: integer
-          format: int32
-          description: Win probability (0-100)
-          example: 50
-        created_time:
-          type: string
-          description: Creation timestamp (ISO-8601)
-          example: '2024-01-10T08:00:00Z'
-        updated_time:
-          type: string
-          description: Last update timestamp (ISO-8601)
-          example: '2024-03-15T10:30:00Z'
-        checklist_items:
-          type: array
-          description: Stage checklist items
-          items:
-            $ref: '#/components/schemas/ChecklistItem'
-    UpdateCustomFieldTabRequest:
-      type: object
-      properties:
-        name:
-          type: string
-        order:
-          type: integer
-          format: int32
-    CustomFieldMetaData_2:
-      type: object
-      description: Metadata describing a custom field, including its type and options
-      properties:
-        id:
-          type: string
-          description: The unique identifier of the custom field
+          description: The unique identifier of the custom field tab
           example: 123
-        label:
+        name:
           type: string
-          description: The display label of the custom field
-          example: Favorite Color
-        options:
-          type: array
-          description: The list of available options for select/radio/multiselect/drilldown field types
-          items:
-            $ref: '#/components/schemas/CustomFieldOption'
+          description: The name of the custom field tab
+          example: Personal Info
+        order:
+          type: integer
+          format: int32
+          description: The display order of the tab
+          example: 1
         record_type:
           type: string
-          description: The entity type this custom field belongs to (e.g. CONTACT, COMPANY)
+          description: The record type this tab belongs to (e.g., CONTACT, COMPANY, OPPORTUNITY, REFERRAL_PARTNER, ORDER, SUBSCRIPTION, TASK_NOTE_APPOINTMENT)
           enum:
           - CONTACT
           - REFERRAL_PARTNER
@@ -3801,49 +3369,7 @@ components:
           - COMPANY
           - ORDER
           - SUBSCRIPTION
-        field_type:
-          type: string
-          description: The data type of the custom field (e.g. Text, Number, Date, Select)
-          enum:
-          - CURRENCY
-          - DATE
-          - DATE_TIME
-          - DAY_OF_WEEK
-          - DECIMAL_NUMBER
-          - DRILLDOWN
-          - DROPDOWN
-          - EMAIL
-          - LIST_BOX
-          - MONTH
-          - NAME
-          - PERCENT
-          - PHONE_NUMBER
-          - RADIO
-          - SOCIAL_SECURITY_NUMBER
-          - STATE
-          - TEXT
-          - TEXT_AREA
-          - USER
-          - USER_LIST_BOX
-          - WEBSITE
-          - WHOLE_NUMBER
-          - YEAR
-          - YES_NO
-        default_value:
-          type: string
-          description: The default value for this custom field, if any
-        group_id:
-          type: string
-          description: The ID of the group this custom field belongs to
-          example: 45
-        group_name:
-          type: string
-          description: The name of the group this custom field belongs to
-          example: Personal Info
-        field_name:
-          type: string
-          description: The database column name for this custom field. Use this value when filtering contacts (e.g. for field_name 'firstName1', filter with 'firstName1==John').
-          example: firstName1
+          example: CONTACT
     RestV2Opportunity:
       type: object
       properties:
@@ -3949,6 +3475,480 @@ components:
       - contact
       - opportunity_title
       - stage
+    ObjectModel_2:
+      type: object
+      properties:
+        custom_fields:
+          type: array
+          items:
+            $ref: '#/components/schemas/CustomFieldMetaData_2'
+        optional_properties:
+          type: array
+          description: These fields are not transmitted by default on this model, but can be requested by specifying them in a comma-separated list in the optional_properties query parameter.
+          items:
+            type: string
+          uniqueItems: true
+    OpportunityContact_2:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Contact ID
+          example: 1001
+        email:
+          type: string
+          description: Email address
+          example: john.smith@example.com
+        city:
+          type: string
+          description: City
+          example: Chandler
+        state:
+          type: string
+          description: State
+          example: AZ
+        first_name:
+          type: string
+          description: First name
+          example: John
+        last_name:
+          type: string
+          description: Last name
+          example: Smith
+        company_name:
+          type: string
+          description: Company name
+          example: Acme Corp
+        job_title:
+          type: string
+          description: Job title
+          example: Sales Manager
+        phone_number:
+          type: string
+          description: Phone number
+          example: 5551234567
+      required:
+      - id
+    CustomFieldGroup:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        order:
+          type: integer
+          format: int32
+        tab_id:
+          type: string
+        record_type:
+          type: string
+          enum:
+          - CONTACT
+          - REFERRAL_PARTNER
+          - OPPORTUNITY
+          - TASK_NOTE_APPOINTMENT
+          - COMPANY
+          - ORDER
+          - SUBSCRIPTION
+    UpdateCustomFieldGroupRequest:
+      type: object
+      properties:
+        name:
+          type: string
+        order:
+          type: integer
+          format: int32
+        tab_id:
+          type: string
+    CreateCustomFieldGroupRequest:
+      type: object
+      properties:
+        name:
+          type: string
+        tab_id:
+          type: string
+    CreateOpportunityRequest:
+      type: object
+      description: opportunity
+      properties:
+        opportunity_title:
+          type: string
+          description: Opportunity title
+          example: New Business Deal
+        next_action_time:
+          type: string
+          description: Next action timestamp (ISO-8601)
+          example: '2024-03-20T10:00:00Z'
+        next_action_notes:
+          type: string
+          description: Notes for next action
+          example: Schedule demo call
+        opportunity_notes:
+          type: string
+          description: General notes
+          example: Prospect from website inquiry
+        estimated_close_time:
+          type: string
+          description: Estimated close timestamp (ISO-8601)
+          example: '2024-04-15T00:00:00Z'
+        include_in_forecast:
+          type: boolean
+          description: Include in sales forecast
+          example: true
+        projected_revenue_low:
+          type: number
+          format: double
+          description: Low revenue estimate
+          example: 5000.0
+        projected_revenue_high:
+          type: number
+          format: double
+          description: High revenue estimate
+          example: 10000.0
+        contact_id:
+          type: string
+          description: Associated contact ID
+          example: 1001
+        stage_id:
+          type: string
+          description: Pipeline stage ID
+          example: 2
+        user_id:
+          type: string
+          description: Assigned user ID
+          example: 456
+        custom_fields:
+          type: array
+          items:
+            $ref: '#/components/schemas/CustomField'
+        affiliate_id:
+          type: string
+          description: Affiliate ID
+          example: 789
+      required:
+      - contact_id
+      - opportunity_title
+      - stage_id
+    ListOpportunitiesResponse:
+      type: object
+      properties:
+        opportunities:
+          type: array
+          items:
+            $ref: '#/components/schemas/RestV2Opportunity'
+        next_page_token:
+          type: string
+    CreateOpportunityStageChecklistItem:
+      type: object
+      properties:
+        description:
+          type: string
+        required:
+          type: boolean
+          example: true
+        order:
+          type: integer
+          format: int32
+          description: Must be Numeric could be negative values as well for ordering
+          examples:
+          - '-2'
+          - '1'
+      required:
+      - description
+      - order
+      - required
+    ErrorDetails:
+      type: object
+      properties:
+        domain:
+          type: string
+        resource:
+          type: string
+    StageDetails_2:
+      type: object
+      properties:
+        probability:
+          type: integer
+          format: int32
+          description: Win probability (0-100)
+          example: 50
+        stage_order:
+          type: integer
+          format: int32
+          description: Stage order in pipeline
+          example: 2
+        target_num_days:
+          type: integer
+          format: int32
+          description: Target days in stage
+          example: 14
+        checklist_items:
+          type: array
+          description: Stage checklist items
+          items:
+            $ref: '#/components/schemas/CheckListItemDetails'
+    CreateCustomFieldOptionRequest:
+      type: object
+      properties:
+        label:
+          type: string
+    OpportunityStageMove:
+      type: object
+      description: Historical record of an opportunity moving from one pipeline stage to another
+      properties:
+        id:
+          type: string
+          description: Unique ID of this stage-move record
+          example: 42
+        opportunity_id:
+          type: string
+          description: ID of the opportunity that was moved
+          example: 7
+        move_time:
+          type: string
+          description: Date-time when the move occurred (ISO-8601 UTC)
+          example: 2024-03-15T10:30:00.000+0000
+        move_from_stage_id:
+          type: string
+          description: ID of the stage moved FROM. 0 = no previous stage (first move)
+          example: 3
+        move_to_stage_id:
+          type: string
+          description: ID of the stage moved TO
+          example: 5
+        prev_stage_move_time:
+          type: string
+          description: Date-time of the previous stage-move (ISO-8601 UTC). Null if first move.
+          example: 2024-02-10T08:00:00.000+0000
+        user_id:
+          type: string
+          description: ID of the user associated with this move
+          example: 1
+        created_by:
+          type: string
+          description: ID of the user who created this record
+          example: 1
+        create_time:
+          type: string
+          description: Date-time this record was created (ISO-8601 UTC)
+          example: 2024-03-15T10:30:00.000+0000
+    ListOpportunityStageMoveResponse:
+      type: object
+      properties:
+        stage_moves:
+          type: array
+          items:
+            $ref: '#/components/schemas/OpportunityStageMove'
+        next_page_token:
+          type: string
+    RestOpportunityStage:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Stage ID
+          example: 1
+        name:
+          type: string
+          description: Stage name
+          example: Qualified
+        order:
+          type: integer
+          format: int32
+          description: Stage order in pipeline
+          example: 2
+        target_number_days:
+          type: integer
+          format: int32
+          description: Target days in stage
+          example: 14
+        probability:
+          type: integer
+          format: int32
+          description: Win probability (0-100)
+          example: 50
+        created_time:
+          type: string
+          description: Creation timestamp (ISO-8601)
+          example: '2024-01-10T08:00:00Z'
+        updated_time:
+          type: string
+          description: Last update timestamp (ISO-8601)
+          example: '2024-03-15T10:30:00Z'
+        checklist_items:
+          type: array
+          description: Stage checklist items
+          items:
+            $ref: '#/components/schemas/ChecklistItem'
+    OpportunityStage:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Stage ID
+          example: 1
+        name:
+          type: string
+          description: Stage name
+          example: Qualified
+        details:
+          $ref: '#/components/schemas/StageDetails_2'
+          description: Stage details
+        reasons:
+          type: array
+          description: Stage change reasons
+          items:
+            type: string
+      required:
+      - id
+    CreateOpportunityStageRequest:
+      type: object
+      description: opportunity
+      properties:
+        name:
+          type: string
+          example: Won
+        order:
+          type: integer
+          format: int32
+          example: 5
+        target_number_days:
+          type: integer
+          format: int32
+          example: 10
+          minimum: 0
+        probability:
+          type: integer
+          format: int32
+          example: 42
+          maximum: 100
+          minimum: 0
+        checklist_items:
+          type: array
+          items:
+            $ref: '#/components/schemas/CreateOpportunityStageChecklistItem'
+      required:
+      - name
+      - order
+      - probability
+      - target_number_days
+    UpdateCustomFieldTabRequest:
+      type: object
+      properties:
+        name:
+          type: string
+        order:
+          type: integer
+          format: int32
+    UpdateCustomFieldMetaDataRequest:
+      type: object
+      properties:
+        label:
+          type: string
+        options:
+          type: array
+          items:
+            $ref: '#/components/schemas/CustomFieldOption'
+        group_id:
+          type: string
+      required:
+      - group_id
+    UpdateOpportunityStageChecklistItem:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Checklist item ID
+          example: 101
+        description:
+          type: string
+          description: Item description
+          example: Review contract terms
+        required:
+          type: boolean
+          description: Whether item is required
+          example: true
+        order:
+          type: integer
+          format: int32
+          description: Display order position
+          example: 1
+      required:
+      - description
+      - order
+      - required
+    CustomFieldMetaData_2:
+      type: object
+      description: Metadata describing a custom field, including its type and options
+      properties:
+        id:
+          type: string
+          description: The unique identifier of the custom field
+          example: 123
+        label:
+          type: string
+          description: The display label of the custom field
+          example: Favorite Color
+        options:
+          type: array
+          description: The list of available options for select/radio/multiselect/drilldown field types
+          items:
+            $ref: '#/components/schemas/CustomFieldOption'
+        record_type:
+          type: string
+          description: The entity type this custom field belongs to (e.g. CONTACT, COMPANY)
+          enum:
+          - CONTACT
+          - REFERRAL_PARTNER
+          - OPPORTUNITY
+          - TASK_NOTE_APPOINTMENT
+          - COMPANY
+          - ORDER
+          - SUBSCRIPTION
+        field_type:
+          type: string
+          description: The data type of the custom field (e.g. Text, Number, Date, Select)
+          enum:
+          - CURRENCY
+          - DATE
+          - DATE_TIME
+          - DAY_OF_WEEK
+          - DECIMAL_NUMBER
+          - DRILLDOWN
+          - DROPDOWN
+          - EMAIL
+          - LIST_BOX
+          - MONTH
+          - NAME
+          - PERCENT
+          - PHONE_NUMBER
+          - RADIO
+          - SOCIAL_SECURITY_NUMBER
+          - STATE
+          - TEXT
+          - TEXT_AREA
+          - USER
+          - USER_LIST_BOX
+          - WEBSITE
+          - WHOLE_NUMBER
+          - YEAR
+          - YES_NO
+        default_value:
+          type: string
+          description: The default value for this custom field, if any
+        group_id:
+          type: string
+          description: The ID of the group this custom field belongs to
+          example: 45
+        group_name:
+          type: string
+          description: The name of the group this custom field belongs to
+          example: Personal Info
+        field_name:
+          type: string
+          description: The database column name for this custom field. Use this value when filtering contacts (e.g. for field_name 'firstName1', filter with 'firstName1==John').
+          example: firstName1
   securitySchemes:
     oauth2:
       type: oauth2

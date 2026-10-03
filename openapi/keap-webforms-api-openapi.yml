@@ -218,20 +218,6 @@ paths:
                 description: Raw HTML content of the webform
 components:
   schemas:
-    Error:
-      type: object
-      properties:
-        code:
-          type: integer
-          format: int32
-        message:
-          type: string
-        status:
-          type: string
-        details:
-          type: array
-          items:
-            $ref: '#/components/schemas/ErrorDetails'
     Webform:
       type: object
       properties:
@@ -331,6 +317,20 @@ components:
             $ref: '#/components/schemas/Webform'
         next_page_token:
           type: string
+    Error:
+      type: object
+      properties:
+        code:
+          type: integer
+          format: int32
+        message:
+          type: string
+        status:
+          type: string
+        details:
+          type: array
+          items:
+            $ref: '#/components/schemas/ErrorDetails'
     ErrorDetails:
       type: object
       properties:

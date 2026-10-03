@@ -413,31 +413,6 @@ paths:
           description: No Content
 components:
   schemas:
-    ListPaymentMethodsResponse:
-      type: object
-      properties:
-        payment_methods:
-          type: array
-          items:
-            $ref: '#/components/schemas/PaymentMethod'
-        next_page_token:
-          type: string
-    ListContactPaymentMethodsResponse:
-      type: object
-      properties:
-        records:
-          type: array
-          items:
-            $ref: '#/components/schemas/PaymentMethod'
-        next_page_token:
-          type: string
-    ErrorDetails:
-      type: object
-      properties:
-        domain:
-          type: string
-        resource:
-          type: string
     Error:
       type: object
       properties:
@@ -452,6 +427,15 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/ErrorDetails'
+    ListPaymentMethodsResponse:
+      type: object
+      properties:
+        payment_methods:
+          type: array
+          items:
+            $ref: '#/components/schemas/PaymentMethod'
+        next_page_token:
+          type: string
     CardInfo:
       type: object
       properties:
@@ -476,6 +460,22 @@ components:
         expiration_month:
           type: string
           description: Two-digit expiration month
+    ErrorDetails:
+      type: object
+      properties:
+        domain:
+          type: string
+        resource:
+          type: string
+    ListContactPaymentMethodsResponse:
+      type: object
+      properties:
+        records:
+          type: array
+          items:
+            $ref: '#/components/schemas/PaymentMethod'
+        next_page_token:
+          type: string
     PaymentMethod:
       type: object
       properties:

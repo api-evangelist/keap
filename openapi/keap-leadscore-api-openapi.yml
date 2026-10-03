@@ -88,6 +88,13 @@ paths:
                 $ref: '#/components/schemas/LeadScore'
 components:
   schemas:
+    ErrorDetails:
+      type: object
+      properties:
+        domain:
+          type: string
+        resource:
+          type: string
     Error:
       type: object
       properties:
@@ -102,13 +109,6 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/ErrorDetails'
-    ErrorDetails:
-      type: object
-      properties:
-        domain:
-          type: string
-        resource:
-          type: string
     LeadScore:
       type: object
       properties:

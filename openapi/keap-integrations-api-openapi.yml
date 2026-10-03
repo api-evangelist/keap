@@ -287,20 +287,6 @@ paths:
           description: No Content
 components:
   schemas:
-    WordPressOptInOption:
-      type: object
-      properties:
-        key:
-          type: string
-        name:
-          type: string
-    ErrorDetails:
-      type: object
-      properties:
-        domain:
-          type: string
-        resource:
-          type: string
     Error:
       type: object
       properties:
@@ -315,6 +301,22 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/ErrorDetails'
+    ListWordPressOptInOptionsResponse:
+      type: object
+      properties:
+        wordpress_opt_in_options:
+          type: array
+          items:
+            $ref: '#/components/schemas/WordPressOptInOption'
+        next_page_token:
+          type: string
+    ErrorDetails:
+      type: object
+      properties:
+        domain:
+          type: string
+        resource:
+          type: string
     AchieveIntegrationsWordPressOptInOptionGoalRequest:
       type: object
       properties:
@@ -333,20 +335,18 @@ components:
           type: string
           description: The display name of the opt-in option
           example: Newsletter Opt-In
+    WordPressOptInOption:
+      type: object
+      properties:
+        key:
+          type: string
+        name:
+          type: string
     AchieveWordPressOptInGoalResult:
       type: object
       properties:
         successful:
           type: boolean
-    ListWordPressOptInOptionsResponse:
-      type: object
-      properties:
-        wordpress_opt_in_options:
-          type: array
-          items:
-            $ref: '#/components/schemas/WordPressOptInOption'
-        next_page_token:
-          type: string
   securitySchemes:
     oauth2:
       type: oauth2

@@ -289,6 +289,31 @@ paths:
                 $ref: '#/components/schemas/AutomationCategory'
 components:
   schemas:
+    Error:
+      type: object
+      properties:
+        code:
+          type: integer
+          format: int32
+        message:
+          type: string
+        status:
+          type: string
+        details:
+          type: array
+          items:
+            $ref: '#/components/schemas/ErrorDetails'
+    ListAutomationCategoryResponse:
+      type: object
+      description: Response containing a list of automation categories
+      properties:
+        automation_categories:
+          type: array
+          description: List of automation categories
+          items:
+            $ref: '#/components/schemas/AutomationCategory'
+        next_page_token:
+          type: string
     ErrorDetails:
       type: object
       properties:
@@ -306,20 +331,15 @@ components:
           example: Marketing Campaigns
       required:
       - name
-    Error:
+    PatchAutomationCategoryRequest:
       type: object
       properties:
-        code:
-          type: integer
-          format: int32
-        message:
+        name:
           type: string
-        status:
-          type: string
-        details:
-          type: array
-          items:
-            $ref: '#/components/schemas/ErrorDetails'
+          description: New name for the category
+          example: Marketing Campaigns
+          maxLength: 100
+          minLength: 1
     AutomationCategory:
       type: object
       description: An automation category
@@ -337,26 +357,6 @@ components:
           format: int64
           description: Number of automations in this category
           example: 15
-    PatchAutomationCategoryRequest:
-      type: object
-      properties:
-        name:
-          type: string
-          description: New name for the category
-          example: Marketing Campaigns
-          maxLength: 100
-          minLength: 1
-    ListAutomationCategoryResponse:
-      type: object
-      description: Response containing a list of automation categories
-      properties:
-        automation_categories:
-          type: array
-          description: List of automation categories
-          items:
-            $ref: '#/components/schemas/AutomationCategory'
-        next_page_token:
-          type: string
   securitySchemes:
     oauth2:
       type: oauth2

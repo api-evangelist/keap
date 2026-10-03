@@ -536,70 +536,20 @@ paths:
     - url: https://api.infusionsoft.com/crm
 components:
   schemas:
-    DefaultHttpStatusCode:
-      allOf:
-      - $ref: '#/components/schemas/HttpStatusCode'
+    CountriesByCode:
+      type: object
+      properties:
+        countries:
+          type: object
+          additionalProperties:
+            type: string
+          description: A key-value pair of country code and country name.
+      required:
+      - countries
     View:
       type: object
       properties:
         contentType:
-          type: string
-    RestDefaultOptionsResponse:
-      type: object
-      properties:
-        contact_types:
-          type: array
-          items:
-            type: string
-        title_types:
-          type: array
-          items:
-            type: string
-        suffix_types:
-          type: array
-          items:
-            type: string
-        phone_types:
-          type: array
-          items:
-            type: string
-        fax_types:
-          type: array
-          items:
-            type: string
-    ProvincesByCode:
-      type: object
-      properties:
-        provinces:
-          type: object
-          additionalProperties:
-            type: string
-          description: A key-value pair of province code and province name.
-      required:
-      - provinces
-    ModelAndView:
-      type: object
-      properties:
-        view:
-          $ref: '#/components/schemas/View'
-        model:
-          type: object
-          additionalProperties: {}
-        status:
-          oneOf:
-          - $ref: '#/components/schemas/DefaultHttpStatusCode'
-          - $ref: '#/components/schemas/HttpStatus'
-        modelMap:
-          type: object
-          additionalProperties: {}
-          properties:
-            empty:
-              type: boolean
-        reference:
-          type: boolean
-        empty:
-          type: boolean
-        viewName:
           type: string
     HttpStatusCode:
       type: object
@@ -616,16 +566,6 @@ components:
           type: boolean
         is5xxServerError:
           type: boolean
-    CountriesByCode:
-      type: object
-      properties:
-        countries:
-          type: object
-          additionalProperties:
-            type: string
-          description: A key-value pair of country code and country name.
-      required:
-      - countries
     HttpStatus:
       allOf:
       - $ref: '#/components/schemas/HttpStatusCode'
@@ -694,6 +634,99 @@ components:
       - 509 BANDWIDTH_LIMIT_EXCEEDED
       - 510 NOT_EXTENDED
       - 511 NETWORK_AUTHENTICATION_REQUIRED
+    DefaultHttpStatusCode:
+      allOf:
+      - $ref: '#/components/schemas/HttpStatusCode'
+    RestDefaultOptionsResponse:
+      type: object
+      properties:
+        contact_types:
+          type: array
+          items:
+            type: string
+        title_types:
+          type: array
+          items:
+            type: string
+        suffix_types:
+          type: array
+          items:
+            type: string
+        phone_types:
+          type: array
+          items:
+            type: string
+        fax_types:
+          type: array
+          items:
+            type: string
+    ProvincesByCode:
+      type: object
+      properties:
+        provinces:
+          type: object
+          additionalProperties:
+            type: string
+          description: A key-value pair of province code and province name.
+      required:
+      - provinces
+    ModelAndView:
+      type: object
+      properties:
+        view:
+          $ref: '#/components/schemas/View'
+        model:
+          type: object
+          additionalProperties: {}
+        status:
+          oneOf:
+          - $ref: '#/components/schemas/DefaultHttpStatusCode'
+          - $ref: '#/components/schemas/HttpStatus'
+        modelMap:
+          type: object
+          additionalProperties: {}
+          properties:
+            empty:
+              type: boolean
+        reference:
+          type: boolean
+        empty:
+          type: boolean
+        viewName:
+          type: string
+    CountryCodes:
+      type: object
+      properties:
+        alpha2:
+          type: string
+        alpha3:
+          type: string
+    Error:
+      type: object
+      properties:
+        code:
+          type: integer
+          format: int32
+        message:
+          type: string
+        status:
+          type: string
+        details:
+          type: array
+          items:
+            $ref: '#/components/schemas/ErrorDetails'
+    ListProvincesResponse:
+      type: object
+      properties:
+        provinces:
+          type: array
+          description: A key-value pair of province code and province name.
+          items:
+            $ref: '#/components/schemas/Province'
+        next_page_token:
+          type: string
+      required:
+      - provinces
     ListCountriesResponse:
       type: object
       properties:
@@ -713,38 +746,12 @@ components:
           type: string
         resource:
           type: string
-    ListProvincesResponse:
+    Country:
       type: object
       properties:
-        provinces:
-          type: array
-          description: A key-value pair of province code and province name.
-          items:
-            $ref: '#/components/schemas/Province'
-        next_page_token:
-          type: string
-      required:
-      - provinces
-    Error:
-      type: object
-      properties:
-        code:
-          type: integer
-          format: int32
-        message:
-          type: string
-        status:
-          type: string
-        details:
-          type: array
-          items:
-            $ref: '#/components/schemas/ErrorDetails'
-    CountryCodes:
-      type: object
-      properties:
-        alpha2:
-          type: string
-        alpha3:
+        codes:
+          $ref: '#/components/schemas/CountryCodes'
+        name:
           type: string
     Province:
       type: object
@@ -754,13 +761,6 @@ components:
         name:
           type: string
         country:
-          type: string
-    Country:
-      type: object
-      properties:
-        codes:
-          $ref: '#/components/schemas/CountryCodes'
-        name:
           type: string
   securitySchemes:
     oauth2:

@@ -95,47 +95,10 @@ paths:
                 $ref: '#/components/schemas/RestMerchantAccountResponse'
 components:
   schemas:
-    DefaultHttpStatusCode:
-      allOf:
-      - $ref: '#/components/schemas/HttpStatusCode'
     View:
       type: object
       properties:
         contentType:
-          type: string
-    RestMerchantAccountResponse:
-      type: object
-      properties:
-        default_merchant_account:
-          type: integer
-          format: int64
-        merchant_accounts:
-          type: array
-          items:
-            $ref: '#/components/schemas/Merchant'
-    ModelAndView:
-      type: object
-      properties:
-        view:
-          $ref: '#/components/schemas/View'
-        model:
-          type: object
-          additionalProperties: {}
-        status:
-          oneOf:
-          - $ref: '#/components/schemas/DefaultHttpStatusCode'
-          - $ref: '#/components/schemas/HttpStatus'
-        modelMap:
-          type: object
-          additionalProperties: {}
-          properties:
-            empty:
-              type: boolean
-        reference:
-          type: boolean
-        empty:
-          type: boolean
-        viewName:
           type: string
     HttpStatusCode:
       type: object
@@ -151,18 +114,6 @@ components:
         is4xxClientError:
           type: boolean
         is5xxServerError:
-          type: boolean
-    Merchant:
-      type: object
-      properties:
-        id:
-          type: integer
-          format: int64
-        type:
-          type: string
-        account_name:
-          type: string
-        is_test:
           type: boolean
     HttpStatus:
       allOf:
@@ -232,6 +183,55 @@ components:
       - 509 BANDWIDTH_LIMIT_EXCEEDED
       - 510 NOT_EXTENDED
       - 511 NETWORK_AUTHENTICATION_REQUIRED
+    DefaultHttpStatusCode:
+      allOf:
+      - $ref: '#/components/schemas/HttpStatusCode'
+    RestMerchantAccountResponse:
+      type: object
+      properties:
+        default_merchant_account:
+          type: integer
+          format: int64
+        merchant_accounts:
+          type: array
+          items:
+            $ref: '#/components/schemas/Merchant'
+    Merchant:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        type:
+          type: string
+        account_name:
+          type: string
+        is_test:
+          type: boolean
+    ModelAndView:
+      type: object
+      properties:
+        view:
+          $ref: '#/components/schemas/View'
+        model:
+          type: object
+          additionalProperties: {}
+        status:
+          oneOf:
+          - $ref: '#/components/schemas/DefaultHttpStatusCode'
+          - $ref: '#/components/schemas/HttpStatus'
+        modelMap:
+          type: object
+          additionalProperties: {}
+          properties:
+            empty:
+              type: boolean
+        reference:
+          type: boolean
+        empty:
+          type: boolean
+        viewName:
+          type: string
   securitySchemes:
     oauth2:
       type: oauth2

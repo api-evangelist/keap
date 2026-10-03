@@ -174,67 +174,10 @@ paths:
                 $ref: '#/components/schemas/AccountProfile'
 components:
   schemas:
-    ContactAddress:
-      type: object
-      properties:
-        line1:
-          type: string
-        line2:
-          type: string
-        locality:
-          type: string
-        region:
-          type: string
-        field:
-          type: string
-          enum:
-          - BILLING
-          - SHIPPING
-          - OTHER
-        postal_code:
-          type: string
-          description: Field used to store postal codes containing a combination of letters and numbers ex. 'EC1A', 'S1 2HE', '75000'
-        zip_code:
-          type: string
-          description: 'Mainly used in the United States, this is typically numeric. ex. ''85001'', ''90002'' Note: this is to be used instead of ''postal_code'', not in addition to.'
-        zip_four:
-          type: string
-          description: Last four of a full zip code ex. '8244', '4320'. This field is supplemental to the zip_code field, otherwise will be ignored.
-        country_code:
-          type: string
-      required:
-      - field
-    DefaultHttpStatusCode:
-      allOf:
-      - $ref: '#/components/schemas/HttpStatusCode'
     View:
       type: object
       properties:
         contentType:
-          type: string
-    ModelAndView:
-      type: object
-      properties:
-        view:
-          $ref: '#/components/schemas/View'
-        model:
-          type: object
-          additionalProperties: {}
-        status:
-          oneOf:
-          - $ref: '#/components/schemas/DefaultHttpStatusCode'
-          - $ref: '#/components/schemas/HttpStatus'
-        modelMap:
-          type: object
-          additionalProperties: {}
-          properties:
-            empty:
-              type: boolean
-        reference:
-          type: boolean
-        empty:
-          type: boolean
-        viewName:
           type: string
     HttpStatusCode:
       type: object
@@ -355,6 +298,63 @@ components:
           type: string
         business_secondary_color:
           type: string
+    DefaultHttpStatusCode:
+      allOf:
+      - $ref: '#/components/schemas/HttpStatusCode'
+    ModelAndView:
+      type: object
+      properties:
+        view:
+          $ref: '#/components/schemas/View'
+        model:
+          type: object
+          additionalProperties: {}
+        status:
+          oneOf:
+          - $ref: '#/components/schemas/DefaultHttpStatusCode'
+          - $ref: '#/components/schemas/HttpStatus'
+        modelMap:
+          type: object
+          additionalProperties: {}
+          properties:
+            empty:
+              type: boolean
+        reference:
+          type: boolean
+        empty:
+          type: boolean
+        viewName:
+          type: string
+    ContactAddress:
+      type: object
+      properties:
+        line1:
+          type: string
+        line2:
+          type: string
+        locality:
+          type: string
+        region:
+          type: string
+        field:
+          type: string
+          enum:
+          - BILLING
+          - SHIPPING
+          - OTHER
+        postal_code:
+          type: string
+          description: Field used to store postal codes containing a combination of letters and numbers ex. 'EC1A', 'S1 2HE', '75000'
+        zip_code:
+          type: string
+          description: 'Mainly used in the United States, this is typically numeric. ex. ''85001'', ''90002'' Note: this is to be used instead of ''postal_code'', not in addition to.'
+        zip_four:
+          type: string
+          description: Last four of a full zip code ex. '8244', '4320'. This field is supplemental to the zip_code field, otherwise will be ignored.
+        country_code:
+          type: string
+      required:
+      - field
   securitySchemes:
     oauth2:
       type: oauth2

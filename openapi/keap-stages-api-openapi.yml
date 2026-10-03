@@ -250,7 +250,42 @@ paths:
       - BearerAuth: []
 components:
   schemas:
+    StageDealListResponse:
+      type: object
+      description: Response for a list of deals in a stage.
+      allOf:
+      - $ref: '#/components/schemas/BaseListResponse_Deal_'
+      - properties:
+          next_page_token:
+            type: string
+            description: Token for the next page of results.
+          deals:
+            type: array
+            description: The list of deals in a stage.
+            items:
+              $ref: '#/components/schemas/Deal'
+    StageListResponse:
+      type: object
+      description: Response for a list of stages.
+      allOf:
+      - $ref: '#/components/schemas/BaseListResponse_Stage_'
+      - properties:
+          next_page_token:
+            type: string
+            description: Token for the next page of results.
+          stages:
+            type: array
+            description: The list of stages.
+            items:
+              $ref: '#/components/schemas/Stage'
     BaseListResponse_Stage_:
+      type: object
+      properties:
+        next_page_token:
+          type: string
+          description: Token for the next page of results.
+      description: The list responses.
+    BaseListResponse_Deal_:
       type: object
       properties:
         next_page_token:
@@ -311,6 +346,48 @@ components:
           additionalProperties: true
           description: The custom fields associated with the deal. This field is optional.
       description: Represents a deal.
+    CreateStageRequest:
+      required:
+      - name
+      - pipeline_id
+      type: object
+      properties:
+        name:
+          minLength: 1
+          type: string
+          description: The name of the stage.
+        pipeline_id:
+          minLength: 1
+          type: string
+          description: The ID of the pipeline to which the stage belongs.
+      description: Request for creating a stage.
+    Money:
+      required:
+      - amount
+      - currency
+      type: object
+      properties:
+        amount:
+          type: number
+          description: The amount of money. This field is required.
+          format: double
+        currency:
+          type: string
+          description: The currency of the money. This field is required.
+      description: Represents a monetary value with an amount and currency.
+    Stage:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Unique identifier for the model.
+        name:
+          type: string
+          description: The name of the stage.
+        pipeline_id:
+          type: string
+          description: The ID of the pipeline.
+      description: Represents a stage in a pipeline.
     UpdateStageRequest:
       required:
       - name
@@ -344,83 +421,6 @@ components:
           - 'null'
           description: The ID of the pipeline.
       description: Request for updating a stage.
-    StageDealListResponse:
-      type: object
-      description: Response for a list of deals in a stage.
-      allOf:
-      - $ref: '#/components/schemas/BaseListResponse_Deal_'
-      - properties:
-          next_page_token:
-            type: string
-            description: Token for the next page of results.
-          deals:
-            type: array
-            description: The list of deals in a stage.
-            items:
-              $ref: '#/components/schemas/Deal'
-    Stage:
-      type: object
-      properties:
-        id:
-          type: string
-          description: Unique identifier for the model.
-        name:
-          type: string
-          description: The name of the stage.
-        pipeline_id:
-          type: string
-          description: The ID of the pipeline.
-      description: Represents a stage in a pipeline.
-    Money:
-      required:
-      - amount
-      - currency
-      type: object
-      properties:
-        amount:
-          type: number
-          description: The amount of money. This field is required.
-          format: double
-        currency:
-          type: string
-          description: The currency of the money. This field is required.
-      description: Represents a monetary value with an amount and currency.
-    BaseListResponse_Deal_:
-      type: object
-      properties:
-        next_page_token:
-          type: string
-          description: Token for the next page of results.
-      description: The list responses.
-    StageListResponse:
-      type: object
-      description: Response for a list of stages.
-      allOf:
-      - $ref: '#/components/schemas/BaseListResponse_Stage_'
-      - properties:
-          next_page_token:
-            type: string
-            description: Token for the next page of results.
-          stages:
-            type: array
-            description: The list of stages.
-            items:
-              $ref: '#/components/schemas/Stage'
-    CreateStageRequest:
-      required:
-      - name
-      - pipeline_id
-      type: object
-      properties:
-        name:
-          minLength: 1
-          type: string
-          description: The name of the stage.
-        pipeline_id:
-          minLength: 1
-          type: string
-          description: The ID of the pipeline to which the stage belongs.
-      description: Request for creating a stage.
   securitySchemes:
     BearerAuth:
       type: http

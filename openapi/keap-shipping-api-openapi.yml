@@ -82,13 +82,6 @@ paths:
                 $ref: '#/components/schemas/ListRestShippingMethodsResponse'
 components:
   schemas:
-    ErrorDetails:
-      type: object
-      properties:
-        domain:
-          type: string
-        resource:
-          type: string
     Error:
       type: object
       properties:
@@ -103,13 +96,6 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/ErrorDetails'
-    ListRestShippingMethodsResponse:
-      type: object
-      properties:
-        shipping_methods:
-          type: array
-          items:
-            $ref: '#/components/schemas/ShippingMethod'
     ShippingMethod:
       type: object
       properties:
@@ -127,6 +113,20 @@ components:
           type: boolean
         settings:
           $ref: '#/components/schemas/ShippingMethodSettings'
+    ErrorDetails:
+      type: object
+      properties:
+        domain:
+          type: string
+        resource:
+          type: string
+    ListRestShippingMethodsResponse:
+      type: object
+      properties:
+        shipping_methods:
+          type: array
+          items:
+            $ref: '#/components/schemas/ShippingMethod'
     ShippingMethodSettings: {}
   securitySchemes:
     oauth2:

@@ -246,6 +246,152 @@ paths:
                 $ref: '#/components/schemas/RestApplicationConfiguration'
 components:
   schemas:
+    RestApplicationConfigurationModuleOpportunityStatesWin:
+      type: object
+      properties:
+        reasons:
+          type: string
+        stage:
+          type: string
+    HttpStatusCode:
+      type: object
+      properties:
+        error:
+          type: boolean
+        is1xxInformational:
+          type: boolean
+        is2xxSuccessful:
+          type: boolean
+        is3xxRedirection:
+          type: boolean
+        is4xxClientError:
+          type: boolean
+        is5xxServerError:
+          type: boolean
+    RestApplicationConfigurationModuleAppointment:
+      type: object
+      properties:
+        appointment_types:
+          type: string
+        share_opportunity_with_related_user:
+          type: boolean
+    RestApplicationConfigurationModuleApplicationFeaturesEnabled:
+      type: object
+      properties:
+        marketing:
+          type: boolean
+    RestApplicationConfigurationModuleAffiliateCommission:
+      type: object
+      properties:
+        levels:
+          type: integer
+          format: int32
+        calculation_type:
+          type: string
+        participant_types:
+          type: string
+    RestApplicationConfigurationModuleApplicationCompany:
+      type: object
+      properties:
+        name:
+          type: string
+        country:
+          type: string
+        email:
+          type: string
+        city:
+          type: string
+        state:
+          type: string
+        zip:
+          type: string
+        phone:
+          type: string
+        website:
+          type: string
+        street_address_1:
+          type: string
+        street_address_2:
+          type: string
+        phone_ext:
+          type: string
+        caller_id_number:
+          type: string
+        web_logo_url:
+          type: string
+    RestApplicationConfigurationModuleFulfillment:
+      type: object
+      properties:
+        default_message_to:
+          type: string
+        default_message_fields:
+          type: string
+    RestApplicationConfigurationModuleOpportunityStatesLoss:
+      type: object
+      properties:
+        reasons:
+          type: string
+        stage:
+          type: string
+    ModelAndView:
+      type: object
+      properties:
+        view:
+          $ref: '#/components/schemas/View'
+        model:
+          type: object
+          additionalProperties: {}
+        status:
+          oneOf:
+          - $ref: '#/components/schemas/DefaultHttpStatusCode'
+          - $ref: '#/components/schemas/HttpStatus'
+        modelMap:
+          type: object
+          additionalProperties: {}
+          properties:
+            empty:
+              type: boolean
+        reference:
+          type: boolean
+        empty:
+          type: boolean
+        viewName:
+          type: string
+    Setting:
+      type: object
+      properties:
+        value:
+          type: string
+    View:
+      type: object
+      properties:
+        contentType:
+          type: string
+    RestApplicationConfigurationModuleOpportunityStatesActive:
+      type: object
+      properties:
+        stages:
+          type: string
+    RestApplicationConfigurationModuleAffiliate:
+      type: object
+      properties:
+        commission:
+          $ref: '#/components/schemas/RestApplicationConfigurationModuleAffiliateCommission'
+        choose_affiliate:
+          type: boolean
+        custom_affiliate_url:
+          type: string
+        display_affiliate_ip_address:
+          type: boolean
+        do_not_notify_affiliate:
+          type: boolean
+        use_referral_history_if_no_tracking_cookie:
+          type: boolean
+        skip_pay_if_unused:
+          type: boolean
+    DefaultHttpStatusCode:
+      allOf:
+      - $ref: '#/components/schemas/HttpStatusCode'
     RestApplicationConfigurationModuleECommerce:
       type: object
       properties:
@@ -278,122 +424,6 @@ components:
           type: boolean
         track_inventory:
           type: boolean
-    ModelAndView:
-      type: object
-      properties:
-        view:
-          $ref: '#/components/schemas/View'
-        model:
-          type: object
-          additionalProperties: {}
-        status:
-          oneOf:
-          - $ref: '#/components/schemas/DefaultHttpStatusCode'
-          - $ref: '#/components/schemas/HttpStatus'
-        modelMap:
-          type: object
-          additionalProperties: {}
-          properties:
-            empty:
-              type: boolean
-        reference:
-          type: boolean
-        empty:
-          type: boolean
-        viewName:
-          type: string
-    RestApplicationConfigurationModuleContact:
-      type: object
-      properties:
-        title_types:
-          type: string
-        suffix_types:
-          type: string
-        contact_types:
-          type: string
-        phone_types:
-          type: string
-        fax_types:
-          type: string
-        address_labels:
-          $ref: '#/components/schemas/RestApplicationConfigurationModuleContactAddressLabels'
-        disable_contact_edit_in_client_login:
-          type: boolean
-        default_new_contact_form:
-          type: string
-    RestApplicationConfigurationModuleOpportunity:
-      type: object
-      properties:
-        states:
-          $ref: '#/components/schemas/RestApplicationConfigurationModuleOpportunityStates'
-        default_stage:
-          type: string
-    DefaultHttpStatusCode:
-      allOf:
-      - $ref: '#/components/schemas/HttpStatusCode'
-    HttpStatusCode:
-      type: object
-      properties:
-        error:
-          type: boolean
-        is1xxInformational:
-          type: boolean
-        is2xxSuccessful:
-          type: boolean
-        is3xxRedirection:
-          type: boolean
-        is4xxClientError:
-          type: boolean
-        is5xxServerError:
-          type: boolean
-    RestApplicationConfigurationModuleApplication:
-      type: object
-      properties:
-        company:
-          $ref: '#/components/schemas/RestApplicationConfigurationModuleApplicationCompany'
-        time_zone:
-          type: string
-        default_view_locale:
-          type: string
-        features_enabled:
-          $ref: '#/components/schemas/RestApplicationConfigurationModuleApplicationFeaturesEnabled'
-    RestApplicationConfigurationModuleOpportunityStatesActive:
-      type: object
-      properties:
-        stages:
-          type: string
-    Setting:
-      type: object
-      properties:
-        value:
-          type: string
-    RestApplicationConfigurationModuleAffiliateCommission:
-      type: object
-      properties:
-        levels:
-          type: integer
-          format: int32
-        calculation_type:
-          type: string
-        participant_types:
-          type: string
-    RestApplicationConfigurationModuleAffiliate:
-      type: object
-      properties:
-        commission:
-          $ref: '#/components/schemas/RestApplicationConfigurationModuleAffiliateCommission'
-        choose_affiliate:
-          type: boolean
-        custom_affiliate_url:
-          type: string
-        display_affiliate_ip_address:
-          type: boolean
-        do_not_notify_affiliate:
-          type: boolean
-        use_referral_history_if_no_tracking_cookie:
-          type: boolean
-        skip_pay_if_unused:
-          type: boolean
     RestApplicationConfigurationModuleEMail:
       type: object
       properties:
@@ -407,146 +437,17 @@ components:
           type: string
         append_contact_key_to_links:
           type: boolean
-    RestApplicationConfigurationModuleNote:
+    RestApplicationConfigurationModuleApplication:
       type: object
       properties:
-        appointment_types:
+        company:
+          $ref: '#/components/schemas/RestApplicationConfigurationModuleApplicationCompany'
+        time_zone:
           type: string
-        share_opportunity_with_related_user:
-          type: boolean
-    RestApplicationConfigurationModuleApplicationCompany:
-      type: object
-      properties:
-        name:
+        default_view_locale:
           type: string
-        country:
-          type: string
-        email:
-          type: string
-        city:
-          type: string
-        state:
-          type: string
-        zip:
-          type: string
-        phone:
-          type: string
-        website:
-          type: string
-        street_address_1:
-          type: string
-        street_address_2:
-          type: string
-        phone_ext:
-          type: string
-        caller_id_number:
-          type: string
-        web_logo_url:
-          type: string
-    RestApplicationConfigurationModuleAppointment:
-      type: object
-      properties:
-        appointment_types:
-          type: string
-        share_opportunity_with_related_user:
-          type: boolean
-    RestApplicationConfigurationModuleContactAddressLabels:
-      type: object
-      properties:
-        line_1:
-          type: string
-        line_2:
-          type: string
-        line_3:
-          type: string
-    RestApplicationConfigurationModuleTemplate:
-      type: object
-      properties:
-        default_country_code:
-          type: integer
-          format: int32
-        default_user_id:
-          type: integer
-          format: int64
-    View:
-      type: object
-      properties:
-        contentType:
-          type: string
-    RestApplicationConfiguration:
-      type: object
-      properties:
-        affiliate:
-          $ref: '#/components/schemas/RestApplicationConfigurationModuleAffiliate'
-        appointment:
-          $ref: '#/components/schemas/RestApplicationConfigurationModuleAppointment'
-        application:
-          $ref: '#/components/schemas/RestApplicationConfigurationModuleApplication'
-        contact:
-          $ref: '#/components/schemas/RestApplicationConfigurationModuleContact'
-        ecommerce:
-          $ref: '#/components/schemas/RestApplicationConfigurationModuleECommerce'
-        email:
-          $ref: '#/components/schemas/RestApplicationConfigurationModuleEMail'
-        forms:
-          $ref: '#/components/schemas/RestApplicationConfigurationModuleForms'
-        fulfillment:
-          $ref: '#/components/schemas/RestApplicationConfigurationModuleFulfillment'
-        invoice:
-          $ref: '#/components/schemas/RestApplicationConfigurationModuleInvoice'
-        note:
-          $ref: '#/components/schemas/RestApplicationConfigurationModuleNote'
-        opportunity:
-          $ref: '#/components/schemas/RestApplicationConfigurationModuleOpportunity'
-        task:
-          $ref: '#/components/schemas/RestApplicationConfigurationModuleTask'
-        template:
-          $ref: '#/components/schemas/RestApplicationConfigurationModuleTemplate'
-    RestApplicationConfigurationModuleForms:
-      type: object
-      properties:
-        spam_filters_enabled:
-          type: boolean
-    RestApplicationConfigurationModuleInvoice:
-      type: object
-      properties:
-        tax_label:
-          type: string
-    RestApplicationConfigurationModuleOpportunityStatesWin:
-      type: object
-      properties:
-        reasons:
-          type: string
-        stage:
-          type: string
-    RestApplicationConfigurationModuleFulfillment:
-      type: object
-      properties:
-        default_message_to:
-          type: string
-        default_message_fields:
-          type: string
-    RestApplicationConfigurationModuleApplicationFeaturesEnabled:
-      type: object
-      properties:
-        marketing:
-          type: boolean
-    RestApplicationConfigurationModuleOpportunityStates:
-      type: object
-      properties:
-        active:
-          $ref: '#/components/schemas/RestApplicationConfigurationModuleOpportunityStatesActive'
-        win:
-          $ref: '#/components/schemas/RestApplicationConfigurationModuleOpportunityStatesWin'
-        loss:
-          $ref: '#/components/schemas/RestApplicationConfigurationModuleOpportunityStatesLoss'
-    RestApplicationConfigurationModuleTask:
-      type: object
-      properties:
-        appointment_types:
-          type: string
-        share_opportunity_with_related_user:
-          type: boolean
+        features_enabled:
+          $ref: '#/components/schemas/RestApplicationConfigurationModuleApplicationFeaturesEnabled'
     HttpStatus:
       allOf:
       - $ref: '#/components/schemas/HttpStatusCode'
@@ -615,13 +516,112 @@ components:
       - 509 BANDWIDTH_LIMIT_EXCEEDED
       - 510 NOT_EXTENDED
       - 511 NETWORK_AUTHENTICATION_REQUIRED
-    RestApplicationConfigurationModuleOpportunityStatesLoss:
+    RestApplicationConfigurationModuleTask:
       type: object
       properties:
-        reasons:
+        appointment_types:
           type: string
-        stage:
+        share_opportunity_with_related_user:
+          type: boolean
+    RestApplicationConfigurationModuleContactAddressLabels:
+      type: object
+      properties:
+        line_1:
           type: string
+        line_2:
+          type: string
+        line_3:
+          type: string
+    RestApplicationConfigurationModuleContact:
+      type: object
+      properties:
+        title_types:
+          type: string
+        suffix_types:
+          type: string
+        contact_types:
+          type: string
+        phone_types:
+          type: string
+        fax_types:
+          type: string
+        address_labels:
+          $ref: '#/components/schemas/RestApplicationConfigurationModuleContactAddressLabels'
+        disable_contact_edit_in_client_login:
+          type: boolean
+        default_new_contact_form:
+          type: string
+    RestApplicationConfigurationModuleInvoice:
+      type: object
+      properties:
+        tax_label:
+          type: string
+    RestApplicationConfigurationModuleNote:
+      type: object
+      properties:
+        appointment_types:
+          type: string
+        share_opportunity_with_related_user:
+          type: boolean
+    RestApplicationConfigurationModuleTemplate:
+      type: object
+      properties:
+        default_country_code:
+          type: integer
+          format: int32
+        default_user_id:
+          type: integer
+          format: int64
+    RestApplicationConfigurationModuleOpportunity:
+      type: object
+      properties:
+        states:
+          $ref: '#/components/schemas/RestApplicationConfigurationModuleOpportunityStates'
+        default_stage:
+          type: string
+    RestApplicationConfigurationModuleOpportunityStates:
+      type: object
+      properties:
+        active:
+          $ref: '#/components/schemas/RestApplicationConfigurationModuleOpportunityStatesActive'
+        win:
+          $ref: '#/components/schemas/RestApplicationConfigurationModuleOpportunityStatesWin'
+        loss:
+          $ref: '#/components/schemas/RestApplicationConfigurationModuleOpportunityStatesLoss'
+    RestApplicationConfigurationModuleForms:
+      type: object
+      properties:
+        spam_filters_enabled:
+          type: boolean
+    RestApplicationConfiguration:
+      type: object
+      properties:
+        affiliate:
+          $ref: '#/components/schemas/RestApplicationConfigurationModuleAffiliate'
+        appointment:
+          $ref: '#/components/schemas/RestApplicationConfigurationModuleAppointment'
+        application:
+          $ref: '#/components/schemas/RestApplicationConfigurationModuleApplication'
+        contact:
+          $ref: '#/components/schemas/RestApplicationConfigurationModuleContact'
+        ecommerce:
+          $ref: '#/components/schemas/RestApplicationConfigurationModuleECommerce'
+        email:
+          $ref: '#/components/schemas/RestApplicationConfigurationModuleEMail'
+        forms:
+          $ref: '#/components/schemas/RestApplicationConfigurationModuleForms'
+        fulfillment:
+          $ref: '#/components/schemas/RestApplicationConfigurationModuleFulfillment'
+        invoice:
+          $ref: '#/components/schemas/RestApplicationConfigurationModuleInvoice'
+        note:
+          $ref: '#/components/schemas/RestApplicationConfigurationModuleNote'
+        opportunity:
+          $ref: '#/components/schemas/RestApplicationConfigurationModuleOpportunity'
+        task:
+          $ref: '#/components/schemas/RestApplicationConfigurationModuleTask'
+        template:
+          $ref: '#/components/schemas/RestApplicationConfigurationModuleTemplate'
   securitySchemes:
     oauth2:
       type: oauth2

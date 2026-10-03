@@ -431,21 +431,6 @@ paths:
                 $ref: '#/components/schemas/FileInformation'
 components:
   schemas:
-    DefaultHttpStatusCode:
-      allOf:
-      - $ref: '#/components/schemas/HttpStatusCode'
-    View:
-      type: object
-      properties:
-        contentType:
-          type: string
-    FileInformation:
-      type: object
-      properties:
-        file_descriptor:
-          $ref: '#/components/schemas/FileDescriptor'
-        file_data:
-          type: string
     FileQueryCommand:
       type: object
       properties:
@@ -495,45 +480,6 @@ components:
         contactId:
           type: integer
           format: int64
-    ModelAndView:
-      type: object
-      properties:
-        view:
-          $ref: '#/components/schemas/View'
-        model:
-          type: object
-          additionalProperties: {}
-        status:
-          oneOf:
-          - $ref: '#/components/schemas/DefaultHttpStatusCode'
-          - $ref: '#/components/schemas/HttpStatus'
-        modelMap:
-          type: object
-          additionalProperties: {}
-          properties:
-            empty:
-              type: boolean
-        reference:
-          type: boolean
-        empty:
-          type: boolean
-        viewName:
-          type: string
-    HttpStatusCode:
-      type: object
-      properties:
-        error:
-          type: boolean
-        is1xxInformational:
-          type: boolean
-        is2xxSuccessful:
-          type: boolean
-        is3xxRedirection:
-          type: boolean
-        is4xxClientError:
-          type: boolean
-        is5xxServerError:
-          type: boolean
     FileUpload:
       type: object
       description: fileUpload
@@ -560,78 +506,26 @@ components:
           writeOnly: true
         public:
           type: boolean
-    FileDescriptor:
+    View:
       type: object
       properties:
-        category:
+        contentType:
           type: string
-          enum:
-          - Attachments
-          - Cart
-          - Documents
-          - Hidden
-          - Invoice
-          - Logo
-          - Tickets
-          - WebForm
-          - Funnel
-        date_created:
-          type: string
-          format: date-time
-        last_updated:
-          type: string
-          format: date-time
-        file_name:
-          type: string
-        file_size:
-          type: integer
-          format: int64
-        created_by:
-          type: integer
-          format: int64
-        public:
+    HttpStatusCode:
+      type: object
+      properties:
+        error:
           type: boolean
-        contact_id:
-          type: integer
-          format: int64
-        remote_file_key:
-          type: string
-        file_box_type:
-          type: string
-          enum:
-          - Application
-          - Image
-          - Fax
-          - Attachment
-          - Ticket
-          - Contact
-          - DigitalProduct
-          - Import
-          - Hidden
-          - WebForm
-          - StyledCart
-          - ReSampledImage
-          - TemplateThumbnail
-          - Funnel
-          - LogoThumbnail
-          - Unlayer
-          - BrandingCenterLogo
-        download_url:
-          type: string
-    FileList:
-      type: object
-      properties:
-        files:
-          type: array
-          items:
-            $ref: '#/components/schemas/FileDescriptor'
-        count:
-          type: integer
-          format: int32
-        next:
-          type: string
-        previous:
-          type: string
+        is1xxInformational:
+          type: boolean
+        is2xxSuccessful:
+          type: boolean
+        is3xxRedirection:
+          type: boolean
+        is4xxClientError:
+          type: boolean
+        is5xxServerError:
+          type: boolean
     HttpStatus:
       allOf:
       - $ref: '#/components/schemas/HttpStatusCode'
@@ -700,6 +594,112 @@ components:
       - 509 BANDWIDTH_LIMIT_EXCEEDED
       - 510 NOT_EXTENDED
       - 511 NETWORK_AUTHENTICATION_REQUIRED
+    DefaultHttpStatusCode:
+      allOf:
+      - $ref: '#/components/schemas/HttpStatusCode'
+    FileList:
+      type: object
+      properties:
+        files:
+          type: array
+          items:
+            $ref: '#/components/schemas/FileDescriptor'
+        count:
+          type: integer
+          format: int32
+        next:
+          type: string
+        previous:
+          type: string
+    FileDescriptor:
+      type: object
+      properties:
+        category:
+          type: string
+          enum:
+          - Attachments
+          - Cart
+          - Documents
+          - Hidden
+          - Invoice
+          - Logo
+          - Tickets
+          - WebForm
+          - Funnel
+        date_created:
+          type: string
+          format: date-time
+        last_updated:
+          type: string
+          format: date-time
+        file_name:
+          type: string
+        file_size:
+          type: integer
+          format: int64
+        created_by:
+          type: integer
+          format: int64
+        public:
+          type: boolean
+        contact_id:
+          type: integer
+          format: int64
+        remote_file_key:
+          type: string
+        file_box_type:
+          type: string
+          enum:
+          - Application
+          - Image
+          - Fax
+          - Attachment
+          - Ticket
+          - Contact
+          - DigitalProduct
+          - Import
+          - Hidden
+          - WebForm
+          - StyledCart
+          - ReSampledImage
+          - TemplateThumbnail
+          - Funnel
+          - LogoThumbnail
+          - Unlayer
+          - BrandingCenterLogo
+        download_url:
+          type: string
+    ModelAndView:
+      type: object
+      properties:
+        view:
+          $ref: '#/components/schemas/View'
+        model:
+          type: object
+          additionalProperties: {}
+        status:
+          oneOf:
+          - $ref: '#/components/schemas/DefaultHttpStatusCode'
+          - $ref: '#/components/schemas/HttpStatus'
+        modelMap:
+          type: object
+          additionalProperties: {}
+          properties:
+            empty:
+              type: boolean
+        reference:
+          type: boolean
+        empty:
+          type: boolean
+        viewName:
+          type: string
+    FileInformation:
+      type: object
+      properties:
+        file_descriptor:
+          $ref: '#/components/schemas/FileDescriptor'
+        file_data:
+          type: string
   securitySchemes:
     oauth2:
       type: oauth2

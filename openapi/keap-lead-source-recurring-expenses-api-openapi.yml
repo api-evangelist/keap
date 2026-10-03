@@ -623,47 +623,20 @@ paths:
                 $ref: '#/components/schemas/ListLeadSourceExpensesResponse'
 components:
   schemas:
-    LeadSourceExpense:
+    Error:
       type: object
       properties:
-        id:
+        code:
+          type: integer
+          format: int32
+        message:
           type: string
-          description: The unique identifier for the expense.
-          example: 123
-        title:
+        status:
           type: string
-          description: The title of the expense
-          example: Google Ads Campaign
-        notes:
-          type: string
-          description: The notes for the expense
-          example: Q1 advertising spend
-        amount:
-          $ref: '#/components/schemas/CurrencyValue'
-          description: The amount of the expense
-        lead_source_id:
-          type: string
-          description: The ID of the lead source this expense belongs to
-          example: 456
-        lead_source_recurring_expense_id:
-          type: string
-          description: If this expense was incurred from a recurring expense, this is the ID of that recurring expense
-          example: 789
-        create_time:
-          type: string
-          format: date-time
-          description: The date the expense was created
-          example: '2024-01-10T08:00:00Z'
-        update_time:
-          type: string
-          format: date-time
-          description: The date the expense was last updated
-          example: '2024-03-15T10:30:00Z'
-        incurred_time:
-          type: string
-          format: date-time
-          description: The date the expense was incurred
-          example: '2024-03-15T00:00:00Z'
+        details:
+          type: array
+          items:
+            $ref: '#/components/schemas/ErrorDetails'
     LeadSourceRecurringExpenseUpdateRequest:
       type: object
       properties:
@@ -691,53 +664,6 @@ components:
           format: date-time
           description: The time the lead source recurring expense ends
           example: '2024-12-31T23:59:59Z'
-    CurrencyValue:
-      type: object
-      properties:
-        amount:
-          type: integer
-          format: int64
-          description: The price amount in the smallest currency unit
-          example: 10000
-        currency_code:
-          type: string
-          description: Three-letter ISO currency code
-          example: USD
-        formatted_amount:
-          type: string
-          description: The product amount formatted using the tenant's currency locale
-          example: $100.00
-    ErrorDetails:
-      type: object
-      properties:
-        domain:
-          type: string
-        resource:
-          type: string
-    ListLeadSourceExpensesResponse:
-      type: object
-      properties:
-        lead_source_expenses:
-          type: array
-          description: The lead source expenses in the current page
-          items:
-            $ref: '#/components/schemas/LeadSourceExpense'
-        next_page_token:
-          type: string
-    Error:
-      type: object
-      properties:
-        code:
-          type: integer
-          format: int32
-        message:
-          type: string
-        status:
-          type: string
-        details:
-          type: array
-          items:
-            $ref: '#/components/schemas/ErrorDetails'
     LeadSourceRecurringExpense:
       type: object
       properties:
@@ -795,6 +721,13 @@ components:
             $ref: '#/components/schemas/LeadSourceRecurringExpense'
         next_page_token:
           type: string
+    ErrorDetails:
+      type: object
+      properties:
+        domain:
+          type: string
+        resource:
+          type: string
     CreateLeadSourceRecurringExpenseRequest:
       type: object
       properties:
@@ -824,6 +757,73 @@ components:
           example: '2024-12-31T23:59:59Z'
       required:
       - amount
+    LeadSourceExpense:
+      type: object
+      properties:
+        id:
+          type: string
+          description: The unique identifier for the expense.
+          example: 123
+        title:
+          type: string
+          description: The title of the expense
+          example: Google Ads Campaign
+        notes:
+          type: string
+          description: The notes for the expense
+          example: Q1 advertising spend
+        amount:
+          $ref: '#/components/schemas/CurrencyValue'
+          description: The amount of the expense
+        lead_source_id:
+          type: string
+          description: The ID of the lead source this expense belongs to
+          example: 456
+        lead_source_recurring_expense_id:
+          type: string
+          description: If this expense was incurred from a recurring expense, this is the ID of that recurring expense
+          example: 789
+        create_time:
+          type: string
+          format: date-time
+          description: The date the expense was created
+          example: '2024-01-10T08:00:00Z'
+        update_time:
+          type: string
+          format: date-time
+          description: The date the expense was last updated
+          example: '2024-03-15T10:30:00Z'
+        incurred_time:
+          type: string
+          format: date-time
+          description: The date the expense was incurred
+          example: '2024-03-15T00:00:00Z'
+    ListLeadSourceExpensesResponse:
+      type: object
+      properties:
+        lead_source_expenses:
+          type: array
+          description: The lead source expenses in the current page
+          items:
+            $ref: '#/components/schemas/LeadSourceExpense'
+        next_page_token:
+          type: string
+    CurrencyValue:
+      type: object
+      properties:
+        amount:
+          type: integer
+          format: int64
+          description: The price amount in the smallest currency unit
+          example: 10000
+        currency_code:
+          type: string
+          description: Three-letter ISO currency code
+          example: USD
+        formatted_amount:
+          type: string
+          description: The product amount formatted using the tenant's currency locale
+          example: $100.00
   securitySchemes:
     oauth2:
       type: oauth2

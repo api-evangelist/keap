@@ -143,20 +143,6 @@ paths:
                 $ref: '#/components/schemas/ListMerchantsResponse'
 components:
   schemas:
-    Error:
-      type: object
-      properties:
-        code:
-          type: integer
-          format: int32
-        message:
-          type: string
-        status:
-          type: string
-        details:
-          type: array
-          items:
-            $ref: '#/components/schemas/ErrorDetails'
     ListMerchantsResponse:
       type: object
       properties:
@@ -167,13 +153,6 @@ components:
           items:
             $ref: '#/components/schemas/ListMerchantAccountResponse'
         next_page_token:
-          type: string
-    ErrorDetails:
-      type: object
-      properties:
-        domain:
-          type: string
-        resource:
           type: string
     ListMerchantAccountResponse:
       type: object
@@ -194,6 +173,27 @@ components:
           - KEAP_PAY
         is_test:
           type: boolean
+    Error:
+      type: object
+      properties:
+        code:
+          type: integer
+          format: int32
+        message:
+          type: string
+        status:
+          type: string
+        details:
+          type: array
+          items:
+            $ref: '#/components/schemas/ErrorDetails'
+    ErrorDetails:
+      type: object
+      properties:
+        domain:
+          type: string
+        resource:
+          type: string
   securitySchemes:
     oauth2:
       type: oauth2

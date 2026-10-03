@@ -588,6 +588,140 @@ paths:
           description: No Content
 components:
   schemas:
+    Error:
+      type: object
+      properties:
+        code:
+          type: integer
+          format: int32
+        message:
+          type: string
+        status:
+          type: string
+        details:
+          type: array
+          items:
+            $ref: '#/components/schemas/ErrorDetails'
+    UpdateOrderTotalDiscountCriteria:
+      type: object
+      properties:
+        code:
+          type: string
+          description: Promotional code for PROMO_CODE criteria
+          example: SUMMER2024
+        criteria_id:
+          type: string
+          description: Unique identifier for this criteria
+          example: 501
+        range_start_time:
+          type: string
+          format: date-time
+          description: Start date/time for DATE_RANGE criteria (ISO-8601 format)
+          example: '2024-01-01T00:00:00Z'
+        range_end_time:
+          type: string
+          format: date-time
+          description: End date/time for DATE_RANGE criteria (ISO-8601 format)
+          example: '2024-12-31T23:59:59Z'
+        product_id:
+          type: string
+          description: Product ID for PRODUCT criteria
+          example: 456
+        product_quantity_min:
+          type: integer
+          format: int32
+          description: Minimum product quantity for PRODUCT criteria
+          example: 1
+        product_quantity_max:
+          type: integer
+          format: int32
+          description: Maximum product quantity for PRODUCT criteria
+          example: 10
+        plan_id:
+          type: string
+          description: Subscription plan ID for SUBSCRIPTION_PLAN criteria
+          example: 789
+        subscription_quantity:
+          type: integer
+          format: int32
+          description: Subscription quantity for SUBSCRIPTION_PLAN criteria
+          example: 1
+        total_amount:
+          type: number
+          format: double
+          description: Total amount threshold for ORDER_TOTAL criteria
+          example: 100.0
+        operator:
+          type: string
+          description: 'Comparison operator for ORDER_TOTAL criteria: LESS_THAN or GREATER_THAN'
+          enum:
+          - LESS_THAN
+          - GREATER_THAN
+          example: GREATER_THAN
+      required:
+      - criteria_id
+    CreateOrderTotalDiscountCriteria:
+      type: object
+      properties:
+        type:
+          type: string
+          description: 'Type of criteria: DATE_RANGE, PROMO_CODE, PRODUCT, SUBSCRIPTION_PLAN, or ORDER_TOTAL'
+          enum:
+          - DATE_RANGE
+          - PROMO_CODE
+          - PRODUCT
+          - SUBSCRIPTION_PLAN
+          - ORDER_TOTAL
+          example: DATE_RANGE
+        code:
+          type: string
+          description: Promotional code for PROMO_CODE criteria
+          example: SUMMER2024
+        range_start_time:
+          type: string
+          format: date-time
+          description: Start date/time for DATE_RANGE criteria (ISO-8601 format)
+          example: '2024-01-01T00:00:00Z'
+        range_end_time:
+          type: string
+          format: date-time
+          description: End date/time for DATE_RANGE criteria (ISO-8601 format)
+          example: '2024-12-31T23:59:59Z'
+        product_id:
+          type: string
+          description: Product ID for PRODUCT criteria
+          example: 456
+        product_quantity_min:
+          type: integer
+          format: int32
+          description: Minimum product quantity for PRODUCT criteria
+          example: 1
+        product_quantity_max:
+          type: integer
+          format: int32
+          description: Maximum product quantity for PRODUCT criteria
+          example: 10
+        plan_id:
+          type: string
+          description: Subscription plan ID for SUBSCRIPTION_PLAN criteria
+          example: 789
+        subscription_quantity:
+          type: integer
+          format: int32
+          description: Subscription quantity for SUBSCRIPTION_PLAN criteria
+          example: 1
+        total_amount:
+          type: number
+          format: double
+          description: Total amount threshold for ORDER_TOTAL criteria
+          example: 100.0
+        operator:
+          type: string
+          description: 'Comparison operator for ORDER_TOTAL criteria: LESS_THAN or GREATER_THAN'
+          enum:
+          - LESS_THAN
+          - GREATER_THAN
+          example: GREATER_THAN
     DiscountCriteria:
       type: object
       properties:
@@ -654,6 +788,13 @@ components:
           - LESS_THAN
           - GREATER_THAN
           example: GREATER_THAN
+    ErrorDetails:
+      type: object
+      properties:
+        domain:
+          type: string
+        resource:
+          type: string
     CreateOrderTotalDiscountRequest:
       type: object
       properties:
@@ -697,94 +838,6 @@ components:
       - discount_type
       - discount_value
       - name
-    UpdateOrderTotalDiscountCriteria:
-      type: object
-      properties:
-        code:
-          type: string
-          description: Promotional code for PROMO_CODE criteria
-          example: SUMMER2024
-        criteria_id:
-          type: string
-          description: Unique identifier for this criteria
-          example: 501
-        range_start_time:
-          type: string
-          format: date-time
-          description: Start date/time for DATE_RANGE criteria (ISO-8601 format)
-          example: '2024-01-01T00:00:00Z'
-        range_end_time:
-          type: string
-          format: date-time
-          description: End date/time for DATE_RANGE criteria (ISO-8601 format)
-          example: '2024-12-31T23:59:59Z'
-        product_id:
-          type: string
-          description: Product ID for PRODUCT criteria
-          example: 456
-        product_quantity_min:
-          type: integer
-          format: int32
-          description: Minimum product quantity for PRODUCT criteria
-          example: 1
-        product_quantity_max:
-          type: integer
-          format: int32
-          description: Maximum product quantity for PRODUCT criteria
-          example: 10
-        plan_id:
-          type: string
-          description: Subscription plan ID for SUBSCRIPTION_PLAN criteria
-          example: 789
-        subscription_quantity:
-          type: integer
-          format: int32
-          description: Subscription quantity for SUBSCRIPTION_PLAN criteria
-          example: 1
-        total_amount:
-          type: number
-          format: double
-          description: Total amount threshold for ORDER_TOTAL criteria
-          example: 100.0
-        operator:
-          type: string
-          description: 'Comparison operator for ORDER_TOTAL criteria: LESS_THAN or GREATER_THAN'
-          enum:
-          - LESS_THAN
-          - GREATER_THAN
-          example: GREATER_THAN
-      required:
-      - criteria_id
-    ListOrderTotalDiscountsResponse:
-      type: object
-      properties:
-        discounts:
-          type: array
-          items:
-            $ref: '#/components/schemas/OrderTotalDiscount'
-        next_page_token:
-          type: string
-    ErrorDetails:
-      type: object
-      properties:
-        domain:
-          type: string
-        resource:
-          type: string
-    Error:
-      type: object
-      properties:
-        code:
-          type: integer
-          format: int32
-        message:
-          type: string
-        status:
-          type: string
-        details:
-          type: array
-          items:
-            $ref: '#/components/schemas/ErrorDetails'
     OrderTotalDiscount:
       type: object
       properties:
@@ -828,6 +881,15 @@ components:
           - GROSS
           - NET
           example: GROSS
+    ListOrderTotalDiscountsResponse:
+      type: object
+      properties:
+        discounts:
+          type: array
+          items:
+            $ref: '#/components/schemas/OrderTotalDiscount'
+        next_page_token:
+          type: string
     UpdateOrderTotalDiscountRequest:
       type: object
       properties:
@@ -867,68 +929,6 @@ components:
           - GROSS
           - NET
           example: GROSS
-    CreateOrderTotalDiscountCriteria:
-      type: object
-      properties:
-        type:
-          type: string
-          description: 'Type of criteria: DATE_RANGE, PROMO_CODE, PRODUCT, SUBSCRIPTION_PLAN, or ORDER_TOTAL'
-          enum:
-          - DATE_RANGE
-          - PROMO_CODE
-          - PRODUCT
-          - SUBSCRIPTION_PLAN
-          - ORDER_TOTAL
-          example: DATE_RANGE
-        code:
-          type: string
-          description: Promotional code for PROMO_CODE criteria
-          example: SUMMER2024
-        range_start_time:
-          type: string
-          format: date-time
-          description: Start date/time for DATE_RANGE criteria (ISO-8601 format)
-          example: '2024-01-01T00:00:00Z'
-        range_end_time:
-          type: string
-          format: date-time
-          description: End date/time for DATE_RANGE criteria (ISO-8601 format)
-          example: '2024-12-31T23:59:59Z'
-        product_id:
-          type: string
-          description: Product ID for PRODUCT criteria
-          example: 456
-        product_quantity_min:
-          type: integer
-          format: int32
-          description: Minimum product quantity for PRODUCT criteria
-          example: 1
-        product_quantity_max:
-          type: integer
-          format: int32
-          description: Maximum product quantity for PRODUCT criteria
-          example: 10
-        plan_id:
-          type: string
-          description: Subscription plan ID for SUBSCRIPTION_PLAN criteria
-          example: 789
-        subscription_quantity:
-          type: integer
-          format: int32
-          description: Subscription quantity for SUBSCRIPTION_PLAN criteria
-          example: 1
-        total_amount:
-          type: number
-          format: double
-          description: Total amount threshold for ORDER_TOTAL criteria
-          example: 100.0
-        operator:
-          type: string
-          description: 'Comparison operator for ORDER_TOTAL criteria: LESS_THAN or GREATER_THAN'
-          enum:
-          - LESS_THAN
-          - GREATER_THAN
-          example: GREATER_THAN
   securitySchemes:
     oauth2:
       type: oauth2

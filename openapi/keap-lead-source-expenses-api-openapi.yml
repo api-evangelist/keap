@@ -471,6 +471,49 @@ paths:
                 $ref: '#/components/schemas/LeadSourceExpense'
 components:
   schemas:
+    Error:
+      type: object
+      properties:
+        code:
+          type: integer
+          format: int32
+        message:
+          type: string
+        status:
+          type: string
+        details:
+          type: array
+          items:
+            $ref: '#/components/schemas/ErrorDetails'
+    ErrorDetails:
+      type: object
+      properties:
+        domain:
+          type: string
+        resource:
+          type: string
+    UpdateLeadSourceExpenseRequest:
+      type: object
+      properties:
+        title:
+          type: string
+          description: The title of the lead source expense
+          example: Google Ads Campaign
+        notes:
+          type: string
+          description: The notes for the lead source expense
+          example: Q1 advertising spend
+        amount:
+          type: integer
+          format: int64
+          description: The cost of the lead source expense. The value should be in the smallest unit of currency for your currency locale. For example, if your currency locale is USD, then the smallest unit of currency is in cents, $225.50 would be provided in the request as 22550.
+          example: 22550
+          minimum: 0
+        incurred_time:
+          type: string
+          format: date-time
+          description: The time that the lead source expense was incurred.
+          example: '2024-03-15T00:00:00Z'
     LeadSourceExpense:
       type: object
       properties:
@@ -512,13 +555,6 @@ components:
           format: date-time
           description: The date the expense was incurred
           example: '2024-03-15T00:00:00Z'
-    ErrorDetails:
-      type: object
-      properties:
-        domain:
-          type: string
-        resource:
-          type: string
     ListLeadSourceExpensesResponse:
       type: object
       properties:
@@ -545,42 +581,6 @@ components:
           type: string
           description: The product amount formatted using the tenant's currency locale
           example: $100.00
-    Error:
-      type: object
-      properties:
-        code:
-          type: integer
-          format: int32
-        message:
-          type: string
-        status:
-          type: string
-        details:
-          type: array
-          items:
-            $ref: '#/components/schemas/ErrorDetails'
-    UpdateLeadSourceExpenseRequest:
-      type: object
-      properties:
-        title:
-          type: string
-          description: The title of the lead source expense
-          example: Google Ads Campaign
-        notes:
-          type: string
-          description: The notes for the lead source expense
-          example: Q1 advertising spend
-        amount:
-          type: integer
-          format: int64
-          description: The cost of the lead source expense. The value should be in the smallest unit of currency for your currency locale. For example, if your currency locale is USD, then the smallest unit of currency is in cents, $225.50 would be provided in the request as 22550.
-          example: 22550
-          minimum: 0
-        incurred_time:
-          type: string
-          format: date-time
-          description: The time that the lead source expense was incurred.
-          example: '2024-03-15T00:00:00Z'
     CreateLeadSourceExpenseRequest:
       type: object
       properties:

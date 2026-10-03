@@ -2343,150 +2343,15 @@ paths:
     - url: https://api.infusionsoft.com/crm
 components:
   schemas:
-    CreateRestCustomField:
+    CreateRestCustomFieldOption:
       type: object
       properties:
         label:
           type: string
-        options:
-          type: array
-          items:
-            $ref: '#/components/schemas/CreateRestCustomFieldOption'
-        field_type:
-          type: string
-          enum:
-          - Currency
-          - Date
-          - DateTime
-          - DayOfWeek
-          - Drilldown
-          - Email
-          - Month
-          - ListBox
-          - Name
-          - WholeNumber
-          - DecimalNumber
-          - Percent
-          - PhoneNumber
-          - Radio
-          - Dropdown
-          - SocialSecurityNumber
-          - State
-          - Text
-          - TextArea
-          - User
-          - UserListBox
-          - Website
-          - Year
-          - YesNo
-        group_id:
-          type: integer
-          format: int64
-          description: An optional tab group to place the field under in the interface.  If not specified, will default to the 'Custom Fields' tab.
-        user_group_id:
-          type: integer
-          format: int64
-          description: An optional user group to choose from when selecting values for User or UserListBox fields.
-      required:
-      - field_type
-      - label
-    DefaultHttpStatusCode:
-      allOf:
-      - $ref: '#/components/schemas/HttpStatusCode'
     View:
       type: object
       properties:
         contentType:
-          type: string
-    TaskSearchCommand:
-      type: object
-      properties:
-        since:
-          type: string
-        until:
-          type: string
-        completed:
-          type: boolean
-        limit:
-          type: integer
-          format: int32
-        offset:
-          type: integer
-          format: int32
-        order:
-          type: string
-        sinceAsDate:
-          type: string
-          format: date-time
-        untilAsDate:
-          type: string
-          format: date-time
-    Task:
-      type: object
-      properties:
-        title:
-          type: string
-        description:
-          type: string
-        type:
-          type: string
-        priority:
-          type: integer
-          format: int32
-        completed:
-          type: boolean
-        contact:
-          $ref: '#/components/schemas/BasicContact'
-        url:
-          type: string
-        due_date:
-          type: string
-          format: date-time
-        creation_date:
-          type: string
-          format: date-time
-        modification_date:
-          type: string
-          format: date-time
-        completion_date:
-          type: string
-          format: date-time
-        remind_time:
-          type: integer
-          format: int32
-          description: "Value in minutes before start_date to show pop-up reminder.  \nAcceptable values are in [`5`,`10`,`15`,`30`,`60`,`120`,`240`,`480`,`1440`,`2880`]"
-        user_id:
-          type: integer
-          format: int64
-        funnel_id:
-          type: integer
-          format: int64
-        jgraph_id:
-          type: integer
-          format: int64
-    ModelAndView:
-      type: object
-      properties:
-        view:
-          $ref: '#/components/schemas/View'
-        model:
-          type: object
-          additionalProperties: {}
-        status:
-          oneOf:
-          - $ref: '#/components/schemas/DefaultHttpStatusCode'
-          - $ref: '#/components/schemas/HttpStatus'
-        modelMap:
-          type: object
-          additionalProperties: {}
-          properties:
-            empty:
-              type: boolean
-        reference:
-          type: boolean
-        empty:
-          type: boolean
-        viewName:
           type: string
     HttpStatusCode:
       type: object
@@ -2503,111 +2368,6 @@ components:
           type: boolean
         is5xxServerError:
           type: boolean
-    CustomFieldOption:
-      type: object
-      properties:
-        id:
-          type: string
-        label:
-          type: string
-    TaskList:
-      type: object
-      properties:
-        tasks:
-          type: array
-          items:
-            $ref: '#/components/schemas/Task'
-        count:
-          type: integer
-          format: int32
-        next:
-          type: string
-        previous:
-          type: string
-        sync_token:
-          type: string
-    CreateRestCustomFieldOption:
-      type: object
-      properties:
-        label:
-          type: string
-    CustomFieldMetaData:
-      type: object
-      properties:
-        id:
-          type: integer
-          format: int64
-        label:
-          type: string
-        options:
-          type: array
-          items:
-            $ref: '#/components/schemas/CustomFieldOption'
-        record_type:
-          type: string
-          enum:
-          - CONTACT
-          - REFERRAL_PARTNER
-          - OPPORTUNITY
-          - TASK_NOTE_APPOINTMENT
-          - COMPANY
-          - ORDER
-          - SUBSCRIPTION
-        field_type:
-          type: string
-          enum:
-          - Currency
-          - Date
-          - DateTime
-          - DayOfWeek
-          - Drilldown
-          - Email
-          - Month
-          - ListBox
-          - Name
-          - WholeNumber
-          - DecimalNumber
-          - Percent
-          - PhoneNumber
-          - Radio
-          - Dropdown
-          - SocialSecurityNumber
-          - State
-          - Text
-          - TextArea
-          - User
-          - UserListBox
-          - Website
-          - Year
-          - YesNo
-        field_name:
-          type: string
-        default_value:
-          type: string
-    BasicContact:
-      type: object
-      properties:
-        id:
-          type: integer
-          format: int64
-        email:
-          type: string
-        first_name:
-          type: string
-        last_name:
-          type: string
-    ObjectModel:
-      type: object
-      properties:
-        custom_fields:
-          type: array
-          items:
-            $ref: '#/components/schemas/CustomFieldMetaData'
-        optional_properties:
-          type: array
-          items:
-            type: string
-          uniqueItems: true
     HttpStatus:
       allOf:
       - $ref: '#/components/schemas/HttpStatusCode'
@@ -2676,6 +2436,416 @@ components:
       - 509 BANDWIDTH_LIMIT_EXCEEDED
       - 510 NOT_EXTENDED
       - 511 NETWORK_AUTHENTICATION_REQUIRED
+    BasicContact:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        email:
+          type: string
+        first_name:
+          type: string
+        last_name:
+          type: string
+    CustomFieldOption:
+      type: object
+      properties:
+        id:
+          type: string
+        label:
+          type: string
+    DefaultHttpStatusCode:
+      allOf:
+      - $ref: '#/components/schemas/HttpStatusCode'
+    ObjectModel:
+      type: object
+      properties:
+        custom_fields:
+          type: array
+          items:
+            $ref: '#/components/schemas/CustomFieldMetaData'
+        optional_properties:
+          type: array
+          items:
+            type: string
+          uniqueItems: true
+    TaskList:
+      type: object
+      properties:
+        tasks:
+          type: array
+          items:
+            $ref: '#/components/schemas/Task'
+        count:
+          type: integer
+          format: int32
+        next:
+          type: string
+        previous:
+          type: string
+        sync_token:
+          type: string
+    CreateRestCustomField:
+      type: object
+      properties:
+        label:
+          type: string
+        options:
+          type: array
+          items:
+            $ref: '#/components/schemas/CreateRestCustomFieldOption'
+        field_type:
+          type: string
+          enum:
+          - Currency
+          - Date
+          - DateTime
+          - DayOfWeek
+          - Drilldown
+          - Email
+          - Month
+          - ListBox
+          - Name
+          - WholeNumber
+          - DecimalNumber
+          - Percent
+          - PhoneNumber
+          - Radio
+          - Dropdown
+          - SocialSecurityNumber
+          - State
+          - Text
+          - TextArea
+          - User
+          - UserListBox
+          - Website
+          - Year
+          - YesNo
+        group_id:
+          type: integer
+          format: int64
+          description: An optional tab group to place the field under in the interface.  If not specified, will default to the 'Custom Fields' tab.
+        user_group_id:
+          type: integer
+          format: int64
+          description: An optional user group to choose from when selecting values for User or UserListBox fields.
+      required:
+      - field_type
+      - label
+    Task:
+      type: object
+      properties:
+        title:
+          type: string
+        description:
+          type: string
+        type:
+          type: string
+        priority:
+          type: integer
+          format: int32
+        completed:
+          type: boolean
+        contact:
+          $ref: '#/components/schemas/BasicContact'
+        url:
+          type: string
+        due_date:
+          type: string
+          format: date-time
+        creation_date:
+          type: string
+          format: date-time
+        modification_date:
+          type: string
+          format: date-time
+        completion_date:
+          type: string
+          format: date-time
+        remind_time:
+          type: integer
+          format: int32
+          description: "Value in minutes before start_date to show pop-up reminder.  \nAcceptable values are in [`5`,`10`,`15`,`30`,`60`,`120`,`240`,`480`,`1440`,`2880`]"
+        user_id:
+          type: integer
+          format: int64
+        funnel_id:
+          type: integer
+          format: int64
+        jgraph_id:
+          type: integer
+          format: int64
+    CustomFieldMetaData:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        label:
+          type: string
+        options:
+          type: array
+          items:
+            $ref: '#/components/schemas/CustomFieldOption'
+        record_type:
+          type: string
+          enum:
+          - CONTACT
+          - REFERRAL_PARTNER
+          - OPPORTUNITY
+          - TASK_NOTE_APPOINTMENT
+          - COMPANY
+          - ORDER
+          - SUBSCRIPTION
+        field_type:
+          type: string
+          enum:
+          - Currency
+          - Date
+          - DateTime
+          - DayOfWeek
+          - Drilldown
+          - Email
+          - Month
+          - ListBox
+          - Name
+          - WholeNumber
+          - DecimalNumber
+          - Percent
+          - PhoneNumber
+          - Radio
+          - Dropdown
+          - SocialSecurityNumber
+          - State
+          - Text
+          - TextArea
+          - User
+          - UserListBox
+          - Website
+          - Year
+          - YesNo
+        field_name:
+          type: string
+        default_value:
+          type: string
+    TaskSearchCommand:
+      type: object
+      properties:
+        since:
+          type: string
+        until:
+          type: string
+        completed:
+          type: boolean
+        limit:
+          type: integer
+          format: int32
+        offset:
+          type: integer
+          format: int32
+        order:
+          type: string
+        sinceAsDate:
+          type: string
+          format: date-time
+        untilAsDate:
+          type: string
+          format: date-time
+    ModelAndView:
+      type: object
+      properties:
+        view:
+          $ref: '#/components/schemas/View'
+        model:
+          type: object
+          additionalProperties: {}
+        status:
+          oneOf:
+          - $ref: '#/components/schemas/DefaultHttpStatusCode'
+          - $ref: '#/components/schemas/HttpStatus'
+        modelMap:
+          type: object
+          additionalProperties: {}
+          properties:
+            empty:
+              type: boolean
+        reference:
+          type: boolean
+        empty:
+          type: boolean
+        viewName:
+          type: string
+    CreateCustomFieldRequest:
+      type: object
+      properties:
+        label:
+          type: string
+        options:
+          type: array
+          items:
+            $ref: '#/components/schemas/CreateCustomFieldOptionRequest'
+        field_type:
+          type: string
+          enum:
+          - CURRENCY
+          - DATE
+          - DATE_TIME
+          - DAY_OF_WEEK
+          - DECIMAL_NUMBER
+          - DRILLDOWN
+          - DROPDOWN
+          - EMAIL
+          - LIST_BOX
+          - MONTH
+          - NAME
+          - PERCENT
+          - PHONE_NUMBER
+          - RADIO
+          - SOCIAL_SECURITY_NUMBER
+          - STATE
+          - TEXT
+          - TEXT_AREA
+          - USER
+          - USER_LIST_BOX
+          - WEBSITE
+          - WHOLE_NUMBER
+          - YEAR
+          - YES_NO
+        group_id:
+          type: string
+          description: An optional tab group to place the field under in the interface.  If not specified, will default to the 'Custom Fields' tab.
+        user_group_id:
+          type: string
+          description: An optional user group to choose from when selecting values for User or UserListBox fields.
+      required:
+      - field_type
+      - label
+    Error:
+      type: object
+      properties:
+        code:
+          type: integer
+          format: int32
+        message:
+          type: string
+        status:
+          type: string
+        details:
+          type: array
+          items:
+            $ref: '#/components/schemas/ErrorDetails'
+    CreateCustomFieldResponse:
+      type: object
+      properties:
+        custom_field:
+          $ref: '#/components/schemas/CustomFieldMetaData_2'
+    CreateCustomFieldTabRequest:
+      type: object
+      properties:
+        name:
+          type: string
+    ListCustomFieldGroupsResponse:
+      type: object
+      properties:
+        groups:
+          type: array
+          items:
+            $ref: '#/components/schemas/CustomFieldGroup'
+    CustomFieldTab:
+      type: object
+      properties:
+        id:
+          type: string
+          description: The unique identifier of the custom field tab
+          example: 123
+        name:
+          type: string
+          description: The name of the custom field tab
+          example: Personal Info
+        order:
+          type: integer
+          format: int32
+          description: The display order of the tab
+          example: 1
+        record_type:
+          type: string
+          description: The record type this tab belongs to (e.g., CONTACT, COMPANY, OPPORTUNITY, REFERRAL_PARTNER, ORDER, SUBSCRIPTION, TASK_NOTE_APPOINTMENT)
+          enum:
+          - CONTACT
+          - REFERRAL_PARTNER
+          - OPPORTUNITY
+          - TASK_NOTE_APPOINTMENT
+          - COMPANY
+          - ORDER
+          - SUBSCRIPTION
+          example: CONTACT
+    ObjectModel_2:
+      type: object
+      properties:
+        custom_fields:
+          type: array
+          items:
+            $ref: '#/components/schemas/CustomFieldMetaData_2'
+        optional_properties:
+          type: array
+          description: These fields are not transmitted by default on this model, but can be requested by specifying them in a comma-separated list in the optional_properties query parameter.
+          items:
+            type: string
+          uniqueItems: true
+    CustomFieldGroup:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        order:
+          type: integer
+          format: int32
+        tab_id:
+          type: string
+        record_type:
+          type: string
+          enum:
+          - CONTACT
+          - REFERRAL_PARTNER
+          - OPPORTUNITY
+          - TASK_NOTE_APPOINTMENT
+          - COMPANY
+          - ORDER
+          - SUBSCRIPTION
+    UpdateCustomFieldGroupRequest:
+      type: object
+      properties:
+        name:
+          type: string
+        order:
+          type: integer
+          format: int32
+        tab_id:
+          type: string
+    ListTasksResponse:
+      type: object
+      properties:
+        tasks:
+          type: array
+          items:
+            $ref: '#/components/schemas/Task_2'
+        next_page_token:
+          type: string
+    ErrorDetails:
+      type: object
+      properties:
+        domain:
+          type: string
+        resource:
+          type: string
+    CreateCustomFieldOptionRequest:
+      type: object
+      properties:
+        label:
+          type: string
     Task_2:
       type: object
       properties:
@@ -2773,55 +2943,26 @@ components:
             content: Preferred
           items:
             $ref: '#/components/schemas/CustomFieldValueObject'
-    UpdateCustomFieldMetaDataRequest:
+    CustomFieldMetaData_2:
       type: object
-      properties:
-        label:
-          type: string
-        options:
-          type: array
-          items:
-            $ref: '#/components/schemas/CustomFieldOption'
-        group_id:
-          type: string
-      required:
-      - group_id
-    CreateCustomFieldGroupRequest:
-      type: object
-      properties:
-        name:
-          type: string
-        tab_id:
-          type: string
-    UpdateCustomFieldGroupRequest:
-      type: object
-      properties:
-        name:
-          type: string
-        order:
-          type: integer
-          format: int32
-        tab_id:
-          type: string
-    CustomFieldTab:
-      type: object
+      description: Metadata describing a custom field, including its type and options
       properties:
         id:
           type: string
-          description: The unique identifier of the custom field tab
+          description: The unique identifier of the custom field
           example: 123
-        name:
+        label:
           type: string
-          description: The name of the custom field tab
-          example: Personal Info
-        order:
-          type: integer
-          format: int32
-          description: The display order of the tab
-          example: 1
+          description: The display label of the custom field
+          example: Favorite Color
+        options:
+          type: array
+          description: The list of available options for select/radio/multiselect/drilldown field types
+          items:
+            $ref: '#/components/schemas/CustomFieldOption'
         record_type:
           type: string
-          description: The record type this tab belongs to (e.g., CONTACT, COMPANY, OPPORTUNITY, REFERRAL_PARTNER, ORDER, SUBSCRIPTION, TASK_NOTE_APPOINTMENT)
+          description: The entity type this custom field belongs to (e.g. CONTACT, COMPANY)
           enum:
           - CONTACT
           - REFERRAL_PARTNER
@@ -2830,7 +2971,49 @@ components:
           - COMPANY
           - ORDER
           - SUBSCRIPTION
-          example: CONTACT
+        field_type:
+          type: string
+          description: The data type of the custom field (e.g. Text, Number, Date, Select)
+          enum:
+          - CURRENCY
+          - DATE
+          - DATE_TIME
+          - DAY_OF_WEEK
+          - DECIMAL_NUMBER
+          - DRILLDOWN
+          - DROPDOWN
+          - EMAIL
+          - LIST_BOX
+          - MONTH
+          - NAME
+          - PERCENT
+          - PHONE_NUMBER
+          - RADIO
+          - SOCIAL_SECURITY_NUMBER
+          - STATE
+          - TEXT
+          - TEXT_AREA
+          - USER
+          - USER_LIST_BOX
+          - WEBSITE
+          - WHOLE_NUMBER
+          - YEAR
+          - YES_NO
+        default_value:
+          type: string
+          description: The default value for this custom field, if any
+        group_id:
+          type: string
+          description: The ID of the group this custom field belongs to
+          example: 45
+        group_name:
+          type: string
+          description: The name of the group this custom field belongs to
+          example: Personal Info
+        field_name:
+          type: string
+          description: The database column name for this custom field. Use this value when filtering contacts (e.g. for field_name 'firstName1', filter with 'firstName1==John').
+          example: firstName1
     CreateUpdateTaskRequest:
       type: object
       description: task
@@ -2907,46 +3090,6 @@ components:
             content: Red
           items:
             $ref: '#/components/schemas/CustomFieldValueObject'
-    CustomFieldGroup:
-      type: object
-      properties:
-        id:
-          type: string
-        name:
-          type: string
-        order:
-          type: integer
-          format: int32
-        tab_id:
-          type: string
-        record_type:
-          type: string
-          enum:
-          - CONTACT
-          - REFERRAL_PARTNER
-          - OPPORTUNITY
-          - TASK_NOTE_APPOINTMENT
-          - COMPANY
-          - ORDER
-          - SUBSCRIPTION
-    CreateCustomFieldTabRequest:
-      type: object
-      properties:
-        name:
-          type: string
-    ObjectModel_2:
-      type: object
-      properties:
-        custom_fields:
-          type: array
-          items:
-            $ref: '#/components/schemas/CustomFieldMetaData_2'
-        optional_properties:
-          type: array
-          description: These fields are not transmitted by default on this model, but can be requested by specifying them in a comma-separated list in the optional_properties query parameter.
-          items:
-            type: string
-          uniqueItems: true
     UpdateTaskResponse:
       type: object
       properties:
@@ -3044,95 +3187,6 @@ components:
             content: Preferred
           items:
             $ref: '#/components/schemas/CustomFieldValueObject'
-    ListCustomFieldTabsResponse:
-      type: object
-      properties:
-        tabs:
-          type: array
-          items:
-            $ref: '#/components/schemas/CustomFieldTab'
-    Error:
-      type: object
-      properties:
-        code:
-          type: integer
-          format: int32
-        message:
-          type: string
-        status:
-          type: string
-        details:
-          type: array
-          items:
-            $ref: '#/components/schemas/ErrorDetails'
-    CustomFieldValueObject:
-      type: object
-      properties:
-        id:
-          type: string
-        content:
-          description: The value of the custom field. Text custom field values have a maximum length of 65535 characters.
-    ListCustomFieldGroupsResponse:
-      type: object
-      properties:
-        groups:
-          type: array
-          items:
-            $ref: '#/components/schemas/CustomFieldGroup'
-    CreateCustomFieldRequest:
-      type: object
-      properties:
-        label:
-          type: string
-        options:
-          type: array
-          items:
-            $ref: '#/components/schemas/CreateCustomFieldOptionRequest'
-        field_type:
-          type: string
-          enum:
-          - CURRENCY
-          - DATE
-          - DATE_TIME
-          - DAY_OF_WEEK
-          - DECIMAL_NUMBER
-          - DRILLDOWN
-          - DROPDOWN
-          - EMAIL
-          - LIST_BOX
-          - MONTH
-          - NAME
-          - PERCENT
-          - PHONE_NUMBER
-          - RADIO
-          - SOCIAL_SECURITY_NUMBER
-          - STATE
-          - TEXT
-          - TEXT_AREA
-          - USER
-          - USER_LIST_BOX
-          - WEBSITE
-          - WHOLE_NUMBER
-          - YEAR
-          - YES_NO
-        group_id:
-          type: string
-          description: An optional tab group to place the field under in the interface.  If not specified, will default to the 'Custom Fields' tab.
-        user_group_id:
-          type: string
-          description: An optional user group to choose from when selecting values for User or UserListBox fields.
-      required:
-      - field_type
-      - label
-    ListTasksResponse:
-      type: object
-      properties:
-        tasks:
-          type: array
-          items:
-            $ref: '#/components/schemas/Task_2'
-        next_page_token:
-          type: string
     CreateTaskRequest:
       type: object
       description: task
@@ -3211,18 +3265,13 @@ components:
             $ref: '#/components/schemas/CustomFieldValueObject'
       required:
       - assigned_to_user_id
-    CreateCustomFieldOptionRequest:
+    CustomFieldValueObject:
       type: object
       properties:
-        label:
+        id:
           type: string
-    ErrorDetails:
-      type: object
-      properties:
-        domain:
-          type: string
-        resource:
-          type: string
+        content:
+          description: The value of the custom field. Text custom field values have a maximum length of 65535 characters.
     UpdateCustomFieldTabRequest:
       type: object
       properties:
@@ -3231,82 +3280,33 @@ components:
         order:
           type: integer
           format: int32
-    CustomFieldMetaData_2:
+    UpdateCustomFieldMetaDataRequest:
       type: object
-      description: Metadata describing a custom field, including its type and options
       properties:
-        id:
-          type: string
-          description: The unique identifier of the custom field
-          example: 123
         label:
           type: string
-          description: The display label of the custom field
-          example: Favorite Color
         options:
           type: array
-          description: The list of available options for select/radio/multiselect/drilldown field types
           items:
             $ref: '#/components/schemas/CustomFieldOption'
-        record_type:
-          type: string
-          description: The entity type this custom field belongs to (e.g. CONTACT, COMPANY)
-          enum:
-          - CONTACT
-          - REFERRAL_PARTNER
-          - OPPORTUNITY
-          - TASK_NOTE_APPOINTMENT
-          - COMPANY
-          - ORDER
-          - SUBSCRIPTION
-        field_type:
-          type: string
-          description: The data type of the custom field (e.g. Text, Number, Date, Select)
-          enum:
-          - CURRENCY
-          - DATE
-          - DATE_TIME
-          - DAY_OF_WEEK
-          - DECIMAL_NUMBER
-          - DRILLDOWN
-          - DROPDOWN
-          - EMAIL
-          - LIST_BOX
-          - MONTH
-          - NAME
-          - PERCENT
-          - PHONE_NUMBER
-          - RADIO
-          - SOCIAL_SECURITY_NUMBER
-          - STATE
-          - TEXT
-          - TEXT_AREA
-          - USER
-          - USER_LIST_BOX
-          - WEBSITE
-          - WHOLE_NUMBER
-          - YEAR
-          - YES_NO
-        default_value:
-          type: string
-          description: The default value for this custom field, if any
         group_id:
           type: string
-          description: The ID of the group this custom field belongs to
-          example: 45
-        group_name:
-          type: string
-          description: The name of the group this custom field belongs to
-          example: Personal Info
-        field_name:
-          type: string
-          description: The database column name for this custom field. Use this value when filtering contacts (e.g. for field_name 'firstName1', filter with 'firstName1==John').
-          example: firstName1
-    CreateCustomFieldResponse:
+      required:
+      - group_id
+    ListCustomFieldTabsResponse:
       type: object
       properties:
-        custom_field:
-          $ref: '#/components/schemas/CustomFieldMetaData_2'
+        tabs:
+          type: array
+          items:
+            $ref: '#/components/schemas/CustomFieldTab'
+    CreateCustomFieldGroupRequest:
+      type: object
+      properties:
+        name:
+          type: string
+        tab_id:
+          type: string
   securitySchemes:
     oauth2:
       type: oauth2

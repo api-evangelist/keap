@@ -150,17 +150,25 @@ paths:
                 $ref: '#/components/schemas/UserGroup'
 components:
   schemas:
-    ListUserGroupsResponse:
+    ErrorDetails:
       type: object
-      description: Response containing a list of user groups
       properties:
-        user_groups:
-          type: array
-          description: List of user groups
-          items:
-            $ref: '#/components/schemas/UserGroup'
-        next_page_token:
+        domain:
           type: string
+        resource:
+          type: string
+    UserGroup:
+      type: object
+      description: A user group in the application
+      properties:
+        id:
+          type: string
+          description: The unique identifier for this user group.
+          example: 5
+        name:
+          type: string
+          description: The name of this user group.
+          example: Accounting
     Error:
       type: object
       properties:
@@ -175,24 +183,16 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/ErrorDetails'
-    UserGroup:
+    ListUserGroupsResponse:
       type: object
-      description: A user group in the application
+      description: Response containing a list of user groups
       properties:
-        id:
-          type: string
-          description: The unique identifier for this user group.
-          example: 5
-        name:
-          type: string
-          description: The name of this user group.
-          example: Accounting
-    ErrorDetails:
-      type: object
-      properties:
-        domain:
-          type: string
-        resource:
+        user_groups:
+          type: array
+          description: List of user groups
+          items:
+            $ref: '#/components/schemas/UserGroup'
+        next_page_token:
           type: string
   securitySchemes:
     oauth2:

@@ -699,21 +699,6 @@ paths:
                   type: string
 components:
   schemas:
-    RestHook:
-      type: object
-      properties:
-        key:
-          type: string
-        eventKey:
-          type: string
-        hookUrl:
-          type: string
-        status:
-          type: string
-          enum:
-          - Unverified
-          - Verified
-          - Inactive
     RestHookRequest:
       type: object
       properties:
@@ -721,37 +706,10 @@ components:
           type: string
         hookUrl:
           type: string
-    DefaultHttpStatusCode:
-      allOf:
-      - $ref: '#/components/schemas/HttpStatusCode'
     View:
       type: object
       properties:
         contentType:
-          type: string
-    ModelAndView:
-      type: object
-      properties:
-        view:
-          $ref: '#/components/schemas/View'
-        model:
-          type: object
-          additionalProperties: {}
-        status:
-          oneOf:
-          - $ref: '#/components/schemas/DefaultHttpStatusCode'
-          - $ref: '#/components/schemas/HttpStatus'
-        modelMap:
-          type: object
-          additionalProperties: {}
-          properties:
-            empty:
-              type: boolean
-        reference:
-          type: boolean
-        empty:
-          type: boolean
-        viewName:
           type: string
     HttpStatusCode:
       type: object
@@ -836,6 +794,48 @@ components:
       - 509 BANDWIDTH_LIMIT_EXCEEDED
       - 510 NOT_EXTENDED
       - 511 NETWORK_AUTHENTICATION_REQUIRED
+    RestHook:
+      type: object
+      properties:
+        key:
+          type: string
+        eventKey:
+          type: string
+        hookUrl:
+          type: string
+        status:
+          type: string
+          enum:
+          - Unverified
+          - Verified
+          - Inactive
+    DefaultHttpStatusCode:
+      allOf:
+      - $ref: '#/components/schemas/HttpStatusCode'
+    ModelAndView:
+      type: object
+      properties:
+        view:
+          $ref: '#/components/schemas/View'
+        model:
+          type: object
+          additionalProperties: {}
+        status:
+          oneOf:
+          - $ref: '#/components/schemas/DefaultHttpStatusCode'
+          - $ref: '#/components/schemas/HttpStatus'
+        modelMap:
+          type: object
+          additionalProperties: {}
+          properties:
+            empty:
+              type: boolean
+        reference:
+          type: boolean
+        empty:
+          type: boolean
+        viewName:
+          type: string
   securitySchemes:
     oauth2:
       type: oauth2

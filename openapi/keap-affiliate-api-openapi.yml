@@ -5011,20 +5011,62 @@ paths:
     - url: https://api.infusionsoft.com/crm
 components:
   schemas:
-    AffiliateClawbackList:
+    AffiliateProgram:
       type: object
       properties:
-        clawbacks:
-          type: array
-          items:
-            $ref: '#/components/schemas/RestAffiliateClawback'
-        count:
+        id:
+          type: integer
+          format: int64
+        name:
+          type: string
+        priority:
           type: integer
           format: int32
-        next:
+        notes:
           type: string
-        previous:
+        affiliate_id:
+          type: integer
+          format: int64
+    HttpStatusCode:
+      type: object
+      properties:
+        error:
+          type: boolean
+        is1xxInformational:
+          type: boolean
+        is2xxSuccessful:
+          type: boolean
+        is3xxRedirection:
+          type: boolean
+        is4xxClientError:
+          type: boolean
+        is5xxServerError:
+          type: boolean
+    Affiliate:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        contact_id:
+          type: integer
+          format: int64
+        parent_id:
+          type: integer
+          format: int64
+        code:
           type: string
+        name:
+          type: string
+        status:
+          type: string
+        notify_on_lead:
+          type: boolean
+        notify_on_sale:
+          type: boolean
+        track_leads_for:
+          type: integer
+          format: int32
     ModelAndView:
       type: object
       properties:
@@ -5048,6 +5090,216 @@ components:
         empty:
           type: boolean
         viewName:
+          type: string
+    RestAffiliatePayment:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        date:
+          type: string
+        notes:
+          type: string
+        amount:
+          type: number
+          format: double
+        type:
+          type: string
+    AffiliateCommissionList:
+      type: object
+      properties:
+        commissions:
+          type: array
+          items:
+            $ref: '#/components/schemas/AffiliateCommission'
+        count:
+          type: integer
+          format: int32
+        next:
+          type: string
+        previous:
+          type: string
+    View:
+      type: object
+      properties:
+        contentType:
+          type: string
+    RedirectList:
+      type: object
+      properties:
+        redirects:
+          type: array
+          items:
+            $ref: '#/components/schemas/AffiliateRedirect'
+        count:
+          type: integer
+          format: int32
+        next:
+          type: string
+        previous:
+          type: string
+    DefaultHttpStatusCode:
+      allOf:
+      - $ref: '#/components/schemas/HttpStatusCode'
+    ObjectModel:
+      type: object
+      properties:
+        custom_fields:
+          type: array
+          items:
+            $ref: '#/components/schemas/CustomFieldMetaData'
+        optional_properties:
+          type: array
+          items:
+            type: string
+          uniqueItems: true
+    AffiliatePaymentList:
+      type: object
+      properties:
+        payments:
+          type: array
+          items:
+            $ref: '#/components/schemas/RestAffiliatePayment'
+        count:
+          type: integer
+          format: int32
+        next:
+          type: string
+        previous:
+          type: string
+    HttpStatus:
+      allOf:
+      - $ref: '#/components/schemas/HttpStatusCode'
+      enum:
+      - 100 CONTINUE
+      - 101 SWITCHING_PROTOCOLS
+      - 102 PROCESSING
+      - 103 EARLY_HINTS
+      - 200 OK
+      - 201 CREATED
+      - 202 ACCEPTED
+      - 203 NON_AUTHORITATIVE_INFORMATION
+      - 204 NO_CONTENT
+      - 205 RESET_CONTENT
+      - 206 PARTIAL_CONTENT
+      - 207 MULTI_STATUS
+      - 208 ALREADY_REPORTED
+      - 226 IM_USED
+      - 300 MULTIPLE_CHOICES
+      - 301 MOVED_PERMANENTLY
+      - 302 FOUND
+      - 303 SEE_OTHER
+      - 304 NOT_MODIFIED
+      - 307 TEMPORARY_REDIRECT
+      - 308 PERMANENT_REDIRECT
+      - 400 BAD_REQUEST
+      - 401 UNAUTHORIZED
+      - 402 PAYMENT_REQUIRED
+      - 403 FORBIDDEN
+      - 404 NOT_FOUND
+      - 405 METHOD_NOT_ALLOWED
+      - 406 NOT_ACCEPTABLE
+      - 407 PROXY_AUTHENTICATION_REQUIRED
+      - 408 REQUEST_TIMEOUT
+      - 409 CONFLICT
+      - 410 GONE
+      - 411 LENGTH_REQUIRED
+      - 412 PRECONDITION_FAILED
+      - 413 CONTENT_TOO_LARGE
+      - 413 PAYLOAD_TOO_LARGE
+      - 414 URI_TOO_LONG
+      - 415 UNSUPPORTED_MEDIA_TYPE
+      - 416 REQUESTED_RANGE_NOT_SATISFIABLE
+      - 417 EXPECTATION_FAILED
+      - 418 I_AM_A_TEAPOT
+      - 421 MISDIRECTED_REQUEST
+      - 422 UNPROCESSABLE_CONTENT
+      - 422 UNPROCESSABLE_ENTITY
+      - 423 LOCKED
+      - 424 FAILED_DEPENDENCY
+      - 425 TOO_EARLY
+      - 426 UPGRADE_REQUIRED
+      - 428 PRECONDITION_REQUIRED
+      - 429 TOO_MANY_REQUESTS
+      - 431 REQUEST_HEADER_FIELDS_TOO_LARGE
+      - 451 UNAVAILABLE_FOR_LEGAL_REASONS
+      - 500 INTERNAL_SERVER_ERROR
+      - 501 NOT_IMPLEMENTED
+      - 502 BAD_GATEWAY
+      - 503 SERVICE_UNAVAILABLE
+      - 504 GATEWAY_TIMEOUT
+      - 505 HTTP_VERSION_NOT_SUPPORTED
+      - 506 VARIANT_ALSO_NEGOTIATES
+      - 507 INSUFFICIENT_STORAGE
+      - 508 LOOP_DETECTED
+      - 509 BANDWIDTH_LIMIT_EXCEEDED
+      - 510 NOT_EXTENDED
+      - 511 NETWORK_AUTHENTICATION_REQUIRED
+    AffiliateProgramList:
+      type: object
+      properties:
+        programs:
+          type: array
+          items:
+            $ref: '#/components/schemas/AffiliateProgram'
+        count:
+          type: integer
+          format: int32
+        next:
+          type: string
+        previous:
+          type: string
+    CustomFieldOption:
+      type: object
+      properties:
+        id:
+          type: string
+        label:
+          type: string
+    AffiliateList:
+      type: object
+      properties:
+        affiliates:
+          type: array
+          items:
+            $ref: '#/components/schemas/Affiliate'
+        count:
+          type: integer
+          format: int32
+        next:
+          type: string
+        previous:
+          type: string
+    AffiliateCommission:
+      type: object
+      properties:
+        description:
+          type: string
+        amount_earned:
+          type: number
+          format: double
+        contact_first_name:
+          type: string
+        contact_last_name:
+          type: string
+        invoice_id:
+          type: integer
+          format: int64
+        date_earned:
+          type: string
+          format: date-time
+        contact_id:
+          type: integer
+          format: int64
+        sales_affiliate_id:
+          type: integer
+          format: int64
+        sold_by_first_name:
+          type: string
+        sold_by_last_name:
+          type: string
+        product_name:
           type: string
     AffiliateSummary:
       type: object
@@ -5095,20 +5347,13 @@ components:
           type: string
         subscription_plan_name:
           type: string
-    CustomFieldOption:
+    AffiliateClawbackList:
       type: object
       properties:
-        id:
-          type: string
-        label:
-          type: string
-    RedirectList:
-      type: object
-      properties:
-        redirects:
+        clawbacks:
           type: array
           items:
-            $ref: '#/components/schemas/AffiliateRedirect'
+            $ref: '#/components/schemas/RestAffiliateClawback'
         count:
           type: integer
           format: int32
@@ -5184,9 +5429,6 @@ components:
           enum:
           - ASCENDING
           - DESCENDING
-    DefaultHttpStatusCode:
-      allOf:
-      - $ref: '#/components/schemas/HttpStatusCode'
     AffiliateRedirect:
       type: object
       properties:
@@ -5207,150 +5449,6 @@ components:
           items:
             type: integer
             format: int64
-    HttpStatusCode:
-      type: object
-      properties:
-        error:
-          type: boolean
-        is1xxInformational:
-          type: boolean
-        is2xxSuccessful:
-          type: boolean
-        is3xxRedirection:
-          type: boolean
-        is4xxClientError:
-          type: boolean
-        is5xxServerError:
-          type: boolean
-    ObjectModel:
-      type: object
-      properties:
-        custom_fields:
-          type: array
-          items:
-            $ref: '#/components/schemas/CustomFieldMetaData'
-        optional_properties:
-          type: array
-          items:
-            type: string
-          uniqueItems: true
-    AffiliateCommission:
-      type: object
-      properties:
-        description:
-          type: string
-        amount_earned:
-          type: number
-          format: double
-        contact_first_name:
-          type: string
-        contact_last_name:
-          type: string
-        invoice_id:
-          type: integer
-          format: int64
-        date_earned:
-          type: string
-          format: date-time
-        contact_id:
-          type: integer
-          format: int64
-        sales_affiliate_id:
-          type: integer
-          format: int64
-        sold_by_first_name:
-          type: string
-        sold_by_last_name:
-          type: string
-        product_name:
-          type: string
-    AffiliateList:
-      type: object
-      properties:
-        affiliates:
-          type: array
-          items:
-            $ref: '#/components/schemas/Affiliate'
-        count:
-          type: integer
-          format: int32
-        next:
-          type: string
-        previous:
-          type: string
-    View:
-      type: object
-      properties:
-        contentType:
-          type: string
-    AffiliateProgramList:
-      type: object
-      properties:
-        programs:
-          type: array
-          items:
-            $ref: '#/components/schemas/AffiliateProgram'
-        count:
-          type: integer
-          format: int32
-        next:
-          type: string
-        previous:
-          type: string
-    RestAffiliatePayment:
-      type: object
-      properties:
-        id:
-          type: integer
-          format: int64
-        date:
-          type: string
-        notes:
-          type: string
-        amount:
-          type: number
-          format: double
-        type:
-          type: string
-    AffiliatePaymentList:
-      type: object
-      properties:
-        payments:
-          type: array
-          items:
-            $ref: '#/components/schemas/RestAffiliatePayment'
-        count:
-          type: integer
-          format: int32
-        next:
-          type: string
-        previous:
-          type: string
-    Affiliate:
-      type: object
-      properties:
-        id:
-          type: integer
-          format: int64
-        contact_id:
-          type: integer
-          format: int64
-        parent_id:
-          type: integer
-          format: int64
-        code:
-          type: string
-        name:
-          type: string
-        status:
-          type: string
-        notify_on_lead:
-          type: boolean
-        notify_on_sale:
-          type: boolean
-        track_leads_for:
-          type: integer
-          format: int32
     AffiliateSummaryList:
       type: object
       properties:
@@ -5361,20 +5459,6 @@ components:
         count:
           type: integer
           format: int32
-    AffiliateCommissionList:
-      type: object
-      properties:
-        commissions:
-          type: array
-          items:
-            $ref: '#/components/schemas/AffiliateCommission'
-        count:
-          type: integer
-          format: int32
-        next:
-          type: string
-        previous:
-          type: string
     CustomFieldMetaData:
       type: object
       properties:
@@ -5428,90 +5512,227 @@ components:
           type: string
         default_value:
           type: string
-    AffiliateProgram:
+    RestAffiliate:
       type: object
       properties:
         id:
-          type: integer
-          format: int64
+          type: string
+          description: The AffiliateId
+          example: 1
+        code:
+          type: string
+          description: The Affiliate Code
+          example: M123
         name:
           type: string
-        priority:
+          description: The Affiliate Name
+          example: John Smith
+        status:
+          type: string
+          description: The Affiliate Status
+          enum:
+          - ACTIVE
+          - INACTIVE
+          example: ACTIVE
+        contact_id:
+          type: string
+          description: The ContactID
+          example: 1
+        unique_site_id:
+          type: string
+          description: The Affiliate PortalSite Id
+          example: 123456
+        date_created:
+          type: string
+          description: Date affiliate was created (ISO-8601)
+          example: '2024-03-15T10:30:00Z'
+        parent_affiliate_id:
+          type: string
+          description: The Parent Affiliate Id
+          example: 0
+        notify_on_sale:
+          type: boolean
+          description: Whether to notify on sale events
+          example: true
+        notify_on_lead:
+          type: boolean
+          description: Whether to notify on lead events
+          example: true
+        track_leads_days:
           type: integer
           format: int32
-        notes:
+          description: Number of days to track leads
+          example: 30
+        custom_fields:
+          type: array
+          description: List of custom field values applied to this affiliate
+          example:
+          - id: '1'
+            content: VIP
+          - id: '2'
+            content: Preferred
+          items:
+            $ref: '#/components/schemas/CustomFieldValue'
+    DefaultCommission:
+      type: object
+      properties:
+        payout_type:
           type: string
-        affiliate_id:
+          default: UPFRONT
+          description: The payout type for this commission.
+          enum:
+          - UPFRONT
+          - PAYMENT_RECEIVED
+          example: UPFRONT
+        dollar_amount:
+          type: number
+          format: double
+          description: Level 1 fixed dollar amount to be paid for commission. This will be set for the Sale. This is deprecated for `level_1`
+          example: 10.5
+        percentage:
+          type: number
+          format: double
+          description: Level 1 percentage to be paid for commission (0-100). This will be set for the Sale. This is deprecated for `level_1`
+          example: 25.0
+        unused:
+          $ref: '#/components/schemas/CommissionItem'
+          description: Payout rules for any unused commissions.
+        level_1:
+          $ref: '#/components/schemas/CommissionItem'
+          description: Payout rules for Level 1 recipients of the commission.
+        level_2:
+          $ref: '#/components/schemas/CommissionItem'
+          description: Payout rules for Level 2 recipients of the commission.
+    CreateCustomFieldRequest:
+      type: object
+      properties:
+        label:
+          type: string
+        options:
+          type: array
+          items:
+            $ref: '#/components/schemas/CreateCustomFieldOptionRequest'
+        field_type:
+          type: string
+          enum:
+          - CURRENCY
+          - DATE
+          - DATE_TIME
+          - DAY_OF_WEEK
+          - DECIMAL_NUMBER
+          - DRILLDOWN
+          - DROPDOWN
+          - EMAIL
+          - LIST_BOX
+          - MONTH
+          - NAME
+          - PERCENT
+          - PHONE_NUMBER
+          - RADIO
+          - SOCIAL_SECURITY_NUMBER
+          - STATE
+          - TEXT
+          - TEXT_AREA
+          - USER
+          - USER_LIST_BOX
+          - WEBSITE
+          - WHOLE_NUMBER
+          - YEAR
+          - YES_NO
+        group_id:
+          type: string
+          description: An optional tab group to place the field under in the interface.  If not specified, will default to the 'Custom Fields' tab.
+        user_group_id:
+          type: string
+          description: An optional user group to choose from when selecting values for User or UserListBox fields.
+      required:
+      - field_type
+      - label
+    CreateSubscriptionCommissionProgramRequest:
+      type: object
+      properties:
+        percentage:
+          type: string
+          deprecated: true
+          description: Level 1 percentage to be paid for commission (0-100). This will be set for the Sale. This is deprecated for `level_1`
+          example: 10.5
+        unused:
+          $ref: '#/components/schemas/CommissionItemRequest'
+          description: Payout rules for any unused commissions.
+        dollar_amount:
+          type: string
+          deprecated: true
+          description: Level 1 fixed dollar amount to be paid for commission. This will be set for the Sale. This is deprecated for `level_1`
+          example: 25.0
+        level_1:
+          $ref: '#/components/schemas/CommissionItemRequest'
+          description: Payout rules for Level 1 recipients of the commission.
+        level_2:
+          $ref: '#/components/schemas/CommissionItemRequest'
+          description: Payout rules for Level 2 recipients of the commission.
+        payout_type:
+          type: string
+          default: UPFRONT
+          description: The payout type for this commission.
+          enum:
+          - UPFRONT
+          - PAYMENT_RECEIVED
+          example: UPFRONT
+        subscription_id:
+          type: string
+          description: Subscription ID to assign commission
+          example: 456
+    UpdateDefaultCommissionProgramRequest:
+      type: object
+      properties:
+        percentage:
+          type: string
+          deprecated: true
+          description: Level 1 percentage to be paid for commission (0-100). This will be set for the Sale. This is deprecated for `level_1`
+          example: 10.5
+        unused:
+          $ref: '#/components/schemas/CommissionItemRequest'
+          description: Payout rules for any unused commissions.
+        dollar_amount:
+          type: string
+          deprecated: true
+          description: Level 1 fixed dollar amount to be paid for commission. This will be set for the Sale. This is deprecated for `level_1`
+          example: 25.0
+        level_1:
+          $ref: '#/components/schemas/CommissionItemRequest'
+          description: Payout rules for Level 1 recipients of the commission.
+        level_2:
+          $ref: '#/components/schemas/CommissionItemRequest'
+          description: Payout rules for Level 2 recipients of the commission.
+        payout_type:
+          type: string
+          default: UPFRONT
+          description: The payout type for this commission.
+          enum:
+          - UPFRONT
+          - PAYMENT_RECEIVED
+          example: UPFRONT
+    Error:
+      type: object
+      properties:
+        code:
           type: integer
-          format: int64
-    HttpStatus:
-      allOf:
-      - $ref: '#/components/schemas/HttpStatusCode'
-      enum:
-      - 100 CONTINUE
-      - 101 SWITCHING_PROTOCOLS
-      - 102 PROCESSING
-      - 103 EARLY_HINTS
-      - 200 OK
-      - 201 CREATED
-      - 202 ACCEPTED
-      - 203 NON_AUTHORITATIVE_INFORMATION
-      - 204 NO_CONTENT
-      - 205 RESET_CONTENT
-      - 206 PARTIAL_CONTENT
-      - 207 MULTI_STATUS
-      - 208 ALREADY_REPORTED
-      - 226 IM_USED
-      - 300 MULTIPLE_CHOICES
-      - 301 MOVED_PERMANENTLY
-      - 302 FOUND
-      - 303 SEE_OTHER
-      - 304 NOT_MODIFIED
-      - 307 TEMPORARY_REDIRECT
-      - 308 PERMANENT_REDIRECT
-      - 400 BAD_REQUEST
-      - 401 UNAUTHORIZED
-      - 402 PAYMENT_REQUIRED
-      - 403 FORBIDDEN
-      - 404 NOT_FOUND
-      - 405 METHOD_NOT_ALLOWED
-      - 406 NOT_ACCEPTABLE
-      - 407 PROXY_AUTHENTICATION_REQUIRED
-      - 408 REQUEST_TIMEOUT
-      - 409 CONFLICT
-      - 410 GONE
-      - 411 LENGTH_REQUIRED
-      - 412 PRECONDITION_FAILED
-      - 413 CONTENT_TOO_LARGE
-      - 413 PAYLOAD_TOO_LARGE
-      - 414 URI_TOO_LONG
-      - 415 UNSUPPORTED_MEDIA_TYPE
-      - 416 REQUESTED_RANGE_NOT_SATISFIABLE
-      - 417 EXPECTATION_FAILED
-      - 418 I_AM_A_TEAPOT
-      - 421 MISDIRECTED_REQUEST
-      - 422 UNPROCESSABLE_CONTENT
-      - 422 UNPROCESSABLE_ENTITY
-      - 423 LOCKED
-      - 424 FAILED_DEPENDENCY
-      - 425 TOO_EARLY
-      - 426 UPGRADE_REQUIRED
-      - 428 PRECONDITION_REQUIRED
-      - 429 TOO_MANY_REQUESTS
-      - 431 REQUEST_HEADER_FIELDS_TOO_LARGE
-      - 451 UNAVAILABLE_FOR_LEGAL_REASONS
-      - 500 INTERNAL_SERVER_ERROR
-      - 501 NOT_IMPLEMENTED
-      - 502 BAD_GATEWAY
-      - 503 SERVICE_UNAVAILABLE
-      - 504 GATEWAY_TIMEOUT
-      - 505 HTTP_VERSION_NOT_SUPPORTED
-      - 506 VARIANT_ALSO_NEGOTIATES
-      - 507 INSUFFICIENT_STORAGE
-      - 508 LOOP_DETECTED
-      - 509 BANDWIDTH_LIMIT_EXCEEDED
-      - 510 NOT_EXTENDED
-      - 511 NETWORK_AUTHENTICATION_REQUIRED
+          format: int32
+        message:
+          type: string
+        status:
+          type: string
+        details:
+          type: array
+          items:
+            $ref: '#/components/schemas/ErrorDetails'
+    ResourceCommissionProgram:
+      type: object
+      properties:
+        commission_program_id:
+          type: string
+          description: The commission program identifier
+          example: 100
     CreateProductCommissionProgramRequest:
       type: object
       properties:
@@ -5546,6 +5767,198 @@ components:
           type: string
           description: Product ID to assign commission
           example: 123
+    UpdateProgramResourceRequest:
+      type: object
+      properties:
+        title:
+          type: string
+          description: The program resource title
+          example: Summer Sale Banner
+        notes:
+          type: string
+          description: The resource notes.
+          example: Use this banner for summer promotions
+        url:
+          type: string
+          description: The URL to the resource.
+          example: https://thryv.com/banners/summer-sale.jpg
+        order:
+          type: integer
+          format: int32
+          description: The order in which the resource is displayed. Minimum value is 0. Lower values indicate higher priority.
+          example: 1
+        content_html:
+          type: string
+          description: The contents of the PAGE or EMAIL. In HTML format.
+          example: <h1>Summer Sale</h1><p>Get 20% off!</p>
+        page_width:
+          type: integer
+          format: int32
+          description: The width of the page for PAGE types, in pixels. Minimum value is 0.
+          example: 728
+        page_height:
+          type: integer
+          format: int32
+          description: The height of the page for PAGE types, in pixels. Minimum value is 0.
+          example: 90
+        commission_program_ids:
+          type: array
+          description: A list of commission program ids to use this resource. The values in this list will replace the existing list of commission program ids.
+          example:
+          - '123'
+          - '456'
+          items:
+            type: string
+    SubscriptionCommission:
+      type: object
+      properties:
+        payout_type:
+          type: string
+          default: UPFRONT
+          description: The payout type for this commission.
+          enum:
+          - UPFRONT
+          - PAYMENT_RECEIVED
+          example: UPFRONT
+        dollar_amount:
+          type: number
+          format: double
+          description: Level 1 fixed dollar amount to be paid for commission. This will be set for the Sale. This is deprecated for `level_1`
+          example: 10.5
+        percentage:
+          type: number
+          format: double
+          description: Level 1 percentage to be paid for commission (0-100). This will be set for the Sale. This is deprecated for `level_1`
+          example: 25.0
+        unused:
+          $ref: '#/components/schemas/CommissionItem'
+          description: Payout rules for any unused commissions.
+        level_1:
+          $ref: '#/components/schemas/CommissionItem'
+          description: Payout rules for Level 1 recipients of the commission.
+        level_2:
+          $ref: '#/components/schemas/CommissionItem'
+          description: Payout rules for Level 2 recipients of the commission.
+        name:
+          type: string
+          description: Subscription name
+          example: Monthly Pro Plan
+        subscription_id:
+          type: string
+          description: Subscription ID
+          example: 456
+        plan_price:
+          type: number
+          format: double
+          description: Plan price
+          example: 49.99
+    UpdateProductCommissionProgramRequest:
+      type: object
+      properties:
+        percentage:
+          type: string
+          deprecated: true
+          description: Level 1 percentage to be paid for commission (0-100). This will be set for the Sale. This is deprecated for `level_1`
+          example: 10.5
+        unused:
+          $ref: '#/components/schemas/CommissionItemRequest'
+          description: Payout rules for any unused commissions.
+        dollar_amount:
+          type: string
+          deprecated: true
+          description: Level 1 fixed dollar amount to be paid for commission. This will be set for the Sale. This is deprecated for `level_1`
+          example: 25.0
+        level_1:
+          $ref: '#/components/schemas/CommissionItemRequest'
+          description: Payout rules for Level 1 recipients of the commission.
+        level_2:
+          $ref: '#/components/schemas/CommissionItemRequest'
+          description: Payout rules for Level 2 recipients of the commission.
+        payout_type:
+          type: string
+          default: UPFRONT
+          description: The payout type for this commission.
+          enum:
+          - UPFRONT
+          - PAYMENT_RECEIVED
+          example: UPFRONT
+        product_id:
+          type: string
+          description: Product ID to assign commission
+          example: 123
+      required:
+      - product_id
+    AffiliateCommissionEarned:
+      type: object
+      properties:
+        affiliate_commission_total:
+          type: number
+          format: double
+          description: Total commission earned by affiliate
+          example: 1250.5
+        view_ledger_url:
+          type: string
+          description: URL to view affiliate ledger
+          example: https://app.thryv.com/affiliate/ledger?affiliateId=123
+    CreateCustomFieldTabRequest:
+      type: object
+      properties:
+        name:
+          type: string
+    Referral:
+      type: object
+      properties:
+        id:
+          type: string
+          description: The unique identifier for this referral.
+          example: 555
+        description:
+          type: string
+          description: The referral description.
+          example: Referred via email campaign
+        source:
+          type: string
+          description: The source for the referral.
+          example: Email Marketing
+        contact_id:
+          type: string
+          description: The referral's contact_id.
+          example: 1001
+        referral_partner_id:
+          type: string
+          description: The referring affiliate ID.
+          example: 123
+        referral_time:
+          type: string
+          format: date-time
+          description: The time of the referral.
+          example: '2024-05-21T23:00:00Z'
+        expiration_time:
+          type: string
+          format: date-time
+          description: The time when the referral expires.
+          example: '2024-08-21T23:00:00Z'
+        ip_address:
+          type: string
+          description: The IP address of the referral.
+          example: 192.168.1.100
+        referral_type:
+          type: string
+          description: The referral type.
+          enum:
+          - COOKIE
+          - MANUAL
+          - PERMANENT
+          example: COOKIE
+    ListAffiliateSummariesResponse:
+      type: object
+      properties:
+        affiliate_summaries:
+          type: array
+          items:
+            $ref: '#/components/schemas/AffiliateSummaryRecord'
+        next_page_token:
+          type: string
     CreateAffiliateRequest:
       type: object
       properties:
@@ -5610,85 +6023,28 @@ components:
       required:
       - code
       - contact_id
-    Referral:
+    UpdateSubscriptionCommissionProgramRequest:
       type: object
       properties:
-        id:
+        percentage:
           type: string
-          description: The unique identifier for this referral.
-          example: 555
-        description:
+          deprecated: true
+          description: Level 1 percentage to be paid for commission (0-100). This will be set for the Sale. This is deprecated for `level_1`
+          example: 10.5
+        unused:
+          $ref: '#/components/schemas/CommissionItemRequest'
+          description: Payout rules for any unused commissions.
+        dollar_amount:
           type: string
-          description: The referral description.
-          example: Referred via email campaign
-        source:
-          type: string
-          description: The source for the referral.
-          example: Email Marketing
-        contact_id:
-          type: string
-          description: The referral's contact_id.
-          example: 1001
-        referral_partner_id:
-          type: string
-          description: The referring affiliate ID.
-          example: 123
-        referral_time:
-          type: string
-          format: date-time
-          description: The time of the referral.
-          example: '2024-05-21T23:00:00Z'
-        expiration_time:
-          type: string
-          format: date-time
-          description: The time when the referral expires.
-          example: '2024-08-21T23:00:00Z'
-        ip_address:
-          type: string
-          description: The IP address of the referral.
-          example: 192.168.1.100
-        referral_type:
-          type: string
-          description: The referral type.
-          enum:
-          - COOKIE
-          - MANUAL
-          - PERMANENT
-          example: COOKIE
-    AffiliateProgramV2:
-      type: object
-      properties:
-        id:
-          type: string
-          description: Commission program ID
-          example: 1
-        name:
-          type: string
-          description: The affiliate commission program name
-          example: commission program
-        priority:
-          type: string
-          description: The Affiliate commission program priority
-          example: 0
-        notes:
-          type: string
-          description: The affiliate commission program notes
-          example: notes for the commission program
-        create_time:
-          type: string
-          description: The created time of affiliate commission program
-          example: '2019-08-24T14:15:22Z'
-        affiliate_ids:
-          type: array
-          description: The list of affiliate_ids using this commission program
-          example:
-          - 123
-          - 124
-          items:
-            type: string
-    DefaultCommission:
-      type: object
-      properties:
+          deprecated: true
+          description: Level 1 fixed dollar amount to be paid for commission. This will be set for the Sale. This is deprecated for `level_1`
+          example: 25.0
+        level_1:
+          $ref: '#/components/schemas/CommissionItemRequest'
+          description: Payout rules for Level 1 recipients of the commission.
+        level_2:
+          $ref: '#/components/schemas/CommissionItemRequest'
+          description: Payout rules for Level 2 recipients of the commission.
         payout_type:
           type: string
           default: UPFRONT
@@ -5697,52 +6053,79 @@ components:
           - UPFRONT
           - PAYMENT_RECEIVED
           example: UPFRONT
-        dollar_amount:
-          type: number
-          format: double
-          description: Level 1 fixed dollar amount to be paid for commission. This will be set for the Sale. This is deprecated for `level_1`
-          example: 10.5
-        percentage:
-          type: number
-          format: double
-          description: Level 1 percentage to be paid for commission (0-100). This will be set for the Sale. This is deprecated for `level_1`
-          example: 25.0
-        unused:
-          $ref: '#/components/schemas/CommissionItem'
-          description: Payout rules for any unused commissions.
-        level_1:
-          $ref: '#/components/schemas/CommissionItem'
-          description: Payout rules for Level 1 recipients of the commission.
-        level_2:
-          $ref: '#/components/schemas/CommissionItem'
-          description: Payout rules for Level 2 recipients of the commission.
-    UpdateCustomFieldMetaDataRequest:
+        subscription_id:
+          type: string
+          description: Subscription ID to assign commission
+          example: 456
+    CommissionItemRequest:
       type: object
       properties:
-        label:
+        sale_percent:
           type: string
-        options:
-          type: array
-          items:
-            $ref: '#/components/schemas/CustomFieldOption'
-        group_id:
+          description: The percentage to be paid for Sale.
+          example: 10.5
+        sale_amount:
           type: string
-      required:
-      - group_id
-    DeleteSubscriptionPlanCommissionRequest:
+          description: The fixed dollar amount to be paid for Sale.
+          example: 25.0
+        lead_percent:
+          type: string
+          description: The percentage to be paid for Lead.
+          example: 10.5
+        lead_amount:
+          type: string
+          description: The fixed dollar amount to be paid for Lead.
+          example: 25.0
+    DeleteProgramCommissionRequest:
       type: object
       properties:
         product_id:
           type: string
-        subscription_plan_id:
-          type: string
-    CreateCustomFieldGroupRequest:
+    ListAffiliateCommissionsResponse:
       type: object
       properties:
+        affiliate_commissions:
+          type: array
+          description: List of commissions for this affiliate
+          items:
+            $ref: '#/components/schemas/AffiliateCommission_2'
+        next_page_token:
+          type: string
+        clawbacks:
+          type: number
+          format: double
+          description: 'Calculated total amount of clawbacks from the returned commissions. '
+          example: 50.0
+        commission_total:
+          type: number
+          format: double
+          description: Calculated total commission amount (amount earned - amount clawbacks) from the returned commissions
+          example: 150.0
+        amount_earned:
+          type: number
+          format: double
+          description: Calculated total amount earned from the returned commissions.
+          example: 200.0
+    AffiliateCommissionProgramResponse:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Commission program ID
+          example: 100
         name:
           type: string
-        tab_id:
+          description: Program name
+          example: Gold Partner Program
+        notes:
           type: string
+          description: Program notes
+          example: 20% commission on all sales
+        priority:
+          type: integer
+          format: int32
+          description: Program priority
+          example: 1
     AffiliateLink:
       type: object
       properties:
@@ -5788,808 +6171,6 @@ components:
           type: string
           description: Date link was created (ISO-8601)
           example: '2024-03-15T10:30:00Z'
-    UpdateCustomFieldGroupRequest:
-      type: object
-      properties:
-        name:
-          type: string
-        order:
-          type: integer
-          format: int32
-        tab_id:
-          type: string
-    CreateProgramResourceRequest:
-      type: object
-      properties:
-        title:
-          type: string
-          description: The program resource title
-          example: Summer Sale Banner
-        type:
-          type: string
-          description: The type of resource
-          enum:
-          - EMAIL
-          - BANNER
-          - PAGE
-          example: BANNER
-        notes:
-          type: string
-          description: The resource notes.
-          example: Use this banner for summer promotions
-        url:
-          type: string
-          description: The URL to the resource.
-          example: https://thryv.com/banners/summer-sale.jpg
-        order:
-          type: integer
-          format: int32
-          description: The order in which the resource is displayed. Minimum value is 0. Defaults to 0. Lower values indicate higher priority.
-          example: 1
-        content_html:
-          type: string
-          description: The contents of the PAGE or EMAIL. In HTML format.
-          example: <h1>Summer Sale</h1><p>Get 20% off!</p>
-        page_width:
-          type: integer
-          format: int32
-          description: The width of the page for PAGE types, in pixels. Minimum value is 0. Defaults to 0
-          example: 728
-        page_height:
-          type: integer
-          format: int32
-          description: The height of the page for PAGE types, in pixels. Minimum value is 0. Defaults to 0
-          example: 90
-        commission_program_ids:
-          type: array
-          description: A list of commission program ids that will use this resource.
-          example:
-          - '123'
-          - '456'
-          items:
-            type: string
-      required:
-      - commission_program_ids
-      - title
-      - type
-    DeleteProgramCommissionRequest:
-      type: object
-      properties:
-        product_id:
-          type: string
-    CustomFieldTab:
-      type: object
-      properties:
-        id:
-          type: string
-          description: The unique identifier of the custom field tab
-          example: 123
-        name:
-          type: string
-          description: The name of the custom field tab
-          example: Personal Info
-        order:
-          type: integer
-          format: int32
-          description: The display order of the tab
-          example: 1
-        record_type:
-          type: string
-          description: The record type this tab belongs to (e.g., CONTACT, COMPANY, OPPORTUNITY, REFERRAL_PARTNER, ORDER, SUBSCRIPTION, TASK_NOTE_APPOINTMENT)
-          enum:
-          - CONTACT
-          - REFERRAL_PARTNER
-          - OPPORTUNITY
-          - TASK_NOTE_APPOINTMENT
-          - COMPANY
-          - ORDER
-          - SUBSCRIPTION
-          example: CONTACT
-    UpdateProgramResourceRequest:
-      type: object
-      properties:
-        title:
-          type: string
-          description: The program resource title
-          example: Summer Sale Banner
-        notes:
-          type: string
-          description: The resource notes.
-          example: Use this banner for summer promotions
-        url:
-          type: string
-          description: The URL to the resource.
-          example: https://thryv.com/banners/summer-sale.jpg
-        order:
-          type: integer
-          format: int32
-          description: The order in which the resource is displayed. Minimum value is 0. Lower values indicate higher priority.
-          example: 1
-        content_html:
-          type: string
-          description: The contents of the PAGE or EMAIL. In HTML format.
-          example: <h1>Summer Sale</h1><p>Get 20% off!</p>
-        page_width:
-          type: integer
-          format: int32
-          description: The width of the page for PAGE types, in pixels. Minimum value is 0.
-          example: 728
-        page_height:
-          type: integer
-          format: int32
-          description: The height of the page for PAGE types, in pixels. Minimum value is 0.
-          example: 90
-        commission_program_ids:
-          type: array
-          description: A list of commission program ids to use this resource. The values in this list will replace the existing list of commission program ids.
-          example:
-          - '123'
-          - '456'
-          items:
-            type: string
-    ProductCommission:
-      type: object
-      properties:
-        payout_type:
-          type: string
-          default: UPFRONT
-          description: The payout type for this commission.
-          enum:
-          - UPFRONT
-          - PAYMENT_RECEIVED
-          example: UPFRONT
-        dollar_amount:
-          type: number
-          format: double
-          description: Level 1 fixed dollar amount to be paid for commission. This will be set for the Sale. This is deprecated for `level_1`
-          example: 10.5
-        percentage:
-          type: number
-          format: double
-          description: Level 1 percentage to be paid for commission (0-100). This will be set for the Sale. This is deprecated for `level_1`
-          example: 25.0
-        unused:
-          $ref: '#/components/schemas/CommissionItem'
-          description: Payout rules for any unused commissions.
-        level_1:
-          $ref: '#/components/schemas/CommissionItem'
-          description: Payout rules for Level 1 recipients of the commission.
-        level_2:
-          $ref: '#/components/schemas/CommissionItem'
-          description: Payout rules for Level 2 recipients of the commission.
-        product_id:
-          type: string
-          description: Product ID
-          example: 123
-        product_name:
-          type: string
-          description: Product name
-          example: Premium Membership
-        product_price:
-          type: number
-          format: double
-          description: Product price
-          example: 99.99
-    CommissionItemRequest:
-      type: object
-      properties:
-        sale_percent:
-          type: string
-          description: The percentage to be paid for Sale.
-          example: 10.5
-        sale_amount:
-          type: string
-          description: The fixed dollar amount to be paid for Sale.
-          example: 25.0
-        lead_percent:
-          type: string
-          description: The percentage to be paid for Lead.
-          example: 10.5
-        lead_amount:
-          type: string
-          description: The fixed dollar amount to be paid for Lead.
-          example: 25.0
-    CustomFieldGroup:
-      type: object
-      properties:
-        id:
-          type: string
-        name:
-          type: string
-        order:
-          type: integer
-          format: int32
-        tab_id:
-          type: string
-        record_type:
-          type: string
-          enum:
-          - CONTACT
-          - REFERRAL_PARTNER
-          - OPPORTUNITY
-          - TASK_NOTE_APPOINTMENT
-          - COMPANY
-          - ORDER
-          - SUBSCRIPTION
-    CreateCustomFieldTabRequest:
-      type: object
-      properties:
-        name:
-          type: string
-    ListAffiliatePaymentsResponse:
-      type: object
-      properties:
-        affiliate_payments:
-          type: array
-          items:
-            $ref: '#/components/schemas/RestAffiliatePayment_2'
-        next_page_token:
-          type: string
-    ObjectModel_2:
-      type: object
-      properties:
-        custom_fields:
-          type: array
-          items:
-            $ref: '#/components/schemas/CustomFieldMetaData_2'
-        optional_properties:
-          type: array
-          description: These fields are not transmitted by default on this model, but can be requested by specifying them in a comma-separated list in the optional_properties query parameter.
-          items:
-            type: string
-          uniqueItems: true
-    ResourceCommissionProgram:
-      type: object
-      properties:
-        commission_program_id:
-          type: string
-          description: The commission program identifier
-          example: 100
-    AffiliateCommission_2:
-      type: object
-      properties:
-        description:
-          type: string
-          description: Description of the product or line item associated with this commission
-          example: Commission for product sale
-        amount_earned:
-          type: number
-          format: double
-          description: Amount earned for this commission
-          example: 25.0
-        contact_first_name:
-          type: string
-          description: First name of the contact associated with this commission
-          example: John
-        contact_last_name:
-          type: string
-          description: Last name of the contact associated with this commission
-          example: Doe
-        invoice_id:
-          type: string
-          description: ID of the invoice associated with this commission
-          example: 1001
-        time_earned:
-          type: string
-          description: When the commission was earned. In ISO-8601 format
-          example: '2024-06-15T14:30:00Z'
-        contact_id:
-          type: string
-          description: ID of the contact associated with this commission
-          example: 1001
-        sales_affiliate_id:
-          type: string
-          description: ID of the sales affiliate
-          example: 123
-        sales_affiliate_name:
-          type: string
-          description: The name of the sales affiliate
-          example: Jane Smith
-        product_name:
-          type: string
-          description: Name of the product or line item associated with this commission
-          example: Premium Membership
-    ListAffiliateSummariesResponse:
-      type: object
-      properties:
-        affiliate_summaries:
-          type: array
-          items:
-            $ref: '#/components/schemas/AffiliateSummaryRecord'
-        next_page_token:
-          type: string
-    CreateDefaultCommissionProgramRequest:
-      type: object
-      properties:
-        percentage:
-          type: string
-          deprecated: true
-          description: Level 1 percentage to be paid for commission (0-100). This will be set for the Sale. This is deprecated for `level_1`
-          example: 10.5
-        unused:
-          $ref: '#/components/schemas/CommissionItemRequest'
-          description: Payout rules for any unused commissions.
-        dollar_amount:
-          type: string
-          deprecated: true
-          description: Level 1 fixed dollar amount to be paid for commission. This will be set for the Sale. This is deprecated for `level_1`
-          example: 25.0
-        level_1:
-          $ref: '#/components/schemas/CommissionItemRequest'
-          description: Payout rules for Level 1 recipients of the commission.
-        level_2:
-          $ref: '#/components/schemas/CommissionItemRequest'
-          description: Payout rules for Level 2 recipients of the commission.
-        payout_type:
-          type: string
-          default: UPFRONT
-          description: The payout type for this commission.
-          enum:
-          - UPFRONT
-          - PAYMENT_RECEIVED
-          example: UPFRONT
-    ListAffiliatesResponse:
-      type: object
-      properties:
-        affiliates:
-          type: array
-          items:
-            $ref: '#/components/schemas/RestAffiliate'
-        next_page_token:
-          type: string
-    AffiliateCommissionProgramResponse:
-      type: object
-      properties:
-        id:
-          type: string
-          description: Commission program ID
-          example: 100
-        name:
-          type: string
-          description: Program name
-          example: Gold Partner Program
-        notes:
-          type: string
-          description: Program notes
-          example: 20% commission on all sales
-        priority:
-          type: integer
-          format: int32
-          description: Program priority
-          example: 1
-    CreateSubscriptionCommissionProgramRequest:
-      type: object
-      properties:
-        percentage:
-          type: string
-          deprecated: true
-          description: Level 1 percentage to be paid for commission (0-100). This will be set for the Sale. This is deprecated for `level_1`
-          example: 10.5
-        unused:
-          $ref: '#/components/schemas/CommissionItemRequest'
-          description: Payout rules for any unused commissions.
-        dollar_amount:
-          type: string
-          deprecated: true
-          description: Level 1 fixed dollar amount to be paid for commission. This will be set for the Sale. This is deprecated for `level_1`
-          example: 25.0
-        level_1:
-          $ref: '#/components/schemas/CommissionItemRequest'
-          description: Payout rules for Level 1 recipients of the commission.
-        level_2:
-          $ref: '#/components/schemas/CommissionItemRequest'
-          description: Payout rules for Level 2 recipients of the commission.
-        payout_type:
-          type: string
-          default: UPFRONT
-          description: The payout type for this commission.
-          enum:
-          - UPFRONT
-          - PAYMENT_RECEIVED
-          example: UPFRONT
-        subscription_id:
-          type: string
-          description: Subscription ID to assign commission
-          example: 456
-    CreateCommissionProgramRequest:
-      type: object
-      properties:
-        name:
-          type: string
-          description: The name of the Commission Program
-          example: Fitness program
-        notes:
-          type: string
-          description: The notes of the Commission Program
-          example: 20% default commission
-        priority:
-          type: integer
-          format: int32
-          description: The priority of the Commission Program
-          example: 1
-      required:
-      - name
-      - priority
-    ListCustomFieldTabsResponse:
-      type: object
-      properties:
-        tabs:
-          type: array
-          items:
-            $ref: '#/components/schemas/CustomFieldTab'
-    AffiliateAddToProgramRequest:
-      type: object
-      properties:
-        affiliate_program_id:
-          type: string
-    AffiliateRemoveFromProgramRequest:
-      type: object
-      properties:
-        affiliate_program_id:
-          type: string
-    Error:
-      type: object
-      properties:
-        code:
-          type: integer
-          format: int32
-        message:
-          type: string
-        status:
-          type: string
-        details:
-          type: array
-          items:
-            $ref: '#/components/schemas/ErrorDetails'
-    ListAffiliateLinksResponse:
-      type: object
-      properties:
-        affiliate_links:
-          type: array
-          items:
-            $ref: '#/components/schemas/AffiliateLink'
-        next_page_token:
-          type: string
-    UpdateSubscriptionCommissionProgramRequest:
-      type: object
-      properties:
-        percentage:
-          type: string
-          deprecated: true
-          description: Level 1 percentage to be paid for commission (0-100). This will be set for the Sale. This is deprecated for `level_1`
-          example: 10.5
-        unused:
-          $ref: '#/components/schemas/CommissionItemRequest'
-          description: Payout rules for any unused commissions.
-        dollar_amount:
-          type: string
-          deprecated: true
-          description: Level 1 fixed dollar amount to be paid for commission. This will be set for the Sale. This is deprecated for `level_1`
-          example: 25.0
-        level_1:
-          $ref: '#/components/schemas/CommissionItemRequest'
-          description: Payout rules for Level 1 recipients of the commission.
-        level_2:
-          $ref: '#/components/schemas/CommissionItemRequest'
-          description: Payout rules for Level 2 recipients of the commission.
-        payout_type:
-          type: string
-          default: UPFRONT
-          description: The payout type for this commission.
-          enum:
-          - UPFRONT
-          - PAYMENT_RECEIVED
-          example: UPFRONT
-        subscription_id:
-          type: string
-          description: Subscription ID to assign commission
-          example: 456
-    AffiliateSummaryRecord:
-      type: object
-      properties:
-        affiliateId:
-          type: integer
-          format: int64
-        clawbacks:
-          type: number
-          format: double
-        balance:
-          type: number
-          format: double
-        amountEarned:
-          type: number
-          format: double
-    ListAffiliateCommissionsResponse:
-      type: object
-      properties:
-        affiliate_commissions:
-          type: array
-          description: List of commissions for this affiliate
-          items:
-            $ref: '#/components/schemas/AffiliateCommission_2'
-        next_page_token:
-          type: string
-        clawbacks:
-          type: number
-          format: double
-          description: 'Calculated total amount of clawbacks from the returned commissions. '
-          example: 50.0
-        commission_total:
-          type: number
-          format: double
-          description: Calculated total commission amount (amount earned - amount clawbacks) from the returned commissions
-          example: 150.0
-        amount_earned:
-          type: number
-          format: double
-          description: Calculated total amount earned from the returned commissions.
-          example: 200.0
-    SubscriptionCommission:
-      type: object
-      properties:
-        payout_type:
-          type: string
-          default: UPFRONT
-          description: The payout type for this commission.
-          enum:
-          - UPFRONT
-          - PAYMENT_RECEIVED
-          example: UPFRONT
-        dollar_amount:
-          type: number
-          format: double
-          description: Level 1 fixed dollar amount to be paid for commission. This will be set for the Sale. This is deprecated for `level_1`
-          example: 10.5
-        percentage:
-          type: number
-          format: double
-          description: Level 1 percentage to be paid for commission (0-100). This will be set for the Sale. This is deprecated for `level_1`
-          example: 25.0
-        unused:
-          $ref: '#/components/schemas/CommissionItem'
-          description: Payout rules for any unused commissions.
-        level_1:
-          $ref: '#/components/schemas/CommissionItem'
-          description: Payout rules for Level 1 recipients of the commission.
-        level_2:
-          $ref: '#/components/schemas/CommissionItem'
-          description: Payout rules for Level 2 recipients of the commission.
-        name:
-          type: string
-          description: Subscription name
-          example: Monthly Pro Plan
-        subscription_id:
-          type: string
-          description: Subscription ID
-          example: 456
-        plan_price:
-          type: number
-          format: double
-          description: Plan price
-          example: 49.99
-    GetRestCommissionProgram:
-      type: object
-      properties:
-        id:
-          type: string
-          description: Commission program ID
-          example: 1
-        name:
-          type: string
-          description: The affiliate commission program name
-          example: commission program
-        priority:
-          type: string
-          description: The Affiliate commission program priority
-          example: 0
-        notes:
-          type: string
-          description: The affiliate commission program notes
-          example: notes for the commission program
-        create_time:
-          type: string
-          description: The created time of affiliate commission program
-          example: '2019-08-24T14:15:22Z'
-        affiliate_ids:
-          type: array
-          description: The list of affiliate_ids using this commission program
-          example:
-          - 123
-          - 124
-          items:
-            type: string
-        default_commission:
-          $ref: '#/components/schemas/DefaultCommission'
-        product_commissions:
-          type: array
-          items:
-            $ref: '#/components/schemas/ProductCommission'
-        subscription_commissions:
-          type: array
-          items:
-            $ref: '#/components/schemas/SubscriptionCommission'
-    CreateOrUpdateAffiliateLinkRequest:
-      type: object
-      properties:
-        name:
-          type: string
-          description: The Affiliate Link Name
-          example: Fitness Program
-        code:
-          type: string
-          description: Code
-          example: fP100
-        affiliate_id:
-          type: string
-          description: The AffiliateId
-          example: 1
-        website_address:
-          type: string
-          description: Website Address
-          example: https://thryv.com/promo
-        program_ids:
-          type: array
-          description: Program IDs to associate
-          example:
-          - '1'
-          - '2'
-          items:
-            type: string
-      required:
-      - code
-      - name
-      - website_address
-    ListCustomFieldGroupsResponse:
-      type: object
-      properties:
-        groups:
-          type: array
-          items:
-            $ref: '#/components/schemas/CustomFieldGroup'
-    CustomFieldValue:
-      type: object
-      properties:
-        id:
-          type: string
-        content:
-          description: The value of the custom field. Text custom field values have a maximum length of 65535 characters.
-    ListProgramResourcesResponse:
-      type: object
-      properties:
-        resources:
-          type: array
-          items:
-            $ref: '#/components/schemas/AffiliateProgramResource'
-        next_page_token:
-          type: string
-    CreateCustomFieldRequest:
-      type: object
-      properties:
-        label:
-          type: string
-        options:
-          type: array
-          items:
-            $ref: '#/components/schemas/CreateCustomFieldOptionRequest'
-        field_type:
-          type: string
-          enum:
-          - CURRENCY
-          - DATE
-          - DATE_TIME
-          - DAY_OF_WEEK
-          - DECIMAL_NUMBER
-          - DRILLDOWN
-          - DROPDOWN
-          - EMAIL
-          - LIST_BOX
-          - MONTH
-          - NAME
-          - PERCENT
-          - PHONE_NUMBER
-          - RADIO
-          - SOCIAL_SECURITY_NUMBER
-          - STATE
-          - TEXT
-          - TEXT_AREA
-          - USER
-          - USER_LIST_BOX
-          - WEBSITE
-          - WHOLE_NUMBER
-          - YEAR
-          - YES_NO
-        group_id:
-          type: string
-          description: An optional tab group to place the field under in the interface.  If not specified, will default to the 'Custom Fields' tab.
-        user_group_id:
-          type: string
-          description: An optional user group to choose from when selecting values for User or UserListBox fields.
-      required:
-      - field_type
-      - label
-    UpdateCommissionProgramRequest:
-      type: object
-      properties:
-        name:
-          type: string
-          description: The name of the Commission Program
-          example: Fitness program
-        notes:
-          type: string
-          description: The notes of the Commission Program
-          example: 20% default commission
-        priority:
-          type: integer
-          format: int32
-          description: The priority of the Commission Program
-          example: 1
-    RestAffiliatePayment_2:
-      type: object
-      properties:
-        id:
-          type: string
-          description: Payment ID
-          example: 789
-        pay_date:
-          type: string
-          description: Payment date (ISO-8601)
-          example: '2024-03-15T10:30:00Z'
-        pay_notes:
-          type: string
-          description: Payment notes
-          example: Monthly commission payout
-        pay_amount:
-          type: number
-          format: double
-          description: Payment amount
-          example: 250.0
-        pay_type:
-          type: string
-          description: Payment type
-          enum:
-          - CASH
-          - CHECK
-          - CREDIT_CARD
-          - CREDIT_CARD_MANUAL
-          - MONEY_ORDER
-          - ADJUSTMENT
-          - CREDIT
-          - REFUND
-          example: CHECK
-        create_time:
-          type: string
-          description: Record creation time (ISO-8601)
-          example: '2024-03-15T10:30:00Z'
-    UpdateDefaultCommissionProgramRequest:
-      type: object
-      properties:
-        percentage:
-          type: string
-          deprecated: true
-          description: Level 1 percentage to be paid for commission (0-100). This will be set for the Sale. This is deprecated for `level_1`
-          example: 10.5
-        unused:
-          $ref: '#/components/schemas/CommissionItemRequest'
-          description: Payout rules for any unused commissions.
-        dollar_amount:
-          type: string
-          deprecated: true
-          description: Level 1 fixed dollar amount to be paid for commission. This will be set for the Sale. This is deprecated for `level_1`
-          example: 25.0
-        level_1:
-          $ref: '#/components/schemas/CommissionItemRequest'
-          description: Payout rules for Level 1 recipients of the commission.
-        level_2:
-          $ref: '#/components/schemas/CommissionItemRequest'
-          description: Payout rules for Level 2 recipients of the commission.
-        payout_type:
-          type: string
-          default: UPFRONT
-          description: The payout type for this commission.
-          enum:
-          - UPFRONT
-          - PAYMENT_RECEIVED
-          example: UPFRONT
     UpdateAffiliateRequest:
       type: object
       properties:
@@ -6648,18 +6229,376 @@ components:
             content: Preferred
           items:
             $ref: '#/components/schemas/CustomFieldValue'
-    AffiliateCommissionEarned:
+    RestAffiliatePayment_2:
       type: object
       properties:
-        affiliate_commission_total:
+        id:
+          type: string
+          description: Payment ID
+          example: 789
+        pay_date:
+          type: string
+          description: Payment date (ISO-8601)
+          example: '2024-03-15T10:30:00Z'
+        pay_notes:
+          type: string
+          description: Payment notes
+          example: Monthly commission payout
+        pay_amount:
           type: number
           format: double
-          description: Total commission earned by affiliate
-          example: 1250.5
-        view_ledger_url:
+          description: Payment amount
+          example: 250.0
+        pay_type:
           type: string
-          description: URL to view affiliate ledger
-          example: https://app.thryv.com/affiliate/ledger?affiliateId=123
+          description: Payment type
+          enum:
+          - CASH
+          - CHECK
+          - CREDIT_CARD
+          - CREDIT_CARD_MANUAL
+          - MONEY_ORDER
+          - ADJUSTMENT
+          - CREDIT
+          - REFUND
+          example: CHECK
+        create_time:
+          type: string
+          description: Record creation time (ISO-8601)
+          example: '2024-03-15T10:30:00Z'
+    ListCustomFieldTabsResponse:
+      type: object
+      properties:
+        tabs:
+          type: array
+          items:
+            $ref: '#/components/schemas/CustomFieldTab'
+    ListAffiliateReferralsResponse:
+      type: object
+      properties:
+        referrals:
+          type: array
+          items:
+            $ref: '#/components/schemas/Referral'
+        next_page_token:
+          type: string
+    CreateCommissionProgramRequest:
+      type: object
+      properties:
+        name:
+          type: string
+          description: The name of the Commission Program
+          example: Fitness program
+        notes:
+          type: string
+          description: The notes of the Commission Program
+          example: 20% default commission
+        priority:
+          type: integer
+          format: int32
+          description: The priority of the Commission Program
+          example: 1
+      required:
+      - name
+      - priority
+    ListCustomFieldGroupsResponse:
+      type: object
+      properties:
+        groups:
+          type: array
+          items:
+            $ref: '#/components/schemas/CustomFieldGroup'
+    CustomFieldTab:
+      type: object
+      properties:
+        id:
+          type: string
+          description: The unique identifier of the custom field tab
+          example: 123
+        name:
+          type: string
+          description: The name of the custom field tab
+          example: Personal Info
+        order:
+          type: integer
+          format: int32
+          description: The display order of the tab
+          example: 1
+        record_type:
+          type: string
+          description: The record type this tab belongs to (e.g., CONTACT, COMPANY, OPPORTUNITY, REFERRAL_PARTNER, ORDER, SUBSCRIPTION, TASK_NOTE_APPOINTMENT)
+          enum:
+          - CONTACT
+          - REFERRAL_PARTNER
+          - OPPORTUNITY
+          - TASK_NOTE_APPOINTMENT
+          - COMPANY
+          - ORDER
+          - SUBSCRIPTION
+          example: CONTACT
+    ListAffiliateLinksResponse:
+      type: object
+      properties:
+        affiliate_links:
+          type: array
+          items:
+            $ref: '#/components/schemas/AffiliateLink'
+        next_page_token:
+          type: string
+    ListAffiliatesResponse:
+      type: object
+      properties:
+        affiliates:
+          type: array
+          items:
+            $ref: '#/components/schemas/RestAffiliate'
+        next_page_token:
+          type: string
+    ObjectModel_2:
+      type: object
+      properties:
+        custom_fields:
+          type: array
+          items:
+            $ref: '#/components/schemas/CustomFieldMetaData_2'
+        optional_properties:
+          type: array
+          description: These fields are not transmitted by default on this model, but can be requested by specifying them in a comma-separated list in the optional_properties query parameter.
+          items:
+            type: string
+          uniqueItems: true
+    DeleteSubscriptionPlanCommissionRequest:
+      type: object
+      properties:
+        product_id:
+          type: string
+        subscription_plan_id:
+          type: string
+    CustomFieldGroup:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        order:
+          type: integer
+          format: int32
+        tab_id:
+          type: string
+        record_type:
+          type: string
+          enum:
+          - CONTACT
+          - REFERRAL_PARTNER
+          - OPPORTUNITY
+          - TASK_NOTE_APPOINTMENT
+          - COMPANY
+          - ORDER
+          - SUBSCRIPTION
+    CreateProgramResourceRequest:
+      type: object
+      properties:
+        title:
+          type: string
+          description: The program resource title
+          example: Summer Sale Banner
+        type:
+          type: string
+          description: The type of resource
+          enum:
+          - EMAIL
+          - BANNER
+          - PAGE
+          example: BANNER
+        notes:
+          type: string
+          description: The resource notes.
+          example: Use this banner for summer promotions
+        url:
+          type: string
+          description: The URL to the resource.
+          example: https://thryv.com/banners/summer-sale.jpg
+        order:
+          type: integer
+          format: int32
+          description: The order in which the resource is displayed. Minimum value is 0. Defaults to 0. Lower values indicate higher priority.
+          example: 1
+        content_html:
+          type: string
+          description: The contents of the PAGE or EMAIL. In HTML format.
+          example: <h1>Summer Sale</h1><p>Get 20% off!</p>
+        page_width:
+          type: integer
+          format: int32
+          description: The width of the page for PAGE types, in pixels. Minimum value is 0. Defaults to 0
+          example: 728
+        page_height:
+          type: integer
+          format: int32
+          description: The height of the page for PAGE types, in pixels. Minimum value is 0. Defaults to 0
+          example: 90
+        commission_program_ids:
+          type: array
+          description: A list of commission program ids that will use this resource.
+          example:
+          - '123'
+          - '456'
+          items:
+            type: string
+      required:
+      - commission_program_ids
+      - title
+      - type
+    AffiliateSummaryRecord:
+      type: object
+      properties:
+        affiliateId:
+          type: integer
+          format: int64
+        clawbacks:
+          type: number
+          format: double
+        balance:
+          type: number
+          format: double
+        amountEarned:
+          type: number
+          format: double
+    UpdateCustomFieldGroupRequest:
+      type: object
+      properties:
+        name:
+          type: string
+        order:
+          type: integer
+          format: int32
+        tab_id:
+          type: string
+    ProductCommission:
+      type: object
+      properties:
+        payout_type:
+          type: string
+          default: UPFRONT
+          description: The payout type for this commission.
+          enum:
+          - UPFRONT
+          - PAYMENT_RECEIVED
+          example: UPFRONT
+        dollar_amount:
+          type: number
+          format: double
+          description: Level 1 fixed dollar amount to be paid for commission. This will be set for the Sale. This is deprecated for `level_1`
+          example: 10.5
+        percentage:
+          type: number
+          format: double
+          description: Level 1 percentage to be paid for commission (0-100). This will be set for the Sale. This is deprecated for `level_1`
+          example: 25.0
+        unused:
+          $ref: '#/components/schemas/CommissionItem'
+          description: Payout rules for any unused commissions.
+        level_1:
+          $ref: '#/components/schemas/CommissionItem'
+          description: Payout rules for Level 1 recipients of the commission.
+        level_2:
+          $ref: '#/components/schemas/CommissionItem'
+          description: Payout rules for Level 2 recipients of the commission.
+        product_id:
+          type: string
+          description: Product ID
+          example: 123
+        product_name:
+          type: string
+          description: Product name
+          example: Premium Membership
+        product_price:
+          type: number
+          format: double
+          description: Product price
+          example: 99.99
+    ListAffiliateCommissionProgramsResponse:
+      type: object
+      properties:
+        commission_programs:
+          type: array
+          items:
+            $ref: '#/components/schemas/AffiliateProgramV2'
+        next_page_token:
+          type: string
+    ErrorDetails:
+      type: object
+      properties:
+        domain:
+          type: string
+        resource:
+          type: string
+    CreateCustomFieldOptionRequest:
+      type: object
+      properties:
+        label:
+          type: string
+    CustomFieldValue:
+      type: object
+      properties:
+        id:
+          type: string
+        content:
+          description: The value of the custom field. Text custom field values have a maximum length of 65535 characters.
+    ListAffiliatePaymentsResponse:
+      type: object
+      properties:
+        affiliate_payments:
+          type: array
+          items:
+            $ref: '#/components/schemas/RestAffiliatePayment_2'
+        next_page_token:
+          type: string
+    AffiliateCommission_2:
+      type: object
+      properties:
+        description:
+          type: string
+          description: Description of the product or line item associated with this commission
+          example: Commission for product sale
+        amount_earned:
+          type: number
+          format: double
+          description: Amount earned for this commission
+          example: 25.0
+        contact_first_name:
+          type: string
+          description: First name of the contact associated with this commission
+          example: John
+        contact_last_name:
+          type: string
+          description: Last name of the contact associated with this commission
+          example: Doe
+        invoice_id:
+          type: string
+          description: ID of the invoice associated with this commission
+          example: 1001
+        time_earned:
+          type: string
+          description: When the commission was earned. In ISO-8601 format
+          example: '2024-06-15T14:30:00Z'
+        contact_id:
+          type: string
+          description: ID of the contact associated with this commission
+          example: 1001
+        sales_affiliate_id:
+          type: string
+          description: ID of the sales affiliate
+          example: 123
+        sales_affiliate_name:
+          type: string
+          description: The name of the sales affiliate
+          example: Jane Smith
+        product_name:
+          type: string
+          description: Name of the product or line item associated with this commission
+          example: Premium Membership
     AffiliateProgramResource:
       type: object
       properties:
@@ -6711,26 +6650,37 @@ components:
           description: A list of commission programs using this resource.
           items:
             $ref: '#/components/schemas/ResourceCommissionProgram'
-    CreateCustomFieldOptionRequest:
-      type: object
-      properties:
-        label:
-          type: string
-    ErrorDetails:
-      type: object
-      properties:
-        domain:
-          type: string
-        resource:
-          type: string
-    UpdateCustomFieldTabRequest:
+    CreateOrUpdateAffiliateLinkRequest:
       type: object
       properties:
         name:
           type: string
-        order:
-          type: integer
-          format: int32
+          description: The Affiliate Link Name
+          example: Fitness Program
+        code:
+          type: string
+          description: Code
+          example: fP100
+        affiliate_id:
+          type: string
+          description: The AffiliateId
+          example: 1
+        website_address:
+          type: string
+          description: Website Address
+          example: https://thryv.com/promo
+        program_ids:
+          type: array
+          description: Program IDs to associate
+          example:
+          - '1'
+          - '2'
+          items:
+            type: string
+      required:
+      - code
+      - name
+      - website_address
     CommissionItem:
       type: object
       properties:
@@ -6825,68 +6775,50 @@ components:
           type: string
           description: The database column name for this custom field. Use this value when filtering contacts (e.g. for field_name 'firstName1', filter with 'firstName1==John').
           example: firstName1
-    RestAffiliate:
+    ListProgramResourcesResponse:
       type: object
       properties:
-        id:
+        resources:
+          type: array
+          items:
+            $ref: '#/components/schemas/AffiliateProgramResource'
+        next_page_token:
           type: string
-          description: The AffiliateId
-          example: 1
-        code:
+    AffiliateRemoveFromProgramRequest:
+      type: object
+      properties:
+        affiliate_program_id:
           type: string
-          description: The Affiliate Code
-          example: M123
+    UpdateCommissionProgramRequest:
+      type: object
+      properties:
         name:
           type: string
-          description: The Affiliate Name
-          example: John Smith
-        status:
+          description: The name of the Commission Program
+          example: Fitness program
+        notes:
           type: string
-          description: The Affiliate Status
-          enum:
-          - ACTIVE
-          - INACTIVE
-          example: ACTIVE
-        contact_id:
-          type: string
-          description: The ContactID
-          example: 1
-        unique_site_id:
-          type: string
-          description: The Affiliate PortalSite Id
-          example: 123456
-        date_created:
-          type: string
-          description: Date affiliate was created (ISO-8601)
-          example: '2024-03-15T10:30:00Z'
-        parent_affiliate_id:
-          type: string
-          description: The Parent Affiliate Id
-          example: 0
-        notify_on_sale:
-          type: boolean
-          description: Whether to notify on sale events
-          example: true
-        notify_on_lead:
-          type: boolean
-          description: Whether to notify on lead events
-          example: true
-        track_leads_days:
+          description: The notes of the Commission Program
+          example: 20% default commission
+        priority:
           type: integer
           format: int32
-          description: Number of days to track leads
-          example: 30
-        custom_fields:
-          type: array
-          description: List of custom field values applied to this affiliate
-          example:
-          - id: '1'
-            content: VIP
-          - id: '2'
-            content: Preferred
-          items:
-            $ref: '#/components/schemas/CustomFieldValue'
-    UpdateProductCommissionProgramRequest:
+          description: The priority of the Commission Program
+          example: 1
+    AffiliateAddToProgramRequest:
+      type: object
+      properties:
+        affiliate_program_id:
+          type: string
+    UpdateCustomFieldTabRequest:
+      type: object
+      properties:
+        name:
+          type: string
+        order:
+          type: integer
+          format: int32
+    CreateDefaultCommissionProgramRequest:
       type: object
       properties:
         percentage:
@@ -6916,30 +6848,98 @@ components:
           - UPFRONT
           - PAYMENT_RECEIVED
           example: UPFRONT
-        product_id:
+    AffiliateProgramV2:
+      type: object
+      properties:
+        id:
           type: string
-          description: Product ID to assign commission
-          example: 123
+          description: Commission program ID
+          example: 1
+        name:
+          type: string
+          description: The affiliate commission program name
+          example: commission program
+        priority:
+          type: string
+          description: The Affiliate commission program priority
+          example: 0
+        notes:
+          type: string
+          description: The affiliate commission program notes
+          example: notes for the commission program
+        create_time:
+          type: string
+          description: The created time of affiliate commission program
+          example: '2019-08-24T14:15:22Z'
+        affiliate_ids:
+          type: array
+          description: The list of affiliate_ids using this commission program
+          example:
+          - 123
+          - 124
+          items:
+            type: string
+    UpdateCustomFieldMetaDataRequest:
+      type: object
+      properties:
+        label:
+          type: string
+        options:
+          type: array
+          items:
+            $ref: '#/components/schemas/CustomFieldOption'
+        group_id:
+          type: string
       required:
-      - product_id
-    ListAffiliateCommissionProgramsResponse:
+      - group_id
+    CreateCustomFieldGroupRequest:
       type: object
       properties:
-        commission_programs:
-          type: array
-          items:
-            $ref: '#/components/schemas/AffiliateProgramV2'
-        next_page_token:
+        name:
           type: string
-    ListAffiliateReferralsResponse:
+        tab_id:
+          type: string
+    GetRestCommissionProgram:
       type: object
       properties:
-        referrals:
+        id:
+          type: string
+          description: Commission program ID
+          example: 1
+        name:
+          type: string
+          description: The affiliate commission program name
+          example: commission program
+        priority:
+          type: string
+          description: The Affiliate commission program priority
+          example: 0
+        notes:
+          type: string
+          description: The affiliate commission program notes
+          example: notes for the commission program
+        create_time:
+          type: string
+          description: The created time of affiliate commission program
+          example: '2019-08-24T14:15:22Z'
+        affiliate_ids:
+          type: array
+          description: The list of affiliate_ids using this commission program
+          example:
+          - 123
+          - 124
+          items:
+            type: string
+        default_commission:
+          $ref: '#/components/schemas/DefaultCommission'
+        product_commissions:
           type: array
           items:
-            $ref: '#/components/schemas/Referral'
-        next_page_token:
-          type: string
+            $ref: '#/components/schemas/ProductCommission'
+        subscription_commissions:
+          type: array
+          items:
+            $ref: '#/components/schemas/SubscriptionCommission'
   securitySchemes:
     oauth2:
       type: oauth2

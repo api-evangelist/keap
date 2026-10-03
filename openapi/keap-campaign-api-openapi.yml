@@ -1172,68 +1172,86 @@ paths:
     - url: https://api.infusionsoft.com/crm
 components:
   schemas:
-    CampaignList:
+    Item:
       type: object
       properties:
-        campaigns:
+        id:
+          type: integer
+          format: int64
+        name:
+          type: string
+        type:
+          type: string
+          enum:
+          - 'NULL'
+          - Start
+          - Wait
+          - DelayTimer
+          - ContactTimer
+          - DateTimer
+          - AppointmentTimer
+          - Email
+          - BardEmail
+          - UnlayerEmail
+          - EmailConfirm
+          - Voice
+          - Fax
+          - Letter
+          - AutomatedSms
+          - UnlayerEmailConfirm
+          - Tag
+          - Opportunity
+          - Note
+          - Task
+          - CompleteTasks
+          - Appointment
+          - AssignOwner
+          - FieldValue
+          - Fulfillment
+          - CreateOrder
+          - Deal
+          - AddToSequence
+          - CancelSubscription
+          - MoveOpportunity
+          - Http
+          - CustomerHub
+          - HttpRequest
+          - IntegrationAction
+          - ActionSet
+        next_item_id:
+          type: integer
+          format: int64
+        previous_item_id:
+          type: integer
+          format: int64
+    GoalEventResultDTO:
+      type: object
+      properties:
+        success:
+          type: boolean
+        message:
+          type: string
+        campaign_id:
+          type: integer
+          format: int64
+        goal_id:
+          type: integer
+          format: int64
+    SetOfIds:
+      type: object
+      properties:
+        ids:
           type: array
           items:
-            $ref: '#/components/schemas/Campaign'
-        count:
-          type: integer
-          format: int32
-        next:
-          type: string
-        previous:
-          type: string
-    DefaultHttpStatusCode:
-      allOf:
-      - $ref: '#/components/schemas/HttpStatusCode'
-    View:
-      type: object
-      properties:
-        contentType:
-          type: string
-    ModelAndView:
-      type: object
-      properties:
-        view:
-          $ref: '#/components/schemas/View'
-        model:
-          type: object
-          additionalProperties: {}
-        status:
-          oneOf:
-          - $ref: '#/components/schemas/DefaultHttpStatusCode'
-          - $ref: '#/components/schemas/HttpStatus'
-        modelMap:
-          type: object
-          additionalProperties: {}
+            type: integer
+            format: int64
           properties:
             empty:
               type: boolean
-        reference:
-          type: boolean
-        empty:
-          type: boolean
-        viewName:
-          type: string
-    HttpStatusCode:
-      type: object
-      properties:
-        error:
-          type: boolean
-        is1xxInformational:
-          type: boolean
-        is2xxSuccessful:
-          type: boolean
-        is3xxRedirection:
-          type: boolean
-        is4xxClientError:
-          type: boolean
-        is5xxServerError:
-          type: boolean
-    Campaign:
+          uniqueItems: true
+      required:
+      - ids
+    CampaignWithStats:
       type: object
       properties:
         id:
@@ -1268,6 +1286,112 @@ components:
         created_by_global_id:
           type: integer
           format: int64
+        active_contact_count:
+          type: integer
+          format: int32
+        completed_contact_count:
+          type: integer
+          format: int32
+    Goal:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        name:
+          type: string
+        type:
+          type: string
+          enum:
+          - WebForm
+          - LandingPage
+          - Survey
+          - LinkClick
+          - EmailOpened
+          - Score
+          - Purchase
+          - FailedPurchase
+          - Quote
+          - WebsiteTrigger
+          - InternalForm
+          - SmartForm
+          - AppointmentEvent
+          - Task
+          - StageMove
+          - Note
+          - Tag
+          - PipelineStageMove
+          - UnlayerLandingPage
+          - GroSocial
+          - TwitterForm
+          - API
+          - WordPress
+          - NewLandingPage
+          - IntegrationTrigger
+        historical_contact_counts:
+          $ref: '#/components/schemas/HistoricalCounts'
+        next_sequence_ids:
+          type: array
+          items:
+            type: integer
+            format: int64
+          uniqueItems: true
+        previous_sequence_ids:
+          type: array
+          items:
+            type: integer
+            format: int64
+          uniqueItems: true
+    CampaignQueryCommand:
+      type: object
+      properties:
+        limit:
+          type: integer
+          format: int32
+        offset:
+          type: integer
+          format: int32
+        search_text:
+          type: string
+        order:
+          type: string
+          enum:
+          - id
+          - name
+          - published_date
+          - completed_contact_count
+          - active_contact_count
+          - date_created
+          - last_updated
+          - category
+          - status
+        order_direction:
+          type: string
+          enum:
+          - ASCENDING
+          - DESCENDING
+        stats:
+          type: boolean
+    View:
+      type: object
+      properties:
+        contentType:
+          type: string
+    HttpStatusCode:
+      type: object
+      properties:
+        error:
+          type: boolean
+        is1xxInformational:
+          type: boolean
+        is2xxSuccessful:
+          type: boolean
+        is3xxRedirection:
+          type: boolean
+        is4xxClientError:
+          type: boolean
+        is5xxServerError:
+          type: boolean
     HttpStatus:
       allOf:
       - $ref: '#/components/schemas/HttpStatusCode'
@@ -1336,6 +1460,37 @@ components:
       - 509 BANDWIDTH_LIMIT_EXCEEDED
       - 510 NOT_EXTENDED
       - 511 NETWORK_AUTHENTICATION_REQUIRED
+    DefaultHttpStatusCode:
+      allOf:
+      - $ref: '#/components/schemas/HttpStatusCode'
+    Sequence:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        name:
+          type: string
+        paths:
+          type: array
+          items:
+            $ref: '#/components/schemas/SequencePath'
+        active_contact_count:
+          type: integer
+          format: int32
+        active_contact_count_completed:
+          type: integer
+          format: int32
+        historical_contact_count:
+          $ref: '#/components/schemas/HistoricalCounts'
+    AchieveApiGoalEvent:
+      type: object
+      properties:
+        contact_id:
+          type: integer
+          format: int64
+      required:
+      - contact_id
     SequencePath:
       type: object
       properties:
@@ -1346,123 +1501,6 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/Item'
-    Item:
-      type: object
-      properties:
-        id:
-          type: integer
-          format: int64
-        name:
-          type: string
-        type:
-          type: string
-          enum:
-          - 'NULL'
-          - Start
-          - Wait
-          - DelayTimer
-          - ContactTimer
-          - DateTimer
-          - AppointmentTimer
-          - Email
-          - BardEmail
-          - UnlayerEmail
-          - EmailConfirm
-          - Voice
-          - Fax
-          - Letter
-          - AutomatedSms
-          - UnlayerEmailConfirm
-          - Tag
-          - Opportunity
-          - Note
-          - Task
-          - CompleteTasks
-          - Appointment
-          - AssignOwner
-          - FieldValue
-          - Fulfillment
-          - CreateOrder
-          - Deal
-          - AddToSequence
-          - CancelSubscription
-          - MoveOpportunity
-          - Http
-          - CustomerHub
-          - HttpRequest
-          - IntegrationAction
-          - ActionSet
-        next_item_id:
-          type: integer
-          format: int64
-        previous_item_id:
-          type: integer
-          format: int64
-    AchieveApiGoalEvent:
-      type: object
-      properties:
-        contact_id:
-          type: integer
-          format: int64
-      required:
-      - contact_id
-    GoalEventResultDTO:
-      type: object
-      properties:
-        success:
-          type: boolean
-        message:
-          type: string
-        campaign_id:
-          type: integer
-          format: int64
-        goal_id:
-          type: integer
-          format: int64
-    CampaignQueryCommand:
-      type: object
-      properties:
-        limit:
-          type: integer
-          format: int32
-        offset:
-          type: integer
-          format: int32
-        search_text:
-          type: string
-        order:
-          type: string
-          enum:
-          - id
-          - name
-          - published_date
-          - completed_contact_count
-          - active_contact_count
-          - date_created
-          - last_updated
-          - category
-          - status
-        order_direction:
-          type: string
-          enum:
-          - ASCENDING
-          - DESCENDING
-        stats:
-          type: boolean
-    SetOfIds:
-      type: object
-      properties:
-        ids:
-          type: array
-          items:
-            type: integer
-            format: int64
-          properties:
-            empty:
-              type: boolean
-          uniqueItems: true
-      required:
-      - ids
     HistoricalCounts:
       type: object
       properties:
@@ -1472,57 +1510,7 @@ components:
         30_days:
           type: integer
           format: int32
-    Goal:
-      type: object
-      properties:
-        id:
-          type: integer
-          format: int64
-        name:
-          type: string
-        type:
-          type: string
-          enum:
-          - WebForm
-          - LandingPage
-          - Survey
-          - LinkClick
-          - EmailOpened
-          - Score
-          - Purchase
-          - FailedPurchase
-          - Quote
-          - WebsiteTrigger
-          - InternalForm
-          - SmartForm
-          - AppointmentEvent
-          - Task
-          - StageMove
-          - Note
-          - Tag
-          - PipelineStageMove
-          - UnlayerLandingPage
-          - GroSocial
-          - TwitterForm
-          - API
-          - WordPress
-          - NewLandingPage
-          - IntegrationTrigger
-        historical_contact_counts:
-          $ref: '#/components/schemas/HistoricalCounts'
-        next_sequence_ids:
-          type: array
-          items:
-            type: integer
-            format: int64
-          uniqueItems: true
-        previous_sequence_ids:
-          type: array
-          items:
-            type: integer
-            format: int64
-          uniqueItems: true
-    CampaignWithStats:
+    Campaign:
       type: object
       properties:
         id:
@@ -1557,159 +1545,55 @@ components:
         created_by_global_id:
           type: integer
           format: int64
-        active_contact_count:
-          type: integer
-          format: int32
-        completed_contact_count:
-          type: integer
-          format: int32
-    Sequence:
+    ModelAndView:
       type: object
       properties:
-        id:
-          type: integer
-          format: int64
-        name:
-          type: string
-        paths:
-          type: array
-          items:
-            $ref: '#/components/schemas/SequencePath'
-        active_contact_count:
-          type: integer
-          format: int32
-        active_contact_count_completed:
-          type: integer
-          format: int32
-        historical_contact_count:
-          $ref: '#/components/schemas/HistoricalCounts'
-    AddContactsToSequenceResponse:
-      type: object
-      properties:
-        add_to_sequence_results:
+        view:
+          $ref: '#/components/schemas/View'
+        model:
           type: object
-          additionalProperties:
-            type: string
-            enum:
-            - SUCCESS
-            - ALREADY_IN_SEQUENCE
-            - CONTACT_DOES_NOT_EXIST
-            - FAILED
-          description: A map containing the contact ID as key and the result of adding them to the sequence as value
-    ErrorDetails:
-      type: object
-      properties:
-        domain:
-          type: string
-        resource:
-          type: string
-    AddContactsToSequenceRequest:
-      type: object
-      properties:
-        contact_ids:
-          type: array
-          description: List of contact IDs to add to the sequence
-          example:
-          - '123'
-          - '456'
-          - '789'
-          items:
-            type: string
-      required:
-      - contact_ids
-    Error:
-      type: object
-      properties:
-        code:
-          type: integer
-          format: int32
-        message:
-          type: string
+          additionalProperties: {}
         status:
-          type: string
-        details:
-          type: array
-          items:
-            $ref: '#/components/schemas/ErrorDetails'
-    Campaign_2:
-      type: object
-      properties:
-        id:
-          type: string
-          description: The unique identifier of the campaign
-          example: 123
-        name:
-          type: string
-          description: The name of the campaign
-          example: Summer Sale Campaign
-        locked:
-          type: boolean
-          description: Whether the campaign is locked for editing
-          example: false
-        date_created:
-          type: string
-          format: date-time
-          description: The date and time when the campaign was created. In ISO-8601 format
-          example: '2024-05-21T14:30:00Z'
-        published_date:
-          type: string
-          format: date-time
-          description: The date and time when the campaign was published. In ISO-8601 format
-          example: '2024-05-21T14:30:00Z'
-        published_status:
-          type: boolean
-          description: Whether the campaign is published
-          example: true
-        error_message:
-          type: string
-          description: Error message if the campaign has issues
-          example: Invalid sequence configuration
-        time_zone:
-          type: string
-          description: The timezone of the campaign
-          example: America/New_York
-        published_time_zone:
-          type: string
-          description: The timezone used when the campaign was published
-          example: America/New_York
-        created_by_global_id:
-          type: string
-          description: The global ID of the user who created the campaign
-          example: user_abc123
-        active_contact_count:
-          type: integer
-          format: int32
-          description: Number of contacts currently active in this campaign
-          example: 250
-        completed_contact_count:
-          type: integer
-          format: int32
-          description: Number of contacts who have completed this campaign
-          example: 1500
-    RemoveContactsFromSequenceResponse:
-      type: object
-      properties:
-        remove_from_sequence_results:
+          oneOf:
+          - $ref: '#/components/schemas/DefaultHttpStatusCode'
+          - $ref: '#/components/schemas/HttpStatus'
+        modelMap:
           type: object
-          additionalProperties:
-            type: string
-            enum:
-            - SUCCESS
-            - CONTACT_DOES_NOT_EXIST
-            - FAILED
-          description: A map containing the contact ID as key and the result of removing them from the sequence as value
-    SequencePath_2:
+          additionalProperties: {}
+          properties:
+            empty:
+              type: boolean
+        reference:
+          type: boolean
+        empty:
+          type: boolean
+        viewName:
+          type: string
+    CampaignList:
       type: object
       properties:
-        id:
-          type: string
-          description: The unique identifier of the sequence path
-          example: 201
-        items:
+        campaigns:
           type: array
-          description: List of items in this sequence path
           items:
-            $ref: '#/components/schemas/Item_2'
+            $ref: '#/components/schemas/Campaign'
+        count:
+          type: integer
+          format: int32
+        next:
+          type: string
+        previous:
+          type: string
+    ListCampaignSequenceResponse:
+      type: object
+      properties:
+        sequences:
+          type: array
+          items:
+            $ref: '#/components/schemas/Sequence_2'
+        next_page_token:
+          type: string
+        campaign_id:
+          type: string
     Item_2:
       type: object
       properties:
@@ -1768,64 +1652,6 @@ components:
           type: string
           description: The ID of the previous item in the sequence
           example: 100
-    ListCampaignSequenceResponse:
-      type: object
-      properties:
-        sequences:
-          type: array
-          items:
-            $ref: '#/components/schemas/Sequence_2'
-        next_page_token:
-          type: string
-        campaign_id:
-          type: string
-    ListCampaignGoalsResponse:
-      type: object
-      properties:
-        goals:
-          type: array
-          items:
-            $ref: '#/components/schemas/Goal_2'
-        next_page_token:
-          type: string
-        campaign_id:
-          type: string
-    ListCampaignsResponse:
-      type: object
-      properties:
-        campaigns:
-          type: array
-          items:
-            $ref: '#/components/schemas/Campaign_2'
-        next_page_token:
-          type: string
-    RemoveContactsFromSequenceRequest:
-      type: object
-      properties:
-        contact_ids:
-          type: array
-          description: List of contact IDs to remove from the sequence
-          example:
-          - '123'
-          - '456'
-          - '789'
-          items:
-            type: string
-      required:
-      - contact_ids
-    HistoricalCounts_2:
-      type: object
-      properties:
-        24_hours:
-          type: integer
-          format: int32
-          description: Number of contacts in the last 24 hours
-          example: 50
-        30_days:
-          type: integer
-          format: int32
-          description: Number of contacts in the last 30 days
-          example: 1200
     Goal_2:
       type: object
       properties:
@@ -1888,6 +1714,77 @@ components:
           items:
             type: string
           uniqueItems: true
+    Error:
+      type: object
+      properties:
+        code:
+          type: integer
+          format: int32
+        message:
+          type: string
+        status:
+          type: string
+        details:
+          type: array
+          items:
+            $ref: '#/components/schemas/ErrorDetails'
+    RemoveContactsFromSequenceResponse:
+      type: object
+      properties:
+        remove_from_sequence_results:
+          type: object
+          additionalProperties:
+            type: string
+            enum:
+            - SUCCESS
+            - CONTACT_DOES_NOT_EXIST
+            - FAILED
+          description: A map containing the contact ID as key and the result of removing them from the sequence as value
+    RemoveContactsFromSequenceRequest:
+      type: object
+      properties:
+        contact_ids:
+          type: array
+          description: List of contact IDs to remove from the sequence
+          example:
+          - '123'
+          - '456'
+          - '789'
+          items:
+            type: string
+      required:
+      - contact_ids
+    ErrorDetails:
+      type: object
+      properties:
+        domain:
+          type: string
+        resource:
+          type: string
+    ListCampaignGoalsResponse:
+      type: object
+      properties:
+        goals:
+          type: array
+          items:
+            $ref: '#/components/schemas/Goal_2'
+        next_page_token:
+          type: string
+        campaign_id:
+          type: string
+    AddContactsToSequenceResponse:
+      type: object
+      properties:
+        add_to_sequence_results:
+          type: object
+          additionalProperties:
+            type: string
+            enum:
+            - SUCCESS
+            - ALREADY_IN_SEQUENCE
+            - CONTACT_DOES_NOT_EXIST
+            - FAILED
+          description: A map containing the contact ID as key and the result of adding them to the sequence as value
     Sequence_2:
       type: object
       properties:
@@ -1917,6 +1814,109 @@ components:
         historical_contact_count:
           $ref: '#/components/schemas/HistoricalCounts_2'
           description: Historical contact counts for this sequence
+    SequencePath_2:
+      type: object
+      properties:
+        id:
+          type: string
+          description: The unique identifier of the sequence path
+          example: 201
+        items:
+          type: array
+          description: List of items in this sequence path
+          items:
+            $ref: '#/components/schemas/Item_2'
+    ListCampaignsResponse:
+      type: object
+      properties:
+        campaigns:
+          type: array
+          items:
+            $ref: '#/components/schemas/Campaign_2'
+        next_page_token:
+          type: string
+    HistoricalCounts_2:
+      type: object
+      properties:
+        24_hours:
+          type: integer
+          format: int32
+          description: Number of contacts in the last 24 hours
+          example: 50
+        30_days:
+          type: integer
+          format: int32
+          description: Number of contacts in the last 30 days
+          example: 1200
+    AddContactsToSequenceRequest:
+      type: object
+      properties:
+        contact_ids:
+          type: array
+          description: List of contact IDs to add to the sequence
+          example:
+          - '123'
+          - '456'
+          - '789'
+          items:
+            type: string
+      required:
+      - contact_ids
+    Campaign_2:
+      type: object
+      properties:
+        id:
+          type: string
+          description: The unique identifier of the campaign
+          example: 123
+        name:
+          type: string
+          description: The name of the campaign
+          example: Summer Sale Campaign
+        locked:
+          type: boolean
+          description: Whether the campaign is locked for editing
+          example: false
+        date_created:
+          type: string
+          format: date-time
+          description: The date and time when the campaign was created. In ISO-8601 format
+          example: '2024-05-21T14:30:00Z'
+        published_date:
+          type: string
+          format: date-time
+          description: The date and time when the campaign was published. In ISO-8601 format
+          example: '2024-05-21T14:30:00Z'
+        published_status:
+          type: boolean
+          description: Whether the campaign is published
+          example: true
+        error_message:
+          type: string
+          description: Error message if the campaign has issues
+          example: Invalid sequence configuration
+        time_zone:
+          type: string
+          description: The timezone of the campaign
+          example: America/New_York
+        published_time_zone:
+          type: string
+          description: The timezone used when the campaign was published
+          example: America/New_York
+        created_by_global_id:
+          type: string
+          description: The global ID of the user who created the campaign
+          example: user_abc123
+        active_contact_count:
+          type: integer
+          format: int32
+          description: Number of contacts currently active in this campaign
+          example: 250
+        completed_contact_count:
+          type: integer
+          format: int32
+          description: Number of contacts who have completed this campaign
+          example: 1500
   securitySchemes:
     oauth2:
       type: oauth2

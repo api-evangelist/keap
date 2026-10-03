@@ -88,6 +88,19 @@ paths:
                 $ref: '#/components/schemas/PaymentMethodConfig'
 components:
   schemas:
+    PaymentMethodConfig:
+      type: object
+      properties:
+        session_key:
+          type: string
+          description: A temporary session key required for rendering Keap's payment component.
+    ErrorDetails:
+      type: object
+      properties:
+        domain:
+          type: string
+        resource:
+          type: string
     Error:
       type: object
       properties:
@@ -102,23 +115,10 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/ErrorDetails'
-    PaymentMethodConfig:
-      type: object
-      properties:
-        session_key:
-          type: string
-          description: A temporary session key required for rendering Keap's payment component.
     CreatePaymentMethodConfigRequest:
       type: object
       properties:
         contact_id:
-          type: string
-    ErrorDetails:
-      type: object
-      properties:
-        domain:
-          type: string
-        resource:
           type: string
   securitySchemes:
     oauth2:
