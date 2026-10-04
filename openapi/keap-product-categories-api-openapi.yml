@@ -760,6 +760,31 @@ paths:
                 $ref: '#/components/schemas/ListAssignedProductsResponse'
 components:
   schemas:
+    ListAssignedProductsResponse:
+      type: object
+      properties:
+        assigned_product_categories:
+          type: array
+          items:
+            $ref: '#/components/schemas/AssignedProducts'
+        next_page_token:
+          type: string
+    UpdateProductCategoryRequest:
+      type: object
+      properties:
+        name:
+          type: string
+          description: The category name
+          example: Electronics
+        display_order_index:
+          type: integer
+          format: int32
+          description: Display order of the category
+          example: 0
+        parent_category_id:
+          type: string
+          description: Parent category ID for subcategories
+          example: 2
     Error:
       type: object
       properties:
@@ -774,6 +799,32 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/ErrorDetails'
+    AssignProductsRequest:
+      type: object
+      properties:
+        product_ids:
+          type: array
+          items:
+            type: string
+          uniqueItems: true
+      required:
+      - product_ids
+    ErrorDetails:
+      type: object
+      properties:
+        domain:
+          type: string
+        resource:
+          type: string
+    ListProductCategoriesResponse:
+      type: object
+      properties:
+        product_categories:
+          type: array
+          items:
+            $ref: '#/components/schemas/ProductCategory'
+        next_page_token:
+          type: string
     ProductCategory:
       type: object
       properties:
@@ -794,69 +845,6 @@ components:
           type: string
           description: Parent category ID for subcategories
           example: 2
-    ErrorDetails:
-      type: object
-      properties:
-        domain:
-          type: string
-        resource:
-          type: string
-    ListAssignedProductsResponse:
-      type: object
-      properties:
-        assigned_product_categories:
-          type: array
-          items:
-            $ref: '#/components/schemas/AssignedProducts'
-        next_page_token:
-          type: string
-    ListProductCategoriesResponse:
-      type: object
-      properties:
-        product_categories:
-          type: array
-          items:
-            $ref: '#/components/schemas/ProductCategory'
-        next_page_token:
-          type: string
-    UpdateProductCategoryRequest:
-      type: object
-      properties:
-        name:
-          type: string
-          description: The category name
-          example: Electronics
-        display_order_index:
-          type: integer
-          format: int32
-          description: Display order of the category
-          example: 0
-        parent_category_id:
-          type: string
-          description: Parent category ID for subcategories
-          example: 2
-    AssignProductsRequest:
-      type: object
-      properties:
-        product_ids:
-          type: array
-          items:
-            type: string
-          uniqueItems: true
-      required:
-      - product_ids
-    AssignedProducts:
-      type: object
-      properties:
-        product_category_id:
-          type: string
-          description: The product category ID
-          example: 123
-        product_ids:
-          type: array
-          description: Assigned product IDs
-          items:
-            type: string
     CreateProductCategoryRequest:
       type: object
       description: productCategory
@@ -876,6 +864,18 @@ components:
           example: 2
       required:
       - name
+    AssignedProducts:
+      type: object
+      properties:
+        product_category_id:
+          type: string
+          description: The product category ID
+          example: 123
+        product_ids:
+          type: array
+          description: Assigned product IDs
+          items:
+            type: string
   securitySchemes:
     oauth2:
       type: oauth2

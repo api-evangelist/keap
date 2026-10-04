@@ -510,13 +510,6 @@ paths:
       - BearerAuth: []
 components:
   schemas:
-    BaseListResponse_PipelineDealWithStageName_:
-      type: object
-      properties:
-        next_page_token:
-          type: string
-          description: Token for the next page of results.
-      description: The list responses.
     Stage:
       type: object
       properties:
@@ -530,6 +523,76 @@ components:
           type: string
           description: The ID of the pipeline.
       description: Represents a stage in a pipeline.
+    UpdatePipelineRequest:
+      required:
+      - name
+      type: object
+      properties:
+        name:
+          maxLength: 255
+          minLength: 1
+          type: string
+          description: The name of the pipeline.
+      description: Request for updating a pipeline.
+    PipelineSummary:
+      required:
+      - pipeline_name
+      type: object
+      properties:
+        pipeline_id:
+          pattern: ^\d+$
+          type:
+          - string
+          - 'null'
+          description: The ID of the pipeline. Can be null and must be a string of digits if present.
+        pipeline_name:
+          maxLength: 255
+          minLength: 1
+          type: string
+          description: The name of the pipeline. Must be a non-null string with a length between 1 and 255 characters.
+        stat_total_deal_count:
+          type:
+          - integer
+          - 'null'
+          description: The total count of deals in the pipeline. Can be null.
+          format: int32
+        stat_new_deal_count:
+          type:
+          - integer
+          - 'null'
+          description: The count of new deals in the pipeline. Can be null.
+          format: int32
+      description: Represents a summary of a pipeline.
+    FilterOperator:
+      type: string
+      description: Enum representing filter operators.
+      enum:
+      - EQUALS
+      - NOT_EQUALS
+      - GREATER_THAN
+      - GREATER_THAN_OR_EQUAL
+      - LESS_THAN
+      - LESS_THAN_OR_EQUAL
+      - IN
+      - NOT_IN
+      - INCLUDES_ANY
+      - EXCLUDES_ANY
+      - BETWEEN
+      - CONTAINS
+    Money:
+      required:
+      - amount
+      - currency
+      type: object
+      properties:
+        amount:
+          type: number
+          description: The amount of money. This field is required.
+          format: double
+        currency:
+          type: string
+          description: The currency of the money. This field is required.
+      description: Represents a monetary value with an amount and currency.
     CreatePipelineRequest:
       required:
       - name
@@ -549,25 +612,63 @@ components:
           items:
             type: string
       description: Request for creating a pipeline.
-    FilterEntry:
+    UpdateDealsInBulkRequest:
       required:
-      - key
-      - operator
-      - value
+      - bulk_deal_update_type
+      - exclude_deal_ids_specified
+      - filters
+      - new_value
       type: object
       properties:
-        key:
+        bulk_deal_update_type:
           type: string
-          description: The key of the filter entry.
-        operator:
-          description: The operator of the filter entry.
-          allOf:
-          - $ref: '#/components/schemas/FilterOperator'
-        value:
+          description: ''
+        new_value:
           type: string
-          description: The value of the filter entry.
-      description: Represents an entry in a filter.
+          description: ''
+        deal_ids:
+          maxItems: 5000
+          minItems: 0
+          type: array
+          items:
+            type: string
+        exclude_deal_ids_specified:
+          type: boolean
+          description: ''
+        filters:
+          type: array
+          items:
+            $ref: '#/components/schemas/FilterEntry'
+      description: Request for updating the deals of a pipeline.
+    PipelineSummariesListResponse:
+      type: object
+      description: Response for a list of pipeline summaries.
+      allOf:
+      - $ref: '#/components/schemas/BaseListResponse_PipelineSummary_'
+      - properties:
+          next_page_token:
+            type: string
+            description: Token for the next page of results.
+          pipeline_summaries:
+            type: array
+            description: The list of pipeline summaries.
+            items:
+              $ref: '#/components/schemas/PipelineSummary'
     BaseListResponse_Stage_:
+      type: object
+      properties:
+        next_page_token:
+          type: string
+          description: Token for the next page of results.
+      description: The list responses.
+    DealStatus:
+      type: string
+      description: Enum representing the status of a deal.
+      enum:
+      - ACTIVE
+      - WON
+      - LOST
+    BaseListResponse_Pipeline_:
       type: object
       properties:
         next_page_token:
@@ -586,13 +687,20 @@ components:
           type: string
           description: Error message if the stage move was not successful.
       description: Response for a bulk update for the reals in a pipeline.
-    DealStatus:
-      type: string
-      description: Enum representing the status of a deal.
-      enum:
-      - ACTIVE
-      - WON
-      - LOST
+    BaseListResponse_PipelineDealWithStageName_:
+      type: object
+      properties:
+        next_page_token:
+          type: string
+          description: Token for the next page of results.
+      description: The list responses.
+    BaseListResponse_PipelineSummary_:
+      type: object
+      properties:
+        next_page_token:
+          type: string
+          description: Token for the next page of results.
+      description: The list responses.
     PipelineStageListResponse:
       type: object
       description: Response for a list of stages.
@@ -607,33 +715,62 @@ components:
             description: The list of stages.
             items:
               $ref: '#/components/schemas/Stage'
-    FilterOperator:
-      type: string
-      description: Enum representing filter operators.
-      enum:
-      - EQUALS
-      - NOT_EQUALS
-      - GREATER_THAN
-      - GREATER_THAN_OR_EQUAL
-      - LESS_THAN
-      - LESS_THAN_OR_EQUAL
-      - IN
-      - NOT_IN
-      - INCLUDES_ANY
-      - EXCLUDES_ANY
-      - BETWEEN
-      - CONTAINS
-    UpdatePipelineRequest:
-      required:
-      - name
+    PipelineDealsListResponse:
+      type: object
+      description: Request for a list of a given deal's pipelines.
+      allOf:
+      - $ref: '#/components/schemas/BaseListResponse_PipelineDealWithStageName_'
+      - properties:
+          next_page_token:
+            type: string
+            description: Token for the next page of results.
+          deals:
+            type: array
+            description: The list of deals.
+            items:
+              $ref: '#/components/schemas/PipelineDealWithStageName'
+    PipelineOutcomeLabelListResponse:
       type: object
       properties:
-        name:
-          maxLength: 255
-          minLength: 1
+        next_page_token:
           type: string
-          description: The name of the pipeline.
-      description: Request for updating a pipeline.
+          description: Token for the next page of results.
+        outcome_labels:
+          type: array
+          description: The list of outcome labels.
+          items:
+            $ref: '#/components/schemas/PipelineOutcomeLabel'
+      description: Represents a response containing a list of pipeline outcome labels.
+    PipelineOutcomeLabel:
+      required:
+      - value
+      type: object
+      properties:
+        value:
+          description: The status of the deal. This field is required.
+          allOf:
+          - $ref: '#/components/schemas/DealStatus'
+        label:
+          minLength: 1
+          type:
+          - string
+          - 'null'
+          description: The label for the outcome. This field is optional but must have at least one character if provided.
+      description: Represents a label for a pipeline outcome.
+    PipelineListResponse:
+      type: object
+      description: Response for a list of pipelines.
+      allOf:
+      - $ref: '#/components/schemas/BaseListResponse_Pipeline_'
+      - properties:
+          next_page_token:
+            type: string
+            description: Token for the next page of results.
+          pipelines:
+            type: array
+            description: The list of pipelines.
+            items:
+              $ref: '#/components/schemas/Pipeline'
     UpdateOutcomeLabelsRequest:
       required:
       - outcome_labels
@@ -694,121 +831,6 @@ components:
           - string
           - 'null'
       description: A deal, including its stage name.
-    BaseListResponse_Pipeline_:
-      type: object
-      properties:
-        next_page_token:
-          type: string
-          description: Token for the next page of results.
-      description: The list responses.
-    UpdateDealsInBulkRequest:
-      required:
-      - bulk_deal_update_type
-      - exclude_deal_ids_specified
-      - filters
-      - new_value
-      type: object
-      properties:
-        bulk_deal_update_type:
-          type: string
-          description: ''
-        new_value:
-          type: string
-          description: ''
-        deal_ids:
-          maxItems: 5000
-          minItems: 0
-          type: array
-          items:
-            type: string
-        exclude_deal_ids_specified:
-          type: boolean
-          description: ''
-        filters:
-          type: array
-          items:
-            $ref: '#/components/schemas/FilterEntry'
-      description: Request for updating the deals of a pipeline.
-    Money:
-      required:
-      - amount
-      - currency
-      type: object
-      properties:
-        amount:
-          type: number
-          description: The amount of money. This field is required.
-          format: double
-        currency:
-          type: string
-          description: The currency of the money. This field is required.
-      description: Represents a monetary value with an amount and currency.
-    BaseListResponse_PipelineSummary_:
-      type: object
-      properties:
-        next_page_token:
-          type: string
-          description: Token for the next page of results.
-      description: The list responses.
-    PipelineSummary:
-      required:
-      - pipeline_name
-      type: object
-      properties:
-        pipeline_id:
-          pattern: ^\d+$
-          type:
-          - string
-          - 'null'
-          description: The ID of the pipeline. Can be null and must be a string of digits if present.
-        pipeline_name:
-          maxLength: 255
-          minLength: 1
-          type: string
-          description: The name of the pipeline. Must be a non-null string with a length between 1 and 255 characters.
-        stat_total_deal_count:
-          type:
-          - integer
-          - 'null'
-          description: The total count of deals in the pipeline. Can be null.
-          format: int32
-        stat_new_deal_count:
-          type:
-          - integer
-          - 'null'
-          description: The count of new deals in the pipeline. Can be null.
-          format: int32
-      description: Represents a summary of a pipeline.
-    PipelineSummariesListResponse:
-      type: object
-      description: Response for a list of pipeline summaries.
-      allOf:
-      - $ref: '#/components/schemas/BaseListResponse_PipelineSummary_'
-      - properties:
-          next_page_token:
-            type: string
-            description: Token for the next page of results.
-          pipeline_summaries:
-            type: array
-            description: The list of pipeline summaries.
-            items:
-              $ref: '#/components/schemas/PipelineSummary'
-    PipelineOutcomeLabel:
-      required:
-      - value
-      type: object
-      properties:
-        value:
-          description: The status of the deal. This field is required.
-          allOf:
-          - $ref: '#/components/schemas/DealStatus'
-        label:
-          minLength: 1
-          type:
-          - string
-          - 'null'
-          description: The label for the outcome. This field is optional but must have at least one character if provided.
-      description: Represents a label for a pipeline outcome.
     Pipeline:
       type: object
       properties:
@@ -819,46 +841,24 @@ components:
           type: string
           description: The name of the pipeline.
       description: A pipeline
-    PipelineDealsListResponse:
-      type: object
-      description: Request for a list of a given deal's pipelines.
-      allOf:
-      - $ref: '#/components/schemas/BaseListResponse_PipelineDealWithStageName_'
-      - properties:
-          next_page_token:
-            type: string
-            description: Token for the next page of results.
-          deals:
-            type: array
-            description: The list of deals.
-            items:
-              $ref: '#/components/schemas/PipelineDealWithStageName'
-    PipelineOutcomeLabelListResponse:
+    FilterEntry:
+      required:
+      - key
+      - operator
+      - value
       type: object
       properties:
-        next_page_token:
+        key:
           type: string
-          description: Token for the next page of results.
-        outcome_labels:
-          type: array
-          description: The list of outcome labels.
-          items:
-            $ref: '#/components/schemas/PipelineOutcomeLabel'
-      description: Represents a response containing a list of pipeline outcome labels.
-    PipelineListResponse:
-      type: object
-      description: Response for a list of pipelines.
-      allOf:
-      - $ref: '#/components/schemas/BaseListResponse_Pipeline_'
-      - properties:
-          next_page_token:
-            type: string
-            description: Token for the next page of results.
-          pipelines:
-            type: array
-            description: The list of pipelines.
-            items:
-              $ref: '#/components/schemas/Pipeline'
+          description: The key of the filter entry.
+        operator:
+          description: The operator of the filter entry.
+          allOf:
+          - $ref: '#/components/schemas/FilterOperator'
+        value:
+          type: string
+          description: The value of the filter entry.
+      description: Represents an entry in a filter.
   securitySchemes:
     BearerAuth:
       type: http

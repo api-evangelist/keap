@@ -699,33 +699,24 @@ paths:
                   type: string
 components:
   schemas:
-    RestHookRequest:
+    RestHook:
       type: object
       properties:
+        key:
+          type: string
         eventKey:
           type: string
         hookUrl:
           type: string
-    View:
-      type: object
-      properties:
-        contentType:
+        status:
           type: string
-    HttpStatusCode:
-      type: object
-      properties:
-        error:
-          type: boolean
-        is1xxInformational:
-          type: boolean
-        is2xxSuccessful:
-          type: boolean
-        is3xxRedirection:
-          type: boolean
-        is4xxClientError:
-          type: boolean
-        is5xxServerError:
-          type: boolean
+          enum:
+          - Unverified
+          - Verified
+          - Inactive
+    DefaultHttpStatusCode:
+      allOf:
+      - $ref: '#/components/schemas/HttpStatusCode'
     HttpStatus:
       allOf:
       - $ref: '#/components/schemas/HttpStatusCode'
@@ -794,24 +785,6 @@ components:
       - 509 BANDWIDTH_LIMIT_EXCEEDED
       - 510 NOT_EXTENDED
       - 511 NETWORK_AUTHENTICATION_REQUIRED
-    RestHook:
-      type: object
-      properties:
-        key:
-          type: string
-        eventKey:
-          type: string
-        hookUrl:
-          type: string
-        status:
-          type: string
-          enum:
-          - Unverified
-          - Verified
-          - Inactive
-    DefaultHttpStatusCode:
-      allOf:
-      - $ref: '#/components/schemas/HttpStatusCode'
     ModelAndView:
       type: object
       properties:
@@ -835,6 +808,33 @@ components:
         empty:
           type: boolean
         viewName:
+          type: string
+    HttpStatusCode:
+      type: object
+      properties:
+        error:
+          type: boolean
+        is1xxInformational:
+          type: boolean
+        is2xxSuccessful:
+          type: boolean
+        is3xxRedirection:
+          type: boolean
+        is4xxClientError:
+          type: boolean
+        is5xxServerError:
+          type: boolean
+    RestHookRequest:
+      type: object
+      properties:
+        eventKey:
+          type: string
+        hookUrl:
+          type: string
+    View:
+      type: object
+      properties:
+        contentType:
           type: string
   securitySchemes:
     oauth2:

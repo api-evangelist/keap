@@ -2364,20 +2364,58 @@ paths:
     - url: https://api.infusionsoft.com/crm
 components:
   schemas:
-    CreateRestCustomFieldOption:
+    CustomFieldMetaData:
       type: object
       properties:
-        label:
-          type: string
-    NoteUser:
-      type: object
-      properties:
-        user_id:
+        id:
           type: integer
           format: int64
-        given_name:
+        label:
           type: string
-        family_name:
+        options:
+          type: array
+          items:
+            $ref: '#/components/schemas/CustomFieldOption'
+        record_type:
+          type: string
+          enum:
+          - CONTACT
+          - REFERRAL_PARTNER
+          - OPPORTUNITY
+          - TASK_NOTE_APPOINTMENT
+          - COMPANY
+          - ORDER
+          - SUBSCRIPTION
+        field_type:
+          type: string
+          enum:
+          - Currency
+          - Date
+          - DateTime
+          - DayOfWeek
+          - Drilldown
+          - Email
+          - Month
+          - ListBox
+          - Name
+          - WholeNumber
+          - DecimalNumber
+          - Percent
+          - PhoneNumber
+          - Radio
+          - Dropdown
+          - SocialSecurityNumber
+          - State
+          - Text
+          - TextArea
+          - User
+          - UserListBox
+          - Website
+          - Year
+          - YesNo
+        field_name:
+          type: string
+        default_value:
           type: string
     RequestNote:
       type: object
@@ -2398,44 +2436,9 @@ components:
           format: int64
       required:
       - contact_id
-    UpdateNote:
-      type: object
-      description: note
-      properties:
-        title:
-          type: string
-        body:
-          type: string
-        type:
-          type: string
-          enum:
-          - Appointment, Call, Email, Fax, Letter, Other
-        contact_id:
-          type: integer
-          format: int64
-        user_id:
-          type: integer
-          format: int64
-    View:
-      type: object
-      properties:
-        contentType:
-          type: string
-    HttpStatusCode:
-      type: object
-      properties:
-        error:
-          type: boolean
-        is1xxInformational:
-          type: boolean
-        is2xxSuccessful:
-          type: boolean
-        is3xxRedirection:
-          type: boolean
-        is4xxClientError:
-          type: boolean
-        is5xxServerError:
-          type: boolean
+    DefaultHttpStatusCode:
+      allOf:
+      - $ref: '#/components/schemas/HttpStatusCode'
     HttpStatus:
       allOf:
       - $ref: '#/components/schemas/HttpStatusCode'
@@ -2504,19 +2507,34 @@ components:
       - 509 BANDWIDTH_LIMIT_EXCEEDED
       - 510 NOT_EXTENDED
       - 511 NETWORK_AUTHENTICATION_REQUIRED
-    NoteList:
+    CreateRestCustomFieldOption:
       type: object
       properties:
-        notes:
-          type: array
-          items:
-            $ref: '#/components/schemas/Note'
-        count:
-          type: integer
-          format: int32
-        next:
+        label:
           type: string
-        previous:
+    ModelAndView:
+      type: object
+      properties:
+        view:
+          $ref: '#/components/schemas/View'
+        model:
+          type: object
+          additionalProperties: {}
+        status:
+          oneOf:
+          - $ref: '#/components/schemas/DefaultHttpStatusCode'
+          - $ref: '#/components/schemas/HttpStatus'
+        modelMap:
+          type: object
+          additionalProperties: {}
+          properties:
+            empty:
+              type: boolean
+        reference:
+          type: boolean
+        empty:
+          type: boolean
+        viewName:
           type: string
     CustomFieldOption:
       type: object
@@ -2525,36 +2543,21 @@ components:
           type: string
         label:
           type: string
-    DefaultHttpStatusCode:
-      allOf:
-      - $ref: '#/components/schemas/HttpStatusCode'
-    ObjectModel:
+    HttpStatusCode:
       type: object
       properties:
-        custom_fields:
-          type: array
-          items:
-            $ref: '#/components/schemas/CustomFieldMetaData'
-        optional_properties:
-          type: array
-          items:
-            type: string
-          uniqueItems: true
-    NoteQueryCommand:
-      type: object
-      properties:
-        limit:
-          type: integer
-          format: int32
-        offset:
-          type: integer
-          format: int32
-        user_id:
-          type: integer
-          format: int64
-        contact_id:
-          type: integer
-          format: int64
+        error:
+          type: boolean
+        is1xxInformational:
+          type: boolean
+        is2xxSuccessful:
+          type: boolean
+        is3xxRedirection:
+          type: boolean
+        is4xxClientError:
+          type: boolean
+        is5xxServerError:
+          type: boolean
     Note:
       type: object
       properties:
@@ -2630,308 +2633,80 @@ components:
       required:
       - field_type
       - label
-    CustomFieldMetaData:
+    NoteUser:
       type: object
       properties:
-        id:
+        user_id:
           type: integer
           format: int64
-        label:
+        given_name:
           type: string
-        options:
-          type: array
-          items:
-            $ref: '#/components/schemas/CustomFieldOption'
-        record_type:
+        family_name:
           type: string
-          enum:
-          - CONTACT
-          - REFERRAL_PARTNER
-          - OPPORTUNITY
-          - TASK_NOTE_APPOINTMENT
-          - COMPANY
-          - ORDER
-          - SUBSCRIPTION
-        field_type:
-          type: string
-          enum:
-          - Currency
-          - Date
-          - DateTime
-          - DayOfWeek
-          - Drilldown
-          - Email
-          - Month
-          - ListBox
-          - Name
-          - WholeNumber
-          - DecimalNumber
-          - Percent
-          - PhoneNumber
-          - Radio
-          - Dropdown
-          - SocialSecurityNumber
-          - State
-          - Text
-          - TextArea
-          - User
-          - UserListBox
-          - Website
-          - Year
-          - YesNo
-        field_name:
-          type: string
-        default_value:
-          type: string
-    ModelAndView:
+    NoteQueryCommand:
       type: object
       properties:
-        view:
-          $ref: '#/components/schemas/View'
-        model:
-          type: object
-          additionalProperties: {}
-        status:
-          oneOf:
-          - $ref: '#/components/schemas/DefaultHttpStatusCode'
-          - $ref: '#/components/schemas/HttpStatus'
-        modelMap:
-          type: object
-          additionalProperties: {}
-          properties:
-            empty:
-              type: boolean
-        reference:
-          type: boolean
-        empty:
-          type: boolean
-        viewName:
-          type: string
-    ListNotesResponse:
+        limit:
+          type: integer
+          format: int32
+        offset:
+          type: integer
+          format: int32
+        user_id:
+          type: integer
+          format: int64
+        contact_id:
+          type: integer
+          format: int64
+    ObjectModel:
+      type: object
+      properties:
+        custom_fields:
+          type: array
+          items:
+            $ref: '#/components/schemas/CustomFieldMetaData'
+        optional_properties:
+          type: array
+          items:
+            type: string
+          uniqueItems: true
+    NoteList:
       type: object
       properties:
         notes:
           type: array
           items:
-            $ref: '#/components/schemas/Note_2'
-        next_page_token:
-          type: string
-    CreateCustomFieldRequest:
-      type: object
-      properties:
-        label:
-          type: string
-        options:
-          type: array
-          items:
-            $ref: '#/components/schemas/CreateCustomFieldOptionRequest'
-        field_type:
-          type: string
-          enum:
-          - CURRENCY
-          - DATE
-          - DATE_TIME
-          - DAY_OF_WEEK
-          - DECIMAL_NUMBER
-          - DRILLDOWN
-          - DROPDOWN
-          - EMAIL
-          - LIST_BOX
-          - MONTH
-          - NAME
-          - PERCENT
-          - PHONE_NUMBER
-          - RADIO
-          - SOCIAL_SECURITY_NUMBER
-          - STATE
-          - TEXT
-          - TEXT_AREA
-          - USER
-          - USER_LIST_BOX
-          - WEBSITE
-          - WHOLE_NUMBER
-          - YEAR
-          - YES_NO
-        group_id:
-          type: string
-          description: An optional tab group to place the field under in the interface.  If not specified, will default to the 'Custom Fields' tab.
-        user_group_id:
-          type: string
-          description: An optional user group to choose from when selecting values for User or UserListBox fields.
-      required:
-      - field_type
-      - label
-    Error:
-      type: object
-      properties:
-        code:
+            $ref: '#/components/schemas/Note'
+        count:
           type: integer
           format: int32
-        message:
+        next:
           type: string
-        status:
+        previous:
           type: string
-        details:
-          type: array
-          items:
-            $ref: '#/components/schemas/ErrorDetails'
-    GetNoteResponse:
+    View:
       type: object
       properties:
-        id:
+        contentType:
           type: string
-          description: Note ID
-          example: 12345
-        text:
-          type: string
-          description: Note content
-          example: Called about the Q3 proposal
+    UpdateNote:
+      type: object
+      description: note
+      properties:
         title:
           type: string
-          description: Note title
-          example: Sales Call
+        body:
+          type: string
         type:
           type: string
-          description: Note type
-          example: Call
+          enum:
+          - Appointment, Call, Email, Fax, Letter, Other
         contact_id:
-          type: string
-          description: Associated contact ID
-          example: 1001
-        assigned_to_user:
-          $ref: '#/components/schemas/BasicUser'
-          description: User assigned to this note
-        create_time:
-          type: string
-          description: Creation timestamp (ISO-8601)
-          example: '2024-01-10T08:00:00Z'
-        update_time:
-          type: string
-          description: Last update timestamp (ISO-8601)
-          example: '2024-03-15T10:30:00Z'
-        last_updated_by_user_id:
-          type: string
-          description: ID of user who last updated
-          example: 456
-        pinned_at:
-          type: string
-          description: Pin timestamp (ISO-8601), null if not pinned
-          example: '2024-02-18T16:45:00Z'
-        created_by_user_id:
-          type: string
-          description: ID of user who created
-          example: 789
-        custom_fields:
-          type: array
-          description: Custom field values for the note
-          example:
-          - id: '1'
-            content: Red
-          - id: '2'
-            content: Preferred
-          items:
-            $ref: '#/components/schemas/CustomFieldValueObject'
-    CreateCustomFieldTabRequest:
-      type: object
-      properties:
-        name:
-          type: string
-    ListCustomFieldGroupsResponse:
-      type: object
-      properties:
-        groups:
-          type: array
-          items:
-            $ref: '#/components/schemas/CustomFieldGroup'
-    CustomFieldTab:
-      type: object
-      properties:
-        id:
-          type: string
-          description: The unique identifier of the custom field tab
-          example: 123
-        name:
-          type: string
-          description: The name of the custom field tab
-          example: Personal Info
-        order:
           type: integer
-          format: int32
-          description: The display order of the tab
-          example: 1
-        record_type:
-          type: string
-          description: The record type this tab belongs to (e.g., CONTACT, COMPANY, OPPORTUNITY, REFERRAL_PARTNER, ORDER, SUBSCRIPTION, TASK_NOTE_APPOINTMENT)
-          enum:
-          - CONTACT
-          - REFERRAL_PARTNER
-          - OPPORTUNITY
-          - TASK_NOTE_APPOINTMENT
-          - COMPANY
-          - ORDER
-          - SUBSCRIPTION
-          example: CONTACT
-    ObjectModel_2:
-      type: object
-      properties:
-        custom_fields:
-          type: array
-          items:
-            $ref: '#/components/schemas/CustomFieldMetaData_2'
-        optional_properties:
-          type: array
-          description: These fields are not transmitted by default on this model, but can be requested by specifying them in a comma-separated list in the optional_properties query parameter.
-          items:
-            type: string
-          uniqueItems: true
-    CustomFieldGroup:
-      type: object
-      properties:
-        id:
-          type: string
-        name:
-          type: string
-        order:
+          format: int64
+        user_id:
           type: integer
-          format: int32
-        tab_id:
-          type: string
-        record_type:
-          type: string
-          enum:
-          - CONTACT
-          - REFERRAL_PARTNER
-          - OPPORTUNITY
-          - TASK_NOTE_APPOINTMENT
-          - COMPANY
-          - ORDER
-          - SUBSCRIPTION
-    UpdateCustomFieldGroupRequest:
-      type: object
-      properties:
-        name:
-          type: string
-        order:
-          type: integer
-          format: int32
-        tab_id:
-          type: string
-    ListNoteTemplateResponse:
-      type: object
-      properties:
-        note_templates:
-          type: array
-          items:
-            $ref: '#/components/schemas/NoteTemplate'
-        next_page_token:
-          type: string
-    CreateCustomFieldGroupRequest:
-      type: object
-      properties:
-        name:
-          type: string
-        tab_id:
-          type: string
+          format: int64
     NoteTemplate:
       type: object
       properties:
@@ -2968,44 +2743,27 @@ components:
           type: string
         resource:
           type: string
-    CreateNoteRequest:
-      type: object
-      properties:
-        title:
-          type: string
-          description: A value for either `title` or `type` is required.
-          example: Follow-up Meeting
-        text:
-          type: string
-          description: Note content
-          example: Discussed pricing for contract renewal
-        type:
-          type: string
-          description: A value for either `title` or `type` is required. The value may be one of `Appointment`, `Call`, `Email`, `Fax`, `Letter` or `Other` in Keap Max/Pro, or an admin-configured value in Classic.
-          example: Call
-        user_id:
-          type: string
-          description: ID of user creating the note
-          example: 123
-        is_pinned:
-          type: boolean
-          description: Whether to pin this note
-          example: false
-        custom_fields:
-          type: array
-          description: Custom field values for the note. An empty array resets all custom fields to their defaults.
-          example:
-          - id: '1'
-            content: Red
-          items:
-            $ref: '#/components/schemas/CustomFieldValueObject'
-      required:
-      - user_id
     CreateCustomFieldOptionRequest:
       type: object
       properties:
         label:
           type: string
+    ListNoteTemplateResponse:
+      type: object
+      properties:
+        note_templates:
+          type: array
+          items:
+            $ref: '#/components/schemas/NoteTemplate'
+        next_page_token:
+          type: string
+    ListCustomFieldTabsResponse:
+      type: object
+      properties:
+        tabs:
+          type: array
+          items:
+            $ref: '#/components/schemas/CustomFieldTab'
     UpdateNoteRequest:
       type: object
       properties:
@@ -3043,125 +2801,23 @@ components:
           example: 1001
       required:
       - user_id
-    Note_2:
+    UpdateCustomFieldTabRequest:
       type: object
       properties:
-        id:
+        name:
           type: string
-          description: Note ID
-          example: 12345
-        text:
-          type: string
-          description: Note content
-          example: Called about the Q3 proposal
-        title:
-          type: string
-          description: Note title
-          example: Sales Call
-        type:
-          type: string
-          description: Note type
-          example: Call
-        contact_id:
-          type: string
-          description: Associated contact ID
-          example: 1001
-        assigned_to_user:
-          $ref: '#/components/schemas/BasicUser'
-          description: User assigned to this note
-        create_time:
-          type: string
-          description: Creation timestamp (ISO-8601)
-          example: '2024-01-10T08:00:00Z'
-        update_time:
-          type: string
-          description: Last update timestamp (ISO-8601)
-          example: '2024-03-15T10:30:00Z'
-        last_updated_by_user_id:
-          type: string
-          description: ID of user who last updated
-          example: 456
-        pinned_at:
-          type: string
-          description: Pin timestamp (ISO-8601), null if not pinned
-          example: '2024-02-18T16:45:00Z'
-        created_by_user_id:
-          type: string
-          description: ID of user who created
-          example: 789
-        custom_fields:
+        order:
+          type: integer
+          format: int32
+    ListNotesResponse:
+      type: object
+      properties:
+        notes:
           type: array
-          description: Custom field values for the note
-          example:
-          - id: '1'
-            content: Red
-          - id: '2'
-            content: Preferred
           items:
-            $ref: '#/components/schemas/CustomFieldValueObject'
-    CustomFieldValueObject:
-      type: object
-      properties:
-        id:
+            $ref: '#/components/schemas/Note_2'
+        next_page_token:
           type: string
-        content:
-          description: The value of the custom field. Text custom field values have a maximum length of 65535 characters.
-    UpdateNoteResponse:
-      type: object
-      properties:
-        id:
-          type: string
-          description: Note ID
-          example: 12345
-        text:
-          type: string
-          description: Note content
-          example: Called about the Q3 proposal
-        title:
-          type: string
-          description: Note title
-          example: Sales Call
-        type:
-          type: string
-          description: Note type
-          example: Call
-        contact_id:
-          type: string
-          description: Associated contact ID
-          example: 1001
-        assigned_to_user:
-          $ref: '#/components/schemas/BasicUser'
-          description: User assigned to this note
-        create_time:
-          type: string
-          description: Creation timestamp (ISO-8601)
-          example: '2024-01-10T08:00:00Z'
-        update_time:
-          type: string
-          description: Last update timestamp (ISO-8601)
-          example: '2024-03-15T10:30:00Z'
-        last_updated_by_user_id:
-          type: string
-          description: ID of user who last updated
-          example: 456
-        pinned_at:
-          type: string
-          description: Pin timestamp (ISO-8601), null if not pinned
-          example: '2024-02-18T16:45:00Z'
-        created_by_user_id:
-          type: string
-          description: ID of user who created
-          example: 789
-        custom_fields:
-          type: array
-          description: Custom field values for the note
-          example:
-          - id: '1'
-            content: Red
-          - id: '2'
-            content: Preferred
-          items:
-            $ref: '#/components/schemas/CustomFieldValueObject'
     BasicUser:
       type: object
       properties:
@@ -3181,14 +2837,24 @@ components:
           type: string
           description: Email address
           example: jane.doe@example.com
-    UpdateCustomFieldTabRequest:
+    CreateCustomFieldTabRequest:
       type: object
       properties:
         name:
           type: string
-        order:
-          type: integer
-          format: int32
+    ObjectModel_2:
+      type: object
+      properties:
+        custom_fields:
+          type: array
+          items:
+            $ref: '#/components/schemas/CustomFieldMetaData_2'
+        optional_properties:
+          type: array
+          description: These fields are not transmitted by default on this model, but can be requested by specifying them in a comma-separated list in the optional_properties query parameter.
+          items:
+            type: string
+          uniqueItems: true
     UpdateCustomFieldMetaDataRequest:
       type: object
       properties:
@@ -3202,13 +2868,39 @@ components:
           type: string
       required:
       - group_id
-    ListCustomFieldTabsResponse:
+    CreateNoteRequest:
       type: object
       properties:
-        tabs:
+        title:
+          type: string
+          description: A value for either `title` or `type` is required.
+          example: Follow-up Meeting
+        text:
+          type: string
+          description: Note content
+          example: Discussed pricing for contract renewal
+        type:
+          type: string
+          description: A value for either `title` or `type` is required. The value may be one of `Appointment`, `Call`, `Email`, `Fax`, `Letter` or `Other` in Keap Max/Pro, or an admin-configured value in Classic.
+          example: Call
+        user_id:
+          type: string
+          description: ID of user creating the note
+          example: 123
+        is_pinned:
+          type: boolean
+          description: Whether to pin this note
+          example: false
+        custom_fields:
           type: array
+          description: Custom field values for the note. An empty array resets all custom fields to their defaults.
+          example:
+          - id: '1'
+            content: Red
           items:
-            $ref: '#/components/schemas/CustomFieldTab'
+            $ref: '#/components/schemas/CustomFieldValueObject'
+      required:
+      - user_id
     CustomFieldMetaData_2:
       type: object
       description: Metadata describing a custom field, including its type and options
@@ -3280,6 +2972,314 @@ components:
           type: string
           description: The database column name for this custom field. Use this value when filtering contacts (e.g. for field_name 'firstName1', filter with 'firstName1==John').
           example: firstName1
+    CreateCustomFieldRequest:
+      type: object
+      properties:
+        label:
+          type: string
+        options:
+          type: array
+          items:
+            $ref: '#/components/schemas/CreateCustomFieldOptionRequest'
+        field_type:
+          type: string
+          enum:
+          - CURRENCY
+          - DATE
+          - DATE_TIME
+          - DAY_OF_WEEK
+          - DECIMAL_NUMBER
+          - DRILLDOWN
+          - DROPDOWN
+          - EMAIL
+          - LIST_BOX
+          - MONTH
+          - NAME
+          - PERCENT
+          - PHONE_NUMBER
+          - RADIO
+          - SOCIAL_SECURITY_NUMBER
+          - STATE
+          - TEXT
+          - TEXT_AREA
+          - USER
+          - USER_LIST_BOX
+          - WEBSITE
+          - WHOLE_NUMBER
+          - YEAR
+          - YES_NO
+        group_id:
+          type: string
+          description: An optional tab group to place the field under in the interface.  If not specified, will default to the 'Custom Fields' tab.
+        user_group_id:
+          type: string
+          description: An optional user group to choose from when selecting values for User or UserListBox fields.
+      required:
+      - field_type
+      - label
+    UpdateNoteResponse:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Note ID
+          example: 12345
+        text:
+          type: string
+          description: Note content
+          example: Called about the Q3 proposal
+        title:
+          type: string
+          description: Note title
+          example: Sales Call
+        type:
+          type: string
+          description: Note type
+          example: Call
+        contact_id:
+          type: string
+          description: Associated contact ID
+          example: 1001
+        assigned_to_user:
+          $ref: '#/components/schemas/BasicUser'
+          description: User assigned to this note
+        create_time:
+          type: string
+          description: Creation timestamp (ISO-8601)
+          example: '2024-01-10T08:00:00Z'
+        update_time:
+          type: string
+          description: Last update timestamp (ISO-8601)
+          example: '2024-03-15T10:30:00Z'
+        last_updated_by_user_id:
+          type: string
+          description: ID of user who last updated
+          example: 456
+        pinned_at:
+          type: string
+          description: Pin timestamp (ISO-8601), null if not pinned
+          example: '2024-02-18T16:45:00Z'
+        created_by_user_id:
+          type: string
+          description: ID of user who created
+          example: 789
+        custom_fields:
+          type: array
+          description: Custom field values for the note
+          example:
+          - id: '1'
+            content: Red
+          - id: '2'
+            content: Preferred
+          items:
+            $ref: '#/components/schemas/CustomFieldValueObject'
+    UpdateCustomFieldGroupRequest:
+      type: object
+      properties:
+        name:
+          type: string
+        order:
+          type: integer
+          format: int32
+        tab_id:
+          type: string
+    CustomFieldGroup:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        order:
+          type: integer
+          format: int32
+        tab_id:
+          type: string
+        record_type:
+          type: string
+          enum:
+          - CONTACT
+          - REFERRAL_PARTNER
+          - OPPORTUNITY
+          - TASK_NOTE_APPOINTMENT
+          - COMPANY
+          - ORDER
+          - SUBSCRIPTION
+    ListCustomFieldGroupsResponse:
+      type: object
+      properties:
+        groups:
+          type: array
+          items:
+            $ref: '#/components/schemas/CustomFieldGroup'
+    CustomFieldTab:
+      type: object
+      properties:
+        id:
+          type: string
+          description: The unique identifier of the custom field tab
+          example: 123
+        name:
+          type: string
+          description: The name of the custom field tab
+          example: Personal Info
+        order:
+          type: integer
+          format: int32
+          description: The display order of the tab
+          example: 1
+        record_type:
+          type: string
+          description: The record type this tab belongs to (e.g., CONTACT, COMPANY, OPPORTUNITY, REFERRAL_PARTNER, ORDER, SUBSCRIPTION, TASK_NOTE_APPOINTMENT)
+          enum:
+          - CONTACT
+          - REFERRAL_PARTNER
+          - OPPORTUNITY
+          - TASK_NOTE_APPOINTMENT
+          - COMPANY
+          - ORDER
+          - SUBSCRIPTION
+          example: CONTACT
+    Error:
+      type: object
+      properties:
+        code:
+          type: integer
+          format: int32
+        message:
+          type: string
+        status:
+          type: string
+        details:
+          type: array
+          items:
+            $ref: '#/components/schemas/ErrorDetails'
+    CustomFieldValueObject:
+      type: object
+      properties:
+        id:
+          type: string
+        content:
+          description: The value of the custom field. Text custom field values have a maximum length of 65535 characters.
+    GetNoteResponse:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Note ID
+          example: 12345
+        text:
+          type: string
+          description: Note content
+          example: Called about the Q3 proposal
+        title:
+          type: string
+          description: Note title
+          example: Sales Call
+        type:
+          type: string
+          description: Note type
+          example: Call
+        contact_id:
+          type: string
+          description: Associated contact ID
+          example: 1001
+        assigned_to_user:
+          $ref: '#/components/schemas/BasicUser'
+          description: User assigned to this note
+        create_time:
+          type: string
+          description: Creation timestamp (ISO-8601)
+          example: '2024-01-10T08:00:00Z'
+        update_time:
+          type: string
+          description: Last update timestamp (ISO-8601)
+          example: '2024-03-15T10:30:00Z'
+        last_updated_by_user_id:
+          type: string
+          description: ID of user who last updated
+          example: 456
+        pinned_at:
+          type: string
+          description: Pin timestamp (ISO-8601), null if not pinned
+          example: '2024-02-18T16:45:00Z'
+        created_by_user_id:
+          type: string
+          description: ID of user who created
+          example: 789
+        custom_fields:
+          type: array
+          description: Custom field values for the note
+          example:
+          - id: '1'
+            content: Red
+          - id: '2'
+            content: Preferred
+          items:
+            $ref: '#/components/schemas/CustomFieldValueObject'
+    Note_2:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Note ID
+          example: 12345
+        text:
+          type: string
+          description: Note content
+          example: Called about the Q3 proposal
+        title:
+          type: string
+          description: Note title
+          example: Sales Call
+        type:
+          type: string
+          description: Note type
+          example: Call
+        contact_id:
+          type: string
+          description: Associated contact ID
+          example: 1001
+        assigned_to_user:
+          $ref: '#/components/schemas/BasicUser'
+          description: User assigned to this note
+        create_time:
+          type: string
+          description: Creation timestamp (ISO-8601)
+          example: '2024-01-10T08:00:00Z'
+        update_time:
+          type: string
+          description: Last update timestamp (ISO-8601)
+          example: '2024-03-15T10:30:00Z'
+        last_updated_by_user_id:
+          type: string
+          description: ID of user who last updated
+          example: 456
+        pinned_at:
+          type: string
+          description: Pin timestamp (ISO-8601), null if not pinned
+          example: '2024-02-18T16:45:00Z'
+        created_by_user_id:
+          type: string
+          description: ID of user who created
+          example: 789
+        custom_fields:
+          type: array
+          description: Custom field values for the note
+          example:
+          - id: '1'
+            content: Red
+          - id: '2'
+            content: Preferred
+          items:
+            $ref: '#/components/schemas/CustomFieldValueObject'
+    CreateCustomFieldGroupRequest:
+      type: object
+      properties:
+        name:
+          type: string
+        tab_id:
+          type: string
   securitySchemes:
     oauth2:
       type: oauth2

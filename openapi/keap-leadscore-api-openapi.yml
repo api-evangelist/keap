@@ -88,6 +88,17 @@ paths:
                 $ref: '#/components/schemas/LeadScore'
 components:
   schemas:
+    LeadScore:
+      type: object
+      properties:
+        score:
+          type: string
+          description: Lead score value (flame count)
+          example: 5
+        last_updated:
+          type: string
+          description: Last updated timestamp (ISO-8601)
+          example: '2024-03-15T10:30:00Z'
     ErrorDetails:
       type: object
       properties:
@@ -109,17 +120,6 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/ErrorDetails'
-    LeadScore:
-      type: object
-      properties:
-        score:
-          type: string
-          description: Lead score value (flame count)
-          example: 5
-        last_updated:
-          type: string
-          description: Last updated timestamp (ISO-8601)
-          example: '2024-03-15T10:30:00Z'
   securitySchemes:
     oauth2:
       type: oauth2

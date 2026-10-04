@@ -453,6 +453,23 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/ErrorDetails'
+    ListLeadSourceCategoriesResponse:
+      type: object
+      properties:
+        lead_source_categories:
+          type: array
+          description: The lead source categories in the current page
+          items:
+            $ref: '#/components/schemas/LeadSourceCategory'
+        next_page_token:
+          type: string
+    ErrorDetails:
+      type: object
+      properties:
+        domain:
+          type: string
+        resource:
+          type: string
     CreateUpdateLeadSourceCategoryRequest:
       type: object
       properties:
@@ -489,23 +506,6 @@ components:
           format: date-time
           description: The date the category was last updated
           example: '2024-03-15T10:30:00Z'
-    ErrorDetails:
-      type: object
-      properties:
-        domain:
-          type: string
-        resource:
-          type: string
-    ListLeadSourceCategoriesResponse:
-      type: object
-      properties:
-        lead_source_categories:
-          type: array
-          description: The lead source categories in the current page
-          items:
-            $ref: '#/components/schemas/LeadSourceCategory'
-        next_page_token:
-          type: string
   securitySchemes:
     oauth2:
       type: oauth2

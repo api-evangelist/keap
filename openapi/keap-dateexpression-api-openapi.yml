@@ -42,6 +42,13 @@ paths:
       x-summary-source: derived
 components:
   schemas:
+    DateExpressionResponse:
+      type: object
+      properties:
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/DateExpression'
     LogicalDate:
       type: object
       properties:
@@ -52,13 +59,6 @@ components:
             format: date-time
         chain:
           type: string
-    DateExpressionResponse:
-      type: object
-      properties:
-        results:
-          type: array
-          items:
-            $ref: '#/components/schemas/DateExpression'
     DateExpression:
       required:
       - date_inferred

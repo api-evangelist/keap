@@ -492,6 +492,16 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/ErrorDetails'
+    ListLeadSourcesResponse:
+      type: object
+      properties:
+        lead_sources:
+          type: array
+          description: The lead sources in the current page
+          items:
+            $ref: '#/components/schemas/LeadSource'
+        next_page_token:
+          type: string
     CreateLeadSourceRequest:
       type: object
       properties:
@@ -536,16 +546,6 @@ components:
           format: date-time
           description: When the lead source ends
           example: '2024-12-31T23:59:59Z'
-    ListLeadSourcesResponse:
-      type: object
-      properties:
-        lead_sources:
-          type: array
-          description: The lead sources in the current page
-          items:
-            $ref: '#/components/schemas/LeadSource'
-        next_page_token:
-          type: string
     ErrorDetails:
       type: object
       properties:

@@ -229,48 +229,27 @@ paths:
                 $ref: '#/components/schemas/GetSettingsResponse'
 components:
   schemas:
-    Error:
+    ApplicationConfigurationModuleFulfillment:
       type: object
       properties:
-        code:
-          type: integer
-          format: int32
-        message:
+        default_message_to:
           type: string
-        status:
+        default_message_fields:
           type: string
-        details:
-          type: array
-          items:
-            $ref: '#/components/schemas/ErrorDetails'
-    ApplicationConfigurationModuleOpportunityStatesActive:
+    ErrorDetails:
       type: object
       properties:
-        stages:
+        domain:
           type: string
-    ApplicationConfigurationModuleApplication:
+        resource:
+          type: string
+    ApplicationConfigurationModuleOpportunity:
       type: object
       properties:
-        company:
-          $ref: '#/components/schemas/ApplicationCompany'
-        time_zone:
+        states:
+          $ref: '#/components/schemas/ApplicationConfigurationModuleOpportunityStates'
+        default_stage:
           type: string
-        default_view_locale:
-          type: string
-        features_enabled:
-          $ref: '#/components/schemas/ApplicationFeaturesEnabled'
-    ApplicationConfigurationModuleOpportunityStatesLoss:
-      type: object
-      properties:
-        reasons:
-          type: string
-        stage:
-          type: string
-    ApplicationConfigurationModuleForms:
-      type: object
-      properties:
-        spam_filters_enabled:
-          type: boolean
     GetContactOptionTypesResponse:
       type: object
       properties:
@@ -297,10 +276,12 @@ components:
           type: boolean
         default_new_contact_form:
           type: string
-    GetApplicationEnabledStatusResponse:
+    ApplicationConfigurationModuleTask:
       type: object
       properties:
-        isEnabled:
+        appointment_types:
+          type: string
+        share_opportunity_with_related_user:
           type: boolean
     ApplicationConfigurationModuleEmail:
       type: object
@@ -314,6 +295,68 @@ components:
         hide_emails_to_and_from_domains:
           type: string
         append_contact_key_to_links:
+          type: boolean
+    ApplicationConfigurationModuleForms:
+      type: object
+      properties:
+        spam_filters_enabled:
+          type: boolean
+    ApplicationConfigurationModuleApplication:
+      type: object
+      properties:
+        company:
+          $ref: '#/components/schemas/ApplicationCompany'
+        time_zone:
+          type: string
+        default_view_locale:
+          type: string
+        features_enabled:
+          $ref: '#/components/schemas/ApplicationFeaturesEnabled'
+    ApplicationConfigurationModuleNote:
+      type: object
+      properties:
+        appointment_types:
+          type: string
+        share_opportunity_with_related_user:
+          type: boolean
+    ApplicationConfigurationModuleAffiliateCommission:
+      type: object
+      properties:
+        levels:
+          type: integer
+          format: int32
+        calculation_type:
+          type: string
+        participant_types:
+          type: string
+    ApplicationConfigurationModuleOpportunityStatesLoss:
+      type: object
+      properties:
+        reasons:
+          type: string
+        stage:
+          type: string
+    GetApplicationEnabledStatusResponse:
+      type: object
+      properties:
+        isEnabled:
+          type: boolean
+    ApplicationConfigurationModuleAffiliate:
+      type: object
+      properties:
+        commission:
+          $ref: '#/components/schemas/ApplicationConfigurationModuleAffiliateCommission'
+        choose_affiliate:
+          type: boolean
+        custom_affiliate_url:
+          type: string
+        display_affiliate_ip_address:
+          type: boolean
+        do_not_notify_affiliate:
+          type: boolean
+        use_referral_history_if_no_tracking_cookie:
+          type: boolean
+        skip_pay_if_unused:
           type: boolean
     ApplicationCompany:
       type: object
@@ -344,44 +387,30 @@ components:
           type: string
         web_logo_url:
           type: string
-    ApplicationConfigurationModuleNote:
+    ApplicationConfigurationModuleInvoice:
       type: object
       properties:
-        appointment_types:
+        tax_label:
           type: string
-        share_opportunity_with_related_user:
-          type: boolean
-    ApplicationConfigurationModuleTemplate:
+    ApplicationConfigurationModuleOpportunityStatesActive:
       type: object
       properties:
-        default_country_code:
+        stages:
+          type: string
+    Error:
+      type: object
+      properties:
+        code:
           type: integer
           format: int32
-        default_user_id:
+        message:
           type: string
-    ApplicationConfigurationModuleFulfillment:
-      type: object
-      properties:
-        default_message_to:
+        status:
           type: string
-        default_message_fields:
-          type: string
-    ApplicationConfigurationModuleOpportunityStates:
-      type: object
-      properties:
-        active:
-          $ref: '#/components/schemas/ApplicationConfigurationModuleOpportunityStatesActive'
-        win:
-          $ref: '#/components/schemas/ApplicationConfigurationModuleOpportunityStatesWin'
-        loss:
-          $ref: '#/components/schemas/ApplicationConfigurationModuleOpportunityStatesLoss'
-    ApplicationConfigurationModuleTask:
-      type: object
-      properties:
-        appointment_types:
-          type: string
-        share_opportunity_with_related_user:
-          type: boolean
+        details:
+          type: array
+          items:
+            $ref: '#/components/schemas/ErrorDetails'
     ApplicationConfigurationModuleEcommerce:
       type: object
       properties:
@@ -414,80 +443,15 @@ components:
           type: boolean
         track_inventory:
           type: boolean
-    ApplicationFeaturesEnabled:
+    ApplicationConfigurationModuleOpportunityStates:
       type: object
       properties:
-        marketing:
-          type: boolean
-    ApplicationConfigurationModuleOpportunity:
-      type: object
-      properties:
-        states:
-          $ref: '#/components/schemas/ApplicationConfigurationModuleOpportunityStates'
-        default_stage:
-          type: string
-    ErrorDetails:
-      type: object
-      properties:
-        domain:
-          type: string
-        resource:
-          type: string
-    ApplicationConfigurationModuleAffiliate:
-      type: object
-      properties:
-        commission:
-          $ref: '#/components/schemas/ApplicationConfigurationModuleAffiliateCommission'
-        choose_affiliate:
-          type: boolean
-        custom_affiliate_url:
-          type: string
-        display_affiliate_ip_address:
-          type: boolean
-        do_not_notify_affiliate:
-          type: boolean
-        use_referral_history_if_no_tracking_cookie:
-          type: boolean
-        skip_pay_if_unused:
-          type: boolean
-    ApplicationConfigurationModuleAffiliateCommission:
-      type: object
-      properties:
-        levels:
-          type: integer
-          format: int32
-        calculation_type:
-          type: string
-        participant_types:
-          type: string
-    ApplicationConfigurationModuleInvoice:
-      type: object
-      properties:
-        tax_label:
-          type: string
-    ApplicationConfigurationModuleOpportunityStatesWin:
-      type: object
-      properties:
-        reasons:
-          type: string
-        stage:
-          type: string
-    ApplicationConfigurationModuleContactAddressLabels:
-      type: object
-      properties:
-        line_1:
-          type: string
-        line_2:
-          type: string
-        line_3:
-          type: string
-    ApplicationConfigurationModuleAppointment:
-      type: object
-      properties:
-        appointment_types:
-          type: string
-        share_opportunity_with_related_user:
-          type: boolean
+        active:
+          $ref: '#/components/schemas/ApplicationConfigurationModuleOpportunityStatesActive'
+        win:
+          $ref: '#/components/schemas/ApplicationConfigurationModuleOpportunityStatesWin'
+        loss:
+          $ref: '#/components/schemas/ApplicationConfigurationModuleOpportunityStatesLoss'
     GetSettingsResponse:
       type: object
       properties:
@@ -517,6 +481,42 @@ components:
           $ref: '#/components/schemas/ApplicationConfigurationModuleTask'
         template:
           $ref: '#/components/schemas/ApplicationConfigurationModuleTemplate'
+    ApplicationConfigurationModuleOpportunityStatesWin:
+      type: object
+      properties:
+        reasons:
+          type: string
+        stage:
+          type: string
+    ApplicationFeaturesEnabled:
+      type: object
+      properties:
+        marketing:
+          type: boolean
+    ApplicationConfigurationModuleTemplate:
+      type: object
+      properties:
+        default_country_code:
+          type: integer
+          format: int32
+        default_user_id:
+          type: string
+    ApplicationConfigurationModuleAppointment:
+      type: object
+      properties:
+        appointment_types:
+          type: string
+        share_opportunity_with_related_user:
+          type: boolean
+    ApplicationConfigurationModuleContactAddressLabels:
+      type: object
+      properties:
+        line_1:
+          type: string
+        line_2:
+          type: string
+        line_3:
+          type: string
   securitySchemes:
     oauth2:
       type: oauth2

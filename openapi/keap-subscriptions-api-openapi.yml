@@ -1483,474 +1483,78 @@ paths:
                 $ref: '#/components/schemas/ObjectModel'
 components:
   schemas:
-    Address:
+    ListSubscriptionsResponse:
       type: object
       properties:
-        country:
-          type: string
-          deprecated: true
-          description: Deprecated. The long-name descriptive version of the Country Code. Please use 'country_code' for POST/PATCH operations. Maximum length is 100 characters.
-          example: United States of America
-        line1:
-          type: string
-          description: Street address line 1. Maximum length is 75 characters for the BILLING address and 100 characters for the SHIPPING and OTHER addresses.
-          example: 123
-        line2:
-          type: string
-          description: Street address line 2. Maximum length is 75 characters for the BILLING address and 100 characters for the SHIPPING and OTHER addresses.
-          example: Suite 100
-        locality:
-          type: string
-          description: The municipality to which the address belongs. Maximum length is 50 characters for the BILLING address and 100 characters for the SHIPPING and OTHER addresses.
-          example: Phoenix
-        region:
-          type: string
-          deprecated: true
-          description: The long-name descriptive version of the Region Code. Please use 'region_code' for POST/PATCH operations. Maximum length is 50 characters.
-          example: Arizona
-        field:
-          type: string
-          description: Address type field
-          enum:
-          - ADDRESS_FIELD_UNSPECIFIED
-          - BILLING
-          - SHIPPING
-          - OTHER
-          example: BILLING
-        country_code:
-          type: string
-          description: An ISO 3166-2 Country Code (https://en.wikipedia.org/wiki/ISO_3166-1_alpha-3)
-          example: USA
-        postal_code:
-          type: string
-          description: Postal or ZIP code. Maximum length is 15 characters for the BILLING and OTHER addresses and 20 characters for the SHIPPING address.
-          example: 85001
-        region_code:
-          type: string
-          description: An ISO 3166-2 Province Code, such as one of the US States (https://en.wikipedia.org/wiki/ISO_3166-2:US)
-          example: US-AZ
-        zip_code:
-          type: string
-          description: ZIP code (US). Maximum length is 15 characters for the BILLING and OTHER addresses and 20 characters for the SHIPPING address.
-          example: 85001
-        zip_four:
-          type: string
-          description: ZIP+4 extension. Maximum length is 10 characters.
-          example: 1234
-    CreateCustomFieldRequest:
-      type: object
-      properties:
-        label:
-          type: string
-        options:
+        subscriptions:
           type: array
           items:
-            $ref: '#/components/schemas/CreateCustomFieldOptionRequest'
-        field_type:
+            $ref: '#/components/schemas/Subscription'
+        next_page_token:
           type: string
-          enum:
-          - CURRENCY
-          - DATE
-          - DATE_TIME
-          - DAY_OF_WEEK
-          - DECIMAL_NUMBER
-          - DRILLDOWN
-          - DROPDOWN
-          - EMAIL
-          - LIST_BOX
-          - MONTH
-          - NAME
-          - PERCENT
-          - PHONE_NUMBER
-          - RADIO
-          - SOCIAL_SECURITY_NUMBER
-          - STATE
-          - TEXT
-          - TEXT_AREA
-          - USER
-          - USER_LIST_BOX
-          - WEBSITE
-          - WHOLE_NUMBER
-          - YEAR
-          - YES_NO
-        group_id:
-          type: string
-          description: An optional tab group to place the field under in the interface.  If not specified, will default to the 'Custom Fields' tab.
-        user_group_id:
-          type: string
-          description: An optional user group to choose from when selecting values for User or UserListBox fields.
-      required:
-      - field_type
-      - label
-    CancelSubscriptionRequest:
+    CreateSubscriptionRequest:
       type: object
       properties:
-        reason:
-          type: string
-          description: The reason for cancelling the subscription.
-          example: Customer request
-    AddressRequest:
-      type: object
-      properties:
-        line1:
-          type: string
-        line2:
-          type: string
-        locality:
-          type: string
-          description: The municipality to which the address belongs
-          example: Phoenix
-        field:
-          type: string
-          description: Address type field
-          enum:
-          - ADDRESS_FIELD_UNSPECIFIED
-          - BILLING
-          - SHIPPING
-          - OTHER
-          example: BILLING
-        country_code:
-          type: string
-          description: An ISO 3166-2 Country Code (https://en.wikipedia.org/wiki/ISO_3166-1_alpha-3)
-          example: USA
-        postal_code:
-          type: string
-        region_code:
-          type: string
-          description: An ISO 3166-2 Province Code, such as one of the US States (https://en.wikipedia.org/wiki/ISO_3166-2:US)
-          example: US-AZ
-    Error:
-      type: object
-      properties:
-        code:
-          type: integer
-          format: int32
-        message:
-          type: string
-        status:
-          type: string
-        details:
-          type: array
-          items:
-            $ref: '#/components/schemas/ErrorDetails'
-    CreateCustomFieldTabRequest:
-      type: object
-      properties:
-        name:
-          type: string
-    ListCustomFieldTabsResponse:
-      type: object
-      properties:
-        tabs:
-          type: array
-          items:
-            $ref: '#/components/schemas/CustomFieldTab'
-    ListCustomFieldGroupsResponse:
-      type: object
-      properties:
-        groups:
-          type: array
-          items:
-            $ref: '#/components/schemas/CustomFieldGroup'
-    CustomFieldTab:
-      type: object
-      properties:
-        id:
-          type: string
-          description: The unique identifier of the custom field tab
-          example: 123
-        name:
-          type: string
-          description: The name of the custom field tab
-          example: Personal Info
-        order:
-          type: integer
-          format: int32
-          description: The display order of the tab
-          example: 1
-        record_type:
-          type: string
-          description: The record type this tab belongs to (e.g., CONTACT, COMPANY, OPPORTUNITY, REFERRAL_PARTNER, ORDER, SUBSCRIPTION, TASK_NOTE_APPOINTMENT)
-          enum:
-          - CONTACT
-          - REFERRAL_PARTNER
-          - OPPORTUNITY
-          - TASK_NOTE_APPOINTMENT
-          - COMPANY
-          - ORDER
-          - SUBSCRIPTION
-          example: CONTACT
-    Subscription:
-      type: object
-      properties:
-        id:
-          type: string
-          description: Id of the subscription.
-          example: 123
         quantity:
           type: integer
-          format: int64
-          description: The subscription quantity.
+          format: int32
+          description: The subscription quantity. Must be 1 or greater. Default is 1.
           example: 1
         active:
           type: boolean
-          description: If the subscription is active or not.
+          description: If the subscription is active or not. Default is true
           example: true
         contact_id:
           type: string
-          description: Id of the contact associated with the subscription.
-          example: 456
-        product_id:
-          type: string
-          description: Id of the product associated with the subscription.
-          example: 789
+          description: Id of the contact to create the subscription for.
+          example: 123
         subscription_plan_id:
           type: string
           description: Id of the product subscription plan.
-          example: 101
+          example: 456
         billing_amount:
           type: number
           format: double
-          description: The billing amount.
+          description: The billing amount. Must be 0 or greater. Default is the price in the product subscription plan.
           example: 10000
         auto_charge:
           type: boolean
-          description: If the subscription should auto charge on the next billing date.
+          description: If the subscription should auto charge on the next billing date. Default is true.
           example: true
-        billing_frequency:
+        max_charge_attempts:
           type: integer
           format: int32
-          description: The billing frequency in days.
-          example: 30
-        billing_cycle:
-          type: string
-          description: The billing cycle of the subscription.
-          enum:
-          - YEAR
-          - MONTH
-          - WEEK
-          - DAY
-          example: MONTH
+          description: Maximum number of charge attempts. Must be 1 or greater. Default is the configured [Max Retries] value.
+          example: 3
+        days_between_retries:
+          type: integer
+          format: int32
+          description: Number of days between charge attempts. Must be 1 or greater. Default is the configured [Num Days Between Retries] value.
+          example: 5
         start_date:
           type: string
           format: date
-          description: The first day the subscription will bill.
+          description: The first day the subscription will bill. Must not be in the past. Default is today.
           example: '2024-05-21'
-        last_bill_date:
-          type: string
-          format: date
-          description: The last date the subscription was billed.
-          example: '2024-05-21'
-        next_bill_date:
-          type: string
-          format: date
-          description: The next date the subscription will bill.
-          example: '2024-06-21'
-        end_date:
-          type: string
-          format: date
-          description: The last date the subscription will bill.
-          example: '2025-05-21'
-        merchant_account_id:
-          type: string
-          description: The merchant account id associated with the subscription.
-          example: 123
         payment_method_id:
           type: string
-          description: Id associated with the payment method.
-          example: 456
-        allow_tax:
-          type: boolean
-          description: If the subscription allows tax.
-          example: false
-        max_charge_attempts:
-          type: integer
-          format: int32
-          description: Maximum number of charge attempts.
-          example: 3
-        days_between_retries:
-          type: integer
-          format: int32
-          description: Number of days between charge attempts.
-          example: 5
-        lead_affiliate_id:
-          type: string
-          description: The affiliate id for the lead of the subscription.
-          example: 789
-        sale_affiliate_id:
-          type: string
-          description: The affiliate id for the sale of the subscription.
-          example: 101
-        shipping_address:
-          $ref: '#/components/schemas/Address'
-          description: The shipping address for the subscription.
-        promo_code:
-          type: string
-          description: The promo code for the subscription.
-          example: PROMO123
-        shipping_option_id:
-          type: string
-          description: The shipping option ID for the subscription.
-          example: 123
-        reason_stopped:
-          type: string
-          description: The reason the subscription is no longer active.
-          example: Customer requested cancellation
-        modification_time:
-          type: string
-          format: date-time
-          description: The date and time the subscription was last modified.
-          example: '2025-06-15T10:30:00Z'
-        custom_fields:
-          type: array
-          description: List of custom field values applied to this subscription
-          example:
-          - id: '1'
-            content: VIP
-          - id: '2'
-            content: Preferred
-          items:
-            $ref: '#/components/schemas/CustomFieldValue'
-    OrderItemProduct:
-      type: object
-      properties:
-        id:
-          type: string
-          description: Product ID
-          example: 123
-        name:
-          type: string
-          description: Product name
-          example: Premium Widget
-        sku:
-          type: string
-          description: Stock keeping unit
-          example: WDG-001
-        description:
-          type: string
-          description: Product description
-          example: High-quality widget
-        shippable:
-          type: boolean
-          description: Whether product requires shipping
-          example: true
-        taxable:
-          type: boolean
-          description: Whether product is taxable
-          example: true
-    ObjectModel:
-      type: object
-      properties:
-        custom_fields:
-          type: array
-          items:
-            $ref: '#/components/schemas/CustomFieldMetaData'
-        optional_properties:
-          type: array
-          description: These fields are not transmitted by default on this model, but can be requested by specifying them in a comma-separated list in the optional_properties query parameter.
-          items:
-            type: string
-          uniqueItems: true
-    CustomFieldGroup:
-      type: object
-      properties:
-        id:
-          type: string
-        name:
-          type: string
-        order:
-          type: integer
-          format: int32
-        tab_id:
-          type: string
-        record_type:
-          type: string
-          enum:
-          - CONTACT
-          - REFERRAL_PARTNER
-          - OPPORTUNITY
-          - TASK_NOTE_APPOINTMENT
-          - COMPANY
-          - ORDER
-          - SUBSCRIPTION
-    UpdateSubscriptionRequest:
-      type: object
-      properties:
-        quantity:
-          type: integer
-          format: int32
-          description: The subscription quantity. Must be 1 or greater.
-          example: 1
-        active:
-          type: boolean
-          description: If the subscription is active or not.
-          example: true
-        contact_id:
-          type: string
-          description: Id of the contact associated with the subscription.
-          example: 123
-        subscription_plan_id:
-          type: string
-          description: Id of the product subscription plan.
-          example: 456
-        billing_amount:
-          type: number
-          format: double
-          description: The billing amount. Must be 0 or greater.
-          example: 10000
-        auto_charge:
-          type: boolean
-          description: If the subscription should auto charge on the next billing date.
-          example: true
-        max_charge_attempts:
-          type: integer
-          format: int32
-          description: Maximum number of charge attempts. Must be 1 or greater.
-          example: 3
-        days_between_retries:
-          type: integer
-          format: int32
-          description: Number of days between charge attempts. Must be 1 or greater.
-          example: 5
-        billing_frequency:
-          type: integer
-          format: int32
-          description: The number of days between billing cycles. Must be 1 or greater.
-          example: 30
-        billing_cycle:
-          type: string
-          description: The billing cycle for the subscription.
-          enum:
-          - YEAR
-          - MONTH
-          - WEEK
-          - DAY
-          example: MONTH
-        next_bill_date:
-          type: string
-          format: date
-          description: The next date the subscription will bill. Must not be in the past.
-          example: '2024-06-21'
-        end_date:
-          type: string
-          format: date
-          description: The date the subscription will end. Must not be in the past.
-          example: '2025-05-21'
-        payment_method_id:
-          type: string
-          description: Id associated with the payment method.
+          description: Id associated with the payment method. Default is the contact's most recently used card, if auto charge is true. Default is 0 otherwise.
           example: 789
         allow_tax:
           type: boolean
-          description: Only works if the product associated with the product subscription is taxable.
+          description: Only works if the product associated with the product subscription is taxable. Default is false.
+          example: false
+        allow_duplicate:
+          type: boolean
+          description: If true, it will disable the check to see if there is already an identical subscription for the contact. Default is false.
           example: false
         lead_affiliate_id:
           type: string
-          description: The affiliate id for the lead of the subscription.
+          description: The affiliate id for the lead of the subscription. Default is 0.
           example: 101
         sale_affiliate_id:
           type: string
-          description: The affiliate id for the sale of the subscription.
+          description: The affiliate id for the sale of the subscription. Default is 0.
           example: 102
         shipping_address:
           $ref: '#/components/schemas/AddressRequest'
@@ -1966,7 +1570,7 @@ components:
         reason_stopped:
           type: string
           description: The reason the subscription is no longer active.
-          example: Customer requested cancellation
+          example: Customer requested
         custom_fields:
           type: array
           description: List of custom field values to apply to this subscription
@@ -1977,16 +1581,9 @@ components:
             content: Preferred
           items:
             $ref: '#/components/schemas/CustomFieldValue'
-    UpdateCustomFieldGroupRequest:
-      type: object
-      properties:
-        name:
-          type: string
-        order:
-          type: integer
-          format: int32
-        tab_id:
-          type: string
+      required:
+      - contact_id
+      - subscription_plan_id
     Discount:
       type: object
       properties:
@@ -2006,40 +1603,6 @@ components:
           - AMOUNT
           - PERCENT
           example: PERCENT
-    CurrencyValue:
-      type: object
-      properties:
-        amount:
-          type: integer
-          format: int64
-          description: The price amount in the smallest currency unit
-          example: 10000
-        currency_code:
-          type: string
-          description: Three-letter ISO currency code
-          example: USD
-        formatted_amount:
-          type: string
-          description: The product amount formatted using the tenant's currency locale
-          example: $100.00
-    BasicContact:
-      type: object
-      properties:
-        id:
-          type: string
-        email:
-          type: string
-        given_name:
-          type: string
-        family_name:
-          type: string
-    CustomFieldOption:
-      type: object
-      properties:
-        id:
-          type: string
-        label:
-          type: string
     ErrorDetails:
       type: object
       properties:
@@ -2052,224 +1615,6 @@ components:
       properties:
         label:
           type: string
-    CustomFieldValue:
-      type: object
-      properties:
-        id:
-          type: string
-        content:
-          description: The value of the custom field. Text custom field values have a maximum length of 65535 characters.
-    InvoiceFile:
-      type: object
-      properties:
-        file_id:
-          type: string
-    PaymentPlanItem:
-      type: object
-      properties:
-        status:
-          type: string
-          description: 'The status of the payment plan item. Possible values are:
-
-            - `UNPAID_MANUAL` - The item is set for manual charge, and its `amount_due` has not been completely paid.
-
-            - `UNPAID_AUTOCHARGE` - The item is set for auto-charge, and its `amount_due` has not been completely paid.
-
-            - `PAID` - The item has been completely paid.
-
-            - `FAILED` - The item `amount_due` has not been completely paid, and there was a failure. (*Note: This status is deprecated and not currently used.*)
-
-            '
-          enum:
-          - UNPAID_MANUAL
-          - UNPAID_AUTOCHARGE
-          - PAID
-          - FAILED
-        due_date:
-          type: string
-          format: date
-          description: The due date in the application's timezone, as an ISO 8601 calendar date string (date only), in the format YYYY-MM-DD
-          example: '2024-05-21'
-        amount_due:
-          $ref: '#/components/schemas/CurrencyValue'
-        amount_paid:
-          $ref: '#/components/schemas/CurrencyValue'
-    CustomFieldMetaData:
-      type: object
-      description: Metadata describing a custom field, including its type and options
-      properties:
-        id:
-          type: string
-          description: The unique identifier of the custom field
-          example: 123
-        label:
-          type: string
-          description: The display label of the custom field
-          example: Favorite Color
-        options:
-          type: array
-          description: The list of available options for select/radio/multiselect/drilldown field types
-          items:
-            $ref: '#/components/schemas/CustomFieldOption'
-        record_type:
-          type: string
-          description: The entity type this custom field belongs to (e.g. CONTACT, COMPANY)
-          enum:
-          - CONTACT
-          - REFERRAL_PARTNER
-          - OPPORTUNITY
-          - TASK_NOTE_APPOINTMENT
-          - COMPANY
-          - ORDER
-          - SUBSCRIPTION
-        field_type:
-          type: string
-          description: The data type of the custom field (e.g. Text, Number, Date, Select)
-          enum:
-          - CURRENCY
-          - DATE
-          - DATE_TIME
-          - DAY_OF_WEEK
-          - DECIMAL_NUMBER
-          - DRILLDOWN
-          - DROPDOWN
-          - EMAIL
-          - LIST_BOX
-          - MONTH
-          - NAME
-          - PERCENT
-          - PHONE_NUMBER
-          - RADIO
-          - SOCIAL_SECURITY_NUMBER
-          - STATE
-          - TEXT
-          - TEXT_AREA
-          - USER
-          - USER_LIST_BOX
-          - WEBSITE
-          - WHOLE_NUMBER
-          - YEAR
-          - YES_NO
-        default_value:
-          type: string
-          description: The default value for this custom field, if any
-        group_id:
-          type: string
-          description: The ID of the group this custom field belongs to
-          example: 45
-        group_name:
-          type: string
-          description: The name of the group this custom field belongs to
-          example: Personal Info
-        field_name:
-          type: string
-          description: The database column name for this custom field. Use this value when filtering contacts (e.g. for field_name 'firstName1', filter with 'firstName1==John').
-          example: firstName1
-    PaymentPlan:
-      type: object
-      properties:
-        auto_charge:
-          type: boolean
-          description: Whether to auto-charge payments
-          example: true
-        max_charge_attempts:
-          type: integer
-          format: int64
-          description: Maximum charge attempts
-          example: 3
-        days_between_retries:
-          type: integer
-          format: int64
-          description: Days between retry attempts
-          example: 7
-        payment_method_id:
-          type: string
-          description: Payment method ID to charge
-          example: 123
-        initial_payment_amount:
-          $ref: '#/components/schemas/CurrencyValue'
-          description: Initial payment amount
-        initial_payment_percent:
-          type: number
-          format: double
-          description: Initial payment as percentage
-          example: 25.0
-        initial_payment_date:
-          type: string
-          format: date
-          description: The initial payment date. In ISO-8601 date format (e.g. 2024-05-21)
-          example: '2024-05-21'
-        plan_start_date:
-          type: string
-          format: date
-          description: The start date of the payment plan. In ISO-8601 date format (e.g. 2024-05-21)
-          example: '2024-05-21'
-        number_of_payments:
-          type: integer
-          format: int64
-          description: Number of payments in the plan
-          example: 12
-        days_between_payments:
-          type: integer
-          format: int64
-          description: Days between each payment
-          example: 30
-        payment_plan_items:
-          type: array
-          description: List of scheduled payment items
-          items:
-            $ref: '#/components/schemas/PaymentPlanItem'
-      required:
-      - days_between_payments
-      - number_of_payments
-      - plan_start_date
-    ShippingInformation:
-      type: object
-      properties:
-        id:
-          type: string
-          description: Shipping information ID
-          example: 123
-        address:
-          $ref: '#/components/schemas/Address'
-          description: Shipping address
-        company:
-          type: string
-          description: Company name
-          example: Acme Corp
-        given_name:
-          type: string
-          description: First name
-          example: John
-        family_name:
-          type: string
-          description: Last name
-          example: Doe
-        phone_number:
-          type: string
-          description: Phone number
-          example: +1-555-123-4567
-        invoice_to_company:
-          type: boolean
-          description: Whether to invoice to company
-          example: false
-    ListSubscriptionsResponse:
-      type: object
-      properties:
-        subscriptions:
-          type: array
-          items:
-            $ref: '#/components/schemas/Subscription'
-        next_page_token:
-          type: string
-    UpdateCustomFieldTabRequest:
-      type: object
-      properties:
-        name:
-          type: string
-        order:
-          type: integer
-          format: int32
     OrderV2:
       type: object
       properties:
@@ -2436,19 +1781,133 @@ components:
           format: date-time
           description: The date and time the order was last updated in the external system. In ISO-8601 format (e.g. 2024-05-21T23:00:00Z)
           example: '2024-05-21T14:30:00Z'
-    UpdateCustomFieldMetaDataRequest:
+    ListCustomFieldTabsResponse:
       type: object
       properties:
-        label:
-          type: string
-        options:
+        tabs:
           type: array
           items:
-            $ref: '#/components/schemas/CustomFieldOption'
-        group_id:
+            $ref: '#/components/schemas/CustomFieldTab'
+    PaymentPlan:
+      type: object
+      properties:
+        auto_charge:
+          type: boolean
+          description: Whether to auto-charge payments
+          example: true
+        max_charge_attempts:
+          type: integer
+          format: int64
+          description: Maximum charge attempts
+          example: 3
+        days_between_retries:
+          type: integer
+          format: int64
+          description: Days between retry attempts
+          example: 7
+        payment_method_id:
           type: string
+          description: Payment method ID to charge
+          example: 123
+        initial_payment_amount:
+          $ref: '#/components/schemas/CurrencyValue'
+          description: Initial payment amount
+        initial_payment_percent:
+          type: number
+          format: double
+          description: Initial payment as percentage
+          example: 25.0
+        initial_payment_date:
+          type: string
+          format: date
+          description: The initial payment date. In ISO-8601 date format (e.g. 2024-05-21)
+          example: '2024-05-21'
+        plan_start_date:
+          type: string
+          format: date
+          description: The start date of the payment plan. In ISO-8601 date format (e.g. 2024-05-21)
+          example: '2024-05-21'
+        number_of_payments:
+          type: integer
+          format: int64
+          description: Number of payments in the plan
+          example: 12
+        days_between_payments:
+          type: integer
+          format: int64
+          description: Days between each payment
+          example: 30
+        payment_plan_items:
+          type: array
+          description: List of scheduled payment items
+          items:
+            $ref: '#/components/schemas/PaymentPlanItem'
       required:
-      - group_id
+      - days_between_payments
+      - number_of_payments
+      - plan_start_date
+    UpdateCustomFieldTabRequest:
+      type: object
+      properties:
+        name:
+          type: string
+        order:
+          type: integer
+          format: int32
+    Address:
+      type: object
+      properties:
+        country:
+          type: string
+          deprecated: true
+          description: Deprecated. The long-name descriptive version of the Country Code. Please use 'country_code' for POST/PATCH operations. Maximum length is 100 characters.
+          example: United States of America
+        line1:
+          type: string
+          description: Street address line 1. Maximum length is 75 characters for the BILLING address and 100 characters for the SHIPPING and OTHER addresses.
+          example: 123
+        line2:
+          type: string
+          description: Street address line 2. Maximum length is 75 characters for the BILLING address and 100 characters for the SHIPPING and OTHER addresses.
+          example: Suite 100
+        locality:
+          type: string
+          description: The municipality to which the address belongs. Maximum length is 50 characters for the BILLING address and 100 characters for the SHIPPING and OTHER addresses.
+          example: Phoenix
+        region:
+          type: string
+          deprecated: true
+          description: The long-name descriptive version of the Region Code. Please use 'region_code' for POST/PATCH operations. Maximum length is 50 characters.
+          example: Arizona
+        field:
+          type: string
+          description: Address type field
+          enum:
+          - ADDRESS_FIELD_UNSPECIFIED
+          - BILLING
+          - SHIPPING
+          - OTHER
+          example: BILLING
+        country_code:
+          type: string
+          description: An ISO 3166-2 Country Code (https://en.wikipedia.org/wiki/ISO_3166-1_alpha-3)
+          example: USA
+        postal_code:
+          type: string
+          description: Postal or ZIP code. Maximum length is 15 characters for the BILLING and OTHER addresses and 20 characters for the SHIPPING address.
+          example: 85001
+        region_code:
+          type: string
+          description: An ISO 3166-2 Province Code, such as one of the US States (https://en.wikipedia.org/wiki/ISO_3166-2:US)
+          example: US-AZ
+        zip_code:
+          type: string
+          description: ZIP code (US). Maximum length is 15 characters for the BILLING and OTHER addresses and 20 characters for the SHIPPING address.
+          example: 85001
+        zip_four:
+          type: string
+          description: ZIP+4 extension. Maximum length is 10 characters.
+          example: 1234
     OrderItem:
       type: object
       properties:
@@ -2518,12 +1977,633 @@ components:
         subscription_plan:
           $ref: '#/components/schemas/SubscriptionPlan'
           description: If the order item is a subscription type, the details of the subscription plan.
-    CreateCustomFieldGroupRequest:
+    CancelSubscriptionRequest:
+      type: object
+      properties:
+        reason:
+          type: string
+          description: The reason for cancelling the subscription.
+          example: Customer request
+    CreateCustomFieldTabRequest:
       type: object
       properties:
         name:
           type: string
+    UpdateSubscriptionRequest:
+      type: object
+      properties:
+        quantity:
+          type: integer
+          format: int32
+          description: The subscription quantity. Must be 1 or greater.
+          example: 1
+        active:
+          type: boolean
+          description: If the subscription is active or not.
+          example: true
+        contact_id:
+          type: string
+          description: Id of the contact associated with the subscription.
+          example: 123
+        subscription_plan_id:
+          type: string
+          description: Id of the product subscription plan.
+          example: 456
+        billing_amount:
+          type: number
+          format: double
+          description: The billing amount. Must be 0 or greater.
+          example: 10000
+        auto_charge:
+          type: boolean
+          description: If the subscription should auto charge on the next billing date.
+          example: true
+        max_charge_attempts:
+          type: integer
+          format: int32
+          description: Maximum number of charge attempts. Must be 1 or greater.
+          example: 3
+        days_between_retries:
+          type: integer
+          format: int32
+          description: Number of days between charge attempts. Must be 1 or greater.
+          example: 5
+        billing_frequency:
+          type: integer
+          format: int32
+          description: The number of days between billing cycles. Must be 1 or greater.
+          example: 30
+        billing_cycle:
+          type: string
+          description: The billing cycle for the subscription.
+          enum:
+          - YEAR
+          - MONTH
+          - WEEK
+          - DAY
+          example: MONTH
+        next_bill_date:
+          type: string
+          format: date
+          description: The next date the subscription will bill. Must not be in the past.
+          example: '2024-06-21'
+        end_date:
+          type: string
+          format: date
+          description: The date the subscription will end. Must not be in the past.
+          example: '2025-05-21'
+        payment_method_id:
+          type: string
+          description: Id associated with the payment method.
+          example: 789
+        allow_tax:
+          type: boolean
+          description: Only works if the product associated with the product subscription is taxable.
+          example: false
+        lead_affiliate_id:
+          type: string
+          description: The affiliate id for the lead of the subscription.
+          example: 101
+        sale_affiliate_id:
+          type: string
+          description: The affiliate id for the sale of the subscription.
+          example: 102
+        shipping_address:
+          $ref: '#/components/schemas/AddressRequest'
+          description: The shipping address for the subscription.
+        promo_code:
+          type: string
+          description: The promo code for the subscription.
+          example: PROMO123
+        shipping_option_id:
+          type: string
+          description: The shipping option ID for the subscription.
+          example: 123
+        reason_stopped:
+          type: string
+          description: The reason the subscription is no longer active.
+          example: Customer requested cancellation
+        custom_fields:
+          type: array
+          description: List of custom field values to apply to this subscription
+          example:
+          - id: '1'
+            content: VIP
+          - id: '2'
+            content: Preferred
+          items:
+            $ref: '#/components/schemas/CustomFieldValue'
+    OrderItemProduct:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Product ID
+          example: 123
+        name:
+          type: string
+          description: Product name
+          example: Premium Widget
+        sku:
+          type: string
+          description: Stock keeping unit
+          example: WDG-001
+        description:
+          type: string
+          description: Product description
+          example: High-quality widget
+        shippable:
+          type: boolean
+          description: Whether product requires shipping
+          example: true
+        taxable:
+          type: boolean
+          description: Whether product is taxable
+          example: true
+    ObjectModel:
+      type: object
+      properties:
+        custom_fields:
+          type: array
+          items:
+            $ref: '#/components/schemas/CustomFieldMetaData'
+        optional_properties:
+          type: array
+          description: These fields are not transmitted by default on this model, but can be requested by specifying them in a comma-separated list in the optional_properties query parameter.
+          items:
+            type: string
+          uniqueItems: true
+    UpdateCustomFieldMetaDataRequest:
+      type: object
+      properties:
+        label:
+          type: string
+        options:
+          type: array
+          items:
+            $ref: '#/components/schemas/CustomFieldOption'
+        group_id:
+          type: string
+      required:
+      - group_id
+    Subscription:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Id of the subscription.
+          example: 123
+        quantity:
+          type: integer
+          format: int64
+          description: The subscription quantity.
+          example: 1
+        active:
+          type: boolean
+          description: If the subscription is active or not.
+          example: true
+        contact_id:
+          type: string
+          description: Id of the contact associated with the subscription.
+          example: 456
+        product_id:
+          type: string
+          description: Id of the product associated with the subscription.
+          example: 789
+        subscription_plan_id:
+          type: string
+          description: Id of the product subscription plan.
+          example: 101
+        billing_amount:
+          type: number
+          format: double
+          description: The billing amount.
+          example: 10000
+        auto_charge:
+          type: boolean
+          description: If the subscription should auto charge on the next billing date.
+          example: true
+        billing_frequency:
+          type: integer
+          format: int32
+          description: The billing frequency in days.
+          example: 30
+        billing_cycle:
+          type: string
+          description: The billing cycle of the subscription.
+          enum:
+          - YEAR
+          - MONTH
+          - WEEK
+          - DAY
+          example: MONTH
+        start_date:
+          type: string
+          format: date
+          description: The first day the subscription will bill.
+          example: '2024-05-21'
+        last_bill_date:
+          type: string
+          format: date
+          description: The last date the subscription was billed.
+          example: '2024-05-21'
+        next_bill_date:
+          type: string
+          format: date
+          description: The next date the subscription will bill.
+          example: '2024-06-21'
+        end_date:
+          type: string
+          format: date
+          description: The last date the subscription will bill.
+          example: '2025-05-21'
+        merchant_account_id:
+          type: string
+          description: The merchant account id associated with the subscription.
+          example: 123
+        payment_method_id:
+          type: string
+          description: Id associated with the payment method.
+          example: 456
+        allow_tax:
+          type: boolean
+          description: If the subscription allows tax.
+          example: false
+        max_charge_attempts:
+          type: integer
+          format: int32
+          description: Maximum number of charge attempts.
+          example: 3
+        days_between_retries:
+          type: integer
+          format: int32
+          description: Number of days between charge attempts.
+          example: 5
+        lead_affiliate_id:
+          type: string
+          description: The affiliate id for the lead of the subscription.
+          example: 789
+        sale_affiliate_id:
+          type: string
+          description: The affiliate id for the sale of the subscription.
+          example: 101
+        shipping_address:
+          $ref: '#/components/schemas/Address'
+          description: The shipping address for the subscription.
+        promo_code:
+          type: string
+          description: The promo code for the subscription.
+          example: PROMO123
+        shipping_option_id:
+          type: string
+          description: The shipping option ID for the subscription.
+          example: 123
+        reason_stopped:
+          type: string
+          description: The reason the subscription is no longer active.
+          example: Customer requested cancellation
+        modification_time:
+          type: string
+          format: date-time
+          description: The date and time the subscription was last modified.
+          example: '2025-06-15T10:30:00Z'
+        custom_fields:
+          type: array
+          description: List of custom field values applied to this subscription
+          example:
+          - id: '1'
+            content: VIP
+          - id: '2'
+            content: Preferred
+          items:
+            $ref: '#/components/schemas/CustomFieldValue'
+    CustomFieldMetaData:
+      type: object
+      description: Metadata describing a custom field, including its type and options
+      properties:
+        id:
+          type: string
+          description: The unique identifier of the custom field
+          example: 123
+        label:
+          type: string
+          description: The display label of the custom field
+          example: Favorite Color
+        options:
+          type: array
+          description: The list of available options for select/radio/multiselect/drilldown field types
+          items:
+            $ref: '#/components/schemas/CustomFieldOption'
+        record_type:
+          type: string
+          description: The entity type this custom field belongs to (e.g. CONTACT, COMPANY)
+          enum:
+          - CONTACT
+          - REFERRAL_PARTNER
+          - OPPORTUNITY
+          - TASK_NOTE_APPOINTMENT
+          - COMPANY
+          - ORDER
+          - SUBSCRIPTION
+        field_type:
+          type: string
+          description: The data type of the custom field (e.g. Text, Number, Date, Select)
+          enum:
+          - CURRENCY
+          - DATE
+          - DATE_TIME
+          - DAY_OF_WEEK
+          - DECIMAL_NUMBER
+          - DRILLDOWN
+          - DROPDOWN
+          - EMAIL
+          - LIST_BOX
+          - MONTH
+          - NAME
+          - PERCENT
+          - PHONE_NUMBER
+          - RADIO
+          - SOCIAL_SECURITY_NUMBER
+          - STATE
+          - TEXT
+          - TEXT_AREA
+          - USER
+          - USER_LIST_BOX
+          - WEBSITE
+          - WHOLE_NUMBER
+          - YEAR
+          - YES_NO
+        default_value:
+          type: string
+          description: The default value for this custom field, if any
+        group_id:
+          type: string
+          description: The ID of the group this custom field belongs to
+          example: 45
+        group_name:
+          type: string
+          description: The name of the group this custom field belongs to
+          example: Personal Info
+        field_name:
+          type: string
+          description: The database column name for this custom field. Use this value when filtering contacts (e.g. for field_name 'firstName1', filter with 'firstName1==John').
+          example: firstName1
+    CurrencyValue:
+      type: object
+      properties:
+        amount:
+          type: integer
+          format: int64
+          description: The price amount in the smallest currency unit
+          example: 10000
+        currency_code:
+          type: string
+          description: Three-letter ISO currency code
+          example: USD
+        formatted_amount:
+          type: string
+          description: The product amount formatted using the tenant's currency locale
+          example: $100.00
+    CreateCustomFieldRequest:
+      type: object
+      properties:
+        label:
+          type: string
+        options:
+          type: array
+          items:
+            $ref: '#/components/schemas/CreateCustomFieldOptionRequest'
+        field_type:
+          type: string
+          enum:
+          - CURRENCY
+          - DATE
+          - DATE_TIME
+          - DAY_OF_WEEK
+          - DECIMAL_NUMBER
+          - DRILLDOWN
+          - DROPDOWN
+          - EMAIL
+          - LIST_BOX
+          - MONTH
+          - NAME
+          - PERCENT
+          - PHONE_NUMBER
+          - RADIO
+          - SOCIAL_SECURITY_NUMBER
+          - STATE
+          - TEXT
+          - TEXT_AREA
+          - USER
+          - USER_LIST_BOX
+          - WEBSITE
+          - WHOLE_NUMBER
+          - YEAR
+          - YES_NO
+        group_id:
+          type: string
+          description: An optional tab group to place the field under in the interface.  If not specified, will default to the 'Custom Fields' tab.
+        user_group_id:
+          type: string
+          description: An optional user group to choose from when selecting values for User or UserListBox fields.
+      required:
+      - field_type
+      - label
+    CustomFieldOption:
+      type: object
+      properties:
+        id:
+          type: string
+        label:
+          type: string
+    UpdateCustomFieldGroupRequest:
+      type: object
+      properties:
+        name:
+          type: string
+        order:
+          type: integer
+          format: int32
         tab_id:
+          type: string
+    PaymentPlanItem:
+      type: object
+      properties:
+        status:
+          type: string
+          description: 'The status of the payment plan item. Possible values are:
+
+            - `UNPAID_MANUAL` - The item is set for manual charge, and its `amount_due` has not been completely paid.
+
+            - `UNPAID_AUTOCHARGE` - The item is set for auto-charge, and its `amount_due` has not been completely paid.
+
+            - `PAID` - The item has been completely paid.
+
+            - `FAILED` - The item `amount_due` has not been completely paid, and there was a failure. (*Note: This status is deprecated and not currently used.*)
+
+            '
+          enum:
+          - UNPAID_MANUAL
+          - UNPAID_AUTOCHARGE
+          - PAID
+          - FAILED
+        due_date:
+          type: string
+          format: date
+          description: The due date in the application's timezone, as an ISO 8601 calendar date string (date only), in the format YYYY-MM-DD
+          example: '2024-05-21'
+        amount_due:
+          $ref: '#/components/schemas/CurrencyValue'
+        amount_paid:
+          $ref: '#/components/schemas/CurrencyValue'
+    ShippingInformation:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Shipping information ID
+          example: 123
+        address:
+          $ref: '#/components/schemas/Address'
+          description: Shipping address
+        company:
+          type: string
+          description: Company name
+          example: Acme Corp
+        given_name:
+          type: string
+          description: First name
+          example: John
+        family_name:
+          type: string
+          description: Last name
+          example: Doe
+        phone_number:
+          type: string
+          description: Phone number
+          example: +1-555-123-4567
+        invoice_to_company:
+          type: boolean
+          description: Whether to invoice to company
+          example: false
+    CustomFieldValue:
+      type: object
+      properties:
+        id:
+          type: string
+        content:
+          description: The value of the custom field. Text custom field values have a maximum length of 65535 characters.
+    CustomFieldGroup:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        order:
+          type: integer
+          format: int32
+        tab_id:
+          type: string
+        record_type:
+          type: string
+          enum:
+          - CONTACT
+          - REFERRAL_PARTNER
+          - OPPORTUNITY
+          - TASK_NOTE_APPOINTMENT
+          - COMPANY
+          - ORDER
+          - SUBSCRIPTION
+    ListCustomFieldGroupsResponse:
+      type: object
+      properties:
+        groups:
+          type: array
+          items:
+            $ref: '#/components/schemas/CustomFieldGroup'
+    CustomFieldTab:
+      type: object
+      properties:
+        id:
+          type: string
+          description: The unique identifier of the custom field tab
+          example: 123
+        name:
+          type: string
+          description: The name of the custom field tab
+          example: Personal Info
+        order:
+          type: integer
+          format: int32
+          description: The display order of the tab
+          example: 1
+        record_type:
+          type: string
+          description: The record type this tab belongs to (e.g., CONTACT, COMPANY, OPPORTUNITY, REFERRAL_PARTNER, ORDER, SUBSCRIPTION, TASK_NOTE_APPOINTMENT)
+          enum:
+          - CONTACT
+          - REFERRAL_PARTNER
+          - OPPORTUNITY
+          - TASK_NOTE_APPOINTMENT
+          - COMPANY
+          - ORDER
+          - SUBSCRIPTION
+          example: CONTACT
+    Error:
+      type: object
+      properties:
+        code:
+          type: integer
+          format: int32
+        message:
+          type: string
+        status:
+          type: string
+        details:
+          type: array
+          items:
+            $ref: '#/components/schemas/ErrorDetails'
+    AddressRequest:
+      type: object
+      properties:
+        line1:
+          type: string
+        line2:
+          type: string
+        locality:
+          type: string
+          description: The municipality to which the address belongs
+          example: Phoenix
+        field:
+          type: string
+          description: Address type field
+          enum:
+          - ADDRESS_FIELD_UNSPECIFIED
+          - BILLING
+          - SHIPPING
+          - OTHER
+          example: BILLING
+        country_code:
+          type: string
+          description: An ISO 3166-2 Country Code (https://en.wikipedia.org/wiki/ISO_3166-1_alpha-3)
+          example: USA
+        postal_code:
+          type: string
+        region_code:
+          type: string
+          description: An ISO 3166-2 Province Code, such as one of the US States (https://en.wikipedia.org/wiki/ISO_3166-2:US)
+          example: US-AZ
+    BasicContact:
+      type: object
+      properties:
+        id:
+          type: string
+        email:
+          type: string
+        given_name:
+          type: string
+        family_name:
           type: string
     SubscriptionPlan:
       type: object
@@ -2567,98 +2647,18 @@ components:
           format: int32
           description: The order index where this plan will be displayed on a page against other plans. Smaller number indicates plan will be displayed higher in the list.
           example: 1
-    CreateSubscriptionRequest:
+    CreateCustomFieldGroupRequest:
       type: object
       properties:
-        quantity:
-          type: integer
-          format: int32
-          description: The subscription quantity. Must be 1 or greater. Default is 1.
-          example: 1
-        active:
-          type: boolean
-          description: If the subscription is active or not. Default is true
-          example: true
-        contact_id:
+        name:
           type: string
-          description: Id of the contact to create the subscription for.
-          example: 123
-        subscription_plan_id:
+        tab_id:
           type: string
-          description: Id of the product subscription plan.
-          example: 456
-        billing_amount:
-          type: number
-          format: double
-          description: The billing amount. Must be 0 or greater. Default is the price in the product subscription plan.
-          example: 10000
-        auto_charge:
-          type: boolean
-          description: If the subscription should auto charge on the next billing date. Default is true.
-          example: true
-        max_charge_attempts:
-          type: integer
-          format: int32
-          description: Maximum number of charge attempts. Must be 1 or greater. Default is the configured [Max Retries] value.
-          example: 3
-        days_between_retries:
-          type: integer
-          format: int32
-          description: Number of days between charge attempts. Must be 1 or greater. Default is the configured [Num Days Between Retries] value.
-          example: 5
-        start_date:
+    InvoiceFile:
+      type: object
+      properties:
+        file_id:
           type: string
-          format: date
-          description: The first day the subscription will bill. Must not be in the past. Default is today.
-          example: '2024-05-21'
-        payment_method_id:
-          type: string
-          description: Id associated with the payment method. Default is the contact's most recently used card, if auto charge is true. Default is 0 otherwise.
-          example: 789
-        allow_tax:
-          type: boolean
-          description: Only works if the product associated with the product subscription is taxable. Default is false.
-          example: false
-        allow_duplicate:
-          type: boolean
-          description: If true, it will disable the check to see if there is already an identical subscription for the contact. Default is false.
-          example: false
-        lead_affiliate_id:
-          type: string
-          description: The affiliate id for the lead of the subscription. Default is 0.
-          example: 101
-        sale_affiliate_id:
-          type: string
-          description: The affiliate id for the sale of the subscription. Default is 0.
-          example: 102
-        shipping_address:
-          $ref: '#/components/schemas/AddressRequest'
-          description: The shipping address for the subscription.
-        promo_code:
-          type: string
-          description: The promo code for the subscription.
-          example: PROMO123
-        shipping_option_id:
-          type: string
-          description: The shipping option ID for the subscription.
-          example: 123
-        reason_stopped:
-          type: string
-          description: The reason the subscription is no longer active.
-          example: Customer requested
-        custom_fields:
-          type: array
-          description: List of custom field values to apply to this subscription
-          example:
-          - id: '1'
-            content: VIP
-          - id: '2'
-            content: Preferred
-          items:
-            $ref: '#/components/schemas/CustomFieldValue'
-      required:
-      - contact_id
-      - subscription_plan_id
   securitySchemes:
     oauth2:
       type: oauth2

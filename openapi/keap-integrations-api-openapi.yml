@@ -287,6 +287,17 @@ paths:
           description: No Content
 components:
   schemas:
+    CreateIntegrationsWordPressOptInOption:
+      type: object
+      properties:
+        key:
+          type: string
+          description: The unique identifier of the opt-in option, which must be an alphanumeric string
+          example: NewsletterOptIn
+        name:
+          type: string
+          description: The display name of the opt-in option
+          example: Newsletter Opt-In
     Error:
       type: object
       properties:
@@ -301,21 +312,12 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/ErrorDetails'
-    ListWordPressOptInOptionsResponse:
+    WordPressOptInOption:
       type: object
       properties:
-        wordpress_opt_in_options:
-          type: array
-          items:
-            $ref: '#/components/schemas/WordPressOptInOption'
-        next_page_token:
+        key:
           type: string
-    ErrorDetails:
-      type: object
-      properties:
-        domain:
-          type: string
-        resource:
+        name:
           type: string
     AchieveIntegrationsWordPressOptInOptionGoalRequest:
       type: object
@@ -324,23 +326,21 @@ components:
           type: string
           description: The Contact Id to Opt-In
           example: d05dc112-3c92-4aaf-b2fa-00cc6cb452ec
-    CreateIntegrationsWordPressOptInOption:
+    ErrorDetails:
       type: object
       properties:
-        key:
+        domain:
           type: string
-          description: The unique identifier of the opt-in option, which must be an alphanumeric string
-          example: NewsletterOptIn
-        name:
+        resource:
           type: string
-          description: The display name of the opt-in option
-          example: Newsletter Opt-In
-    WordPressOptInOption:
+    ListWordPressOptInOptionsResponse:
       type: object
       properties:
-        key:
-          type: string
-        name:
+        wordpress_opt_in_options:
+          type: array
+          items:
+            $ref: '#/components/schemas/WordPressOptInOption'
+        next_page_token:
           type: string
     AchieveWordPressOptInGoalResult:
       type: object

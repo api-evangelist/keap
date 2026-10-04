@@ -303,17 +303,15 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/ErrorDetails'
-    ListAutomationCategoryResponse:
+    PatchAutomationCategoryRequest:
       type: object
-      description: Response containing a list of automation categories
       properties:
-        automation_categories:
-          type: array
-          description: List of automation categories
-          items:
-            $ref: '#/components/schemas/AutomationCategory'
-        next_page_token:
+        name:
           type: string
+          description: New name for the category
+          example: Marketing Campaigns
+          maxLength: 100
+          minLength: 1
     ErrorDetails:
       type: object
       properties:
@@ -331,15 +329,17 @@ components:
           example: Marketing Campaigns
       required:
       - name
-    PatchAutomationCategoryRequest:
+    ListAutomationCategoryResponse:
       type: object
+      description: Response containing a list of automation categories
       properties:
-        name:
+        automation_categories:
+          type: array
+          description: List of automation categories
+          items:
+            $ref: '#/components/schemas/AutomationCategory'
+        next_page_token:
           type: string
-          description: New name for the category
-          example: Marketing Campaigns
-          maxLength: 100
-          minLength: 1
     AutomationCategory:
       type: object
       description: An automation category

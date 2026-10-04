@@ -1325,172 +1325,35 @@ paths:
           description: No Content
 components:
   schemas:
-    HttpStatusCode:
+    RestPaymentPlan:
       type: object
       properties:
-        error:
+        auto_charge:
           type: boolean
-        is1xxInformational:
-          type: boolean
-        is2xxSuccessful:
-          type: boolean
-        is3xxRedirection:
-          type: boolean
-        is4xxClientError:
-          type: boolean
-        is5xxServerError:
-          type: boolean
-    OrderSearchCommand:
-      type: object
-      properties:
-        since:
+        credit_card_id:
+          type: integer
+          format: int64
+        payment_gateway:
+          $ref: '#/components/schemas/PaymentGatewayV1'
+        initial_payment_amount:
+          type: number
+          format: double
+        initial_payment_date:
           type: string
-        until:
+          format: date
+        plan_start_date:
           type: string
-        limit:
+          format: date
+        number_of_payments:
           type: integer
           format: int32
-        offset:
+        days_between_payments:
           type: integer
           format: int32
-        paid:
-          type: boolean
-        order:
-          type: string
-        contact_id:
-          type: integer
-          format: int64
-        product_id:
-          type: integer
-          format: int64
-        sinceAsDate:
-          type: string
-          format: date-time
-        untilAsDate:
-          type: string
-          format: date-time
-    RestV1AddressInformation:
-      type: object
-      properties:
-        line1:
-          type: string
-        line2:
-          type: string
-        locality:
-          type: string
-        region:
-          type: string
-        company:
-          type: string
-        phone:
-          type: string
-        zip_code:
-          type: string
-        zip_four:
-          type: string
-        country_code:
-          type: string
-        first_name:
-          type: string
-        middle_name:
-          type: string
-        last_name:
-          type: string
-        is_invoice_to_company:
-          type: boolean
-    Order:
-      type: object
-      properties:
-        id:
-          type: integer
-          format: int64
-        title:
-          type: string
-        status:
-          type: string
-        total:
-          type: number
-          format: double
-        contact:
-          $ref: '#/components/schemas/EcommerceReportingOrderContactDetails'
-        notes:
-          type: string
-        creation_date:
-          type: string
-        modification_date:
-          type: string
-        order_date:
-          type: string
-        lead_affiliate_id:
-          type: integer
-          format: int64
-        sales_affiliate_id:
-          type: integer
-          format: int64
-        total_due:
-          type: number
-          format: double
-        total_paid:
-          type: number
-          format: double
-        shipping_information:
-          $ref: '#/components/schemas/RestV1AddressInformation'
-        refund_total:
-          type: number
-          format: double
-        order_items:
-          type: array
-          items:
-            $ref: '#/components/schemas/OrderItem'
-        payment_plan:
-          $ref: '#/components/schemas/RestPaymentPlan'
-    OrderList:
-      type: object
-      properties:
-        orders:
-          type: array
-          items:
-            $ref: '#/components/schemas/EcommerceReportingOrder'
-        count:
-          type: integer
-          format: int32
-        next:
-          type: string
-        previous:
-          type: string
-    PaymentResult:
-      type: object
-      properties:
-        id:
-          type: integer
-          format: int64
-        invoice_id:
-          type: integer
-          format: int64
-        payment_amount:
-          type: number
-          format: double
-        payment_status:
-          type: string
-        transaction_id:
-          type: integer
-          format: int64
-    EcommerceReportingSimpleProduct:
-      type: object
-      properties:
-        id:
-          type: integer
-          format: int64
-        name:
-          type: string
-        sku:
-          type: string
-        description:
-          type: string
-        shippable:
-          type: boolean
-        taxable:
-          type: boolean
+      required:
+      - days_between_payments
+      - number_of_payments
+      - plan_start_date
     CreateSubscription:
       type: object
       properties:
@@ -1536,6 +1399,136 @@ components:
       required:
       - contact_id
       - subscription_plan_id
+    CreateOrderItem:
+      type: object
+      properties:
+        description:
+          type: string
+        price:
+          type: string
+          description: Overridable price of the product, if not specified, the default will be used. Must be greater than or equal to 0.
+        quantity:
+          type: integer
+          format: int32
+          description: Quantity must be greater than or equal to 1
+        product_id:
+          type: integer
+          format: int64
+          description: The id of the product to be added to the order.
+        item_type:
+          type: string
+          enum:
+          - UNKNOWN
+          - SHIPPING
+          - TAX
+          - SERVICE
+          - PRODUCT
+          - UPSELL
+          - FINANCE_CHARGE
+          - SPECIAL
+          - PROGRAM
+          - SUBSCRIPTION
+          - SPECIAL_FREE_TRIAL_DAYS
+          - SPECIAL_ORDER_TOTAL
+          - SPECIAL_PRODUCT
+          - SPECIAL_CATEGORY
+          - SPECIAL_SHIPPING
+          - TIP
+          - OTHER
+          - FEE
+      required:
+      - product_id
+      - quantity
+    TransactionList:
+      type: object
+      properties:
+        transactions:
+          type: array
+          items:
+            $ref: '#/components/schemas/EcommerceReportingTransaction'
+        count:
+          type: integer
+          format: int32
+        next:
+          type: string
+        previous:
+          type: string
+    OrderSearchCommand:
+      type: object
+      properties:
+        since:
+          type: string
+        until:
+          type: string
+        limit:
+          type: integer
+          format: int32
+        offset:
+          type: integer
+          format: int32
+        paid:
+          type: boolean
+        order:
+          type: string
+        contact_id:
+          type: integer
+          format: int64
+        product_id:
+          type: integer
+          format: int64
+        sinceAsDate:
+          type: string
+          format: date-time
+        untilAsDate:
+          type: string
+          format: date-time
+    SubscriptionListCommand:
+      type: object
+      properties:
+        limit:
+          type: integer
+          format: int32
+        offset:
+          type: integer
+          format: int32
+        contact_id:
+          type: integer
+          format: int64
+    EcommerceReportingPaymentGateway:
+      type: object
+      properties:
+        merchant_account_id:
+          type: integer
+          format: int64
+        use_default:
+          type: boolean
+        merchant_account_name:
+          type: string
+    View:
+      type: object
+      properties:
+        contentType:
+          type: string
+    OrderItemTax:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        orderItemId:
+          type: integer
+          format: int64
+        name:
+          type: string
+        rate:
+          type: number
+          format: double
+        taxTemplateId:
+          type: integer
+          format: int64
+        amount:
+          type: number
+          format: double
     ModelAndView:
       type: object
       properties:
@@ -1560,47 +1553,197 @@ components:
           type: boolean
         viewName:
           type: string
-    OrderItemTax:
+    EcommerceReportingOrderItem:
       type: object
       properties:
         id:
           type: integer
           format: int64
-        orderItemId:
+        jobRecurringId:
           type: integer
           format: int64
         name:
           type: string
-        rate:
+        description:
+          type: string
+        type:
+          type: string
+        notes:
+          type: string
+        quantity:
+          type: integer
+          format: int32
+        cost:
           type: number
           format: double
-        taxTemplateId:
+        price:
+          type: number
+          format: double
+        discount:
+          type: number
+          format: double
+        specialId:
           type: integer
           format: int64
-        amount:
+        specialAmount:
           type: number
           format: double
-    View:
-      type: object
-      properties:
-        contentType:
-          type: string
-    EcommerceReportingOrderContactDetails:
+        specialPctOrAmt:
+          type: integer
+          format: int32
+        product:
+          $ref: '#/components/schemas/EcommerceReportingSimpleProduct'
+        subscriptionPlan:
+          $ref: '#/components/schemas/SubscriptionPlan'
+    OrderItem:
       type: object
       properties:
         id:
           type: integer
           format: int64
-        email:
+        name:
           type: string
-        first_name:
+        description:
           type: string
-        last_name:
+        type:
           type: string
-        company_name:
+        notes:
           type: string
-        job_title:
+        quantity:
+          type: integer
+          format: int32
+        cost:
+          type: number
+          format: double
+        price:
+          type: number
+          format: double
+        discount:
+          type: number
+          format: double
+        product:
+          $ref: '#/components/schemas/Product_'
+        specialId:
+          type: integer
+          format: int64
+        specialAmount:
+          type: number
+          format: double
+        specialPctOrAmt:
+          type: integer
+          format: int32
+        orderItemTaxes:
+          type: array
+          items:
+            $ref: '#/components/schemas/OrderItemTax'
+        recurringBilling:
+          type: boolean
+        frequency:
+          type: integer
+          format: int32
+        billingCycle:
+          type: integer
+          format: int32
+        numberOfPayments:
+          type: integer
+          format: int32
+        jobRecurringId:
+          type: integer
+          format: int64
+        recurringStartDate:
           type: string
+        recurringNextBillDate:
+          type: string
+        recurringEndDate:
+          type: string
+        recurringCyclesCompleted:
+          type: integer
+          format: int32
+        recurringInactive:
+          type: boolean
+    SubscriptionList:
+      type: object
+      properties:
+        subscriptions:
+          type: array
+          items:
+            $ref: '#/components/schemas/Subscription'
+        count:
+          type: integer
+          format: int32
+        next:
+          type: string
+        previous:
+          type: string
+    CreateOrder:
+      type: object
+      properties:
+        contact_id:
+          type: integer
+          format: int64
+        order_items:
+          type: array
+          items:
+            $ref: '#/components/schemas/CreateOrderItem'
+        order_title:
+          type: string
+        order_date:
+          type: string
+          format: date-time
+        order_type:
+          type: string
+          enum:
+          - Offline
+          - Online
+        promo_codes:
+          type: array
+          description: Uses multiple strings as promo codes. The corresponding discount will be applied to the order.
+          items:
+            type: string
+        lead_affiliate_id:
+          type: integer
+          format: int64
+        sales_affiliate_id:
+          type: integer
+          format: int64
+        shipping_address:
+          $ref: '#/components/schemas/RestV1AddressInformation'
+      required:
+      - contact_id
+      - order_date
+      - order_items
+      - order_title
+      - order_type
+    ObjectModel:
+      type: object
+      properties:
+        custom_fields:
+          type: array
+          items:
+            $ref: '#/components/schemas/CustomFieldMetaData'
+        optional_properties:
+          type: array
+          items:
+            type: string
+          uniqueItems: true
+    ProductOptionValue:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        label:
+          type: string
+        sku:
+          type: string
+        index:
+          type: integer
+          format: int64
+        is_default:
+          type: boolean
+        price_adjustment:
+          type: number
+          format: double
     Subscription:
       type: object
       properties:
@@ -1658,226 +1801,52 @@ components:
         sale_affiliate_id:
           type: integer
           format: int64
-    EcommerceReportingPaymentPlan:
-      type: object
-      properties:
-        auto_charge:
-          type: boolean
-        credit_card_id:
-          type: integer
-          format: int64
-        days_between_payments:
-          type: integer
-          format: int64
-        initial_payment_amount:
-          type: number
-          format: double
-        initial_payment_percent:
-          type: number
-          format: double
-        initial_payment_date:
-          type: string
-        number_of_payments:
-          type: integer
-          format: int64
-        payment_gateway:
-          $ref: '#/components/schemas/EcommerceReportingPaymentGateway'
-        plan_start_date:
-          type: string
-        payment_method_id:
-          type: string
-        max_charge_attempts:
-          type: integer
-          format: int64
-        days_between_retries:
-          type: integer
-          format: int64
-    ObjectModel:
-      type: object
-      properties:
-        custom_fields:
-          type: array
-          items:
-            $ref: '#/components/schemas/CustomFieldMetaData'
-        optional_properties:
-          type: array
-          items:
-            type: string
-          uniqueItems: true
-    DefaultHttpStatusCode:
-      allOf:
-      - $ref: '#/components/schemas/HttpStatusCode'
-    ProductOptionValue:
+    Order:
       type: object
       properties:
         id:
           type: integer
           format: int64
-        label:
+        title:
           type: string
-        sku:
+        status:
           type: string
-        index:
-          type: integer
-          format: int64
-        is_default:
-          type: boolean
-        price_adjustment:
+        total:
           type: number
           format: double
-    TransactionSearchCommand:
-      type: object
-      properties:
-        since:
+        contact:
+          $ref: '#/components/schemas/EcommerceReportingOrderContactDetails'
+        notes:
           type: string
-        until:
+        creation_date:
           type: string
-        limit:
-          type: integer
-          format: int32
-        offset:
-          type: integer
-          format: int32
-        contact_id:
+        modification_date:
+          type: string
+        order_date:
+          type: string
+        lead_affiliate_id:
           type: integer
           format: int64
-        sinceAsDate:
-          type: string
-          format: date-time
-        untilAsDate:
-          type: string
-          format: date-time
-    SubscriptionListCommand:
-      type: object
-      properties:
-        limit:
-          type: integer
-          format: int32
-        offset:
-          type: integer
-          format: int32
-        contact_id:
+        sales_affiliate_id:
           type: integer
           format: int64
-    EcommerceReportingShippingInformation:
-      type: object
-      properties:
-        id:
-          type: integer
-          format: int64
-        first_name:
-          type: string
-        middle_name:
-          type: string
-        last_name:
-          type: string
-        company:
-          type: string
-        phone:
-          type: string
-        street1:
-          type: string
-        street2:
-          type: string
-        city:
-          type: string
-        state:
-          type: string
-        zip:
-          type: string
-        country:
-          type: string
-        invoiceToCompany:
-          type: boolean
-    TransactionList:
-      type: object
-      properties:
-        transactions:
+        total_due:
+          type: number
+          format: double
+        total_paid:
+          type: number
+          format: double
+        shipping_information:
+          $ref: '#/components/schemas/RestV1AddressInformation'
+        refund_total:
+          type: number
+          format: double
+        order_items:
           type: array
           items:
-            $ref: '#/components/schemas/EcommerceReportingTransaction'
-        count:
-          type: integer
-          format: int32
-        next:
-          type: string
-        previous:
-          type: string
-    HttpStatus:
-      allOf:
-      - $ref: '#/components/schemas/HttpStatusCode'
-      enum:
-      - 100 CONTINUE
-      - 101 SWITCHING_PROTOCOLS
-      - 102 PROCESSING
-      - 103 EARLY_HINTS
-      - 200 OK
-      - 201 CREATED
-      - 202 ACCEPTED
-      - 203 NON_AUTHORITATIVE_INFORMATION
-      - 204 NO_CONTENT
-      - 205 RESET_CONTENT
-      - 206 PARTIAL_CONTENT
-      - 207 MULTI_STATUS
-      - 208 ALREADY_REPORTED
-      - 226 IM_USED
-      - 300 MULTIPLE_CHOICES
-      - 301 MOVED_PERMANENTLY
-      - 302 FOUND
-      - 303 SEE_OTHER
-      - 304 NOT_MODIFIED
-      - 307 TEMPORARY_REDIRECT
-      - 308 PERMANENT_REDIRECT
-      - 400 BAD_REQUEST
-      - 401 UNAUTHORIZED
-      - 402 PAYMENT_REQUIRED
-      - 403 FORBIDDEN
-      - 404 NOT_FOUND
-      - 405 METHOD_NOT_ALLOWED
-      - 406 NOT_ACCEPTABLE
-      - 407 PROXY_AUTHENTICATION_REQUIRED
-      - 408 REQUEST_TIMEOUT
-      - 409 CONFLICT
-      - 410 GONE
-      - 411 LENGTH_REQUIRED
-      - 412 PRECONDITION_FAILED
-      - 413 CONTENT_TOO_LARGE
-      - 413 PAYLOAD_TOO_LARGE
-      - 414 URI_TOO_LONG
-      - 415 UNSUPPORTED_MEDIA_TYPE
-      - 416 REQUESTED_RANGE_NOT_SATISFIABLE
-      - 417 EXPECTATION_FAILED
-      - 418 I_AM_A_TEAPOT
-      - 421 MISDIRECTED_REQUEST
-      - 422 UNPROCESSABLE_CONTENT
-      - 422 UNPROCESSABLE_ENTITY
-      - 423 LOCKED
-      - 424 FAILED_DEPENDENCY
-      - 425 TOO_EARLY
-      - 426 UPGRADE_REQUIRED
-      - 428 PRECONDITION_REQUIRED
-      - 429 TOO_MANY_REQUESTS
-      - 431 REQUEST_HEADER_FIELDS_TOO_LARGE
-      - 451 UNAVAILABLE_FOR_LEGAL_REASONS
-      - 500 INTERNAL_SERVER_ERROR
-      - 501 NOT_IMPLEMENTED
-      - 502 BAD_GATEWAY
-      - 503 SERVICE_UNAVAILABLE
-      - 504 GATEWAY_TIMEOUT
-      - 505 HTTP_VERSION_NOT_SUPPORTED
-      - 506 VARIANT_ALSO_NEGOTIATES
-      - 507 INSUFFICIENT_STORAGE
-      - 508 LOOP_DETECTED
-      - 509 BANDWIDTH_LIMIT_EXCEEDED
-      - 510 NOT_EXTENDED
-      - 511 NETWORK_AUTHENTICATION_REQUIRED
-    CustomFieldOption:
-      type: object
-      properties:
-        id:
-          type: string
-        label:
-          type: string
+            $ref: '#/components/schemas/OrderItem'
+        payment_plan:
+          $ref: '#/components/schemas/RestPaymentPlan'
     ProductOption:
       type: object
       properties:
@@ -1924,293 +1893,6 @@ components:
         display_index:
           type: integer
           format: int32
-    SubscriptionList:
-      type: object
-      properties:
-        subscriptions:
-          type: array
-          items:
-            $ref: '#/components/schemas/Subscription'
-        count:
-          type: integer
-          format: int32
-        next:
-          type: string
-        previous:
-          type: string
-    PaymentGatewayV1:
-      type: object
-      properties:
-        merchant_account_id:
-          type: integer
-          format: int64
-        use_default:
-          type: boolean
-    CreateOrder:
-      type: object
-      properties:
-        contact_id:
-          type: integer
-          format: int64
-        order_items:
-          type: array
-          items:
-            $ref: '#/components/schemas/CreateOrderItem'
-        order_title:
-          type: string
-        order_date:
-          type: string
-          format: date-time
-        order_type:
-          type: string
-          enum:
-          - Offline
-          - Online
-        promo_codes:
-          type: array
-          description: Uses multiple strings as promo codes. The corresponding discount will be applied to the order.
-          items:
-            type: string
-        lead_affiliate_id:
-          type: integer
-          format: int64
-        sales_affiliate_id:
-          type: integer
-          format: int64
-        shipping_address:
-          $ref: '#/components/schemas/RestV1AddressInformation'
-      required:
-      - contact_id
-      - order_date
-      - order_items
-      - order_title
-      - order_type
-    Product_:
-      type: object
-      properties:
-        id:
-          type: integer
-          format: int64
-        sku:
-          type: string
-        url:
-          type: string
-        status:
-          type: integer
-          format: int32
-        product_name:
-          type: string
-        product_desc:
-          type: string
-        product_price:
-          type: number
-          format: double
-        product_short_desc:
-          type: string
-        subscription_only:
-          type: boolean
-        product_options:
-          type: array
-          items:
-            $ref: '#/components/schemas/ProductOption'
-        subscription_plans:
-          type: array
-          items:
-            $ref: '#/components/schemas/SubscriptionPlan_'
-    CreatePayment:
-      type: object
-      properties:
-        date:
-          type: string
-          format: date-time
-          description: Used when charge_now:false or inserting historical data. ex `2017-01-01T22:17:59.039Z`
-        notes:
-          type: string
-        apply_to_commissions:
-          type: boolean
-        charge_now:
-          type: boolean
-        credit_card_id:
-          type: integer
-          format: int64
-        payment_amount:
-          type: string
-        payment_method_type:
-          type: string
-          enum:
-          - CREDIT_CARD
-          - CASH
-          - CHECK
-          - TOKEN
-        payment_gateway_id:
-          type: string
-    SubscriptionPlan_:
-      type: object
-      properties:
-        id:
-          type: integer
-          format: int64
-        cycle:
-          type: integer
-          format: int32
-        frequency:
-          type: integer
-          format: int32
-        url:
-          type: string
-        active:
-          type: boolean
-        subscription_plan_name:
-          type: string
-        number_of_cycles:
-          type: integer
-          format: int32
-        plan_price:
-          type: number
-          format: double
-        subscription_plan_index:
-          type: integer
-          format: int32
-    InvoicePayment:
-      type: object
-      properties:
-        id:
-          type: integer
-          format: int64
-        amount:
-          type: number
-        note:
-          type: string
-        disputed:
-          type: boolean
-        invoice_id:
-          type: integer
-          format: int64
-        payment_id:
-          type: integer
-          format: int64
-        pay_date:
-          type: string
-          format: date-time
-        pay_status:
-          type: string
-        last_updated:
-          type: string
-          format: date-time
-        skip_commission:
-          type: boolean
-        refund_invoice_payment_id:
-          type: integer
-          format: int64
-    EcommerceReportingTransaction:
-      type: object
-      properties:
-        id:
-          type: integer
-          format: int64
-        test:
-          type: boolean
-        amount:
-          type: number
-          format: double
-        currency:
-          type: string
-        gateway:
-          type: string
-        paymentDate:
-          type: string
-        type:
-          type: string
-        status:
-          type: string
-        errors:
-          type: string
-        orders:
-          type: array
-          items:
-            $ref: '#/components/schemas/EcommerceReportingOrder'
-        contact_id:
-          type: integer
-          format: int64
-        transaction_date:
-          type: string
-        gateway_account_name:
-          type: string
-        order_ids:
-          type: string
-        collection_method:
-          type: string
-    EcommerceReportingOrderItem:
-      type: object
-      properties:
-        id:
-          type: integer
-          format: int64
-        jobRecurringId:
-          type: integer
-          format: int64
-        name:
-          type: string
-        description:
-          type: string
-        type:
-          type: string
-        notes:
-          type: string
-        quantity:
-          type: integer
-          format: int32
-        cost:
-          type: number
-          format: double
-        price:
-          type: number
-          format: double
-        discount:
-          type: number
-          format: double
-        specialId:
-          type: integer
-          format: int64
-        specialAmount:
-          type: number
-          format: double
-        specialPctOrAmt:
-          type: integer
-          format: int32
-        product:
-          $ref: '#/components/schemas/EcommerceReportingSimpleProduct'
-        subscriptionPlan:
-          $ref: '#/components/schemas/SubscriptionPlan'
-    RestPaymentPlan:
-      type: object
-      properties:
-        auto_charge:
-          type: boolean
-        credit_card_id:
-          type: integer
-          format: int64
-        payment_gateway:
-          $ref: '#/components/schemas/PaymentGatewayV1'
-        initial_payment_amount:
-          type: number
-          format: double
-        initial_payment_date:
-          type: string
-          format: date
-        plan_start_date:
-          type: string
-          format: date
-        number_of_payments:
-          type: integer
-          format: int32
-        days_between_payments:
-          type: integer
-          format: int32
-      required:
-      - days_between_payments
-      - number_of_payments
-      - plan_start_date
     EcommerceReportingOrder:
       type: object
       properties:
@@ -2283,112 +1965,6 @@ components:
           type: string
         product_id:
           type: string
-    CreateOrderItem:
-      type: object
-      properties:
-        description:
-          type: string
-        price:
-          type: string
-          description: Overridable price of the product, if not specified, the default will be used. Must be greater than or equal to 0.
-        quantity:
-          type: integer
-          format: int32
-          description: Quantity must be greater than or equal to 1
-        product_id:
-          type: integer
-          format: int64
-          description: The id of the product to be added to the order.
-        item_type:
-          type: string
-          enum:
-          - UNKNOWN
-          - SHIPPING
-          - TAX
-          - SERVICE
-          - PRODUCT
-          - UPSELL
-          - FINANCE_CHARGE
-          - SPECIAL
-          - PROGRAM
-          - SUBSCRIPTION
-          - SPECIAL_FREE_TRIAL_DAYS
-          - SPECIAL_ORDER_TOTAL
-          - SPECIAL_PRODUCT
-          - SPECIAL_CATEGORY
-          - SPECIAL_SHIPPING
-          - TIP
-          - OTHER
-          - FEE
-      required:
-      - product_id
-      - quantity
-    OrderItem:
-      type: object
-      properties:
-        id:
-          type: integer
-          format: int64
-        name:
-          type: string
-        description:
-          type: string
-        type:
-          type: string
-        notes:
-          type: string
-        quantity:
-          type: integer
-          format: int32
-        cost:
-          type: number
-          format: double
-        price:
-          type: number
-          format: double
-        discount:
-          type: number
-          format: double
-        product:
-          $ref: '#/components/schemas/Product_'
-        specialId:
-          type: integer
-          format: int64
-        specialAmount:
-          type: number
-          format: double
-        specialPctOrAmt:
-          type: integer
-          format: int32
-        orderItemTaxes:
-          type: array
-          items:
-            $ref: '#/components/schemas/OrderItemTax'
-        recurringBilling:
-          type: boolean
-        frequency:
-          type: integer
-          format: int32
-        billingCycle:
-          type: integer
-          format: int32
-        numberOfPayments:
-          type: integer
-          format: int32
-        jobRecurringId:
-          type: integer
-          format: int64
-        recurringStartDate:
-          type: string
-        recurringNextBillDate:
-          type: string
-        recurringEndDate:
-          type: string
-        recurringCyclesCompleted:
-          type: integer
-          format: int32
-        recurringInactive:
-          type: boolean
     CustomFieldMetaData:
       type: object
       properties:
@@ -2442,6 +2018,342 @@ components:
           type: string
         default_value:
           type: string
+    DefaultHttpStatusCode:
+      allOf:
+      - $ref: '#/components/schemas/HttpStatusCode'
+    EcommerceReportingSimpleProduct:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        name:
+          type: string
+        sku:
+          type: string
+        description:
+          type: string
+        shippable:
+          type: boolean
+        taxable:
+          type: boolean
+    Product_:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        sku:
+          type: string
+        url:
+          type: string
+        status:
+          type: integer
+          format: int32
+        product_name:
+          type: string
+        product_desc:
+          type: string
+        product_price:
+          type: number
+          format: double
+        product_short_desc:
+          type: string
+        subscription_only:
+          type: boolean
+        product_options:
+          type: array
+          items:
+            $ref: '#/components/schemas/ProductOption'
+        subscription_plans:
+          type: array
+          items:
+            $ref: '#/components/schemas/SubscriptionPlan_'
+    CustomFieldOption:
+      type: object
+      properties:
+        id:
+          type: string
+        label:
+          type: string
+    PaymentGatewayV1:
+      type: object
+      properties:
+        merchant_account_id:
+          type: integer
+          format: int64
+        use_default:
+          type: boolean
+    EcommerceReportingShippingInformation:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        first_name:
+          type: string
+        middle_name:
+          type: string
+        last_name:
+          type: string
+        company:
+          type: string
+        phone:
+          type: string
+        street1:
+          type: string
+        street2:
+          type: string
+        city:
+          type: string
+        state:
+          type: string
+        zip:
+          type: string
+        country:
+          type: string
+        invoiceToCompany:
+          type: boolean
+    EcommerceReportingTransaction:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        test:
+          type: boolean
+        amount:
+          type: number
+          format: double
+        currency:
+          type: string
+        gateway:
+          type: string
+        paymentDate:
+          type: string
+        type:
+          type: string
+        status:
+          type: string
+        errors:
+          type: string
+        orders:
+          type: array
+          items:
+            $ref: '#/components/schemas/EcommerceReportingOrder'
+        contact_id:
+          type: integer
+          format: int64
+        transaction_date:
+          type: string
+        gateway_account_name:
+          type: string
+        order_ids:
+          type: string
+        collection_method:
+          type: string
+    RestV1AddressInformation:
+      type: object
+      properties:
+        line1:
+          type: string
+        line2:
+          type: string
+        locality:
+          type: string
+        region:
+          type: string
+        company:
+          type: string
+        phone:
+          type: string
+        zip_code:
+          type: string
+        zip_four:
+          type: string
+        country_code:
+          type: string
+        first_name:
+          type: string
+        middle_name:
+          type: string
+        last_name:
+          type: string
+        is_invoice_to_company:
+          type: boolean
+    OrderList:
+      type: object
+      properties:
+        orders:
+          type: array
+          items:
+            $ref: '#/components/schemas/EcommerceReportingOrder'
+        count:
+          type: integer
+          format: int32
+        next:
+          type: string
+        previous:
+          type: string
+    InvoicePayment:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        amount:
+          type: number
+        note:
+          type: string
+        disputed:
+          type: boolean
+        invoice_id:
+          type: integer
+          format: int64
+        payment_id:
+          type: integer
+          format: int64
+        pay_date:
+          type: string
+          format: date-time
+        pay_status:
+          type: string
+        last_updated:
+          type: string
+          format: date-time
+        skip_commission:
+          type: boolean
+        refund_invoice_payment_id:
+          type: integer
+          format: int64
+    EcommerceReportingOrderContactDetails:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        email:
+          type: string
+        first_name:
+          type: string
+        last_name:
+          type: string
+        company_name:
+          type: string
+        job_title:
+          type: string
+    HttpStatus:
+      allOf:
+      - $ref: '#/components/schemas/HttpStatusCode'
+      enum:
+      - 100 CONTINUE
+      - 101 SWITCHING_PROTOCOLS
+      - 102 PROCESSING
+      - 103 EARLY_HINTS
+      - 200 OK
+      - 201 CREATED
+      - 202 ACCEPTED
+      - 203 NON_AUTHORITATIVE_INFORMATION
+      - 204 NO_CONTENT
+      - 205 RESET_CONTENT
+      - 206 PARTIAL_CONTENT
+      - 207 MULTI_STATUS
+      - 208 ALREADY_REPORTED
+      - 226 IM_USED
+      - 300 MULTIPLE_CHOICES
+      - 301 MOVED_PERMANENTLY
+      - 302 FOUND
+      - 303 SEE_OTHER
+      - 304 NOT_MODIFIED
+      - 307 TEMPORARY_REDIRECT
+      - 308 PERMANENT_REDIRECT
+      - 400 BAD_REQUEST
+      - 401 UNAUTHORIZED
+      - 402 PAYMENT_REQUIRED
+      - 403 FORBIDDEN
+      - 404 NOT_FOUND
+      - 405 METHOD_NOT_ALLOWED
+      - 406 NOT_ACCEPTABLE
+      - 407 PROXY_AUTHENTICATION_REQUIRED
+      - 408 REQUEST_TIMEOUT
+      - 409 CONFLICT
+      - 410 GONE
+      - 411 LENGTH_REQUIRED
+      - 412 PRECONDITION_FAILED
+      - 413 CONTENT_TOO_LARGE
+      - 413 PAYLOAD_TOO_LARGE
+      - 414 URI_TOO_LONG
+      - 415 UNSUPPORTED_MEDIA_TYPE
+      - 416 REQUESTED_RANGE_NOT_SATISFIABLE
+      - 417 EXPECTATION_FAILED
+      - 418 I_AM_A_TEAPOT
+      - 421 MISDIRECTED_REQUEST
+      - 422 UNPROCESSABLE_CONTENT
+      - 422 UNPROCESSABLE_ENTITY
+      - 423 LOCKED
+      - 424 FAILED_DEPENDENCY
+      - 425 TOO_EARLY
+      - 426 UPGRADE_REQUIRED
+      - 428 PRECONDITION_REQUIRED
+      - 429 TOO_MANY_REQUESTS
+      - 431 REQUEST_HEADER_FIELDS_TOO_LARGE
+      - 451 UNAVAILABLE_FOR_LEGAL_REASONS
+      - 500 INTERNAL_SERVER_ERROR
+      - 501 NOT_IMPLEMENTED
+      - 502 BAD_GATEWAY
+      - 503 SERVICE_UNAVAILABLE
+      - 504 GATEWAY_TIMEOUT
+      - 505 HTTP_VERSION_NOT_SUPPORTED
+      - 506 VARIANT_ALSO_NEGOTIATES
+      - 507 INSUFFICIENT_STORAGE
+      - 508 LOOP_DETECTED
+      - 509 BANDWIDTH_LIMIT_EXCEEDED
+      - 510 NOT_EXTENDED
+      - 511 NETWORK_AUTHENTICATION_REQUIRED
+    PaymentResult:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        invoice_id:
+          type: integer
+          format: int64
+        payment_amount:
+          type: number
+          format: double
+        payment_status:
+          type: string
+        transaction_id:
+          type: integer
+          format: int64
+    SubscriptionPlan_:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        cycle:
+          type: integer
+          format: int32
+        frequency:
+          type: integer
+          format: int32
+        url:
+          type: string
+        active:
+          type: boolean
+        subscription_plan_name:
+          type: string
+        number_of_cycles:
+          type: integer
+          format: int32
+        plan_price:
+          type: number
+          format: double
+        subscription_plan_index:
+          type: integer
+          format: int32
     SubscriptionPlan:
       type: object
       properties:
@@ -2469,16 +2381,104 @@ components:
         subscription_plan_index:
           type: integer
           format: int32
-    EcommerceReportingPaymentGateway:
+    HttpStatusCode:
       type: object
       properties:
-        merchant_account_id:
+        error:
+          type: boolean
+        is1xxInformational:
+          type: boolean
+        is2xxSuccessful:
+          type: boolean
+        is3xxRedirection:
+          type: boolean
+        is4xxClientError:
+          type: boolean
+        is5xxServerError:
+          type: boolean
+    TransactionSearchCommand:
+      type: object
+      properties:
+        since:
+          type: string
+        until:
+          type: string
+        limit:
+          type: integer
+          format: int32
+        offset:
+          type: integer
+          format: int32
+        contact_id:
           type: integer
           format: int64
-        use_default:
-          type: boolean
-        merchant_account_name:
+        sinceAsDate:
           type: string
+          format: date-time
+        untilAsDate:
+          type: string
+          format: date-time
+    CreatePayment:
+      type: object
+      properties:
+        date:
+          type: string
+          format: date-time
+          description: Used when charge_now:false or inserting historical data. ex `2017-01-01T22:17:59.039Z`
+        notes:
+          type: string
+        apply_to_commissions:
+          type: boolean
+        charge_now:
+          type: boolean
+        credit_card_id:
+          type: integer
+          format: int64
+        payment_amount:
+          type: string
+        payment_method_type:
+          type: string
+          enum:
+          - CREDIT_CARD
+          - CASH
+          - CHECK
+          - TOKEN
+        payment_gateway_id:
+          type: string
+    EcommerceReportingPaymentPlan:
+      type: object
+      properties:
+        auto_charge:
+          type: boolean
+        credit_card_id:
+          type: integer
+          format: int64
+        days_between_payments:
+          type: integer
+          format: int64
+        initial_payment_amount:
+          type: number
+          format: double
+        initial_payment_percent:
+          type: number
+          format: double
+        initial_payment_date:
+          type: string
+        number_of_payments:
+          type: integer
+          format: int64
+        payment_gateway:
+          $ref: '#/components/schemas/EcommerceReportingPaymentGateway'
+        plan_start_date:
+          type: string
+        payment_method_id:
+          type: string
+        max_charge_attempts:
+          type: integer
+          format: int64
+        days_between_retries:
+          type: integer
+          format: int64
   securitySchemes:
     oauth2:
       type: oauth2

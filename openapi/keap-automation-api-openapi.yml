@@ -789,25 +789,103 @@ paths:
                 $ref: '#/components/schemas/ListAutomationIdsResponse'
 components:
   schemas:
-    AutomationLockStatus:
+    AchieveGoalResponse:
+      type: object
+      description: Response containing the results of achieving a goal
+      properties:
+        results:
+          type: array
+          description: List of results for each goal that was achieved. Contains information about flows started and stopped as a result.
+          items:
+            $ref: '#/components/schemas/GoalEventResultDTO'
+    AddToAutomationSequenceResponse:
       type: object
       properties:
-        locked:
+        add_to_automation_sequence_results:
+          type: object
+          additionalProperties:
+            type: string
+            enum:
+            - SUCCESS
+            - ALREADY_IN_SEQUENCE
+            - CONTACT_DOES_NOT_EXIST
+            - FAILED
+          description: A map containing the contact ID as key and the result of adding them to the sequence as value
+    ListAutomationIdsResponse:
+      type: object
+      description: Response containing a list of automation IDs
+      properties:
+        automation_ids:
+          type: array
+          description: List of automation IDs
+          example:
+          - '123'
+          - '456'
+          - '789'
+          items:
+            type: string
+        next_page_token:
+          type: string
+        locked_automation_ids:
+          type: array
+          description: List of automation IDs that are currently locked for editing
+          example:
+          - '456'
+          - '789'
+          items:
+            type: string
+    AssignAutomationCategoryRequest:
+      type: object
+      description: Request to assign categories to automations
+      properties:
+        category_ids:
+          type: array
+          description: List of category IDs to assign to the automations
+          example:
+          - '1'
+          - '2'
+          - '3'
+          items:
+            type: string
+        automation_ids:
+          type: array
+          description: List of automation IDs to update. Use '0' as a wildcard to select all automations.
+          example:
+          - '100'
+          - '200'
+          - '300'
+          items:
+            type: string
+        apply_category:
           type: boolean
-          description: Whether the automation is currently locked
+          description: If true, the categories will be applied to the automations. If false, the categories will be removed from the automations.
           example: true
-        user_id:
+    ListAutomationResponse:
+      type: object
+      properties:
+        automations:
+          type: array
+          items:
+            $ref: '#/components/schemas/Automation'
+        next_page_token:
           type: string
-          description: The ID of the user who has the lock
-          example: 123
-        user_name:
+        automation_count:
+          type: integer
+          format: int32
+    Error:
+      type: object
+      properties:
+        code:
+          type: integer
+          format: int32
+        message:
           type: string
-          description: The username of the user who has the lock
-          example: john.doe@example.com
-        user_firstname:
+        status:
           type: string
-          description: The first name of the user who has the lock
-          example: John
+        details:
+          type: array
+          items:
+            $ref: '#/components/schemas/ErrorDetails'
     GoalEventResultDTO:
       type: object
       description: Result of achieving a specific goal
@@ -840,6 +918,31 @@ components:
           description: List of flows that were stopped as a result of achieving this goal
           items:
             $ref: '#/components/schemas/FlowEventResultDTO'
+    UnpublishAutomationRequest:
+      type: object
+      description: Request to unpublish a single automation
+      properties:
+        unpublished_form_message:
+          type: string
+          description: Custom message to display on forms when the automation is unpublished
+          example: This form is currently unavailable
+    FlowEventResultDTO:
+      type: object
+      description: Result of a flow being started or stopped
+      properties:
+        success:
+          type: boolean
+          description: Whether the flow operation was successful
+          example: true
+        message:
+          type: string
+          description: A message with details about the flow operation
+          example: Flow started successfully
+        flow_id:
+          type: integer
+          format: int64
+          description: The flow ID that was affected
+          example: 789
     RenameEasyAutomationCommand:
       type: object
       description: An object used to rename an automation.
@@ -870,67 +973,13 @@ components:
           example: This form is currently unavailable
       required:
       - automation_ids
-    AssignAutomationCategoryRequest:
+    ErrorDetails:
       type: object
-      description: Request to assign categories to automations
       properties:
-        category_ids:
-          type: array
-          description: List of category IDs to assign to the automations
-          example:
-          - '1'
-          - '2'
-          - '3'
-          items:
-            type: string
-        automation_ids:
-          type: array
-          description: List of automation IDs to update. Use '0' as a wildcard to select all automations.
-          example:
-          - '100'
-          - '200'
-          - '300'
-          items:
-            type: string
-        apply_category:
-          type: boolean
-          description: If true, the categories will be applied to the automations. If false, the categories will be removed from the automations.
-          example: true
-    ListAutomationIdsResponse:
-      type: object
-      description: Response containing a list of automation IDs
-      properties:
-        automation_ids:
-          type: array
-          description: List of automation IDs
-          example:
-          - '123'
-          - '456'
-          - '789'
-          items:
-            type: string
-        next_page_token:
+        domain:
           type: string
-        locked_automation_ids:
-          type: array
-          description: List of automation IDs that are currently locked for editing
-          example:
-          - '456'
-          - '789'
-          items:
-            type: string
-    ListAutomationResponse:
-      type: object
-      properties:
-        automations:
-          type: array
-          items:
-            $ref: '#/components/schemas/Automation'
-        next_page_token:
+        resource:
           type: string
-        automation_count:
-          type: integer
-          format: int32
     AddToAutomationSequenceRequest:
       type: object
       properties:
@@ -945,14 +994,25 @@ components:
             type: string
       required:
       - contact_ids
-    UnpublishAutomationRequest:
+    AutomationLockStatus:
       type: object
-      description: Request to unpublish a single automation
       properties:
-        unpublished_form_message:
+        locked:
+          type: boolean
+          description: Whether the automation is currently locked
+          example: true
+        user_id:
           type: string
-          description: Custom message to display on forms when the automation is unpublished
-          example: This form is currently unavailable
+          description: The ID of the user who has the lock
+          example: 123
+        user_name:
+          type: string
+          description: The username of the user who has the lock
+          example: john.doe@example.com
+        user_firstname:
+          type: string
+          description: The first name of the user who has the lock
+          example: John
     AchieveGoalRequest:
       type: object
       description: Request to achieve a goal in an automation. You must provide EITHER (integration + call_name) OR (automation_id + goal_id), along with contact_id.
@@ -1037,66 +1097,6 @@ components:
         current_edit_lock_status:
           $ref: '#/components/schemas/AutomationLockStatus'
           description: Current edit lock status information
-    Error:
-      type: object
-      properties:
-        code:
-          type: integer
-          format: int32
-        message:
-          type: string
-        status:
-          type: string
-        details:
-          type: array
-          items:
-            $ref: '#/components/schemas/ErrorDetails'
-    ErrorDetails:
-      type: object
-      properties:
-        domain:
-          type: string
-        resource:
-          type: string
-    FlowEventResultDTO:
-      type: object
-      description: Result of a flow being started or stopped
-      properties:
-        success:
-          type: boolean
-          description: Whether the flow operation was successful
-          example: true
-        message:
-          type: string
-          description: A message with details about the flow operation
-          example: Flow started successfully
-        flow_id:
-          type: integer
-          format: int64
-          description: The flow ID that was affected
-          example: 789
-    AchieveGoalResponse:
-      type: object
-      description: Response containing the results of achieving a goal
-      properties:
-        results:
-          type: array
-          description: List of results for each goal that was achieved. Contains information about flows started and stopped as a result.
-          items:
-            $ref: '#/components/schemas/GoalEventResultDTO'
-    AddToAutomationSequenceResponse:
-      type: object
-      properties:
-        add_to_automation_sequence_results:
-          type: object
-          additionalProperties:
-            type: string
-            enum:
-            - SUCCESS
-            - ALREADY_IN_SEQUENCE
-            - CONTACT_DOES_NOT_EXIST
-            - FAILED
-          description: A map containing the contact ID as key and the result of adding them to the sequence as value
   securitySchemes:
     oauth2:
       type: oauth2

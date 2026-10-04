@@ -546,26 +546,9 @@ components:
           description: A key-value pair of country code and country name.
       required:
       - countries
-    View:
-      type: object
-      properties:
-        contentType:
-          type: string
-    HttpStatusCode:
-      type: object
-      properties:
-        error:
-          type: boolean
-        is1xxInformational:
-          type: boolean
-        is2xxSuccessful:
-          type: boolean
-        is3xxRedirection:
-          type: boolean
-        is4xxClientError:
-          type: boolean
-        is5xxServerError:
-          type: boolean
+    DefaultHttpStatusCode:
+      allOf:
+      - $ref: '#/components/schemas/HttpStatusCode'
     HttpStatus:
       allOf:
       - $ref: '#/components/schemas/HttpStatusCode'
@@ -634,9 +617,6 @@ components:
       - 509 BANDWIDTH_LIMIT_EXCEEDED
       - 510 NOT_EXTENDED
       - 511 NETWORK_AUTHENTICATION_REQUIRED
-    DefaultHttpStatusCode:
-      allOf:
-      - $ref: '#/components/schemas/HttpStatusCode'
     RestDefaultOptionsResponse:
       type: object
       properties:
@@ -660,16 +640,6 @@ components:
           type: array
           items:
             type: string
-    ProvincesByCode:
-      type: object
-      properties:
-        provinces:
-          type: object
-          additionalProperties:
-            type: string
-          description: A key-value pair of province code and province name.
-      required:
-      - provinces
     ModelAndView:
       type: object
       properties:
@@ -694,13 +664,55 @@ components:
           type: boolean
         viewName:
           type: string
-    CountryCodes:
+    HttpStatusCode:
       type: object
       properties:
-        alpha2:
+        error:
+          type: boolean
+        is1xxInformational:
+          type: boolean
+        is2xxSuccessful:
+          type: boolean
+        is3xxRedirection:
+          type: boolean
+        is4xxClientError:
+          type: boolean
+        is5xxServerError:
+          type: boolean
+    ProvincesByCode:
+      type: object
+      properties:
+        provinces:
+          type: object
+          additionalProperties:
+            type: string
+          description: A key-value pair of province code and province name.
+      required:
+      - provinces
+    View:
+      type: object
+      properties:
+        contentType:
           type: string
-        alpha3:
+    Country:
+      type: object
+      properties:
+        codes:
+          $ref: '#/components/schemas/CountryCodes'
+        name:
           type: string
+    ListCountriesResponse:
+      type: object
+      properties:
+        countries:
+          type: array
+          description: A key-value pair of country code and country name.
+          items:
+            $ref: '#/components/schemas/Country'
+        next_page_token:
+          type: string
+      required:
+      - countries
     Error:
       type: object
       properties:
@@ -715,6 +727,13 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/ErrorDetails'
+    CountryCodes:
+      type: object
+      properties:
+        alpha2:
+          type: string
+        alpha3:
+          type: string
     ListProvincesResponse:
       type: object
       properties:
@@ -727,32 +746,6 @@ components:
           type: string
       required:
       - provinces
-    ListCountriesResponse:
-      type: object
-      properties:
-        countries:
-          type: array
-          description: A key-value pair of country code and country name.
-          items:
-            $ref: '#/components/schemas/Country'
-        next_page_token:
-          type: string
-      required:
-      - countries
-    ErrorDetails:
-      type: object
-      properties:
-        domain:
-          type: string
-        resource:
-          type: string
-    Country:
-      type: object
-      properties:
-        codes:
-          $ref: '#/components/schemas/CountryCodes'
-        name:
-          type: string
     Province:
       type: object
       properties:
@@ -761,6 +754,13 @@ components:
         name:
           type: string
         country:
+          type: string
+    ErrorDetails:
+      type: object
+      properties:
+        domain:
+          type: string
+        resource:
           type: string
   securitySchemes:
     oauth2:

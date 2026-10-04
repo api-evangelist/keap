@@ -250,48 +250,6 @@ paths:
       - BearerAuth: []
 components:
   schemas:
-    StageDealListResponse:
-      type: object
-      description: Response for a list of deals in a stage.
-      allOf:
-      - $ref: '#/components/schemas/BaseListResponse_Deal_'
-      - properties:
-          next_page_token:
-            type: string
-            description: Token for the next page of results.
-          deals:
-            type: array
-            description: The list of deals in a stage.
-            items:
-              $ref: '#/components/schemas/Deal'
-    StageListResponse:
-      type: object
-      description: Response for a list of stages.
-      allOf:
-      - $ref: '#/components/schemas/BaseListResponse_Stage_'
-      - properties:
-          next_page_token:
-            type: string
-            description: Token for the next page of results.
-          stages:
-            type: array
-            description: The list of stages.
-            items:
-              $ref: '#/components/schemas/Stage'
-    BaseListResponse_Stage_:
-      type: object
-      properties:
-        next_page_token:
-          type: string
-          description: Token for the next page of results.
-      description: The list responses.
-    BaseListResponse_Deal_:
-      type: object
-      properties:
-        next_page_token:
-          type: string
-          description: Token for the next page of results.
-      description: The list responses.
     Deal:
       type: object
       properties:
@@ -346,6 +304,26 @@ components:
           additionalProperties: true
           description: The custom fields associated with the deal. This field is optional.
       description: Represents a deal.
+    Stage:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Unique identifier for the model.
+        name:
+          type: string
+          description: The name of the stage.
+        pipeline_id:
+          type: string
+          description: The ID of the pipeline.
+      description: Represents a stage in a pipeline.
+    BaseListResponse_Deal_:
+      type: object
+      properties:
+        next_page_token:
+          type: string
+          description: Token for the next page of results.
+      description: The list responses.
     CreateStageRequest:
       required:
       - name
@@ -375,19 +353,41 @@ components:
           type: string
           description: The currency of the money. This field is required.
       description: Represents a monetary value with an amount and currency.
-    Stage:
+    StageListResponse:
+      type: object
+      description: Response for a list of stages.
+      allOf:
+      - $ref: '#/components/schemas/BaseListResponse_Stage_'
+      - properties:
+          next_page_token:
+            type: string
+            description: Token for the next page of results.
+          stages:
+            type: array
+            description: The list of stages.
+            items:
+              $ref: '#/components/schemas/Stage'
+    StageDealListResponse:
+      type: object
+      description: Response for a list of deals in a stage.
+      allOf:
+      - $ref: '#/components/schemas/BaseListResponse_Deal_'
+      - properties:
+          next_page_token:
+            type: string
+            description: Token for the next page of results.
+          deals:
+            type: array
+            description: The list of deals in a stage.
+            items:
+              $ref: '#/components/schemas/Deal'
+    BaseListResponse_Stage_:
       type: object
       properties:
-        id:
+        next_page_token:
           type: string
-          description: Unique identifier for the model.
-        name:
-          type: string
-          description: The name of the stage.
-        pipeline_id:
-          type: string
-          description: The ID of the pipeline.
-      description: Represents a stage in a pipeline.
+          description: Token for the next page of results.
+      description: The list responses.
     UpdateStageRequest:
       required:
       - name

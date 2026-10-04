@@ -460,13 +460,6 @@ components:
         expiration_month:
           type: string
           description: Two-digit expiration month
-    ErrorDetails:
-      type: object
-      properties:
-        domain:
-          type: string
-        resource:
-          type: string
     ListContactPaymentMethodsResponse:
       type: object
       properties:
@@ -475,6 +468,13 @@ components:
           items:
             $ref: '#/components/schemas/PaymentMethod'
         next_page_token:
+          type: string
+    ErrorDetails:
+      type: object
+      properties:
+        domain:
+          type: string
+        resource:
           type: string
     PaymentMethod:
       type: object

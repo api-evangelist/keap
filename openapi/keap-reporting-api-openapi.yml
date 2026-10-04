@@ -347,6 +347,15 @@ paths:
                 $ref: '#/components/schemas/ReportModel'
 components:
   schemas:
+    ReportEntryRecord:
+      type: object
+      properties:
+        columns:
+          type: array
+          description: The set of column values for this record
+          items:
+            $ref: '#/components/schemas/ReportEntryValue'
+          uniqueItems: true
     Error:
       type: object
       properties:
@@ -361,42 +370,6 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/ErrorDetails'
-    ReportModel:
-      type: object
-      properties:
-        fields:
-          type: array
-          description: The list of fields available for this Report (Saved Search)
-          items:
-            $ref: '#/components/schemas/ReportField'
-    ListReportsResponse:
-      type: object
-      properties:
-        reports:
-          type: array
-          items:
-            $ref: '#/components/schemas/Report'
-        next_page_token:
-          type: string
-    ReportExecutionResult:
-      type: object
-      properties:
-        results:
-          type: array
-          description: The list of report result records
-          items:
-            $ref: '#/components/schemas/ReportEntryRecord'
-        page_token:
-          type: string
-          description: Token for retrieving the next page of results
-          example: eyJsYXN0Um93IjoxMDB9
-    ErrorDetails:
-      type: object
-      properties:
-        domain:
-          type: string
-        resource:
-          type: string
     Report:
       type: object
       properties:
@@ -425,15 +398,6 @@ components:
           - ALL_USERS
           items:
             type: string
-    ReportEntryRecord:
-      type: object
-      properties:
-        columns:
-          type: array
-          description: The set of column values for this record
-          items:
-            $ref: '#/components/schemas/ReportEntryValue'
-          uniqueItems: true
     RunReportRequest:
       type: object
       properties:
@@ -446,17 +410,33 @@ components:
           format: int32
         fields:
           type: string
-    ReportEntryValue:
+    ReportExecutionResult:
       type: object
       properties:
-        field_name:
+        results:
+          type: array
+          description: The list of report result records
+          items:
+            $ref: '#/components/schemas/ReportEntryRecord'
+        page_token:
           type: string
-          description: The name of the field/column
-          example: contact_email
-        value:
+          description: Token for retrieving the next page of results
+          example: eyJsYXN0Um93IjoxMDB9
+    ErrorDetails:
+      type: object
+      properties:
+        domain:
           type: string
-          description: The value of the field
-          example: john.smith@example.com
+        resource:
+          type: string
+    ReportModel:
+      type: object
+      properties:
+        fields:
+          type: array
+          description: The list of fields available for this Report (Saved Search)
+          items:
+            $ref: '#/components/schemas/ReportField'
     ReportField:
       type: object
       properties:
@@ -468,6 +448,26 @@ components:
           type: string
           description: The human-readable label for the field
           example: ID
+    ReportEntryValue:
+      type: object
+      properties:
+        field_name:
+          type: string
+          description: The name of the field/column
+          example: contact_email
+        value:
+          type: string
+          description: The value of the field
+          example: john.smith@example.com
+    ListReportsResponse:
+      type: object
+      properties:
+        reports:
+          type: array
+          items:
+            $ref: '#/components/schemas/Report'
+        next_page_token:
+          type: string
   securitySchemes:
     oauth2:
       type: oauth2
