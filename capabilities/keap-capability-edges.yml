@@ -11,8 +11,18 @@ capability_model:
   attribution: Turbo EA Capabilities by Vincent Verdet — Turbo EA, https://github.com/vincentmakes/turbo-ea-capabilities,
     CC BY 4.0
   notice: NOTICE
-edge_count: 13
+edge_count: 17
 edges:
+- tag: Deals
+  spec_file: keap-deals-api-openapi.yml
+  capability_id: BC-410.30
+  capability_id_l1: BC-410
+  capability_name: Opportunity & Pipeline Management
+  confidence: 0.95
+  evidence: POST /v2/deals/moveByContactIds  moveDealsForContacts  Moves the active deals of specified
+    contacts from one stage to another
+  reason: Operations create, list, update and move deals through pipeline stages and associate them with
+    contacts — classic opportunity/deal pipeline management.
 - tag: Opportunity
   spec_file: keap-opportunity-api-openapi.yml
   capability_id: BC-410.30
@@ -22,6 +32,26 @@ edges:
   evidence: GET /rest/v2/opportunities listOpportunities; GET /rest/v2/opportunities/stages "List of Opportunity
     Stages"; schemas RestV2Opportunity, OpportunityStage
   reason: Sales opportunities with stages, stage moves and contacts are exactly deal/pipeline lifecycle
+    management.
+- tag: Pipelines
+  spec_file: keap-pipelines-api-openapi.yml
+  capability_id: BC-410.30
+  capability_id_l1: BC-410
+  capability_name: Opportunity & Pipeline Management
+  confidence: 0.95
+  evidence: 'GET /v2/pipelines/{id}/deals  getPipelineDeals  Retrieves the list of deals for a specific
+    pipeline; schemas: DealStatus, PipelineStageListResponse'
+  reason: CRUD over sales pipelines, their stages, deals and outcome labels is plainly deal/opportunity
+    pipeline management in a CRM.
+- tag: Stages
+  spec_file: keap-stages-api-openapi.yml
+  capability_id: BC-410.30
+  capability_id_l1: BC-410
+  capability_name: Opportunity & Pipeline Management
+  confidence: 0.9
+  evidence: 'GET /v2/stages/{id}/deals  listStageDeals  Retrieves a list of deals for a specific stage;
+    schemas: Deal, StageDealListResponse'
+  reason: Stage CRUD with deal counts and deal listings per stage is sales pipeline/opportunity stage
     management.
 - tag: Contact
   spec_file: keap-contact-api-openapi.yml
@@ -73,6 +103,16 @@ edges:
     Event Types'; schema RestHook
   reason: The tag is squarely outbound webhook/event subscription lifecycle — create, verify, list event
     types, delete subscriptions — which the frame models explicitly as Webhook & Event Subscription Management.
+- tag: LeadScore
+  spec_file: keap-leadscore-api-openapi.yml
+  capability_id: BC-400.40
+  capability_id_l1: BC-400
+  capability_name: Demand Generation Management
+  confidence: 0.8
+  evidence: GET /rest/v2/contacts/{contact_id}/leadScore  getLeadScoreDetails  Retrieve Lead Score of
+    a Contact
+  reason: Lead scoring of contacts is a demand-generation/lead-qualification capability; could alternatively
+    sit under opportunity management, hence 0.8.
 - tag: Shipping Discounts
   spec_file: keap-shipping-discounts-api-openapi.yml
   capability_id: BC-440.30
