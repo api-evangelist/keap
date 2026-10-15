@@ -8,6 +8,7 @@ checked:
 - https://monid.ai/tools/keap
 - https://n8n.io/integrations/keap/
 - https://zapier.com/apps/keap/integrations
+- wordpress/integrations/wordpress-integration-edges.yml
 summary: null
 marketplace_apps:
 - marketplace: zapier
@@ -839,6 +840,23 @@ edges:
   direction: third-party
   category: Ads & Conversion
   partner_url: https://developers.facebook.com/docs/marketing-api/server-side-api/guides/zapier-integration
+- partner_name: WordPress (own)
+  partner: wordpress
+  partner_match: mirror
+  mirror_match: domain
+  type: marketplace
+  relationship: platform-app
+  direction: third-party
+  channel: partner-built
+  marketplace: own
+  evidence: https://wordpress.org/plugins/infusionsoft-official-opt-in-forms/
+  mirror_of: wordpress/integrations/wordpress-integration-edges.yml
+  apps:
+  - Keap Official Opt-in Forms
+  listing_count: 1
+  detected: '2026-10-15'
+  detected_by: mirror-platform-listings.py
+  category: WordPress plugin
 templates:
 - title: Create or update Keap contacts from new Calendly events
   url: https://zapier.com/apps/calendly/integrations/keap/243414/create-or-update-keap-contacts-from-new-calendly-events
