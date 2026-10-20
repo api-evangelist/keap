@@ -15,6 +15,7 @@
   evidence: https://zapier.com/apps/calendly/integrations/keap/243414/create-or-update-keap-contacts-from-new-calendly-events
   template: https://zapier.com/apps/calendly/integrations/keap/243414/create-or-update-keap-contacts-from-new-calendly-events
   source: template
+  relationship: ipaas-bridge
   status: pending-generation
   arazzo: null
 - slug: keap-create-or-update-keap-max-classic-contacts-from-new-calendly-events
@@ -29,6 +30,7 @@
   evidence: https://zapier.com/apps/calendly/integrations/keap/10009/create-or-update-keap-max-classic-contacts-from-new-calendly-events
   template: https://zapier.com/apps/calendly/integrations/keap/10009/create-or-update-keap-max-classic-contacts-from-new-calendly-events
   source: template
+  relationship: ipaas-bridge
   status: pending-generation
   arazzo: null
 - slug: keap-create-or-update-keap-contacts-from-new-facebook-lead-ads-leads
@@ -43,6 +45,7 @@
   evidence: https://zapier.com/apps/facebook-lead-ads/integrations/keap/243238/create-or-update-keap-contacts-from-new-facebook-lead-ads-leads
   template: https://zapier.com/apps/facebook-lead-ads/integrations/keap/243238/create-or-update-keap-contacts-from-new-facebook-lead-ads-leads
   source: template
+  relationship: ipaas-bridge
   status: pending-generation
   arazzo: null
 - slug: keap-create-new-contacts-to-keap-from-new-gravity-forms-submissions
@@ -57,6 +60,7 @@
   evidence: https://zapier.com/apps/gravity-forms/integrations/keap/243442/create-new-contacts-to-keap-from-new-gravity-forms-submissions
   template: https://zapier.com/apps/gravity-forms/integrations/keap/243442/create-new-contacts-to-keap-from-new-gravity-forms-submissions
   source: template
+  relationship: ipaas-bridge
   status: pending-generation
   arazzo: null
 - slug: keap-add-new-rows-to-google-sheets-by-tagging-keap-max-classic-contacts
@@ -71,6 +75,7 @@
   evidence: https://zapier.com/apps/google-sheets/integrations/keap/2148/add-new-rows-to-google-sheets-by-tagging-keap-max-classic-contacts
   template: https://zapier.com/apps/google-sheets/integrations/keap/2148/add-new-rows-to-google-sheets-by-tagging-keap-max-classic-contacts
   source: template
+  relationship: ipaas-bridge
   status: pending-generation
   arazzo: null
 - slug: keap-create-or-update-keap-contacts-from-new-typeform-entries
@@ -85,10 +90,12 @@
   evidence: https://zapier.com/apps/keap/integrations/typeform/1012018/create-or-update-keap-contacts-from-new-typeform-entries
   template: https://zapier.com/apps/keap/integrations/typeform/1012018/create-or-update-keap-contacts-from-new-typeform-entries
   source: template
+  relationship: ipaas-bridge
   status: pending-generation
   arazzo: null
 - slug: keap-send-funnel-events-to-facebook-conversions-from-keap
   label: Send funnel events to Facebook Conversions from Keap
+  partner: facebook
   partner_name: Facebook Conversions
   category: Ads & Conversion
   use_case: Send funnel events to Facebook Conversions from Keap
@@ -98,7 +105,8 @@
   evidence: https://zapier.com/apps/facebook-conversions/integrations/keap/1130098/send-funnel-events-to-facebook-conversions-from-keap
   template: https://zapier.com/apps/facebook-conversions/integrations/keap/1130098/send-funnel-events-to-facebook-conversions-from-keap
   source: template
-  status: pending-partner-spec
+  relationship: ipaas-bridge
+  status: pending-generation
   arazzo: null
 - slug: keap-create-or-update-keap-max-classic-contacts-with-new-contact-activity-on-clickfunnels
   label: Create or update Keap Max Classic contacts with new contact activity on ClickFunnels
@@ -112,6 +120,7 @@
   evidence: https://zapier.com/apps/clickfunnels-classic/integrations/keap/15979/create-or-update-keap-max-classic-contacts-with-new-contact-activity-on-clickfunnels
   template: https://zapier.com/apps/clickfunnels-classic/integrations/keap/15979/create-or-update-keap-max-classic-contacts-with-new-contact-activity-on-clickfunnels
   source: template
+  relationship: ipaas-bridge
   status: pending-generation
   arazzo: null
 - slug: keap-create-or-update-keap-contacts-when-new-invitees-are-created-in-calendly
@@ -126,6 +135,7 @@
   evidence: https://zapier.com/apps/calendly/integrations/keap/1583457/create-or-update-keap-contacts-when-new-invitees-are-created-in-calendly
   template: https://zapier.com/apps/calendly/integrations/keap/1583457/create-or-update-keap-contacts-when-new-invitees-are-created-in-calendly
   source: template
+  relationship: ipaas-bridge
   status: pending-generation
   arazzo: null
 - slug: keap-add-new-keap-contacts-to-google-sheets-rows
@@ -140,6 +150,7 @@
   evidence: https://zapier.com/apps/google-sheets/integrations/keap/1211763/add-new-keap-contacts-to-google-sheets-rows
   template: https://zapier.com/apps/google-sheets/integrations/keap/1211763/add-new-keap-contacts-to-google-sheets-rows
   source: template
+  relationship: ipaas-bridge
   status: pending-generation
   arazzo: null
 - slug: keap-create-or-update-keap-contacts-when-new-oncehub-bookings-are-scheduled
@@ -153,270 +164,8 @@
   evidence: https://zapier.com/apps/keap/integrations/oncehub/1226891/create-or-update-keap-contacts-when-new-oncehub-bookings-are-scheduled
   template: https://zapier.com/apps/keap/integrations/oncehub/1226891/create-or-update-keap-contacts-when-new-oncehub-bookings-are-scheduled
   source: template
+  relationship: ipaas-bridge
   status: pending-partner-spec
-  arazzo: null
-- slug: keap-getresponse
-  label: GetResponse
-  partner: getresponse
-  partner_name: GetResponse
-  category: Marketing Automation
-  type: marketplace
-  marketplace: zapier
-  channel: ipaas-usage
-  evidence: https://zapier.com/apps/keap/integrations/getresponse
-  source: edge
-  status: pending-generation
-  arazzo: null
-- slug: keap-kajabi
-  label: Kajabi
-  partner: kajabi
-  partner_name: Kajabi
-  category: eCommerce
-  type: marketplace
-  marketplace: zapier
-  channel: ipaas-usage
-  evidence: https://zapier.com/apps/keap/integrations/kajabi
-  source: edge
-  status: pending-generation
-  arazzo: null
-- slug: keap-instapage
-  label: Instapage
-  partner: instapage
-  partner_name: Instapage
-  category: Forms & Surveys
-  type: marketplace
-  marketplace: zapier
-  channel: ipaas-usage
-  evidence: https://zapier.com/apps/keap/integrations/instapage
-  source: edge
-  status: pending-generation
-  arazzo: null
-- slug: keap-google-forms
-  label: Google Forms
-  partner: google-forms
-  partner_name: Google Forms
-  category: Forms & Surveys
-  type: marketplace
-  marketplace: zapier
-  channel: ipaas-usage
-  evidence: https://zapier.com/apps/keap/integrations/google-forms
-  source: edge
-  status: pending-generation
-  arazzo: null
-- slug: keap-circle
-  label: Circle
-  partner: circle-community
-  partner_name: Circle
-  category: CRM (Customer Relationship Management)
-  type: marketplace
-  marketplace: zapier
-  channel: ipaas-usage
-  evidence: https://zapier.com/apps/keap/integrations/circle
-  source: edge
-  status: pending-generation
-  arazzo: null
-- slug: keap-acuity-scheduling
-  label: Acuity Scheduling
-  partner: acuity-scheduling
-  partner_name: Acuity Scheduling
-  category: Scheduling & Booking
-  type: marketplace
-  marketplace: zapier
-  channel: ipaas-usage
-  evidence: https://zapier.com/apps/keap/integrations/acuity-scheduling
-  source: edge
-  status: pending-generation
-  arazzo: null
-- slug: keap-shopify
-  label: Shopify
-  partner: shopify
-  partner_name: Shopify
-  category: eCommerce
-  type: marketplace
-  marketplace: zapier
-  channel: ipaas-usage
-  evidence: https://zapier.com/apps/keap/integrations/shopify
-  source: edge
-  status: pending-generation
-  arazzo: null
-- slug: keap-monday-com
-  label: monday.com
-  partner_name: monday.com
-  category: Project Management
-  type: marketplace
-  marketplace: zapier
-  channel: ipaas-usage
-  evidence: https://zapier.com/apps/keap/integrations/monday
-  source: edge
-  status: pending-partner-spec
-  arazzo: null
-- slug: keap-woocommerce
-  label: WooCommerce
-  partner: woocommerce
-  partner_name: WooCommerce
-  category: eCommerce
-  type: marketplace
-  marketplace: zapier
-  channel: ipaas-usage
-  evidence: https://zapier.com/apps/keap/integrations/woocommerce
-  source: edge
-  status: pending-generation
-  arazzo: null
-- slug: keap-samcart
-  label: SamCart
-  partner: samcart
-  partner_name: SamCart
-  category: eCommerce
-  type: marketplace
-  marketplace: zapier
-  channel: ipaas-usage
-  evidence: https://zapier.com/apps/keap/integrations/samcart
-  source: edge
-  status: pending-generation
-  arazzo: null
-- slug: keap-airtable
-  label: Airtable
-  partner: airtable
-  partner_name: Airtable
-  category: Databases
-  type: marketplace
-  marketplace: zapier
-  channel: ipaas-usage
-  evidence: https://zapier.com/apps/keap/integrations/airtable
-  source: edge
-  status: pending-generation
-  arazzo: null
-- slug: keap-hubspot
-  label: HubSpot
-  partner: hubspot
-  partner_name: HubSpot
-  category: Marketing Automation
-  type: marketplace
-  marketplace: zapier
-  channel: ipaas-usage
-  evidence: https://zapier.com/apps/keap/integrations/hubspot
-  source: edge
-  status: pending-generation
-  arazzo: null
-- slug: keap-clickfunnels
-  label: ClickFunnels
-  partner: clickfunnels
-  partner_name: ClickFunnels
-  category: Website & App Building
-  type: marketplace
-  marketplace: zapier
-  channel: ipaas-usage
-  evidence: https://zapier.com/apps/keap/integrations/clickfunnels
-  source: edge
-  status: pending-generation
-  arazzo: null
-- slug: keap-squarespace-forms
-  label: Squarespace Forms
-  partner: squarespace
-  partner_name: Squarespace Forms
-  category: Forms & Surveys
-  type: marketplace
-  marketplace: zapier
-  channel: ipaas-usage
-  evidence: https://zapier.com/apps/keap/integrations/squarespace-forms
-  source: edge
-  status: pending-generation
-  arazzo: null
-- slug: keap-manychat
-  label: Manychat
-  partner: manychat
-  partner_name: Manychat
-  category: Social Media Marketing
-  type: marketplace
-  marketplace: zapier
-  channel: ipaas-usage
-  evidence: https://zapier.com/apps/keap/integrations/manychat
-  source: edge
-  status: pending-generation
-  arazzo: null
-- slug: keap-close
-  label: Close
-  partner: close
-  partner_name: Close
-  category: CRM (Customer Relationship Management)
-  type: marketplace
-  marketplace: zapier
-  channel: ipaas-usage
-  evidence: https://zapier.com/apps/keap/integrations/close
-  source: edge
-  status: pending-generation
-  arazzo: null
-- slug: keap-google-calendar
-  label: Google Calendar
-  partner: google-calendar
-  partner_name: Google Calendar
-  category: Calendar
-  type: marketplace
-  marketplace: zapier
-  channel: ipaas-usage
-  evidence: https://zapier.com/apps/keap/integrations/google-calendar
-  source: edge
-  status: pending-generation
-  arazzo: null
-- slug: keap-eventbrite
-  label: Eventbrite
-  partner: eventbrite
-  partner_name: Eventbrite
-  category: Event Management
-  type: marketplace
-  marketplace: zapier
-  channel: ipaas-usage
-  evidence: https://zapier.com/apps/keap/integrations/eventbrite
-  source: edge
-  status: pending-generation
-  arazzo: null
-- slug: keap-pandadoc
-  label: PandaDoc
-  partner: pandadoc
-  partner_name: PandaDoc
-  category: Documents
-  type: marketplace
-  marketplace: zapier
-  channel: ipaas-usage
-  evidence: https://zapier.com/apps/keap/integrations/pandadoc
-  source: edge
-  status: pending-generation
-  arazzo: null
-- slug: keap-google-ads
-  label: Google Ads
-  partner: google-ads
-  partner_name: Google Ads
-  category: Ads & Conversion
-  type: marketplace
-  marketplace: zapier
-  channel: ipaas-usage
-  evidence: https://zapier.com/apps/keap/integrations/google-ads
-  source: edge
-  status: pending-generation
-  arazzo: null
-- slug: keap-docusign
-  label: Docusign
-  partner: docusign
-  partner_name: Docusign
-  category: AI Document Extraction
-  type: marketplace
-  marketplace: zapier
-  channel: ipaas-usage
-  evidence: https://zapier.com/apps/keap/integrations/docusign
-  source: edge
-  status: pending-generation
-  arazzo: null
-- slug: keap-thinkific
-  label: Thinkific
-  partner: thinkific
-  partner_name: Thinkific
-  category: Online Courses
-  type: marketplace
-  marketplace: zapier
-  channel: ipaas-usage
-  evidence: https://zapier.com/apps/keap/integrations/thinkific
-  source: edge
-  status: pending-generation
   arazzo: null
 - slug: keap-zapier
   label: Zapier
@@ -454,35 +203,6 @@
   evidence: https://wordpress.org/plugins/infusionsoft-official-opt-in-forms/
   source: edge
   relationship: platform-app
-  status: not-a-workflow
-  arazzo: null
-- slug: keap-meltano
-  label: Meltano
-  partner: meltano
-  partner_name: Meltano
-  type: marketplace
-  marketplace: meltano-hub
-  channel: elt-connector
-  evidence: https://hub.meltano.com/extractors/tap-keap--hotgluexyz
-  source: edge
-  relationship: ipaas-bridge
-  contract_reference:
-    register: Meltano Hub (github.com/meltano/hub _data/meltano extractors + loaders)
-    spec_file: null
-    role: elt-connector:meltano-hub
-    registered_name: Keap
-    matched_domain: keap.com
-    matched_by: domain
-    detected_by: sweep-data-integration.py
-    detected: '2026-10-18'
-    signal_note: one edge per (provider, platform); connectors, streams, packages and usage are context, never read
-    plugins:
-    - tap-keap--hotgluexyz
-    maintenance_status:
-    - active
-    quality:
-    - gold
-    builder: 'community (Meltano Hub variant maintainers: hotgluexyz)'
   status: not-a-workflow
   arazzo: null
 - slug: keap-zoom-own
@@ -537,4 +257,319 @@
     detected_by: sweep-official-sdks.py
     detected: '2026-10-18'
   status: not-a-workflow
+  arazzo: null
+- slug: keap-meltano
+  label: Meltano
+  partner: meltano
+  partner_name: Meltano
+  type: marketplace
+  marketplace: meltano-hub
+  channel: elt-connector
+  evidence: https://hub.meltano.com/extractors/tap-keap--hotgluexyz
+  source: edge
+  relationship: ipaas-bridge
+  contract_reference:
+    register: Meltano Hub (github.com/meltano/hub _data/meltano extractors + loaders)
+    spec_file: null
+    role: elt-connector:meltano-hub
+    registered_name: Keap
+    matched_domain: keap.com
+    matched_by: domain
+    detected_by: sweep-data-integration.py
+    detected: '2026-10-18'
+    signal_note: one edge per (provider, platform); connectors, streams, packages and usage are context, never read
+    plugins:
+    - tap-keap--hotgluexyz
+    maintenance_status:
+    - active
+    quality:
+    - gold
+    builder: 'community (Meltano Hub variant maintainers: hotgluexyz)'
+  status: not-a-workflow
+  arazzo: null
+- slug: keap-getresponse
+  label: GetResponse
+  partner: getresponse
+  partner_name: GetResponse
+  category: Marketing Automation
+  type: marketplace
+  marketplace: zapier
+  channel: ipaas-usage
+  evidence: https://zapier.com/apps/keap/integrations/getresponse
+  source: edge
+  relationship: ipaas-bridge
+  status: pending-generation
+  arazzo: null
+- slug: keap-kajabi
+  label: Kajabi
+  partner: kajabi
+  partner_name: Kajabi
+  category: eCommerce
+  type: marketplace
+  marketplace: zapier
+  channel: ipaas-usage
+  evidence: https://zapier.com/apps/keap/integrations/kajabi
+  source: edge
+  relationship: ipaas-bridge
+  status: pending-generation
+  arazzo: null
+- slug: keap-instapage
+  label: Instapage
+  partner: instapage
+  partner_name: Instapage
+  category: Forms & Surveys
+  type: marketplace
+  marketplace: zapier
+  channel: ipaas-usage
+  evidence: https://zapier.com/apps/keap/integrations/instapage
+  source: edge
+  relationship: ipaas-bridge
+  status: pending-generation
+  arazzo: null
+- slug: keap-google-forms
+  label: Google Forms
+  partner: google-forms
+  partner_name: Google Forms
+  category: Forms & Surveys
+  type: marketplace
+  marketplace: zapier
+  channel: ipaas-usage
+  evidence: https://zapier.com/apps/keap/integrations/google-forms
+  source: edge
+  relationship: ipaas-bridge
+  status: pending-generation
+  arazzo: null
+- slug: keap-circle
+  label: Circle
+  partner: circle-community
+  partner_name: Circle
+  category: CRM (Customer Relationship Management)
+  type: marketplace
+  marketplace: zapier
+  channel: ipaas-usage
+  evidence: https://zapier.com/apps/keap/integrations/circle
+  source: edge
+  relationship: ipaas-bridge
+  status: pending-generation
+  arazzo: null
+- slug: keap-acuity-scheduling
+  label: Acuity Scheduling
+  partner: acuity-scheduling
+  partner_name: Acuity Scheduling
+  category: Scheduling & Booking
+  type: marketplace
+  marketplace: zapier
+  channel: ipaas-usage
+  evidence: https://zapier.com/apps/keap/integrations/acuity-scheduling
+  source: edge
+  relationship: ipaas-bridge
+  status: pending-generation
+  arazzo: null
+- slug: keap-shopify
+  label: Shopify
+  partner: shopify
+  partner_name: Shopify
+  category: eCommerce
+  type: marketplace
+  marketplace: zapier
+  channel: ipaas-usage
+  evidence: https://zapier.com/apps/keap/integrations/shopify
+  source: edge
+  relationship: ipaas-bridge
+  status: pending-generation
+  arazzo: null
+- slug: keap-monday-com
+  label: monday.com
+  partner: monday-com
+  partner_name: monday.com
+  category: Project Management
+  type: marketplace
+  marketplace: zapier
+  channel: ipaas-usage
+  evidence: https://zapier.com/apps/keap/integrations/monday
+  source: edge
+  relationship: ipaas-bridge
+  status: pending-generation
+  arazzo: null
+- slug: keap-woocommerce
+  label: WooCommerce
+  partner: woocommerce
+  partner_name: WooCommerce
+  category: eCommerce
+  type: marketplace
+  marketplace: zapier
+  channel: ipaas-usage
+  evidence: https://zapier.com/apps/keap/integrations/woocommerce
+  source: edge
+  relationship: ipaas-bridge
+  status: pending-generation
+  arazzo: null
+- slug: keap-samcart
+  label: SamCart
+  partner: samcart
+  partner_name: SamCart
+  category: eCommerce
+  type: marketplace
+  marketplace: zapier
+  channel: ipaas-usage
+  evidence: https://zapier.com/apps/keap/integrations/samcart
+  source: edge
+  relationship: ipaas-bridge
+  status: pending-generation
+  arazzo: null
+- slug: keap-airtable
+  label: Airtable
+  partner: airtable
+  partner_name: Airtable
+  category: Databases
+  type: marketplace
+  marketplace: zapier
+  channel: ipaas-usage
+  evidence: https://zapier.com/apps/keap/integrations/airtable
+  source: edge
+  relationship: ipaas-bridge
+  status: pending-generation
+  arazzo: null
+- slug: keap-hubspot
+  label: HubSpot
+  partner: hubspot
+  partner_name: HubSpot
+  category: Marketing Automation
+  type: marketplace
+  marketplace: zapier
+  channel: ipaas-usage
+  evidence: https://zapier.com/apps/keap/integrations/hubspot
+  source: edge
+  relationship: ipaas-bridge
+  status: pending-generation
+  arazzo: null
+- slug: keap-clickfunnels
+  label: ClickFunnels
+  partner: clickfunnels
+  partner_name: ClickFunnels
+  category: Website & App Building
+  type: marketplace
+  marketplace: zapier
+  channel: ipaas-usage
+  evidence: https://zapier.com/apps/keap/integrations/clickfunnels
+  source: edge
+  relationship: ipaas-bridge
+  status: pending-generation
+  arazzo: null
+- slug: keap-squarespace-forms
+  label: Squarespace Forms
+  partner: squarespace
+  partner_name: Squarespace Forms
+  category: Forms & Surveys
+  type: marketplace
+  marketplace: zapier
+  channel: ipaas-usage
+  evidence: https://zapier.com/apps/keap/integrations/squarespace-forms
+  source: edge
+  relationship: ipaas-bridge
+  status: pending-generation
+  arazzo: null
+- slug: keap-manychat
+  label: Manychat
+  partner: manychat
+  partner_name: Manychat
+  category: Social Media Marketing
+  type: marketplace
+  marketplace: zapier
+  channel: ipaas-usage
+  evidence: https://zapier.com/apps/keap/integrations/manychat
+  source: edge
+  relationship: ipaas-bridge
+  status: pending-generation
+  arazzo: null
+- slug: keap-close
+  label: Close
+  partner: close
+  partner_name: Close
+  category: CRM (Customer Relationship Management)
+  type: marketplace
+  marketplace: zapier
+  channel: ipaas-usage
+  evidence: https://zapier.com/apps/keap/integrations/close
+  source: edge
+  relationship: ipaas-bridge
+  status: pending-generation
+  arazzo: null
+- slug: keap-google-calendar
+  label: Google Calendar
+  partner: google-calendar
+  partner_name: Google Calendar
+  category: Calendar
+  type: marketplace
+  marketplace: zapier
+  channel: ipaas-usage
+  evidence: https://zapier.com/apps/keap/integrations/google-calendar
+  source: edge
+  relationship: ipaas-bridge
+  status: pending-generation
+  arazzo: null
+- slug: keap-eventbrite
+  label: Eventbrite
+  partner: eventbrite
+  partner_name: Eventbrite
+  category: Event Management
+  type: marketplace
+  marketplace: zapier
+  channel: ipaas-usage
+  evidence: https://zapier.com/apps/keap/integrations/eventbrite
+  source: edge
+  relationship: ipaas-bridge
+  status: pending-generation
+  arazzo: null
+- slug: keap-pandadoc
+  label: PandaDoc
+  partner: pandadoc
+  partner_name: PandaDoc
+  category: Documents
+  type: marketplace
+  marketplace: zapier
+  channel: ipaas-usage
+  evidence: https://zapier.com/apps/keap/integrations/pandadoc
+  source: edge
+  relationship: ipaas-bridge
+  status: pending-generation
+  arazzo: null
+- slug: keap-google-ads
+  label: Google Ads
+  partner: google-ads
+  partner_name: Google Ads
+  category: Ads & Conversion
+  type: marketplace
+  marketplace: zapier
+  channel: ipaas-usage
+  evidence: https://zapier.com/apps/keap/integrations/google-ads
+  source: edge
+  relationship: ipaas-bridge
+  status: pending-generation
+  arazzo: null
+- slug: keap-docusign
+  label: Docusign
+  partner: docusign
+  partner_name: Docusign
+  category: AI Document Extraction
+  type: marketplace
+  marketplace: zapier
+  channel: ipaas-usage
+  evidence: https://zapier.com/apps/keap/integrations/docusign
+  source: edge
+  relationship: ipaas-bridge
+  status: pending-generation
+  arazzo: null
+- slug: keap-thinkific
+  label: Thinkific
+  partner: thinkific
+  partner_name: Thinkific
+  category: Online Courses
+  type: marketplace
+  marketplace: zapier
+  channel: ipaas-usage
+  evidence: https://zapier.com/apps/keap/integrations/thinkific
+  source: edge
+  relationship: ipaas-bridge
+  status: pending-generation
   arazzo: null
