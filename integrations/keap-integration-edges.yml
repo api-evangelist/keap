@@ -19,6 +19,7 @@ checked:
 - https://zapier.com/apps/keap/integrations
 - wordpress/integrations/wordpress-integration-edges.yml
 - zoom/integrations/zoom-integration-edges.yml
+- bigcommerce/integrations/bigcommerce-integration-edges.yml
 summary: null
 marketplace_apps:
 - marketplace: zapier
@@ -143,40 +144,6 @@ edges:
     builder: unknown (not in the directory record)
   detected_by: sweep-workflow-automation.py
   first_seen: '2026-10-15'
-- partner_name: WordPress (own)
-  partner: wordpress
-  partner_match: mirror
-  mirror_match: domain
-  type: marketplace
-  relationship: platform-app
-  direction: third-party
-  channel: partner-built
-  marketplace: own
-  evidence: https://wordpress.org/plugins/infusionsoft-official-opt-in-forms/
-  mirror_of: wordpress/integrations/wordpress-integration-edges.yml
-  apps:
-  - Keap Official Opt-in Forms
-  listing_count: 1
-  detected: '2026-10-15'
-  detected_by: mirror-platform-listings.py
-  category: WordPress plugin
-- partner_name: Zoom (own)
-  partner: zoom
-  partner_match: mirror
-  mirror_match: domain
-  type: marketplace
-  relationship: platform-app
-  direction: third-party
-  channel: partner-built
-  marketplace: own
-  evidence: https://marketplace.zoom.us/apps/VmFHeXRuQ2Wr_RMvNBDHtw
-  mirror_of: zoom/integrations/zoom-integration-edges.yml
-  apps:
-  - Keap
-  listing_count: 1
-  detected: '2026-10-18'
-  detected_by: mirror-platform-listings.py
-  category: Zoom app
 - partner_name: npm registry
   partner: npm
   partner_match: register
@@ -605,6 +572,57 @@ edges:
   direction: third-party
   category: Ads & Conversion
   partner_url: https://developers.facebook.com/docs/marketing-api/server-side-api/guides/zapier-integration
+- partner_name: WordPress (own)
+  partner: wordpress
+  partner_match: mirror
+  mirror_match: domain
+  type: marketplace
+  relationship: platform-app
+  direction: third-party
+  channel: partner-built
+  marketplace: own
+  evidence: https://wordpress.org/plugins/infusionsoft-official-opt-in-forms/
+  mirror_of: wordpress/integrations/wordpress-integration-edges.yml
+  apps:
+  - Keap Official Opt-in Forms
+  listing_count: 1
+  detected: '2026-10-15'
+  detected_by: mirror-platform-listings.py
+  category: WordPress plugin
+- partner_name: Zoom (own)
+  partner: zoom
+  partner_match: mirror
+  mirror_match: domain
+  type: marketplace
+  relationship: platform-app
+  direction: third-party
+  channel: partner-built
+  marketplace: own
+  evidence: https://marketplace.zoom.us/apps/VmFHeXRuQ2Wr_RMvNBDHtw
+  mirror_of: zoom/integrations/zoom-integration-edges.yml
+  apps:
+  - Keap
+  listing_count: 1
+  detected: '2026-10-18'
+  detected_by: mirror-platform-listings.py
+  category: Zoom app
+- partner_name: BigCommerce (own)
+  partner: bigcommerce
+  partner_match: mirror
+  mirror_match: domain
+  type: marketplace
+  relationship: platform-app
+  direction: third-party
+  channel: partner-built
+  marketplace: own
+  evidence: https://www.bigcommerce.com/apps/keap/
+  mirror_of: bigcommerce/integrations/bigcommerce-integration-edges.yml
+  apps:
+  - Keap
+  listing_count: 1
+  detected: '2026-10-20'
+  detected_by: mirror-platform-listings.py
+  category: CRM & Customer Service, Customer Relationship Management, Site Tools, Connectors & Integrations
 templates:
 - title: Create or update Keap contacts from new Calendly events
   url: https://zapier.com/apps/calendly/integrations/keap/243414/create-or-update-keap-contacts-from-new-calendly-events
