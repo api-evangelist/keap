@@ -586,3 +586,53 @@
   relationship: platform-app
   status: not-a-workflow
   arazzo: null
+- slug: keap-packagist
+  label: Packagist
+  partner: packagist
+  partner_name: Packagist
+  category: official SDK (PHP)
+  type: register
+  channel: package-registry
+  evidence: https://packagist.org/packages/infusionsoft/php-isdk
+  source: edge
+  relationship: distribution-channel
+  contract_reference:
+    register: Packagist (public registry JSON)
+    spec_file: null
+    language: PHP
+    packages:
+    - name: infusionsoft/php-isdk
+      version: 1.9.0
+      released: '2014-09-12'
+      released_field: time
+      lapsed: true
+      page: https://packagist.org/packages/infusionsoft/php-isdk
+      repo_leg: github-org:infusionsoft
+      publisher_leg: org:infusionsoft
+      matched_by: github-org
+      abandoned: true
+    - name: infusionsoft/php-sdk
+      version: 1.6.8
+      released: '2025-04-17'
+      released_field: time
+      lapsed: false
+      page: https://packagist.org/packages/infusionsoft/php-sdk
+      repo_leg: github-org:infusionsoft
+      publisher_leg: org:infusionsoft
+      matched_by: github-org
+    - name: keap/keap-sdk
+      version: 2.0.26
+      released: '2026-10-08'
+      released_field: time
+      lapsed: false
+      page: https://packagist.org/packages/keap/keap-sdk
+      repo_leg: github-org:infusionsoft
+      publisher_leg: org:keap
+      matched_by: github-org
+    current: true
+    signal_note: 'an official package on the registry: distribution, not an integration; lapsed = no release in
+      24 months'
+    detected_by: sweep-php-dart-elixir-package-registries.py
+    detected: '2026-10-22'
+  status: not-a-workflow
+  arazzo: null
